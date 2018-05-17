@@ -1,0 +1,91 @@
+.clear {
+    clear: both;
+}
+
+.inline {
+    display: inline;
+}
+
+.block {
+    display: block;
+}
+
+.inline.block {
+    display: inline-block;
+}
+
+.hidden {
+    display: none;
+}
+
+.border-box {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.content-box {
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.cursor {
+    cursor: default;
+}
+
+.transparent {
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+// .op-00 {
+//     opacity: 0;
+//     filter: alpha(opacity=0);
+// }
+// @for $i from 1 through 10 {
+//     .op-#{$i10} {
+//         opacity: $i/10;
+//         filter: alpha(opacity=#{$i*10});
+//     }
+// }
+.ov-visi {
+    overflow: visible;
+}
+
+.ov-hide {
+    overflow: hidden;
+}
+
+.ov-scrl {
+    overflow: scroll;
+}
+
+.ov-auto {
+    overflow: auto;
+}
+
+// Border Radius 
+.rounded {
+    border-radius: 2%;
+}
+
+.circle {
+    border-radius: 50%;
+}
+
+$radiuses: 2,
+3,
+4,
+5,
+10,
+20;
+@each $radius in $radiuses {
+    .rounded-#{$radius} {
+        border-radius: #{$radius}px;
+    }
+}

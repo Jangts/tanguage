@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+/*********************************************
+ ******** tanguage SEE UI framework ********
+ **********  class _.see.ScrollBar  **********
+ **********      theme  weiming     **********
+ *********************************************/
+
+.scrollbar.weiming {
+    .scroll-bar-vertical {
+        .scroll-bar {
+            width: 16px;
+            cursor: default;
+            .scroll-rail {
+                width: 4px;
+                margin: 0px 6px;
+                background: #FFF;
+                z-index: 100;
+            }
+            .scroll-dragger {
+                width: 6px;
+                margin: 0px 5px;
+                background: #DDD;
+                position: absolute;
+                z-index: 200;
+                cursor: pointer;
+            }
+            .scroll-dragger:hover {
+                background: #CCC;
+            }
+        }
+        .scroll-button-prev {
+            display: none;
+            width: 0px;
+            height: 0px
+        }
+        .scroll-button-next {
+            display: none;
+            width: 0px;
+            height: 0px
+        }
+    }
+    .scroll-bar-horizontal {
+        .scroll-bar {
+            height: 16px;
+            cursor: default;
+            .scroll-rail {
+                height: 4px;
+                margin: 6px 0px;
+                background: #FFF;
+                z-index: 100;
+            }
+            .scroll-dragger {
+                height: 6px;
+                margin: 5px 0px;
+                background: #DDD;
+                position: absolute;
+                z-index: 200;
+                cursor: pointer;
+            }
+            .scroll-dragger:hover {
+                background: #CCC;
+            }
+        }
+        .scroll-button-prev {
+            display: none;
+            width: 0px;
+            height: 0px
+        }
+        .scroll-button-next {
+            display: none;
+            width: 0px;
+            height: 0px
+        }
+    }
+}

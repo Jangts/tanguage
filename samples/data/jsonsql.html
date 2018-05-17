@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSONSQL</title>
+    <script src="../../lib/dist/runtime.js" data-tang-debug></script>
+</head>
+
+<body>
+    <p><b>运行示例：</b></p>
+    <hr/>
+    <p>语句1： pandora.data.queryJSON("select * from json.channel.items order by title desc",json);</p>
+    <button name="btn1" id="btn1" onclick="getAll();">获取全部数据</button>
+    <hr/>
+    <p>语句2： pandora.data.queryJSON("select title,url from json.channel.items where (category=='javascript' || category=='vista') order by title,category asc limit 3",json);
+    </p>
+    <button name="btn2" id="btn2" onclick="getFiltered();">获取过滤数据</button>
+    <hr/>
+    <p>语句3：_.data.queryJSON("select url from json.channel.items where (category=='javascript' && author=='trent') order by url asc limit 1,2",json);
+    </p>
+    <button name="btn3" id="btn3" onclick="getLimit();">获取限定数量的数据</button>
+    <hr/>
+    <p><b>参数详解：</b></p>
+    <p>只支持 Select 查询语句，“JSON”：“json.channel.items”指向一个对象数组, 排序接受参数：asc,desc,ascnum,descnum， limit：接受1，或2个参数，指定要获取数据数量个数。
+    </P>
+    <script type="text/javascript">
+        tang.init().block([
+            '$_/data/',
+            '$_/async/'
+        ], function(pandora, root, imports, undefined) {
+            function getAll() {
+                pandora.async.json("jsonsql.test.json", function(json) {
+                    console.log(json, pandora.data.queryJSON("select * from json.channel", json));
+                });
+            }
+
+            function getFiltered() {
+                pandora.async.json("jsonsql.test.json", function(json) {
+                    console.log(json, pandora.data.queryJSON("select title,url,author,category from json.channel.items where (category=='javascript' || author=='trent') order by title,category asc limit 3", json));
+                });
+            }
+
+            function getLimit() {
+                pandora.async.json("jsonsql.test.json", function(json) {
+                    console.log(pandora.data.queryJSON("select url from json.channel.items where (category=='javascript' && author=='trent') order by url asc limit 1,2", json));
+                });
+            }
+            root.getAll = getAll;
+            root.getFiltered = getFiltered;
+            root.getLimit = getLimit;
+        }, true);
+    </script>
+</body>
+
+</html>

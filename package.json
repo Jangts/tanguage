@@ -1,0 +1,36 @@
+{
+    "name": "tanguage",
+    "version": "0.9.9",
+    "description": "A Web Front-end Development Framework",
+    "main": "./lib/dist/runtime.js",
+    "deprecated": false,
+    "dependencies": {
+        "@types/node": "^9.6.6",
+        "glob": "^7.1.2"
+    },
+    "bundleDependencies": [],
+    "devDependencies": {},
+    "scripts": {
+        "help": "node-sugar help",
+        "clib": "node-sugar cdir ./lib/tang/ ./lib/dist/ -map -c",
+        "tang": "node ./compiler/js/node-sugar.js cdir ./lib/tang/ ./lib/dist/ -map -c"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Jangts/tanguage.git"
+    },
+    "keywords": [
+        "tanguage"
+    ],
+    "bin": {
+        "node-sugar": "./compiler/js/node-sugar.js"
+    },
+    "author": {
+        "name": "Jangts"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Jangts/tanguage/issues"
+    },
+    "homepage": "https://tangram.js.cn"
+}

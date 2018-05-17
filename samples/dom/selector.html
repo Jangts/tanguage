@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUERY</title>
+    <script src="../../lib/dist/runtime.js" data-tang-debug></script>
+</head>
+
+<body>
+    <div class="changeText">Original Text</div>
+    <div class="changeText">Original Text</div>
+    <div class="changeText">Original Text</div>
+    <div class="changeText">Original Text</div>
+    <div class="changeText">Original Text</div>
+    <div class="changeText">Original Text</div>
+    <div class="changeText">Original Text</div>
+    <div class="changeText">Original Text</div>
+    <div class="changeText">Original Text</div>
+    <script>
+        tang.init().block(['$_/dom/selector'], function(pandora, root, imports, undefined) {
+
+            var iterator = new pandora.Iterator(pandora.query('.changeText')),
+                render = function(elem) {
+                    if (elem) {
+                        setTimeout(function() {
+                            elem.innerHTML = 'Changed Text';
+                            render(iterator.next());
+                        }, 150);
+                    } else {
+                        setTimeout(function() {
+                            pandora.render({
+                                margin: "10px auto",
+                                fontSize: "13px",
+                                color: "#666"
+                            }, 'Completed');
+                        }, 200);
+                    }
+                };
+
+            setTimeout(function() {
+                render(iterator.next());
+            }, 200);
+
+            console.log(typeof pandora.query('.changeText'));
+        }, true);
+    </script>
+</body>
+
+</html>

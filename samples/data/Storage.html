@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript Database Storage</title>
+    <script src="../../lib/dist/runtime.js" data-tang-debug></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <table>
+        <tbody id="table-body">
+
+        </tbody>
+    </table>
+    <script>
+        tang.init().block(['$_/data/Storage'], function(pandora, root, imports, undefined) {
+            var db = new pandora.data.Storage('mydatabase');
+            if (db.length == 0) {
+                db.set('tanguage', {
+                        name: 'tanguage',
+                        type: 'Javascripts Framework',
+                        keywords: ['block', 'tanguage', 'Javascripts Framework', 'nidn']
+                    })
+                    .set('YangRAM', {
+                        name: 'YangRAM',
+                        type: 'I4s',
+                        keywords: ['YangRAM', 'TNI Framework', 'PHP Framework', 'nidn']
+                    });
+                console.log('Added');
+            }
+            // db.clear();
+            //console.log(db.get('tanguage'), db.get('YangRAM'));
+
+            console.log(pandora.data.Storage('mydatabase'), new pandora.data.Storage('mydatabase'));
+        }, true);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Picker</title>
+    <script src="../../../lib/dist/runtime.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../lib/dist/see/see.css" />
+    <link rel="stylesheet" type="text/css" href="../../../lib/dist/Time/widgets.css" />
+</head>
+
+<body bgcolor="#999999">
+    <div id="timepicker"></div>
+
+    <script>
+        tang.init().block(['$_/Time/', '$_/Time/Picker/'], (_) => {
+            var picker = new pandora.util.Time.Picker('timepicker');
+
+            picker.launch('2016-02-26', 'fulldate', function(value) {
+                alert(value);
+
+            }, function(value) {
+                alert(value);
+
+            });
+
+            console.log(picker);
+        }, true);
+    </script>
+</body>
+
+</html>

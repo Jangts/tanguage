@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tanguage geo map | Paint World Map</title>
+    <script src="../../../lib/dist/runtime.js"></script>
+</head>
+
+<body>
+    <script>
+        var includes = [
+            '$_/data/',
+            '$_/dom/Elements',
+            '$_/painter/SVG'
+        ];
+        tang.init().block(includes, function(pandora, root, imports, undefined) {
+            var document = root.document;
+            var location = root.location;
+            var $ = pandora.dom.select;
+
+            var width = 1200,
+                height = 600;
+            var range = {
+                lt: [-180, 90],
+                rb: [180, -90]
+            };
+
+            var url = pandora.core.url() + '../data/geomaps/world.json';
+
+            pandora.async.json(url, function(data) {
+                var map = pandora.painter.geo(document.body, width, height, data["features"], range, function(index, path, type, properties) {
+                    path.attr('fill', 'rgba(128,124,139,0.61)')
+                        .attr('stroke', 'rgba(255,255,255,1)')
+                        .attr('stroke-width', 1)
+                        .css('cursor', 'pointer')
+                        .hover(function() {
+                            path.attr('fill', 'rgba(2,2,139,0.61)');
+                        }, function() {
+                            path.attr('fill', 'rgba(128,124,139,0.61)');
+                        })
+                        .bind('click', function() {
+                            alert(properties["SOVEREIGNT"]);
+                        });
+                }, 'World');
+            }, function() {
+
+            });
+        }, true);
+    </script>
+</body>
+
+</html>

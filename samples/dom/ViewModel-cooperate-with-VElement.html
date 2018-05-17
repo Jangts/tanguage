@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIEWMODEL | Cooperate With VElement</title>
+    <script src="../../lib/dist/runtime.js" data-tang-debug></script>
+</head>
+
+<body>
+    <script>
+        tang.init().block([
+            '$_/dom/VElement/',
+            '$_/dom/ViewModel'
+        ], function(pandora, root, imports, undefined) {
+            var _ = pandora,
+                document = root.document,
+                console = root.console;
+
+            var el = pandora.dom.VElement.create,
+                ViewModel = pandora.dom.ViewModel;
+
+            var demo2 = new ViewModel({
+                data: {
+                    text: "before",
+                    input: "test",
+                },
+                render: function() {
+                    return el('div', {
+                        'id': 'demo2'
+                    }, [
+                        el('span', {}, [this.text]),
+                        el('input', {
+                            value: this.input
+                        }, []),
+                        el('input', {
+                            value: this.input
+                        }, [])
+                    ])
+                }
+            }, true);
+
+            setTimeout(function() {
+                demo2.text = 'after';
+            }, 3000);
+        }, true);
+    </script>
+</body>
+
+</html>

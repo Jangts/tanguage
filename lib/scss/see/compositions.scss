@@ -1,0 +1,46 @@
+$heights: 15,
+18,
+21,
+24,
+27,
+30,
+33,
+36,
+40;
+@each $height in $heights {
+    .lh-#{$height} {
+        line-height: #{$height}px;
+    }
+}
+
+.al-left {
+    text-align: left;
+}
+
+.al-right {
+    text-align: right;
+}
+
+.al-center {
+    text-align: center;
+}
+
+.al-just {
+    text-align: justify;
+}
+
+.indent {
+    text-indent: 2em;
+}
+
+.uppercase {
+    text-transform: uppercase
+}
+
+.capitalize {
+    text-transform: capitalize
+}
+
+.lowercase {
+    text-transform: lowercase
+}

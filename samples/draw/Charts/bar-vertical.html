@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>tanguage vertical bar chart</title>
+    <script src="../../../lib/dist/runtime.js" data-tang-debug></script>
+    <style>
+        div {
+            float: left;
+            width: 520px;
+            max-width: 100%;
+            height: 360px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvas1"> </div>
+    <div id="canvas2"> </div>
+    <div id="canvas5"> </div>
+    <script>
+        tang.init().block([
+            '$_/painter/Charts/modules/animation',
+            '$_/painter/Charts/modules/tooltip',
+            '$_/painter/Charts/types/Bar'
+        ], function(pandora, root, imports, undefined) {
+            var document = root.document;
+            var location = root.location;
+            var randomScalingFactor = function() {
+                return Math.round(Math.random() * 100 + 100)
+            };
+            var option1 = {
+                tooltip: {
+                    show: true,
+                    type: 'axis',
+                },
+                xAxis: {
+                    axisLine: {
+                        onZero: true,
+                    }
+                },
+                yAxis: {
+                    data: ["January", "February", "March", "April", "May", "June"]
+                },
+                //animation : false,
+                animationDuration: 1000,
+                series: [{
+                    type: "bar",
+                    name: "A",
+                    data: [-75, randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), -55, -30]
+                }, {
+                    type: "bar",
+                    name: "BB",
+                    data: [randomScalingFactor(), -60, randomScalingFactor(), -45, randomScalingFactor(), randomScalingFactor()]
+                }, {
+                    type: "bar",
+                    name: "C",
+                    data: [randomScalingFactor(), randomScalingFactor(), -35, randomScalingFactor(), randomScalingFactor(), -80]
+                }]
+            }
+            var chart1 = new pandora.painter.Charts(document.getElementById("canvas1"));
+            chart1.setOption(option1);
+            var option5 = {
+                tooltip: {
+                    show: true,
+                    //type : 'axis'
+                },
+                xAxis: {},
+                yAxis: {
+                    data: ["January", "February", "March", "April", "May", "June"]
+                },
+                animationDuration: 1000,
+                series: [{
+                    type: "bar",
+                    name: "A",
+                    data: [
+                        [50, 100],
+                        [150, 200],
+                        [-20, 80],
+                        [20, 120],
+                        [80, 130],
+                        [160, 200],
+                    ]
+                }, {
+                    type: "bar",
+                    name: "B",
+                    data: [
+                        [10, 130],
+                        [50, 230],
+                        [-70, 50],
+                        [90, 210],
+                        [50,
+                            160
+                        ],
+                        [60, 100],
+                    ]
+                }, {
+                    type: "bar",
+                    name: "C",
+                    data: [
+                        [-50, 50],
+                        [90, 140],
+                        [10, 80],
+                        [60, 180],
+                        [00, 80],
+                        [-20, 90],
+                    ]
+                }]
+            }
+            var chart5 = new pandora.painter.Charts(document.getElementById("canvas5"));
+            chart5.setOption(option5);
+            var option2 = {
+                tooltip: {
+                    show: true,
+                    type: 'axis',
+                },
+                yAxis: {
+                    data: ["January", "February", "March", "April", "May", "June"]
+                },
+                //animation : false,
+                animationDuration: 1000,
+                series: [{
+                    type: "bar",
+                    name: "A",
+                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                }, {
+                    type: "bar",
+                    name: "BB",
+                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                }, {
+                    type: "bar",
+                    name: "C",
+                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                }]
+            }
+            var chart2 = new pandora.painter.Charts(document.getElementById("canvas2"));
+            chart2.setOption(option2);
+            setTimeout(function() {
+                var option = {
+                    yAxis: {
+                        data: ["January", "February", "March", "April", "May", "June"]
+                    },
+                    series: [{
+                        type: "bar",
+                        name: "A",
+                        data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                    }, {
+                        type: "bar",
+                        name: "BB",
+                        data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                    }, {
+                        type: "bar",
+                        name: "C",
+                        data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                    }]
+                }
+                chart2.setOption(option);
+                setInterval(function() {
+                    var option = {
+                        series: [{
+                            type: "bar",
+                            name: "A",
+                            data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                        }, {
+                            type: "bar",
+                            name: "BB",
+                            data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                        }, {
+                            type: "bar",
+                            name: "C",
+                            data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                        }, {
+                            type: "bar",
+                            name: "D",
+                            data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                        }]
+                    }
+                    chart2.setOption(option);
+                }, 1000);
+            }, 1000);
+        }, true);
+    </script>
+</body>
+
+</html>

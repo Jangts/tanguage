@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>tanguage radar chart</title>
+    <script src="../../../lib/dist/runtime.js" data-tang-debug></script>
+    <style>
+        div {
+            float: left;
+            width: 450px;
+            max-width: 100%;
+            height: 450px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvas1"> </div>
+    <div id="canvas2"> </div>
+    <script>
+        tang.init().block([
+            '$_/painter/Charts/modules/animation',
+            '$_/painter/Charts/modules/tooltip',
+            '$_/painter/Charts/types/Radar'
+        ], function(pandora, root, imports, undefined) {
+            var document = root.document;
+            var option1 = {
+                tooltip: {},
+                animationDuration: 2000,
+                radar: {
+                    indicator: [{
+                        name: "Eating"
+                    }, {
+                        name: "Drinking"
+                    }, {
+                        name: "Sleeping"
+                    }, {
+                        name: "Designing"
+                    }, {
+                        name: "Coding"
+                    }, {
+                        name: "Cycling"
+                    }, {
+                        name: "Running"
+                    }],
+                },
+                series: [{
+                    type: 'radar',
+                    name: "My First dataset",
+                    lineStyle: {
+                        type: 'dotted'
+                    },
+                    data: [65, 59, 90, 81, 56, 55, 40]
+                }, {
+                    type: 'radar',
+                    name: "My Second dataset",
+                    showPoint: false,
+                    showArea: true,
+                    smooth: true,
+                    smoothTension: 0.8,
+                    data: [28, 48, 40, 19, 96, 27, 100]
+                }]
+            };
+            var chart1 = new pandora.painter.Charts(document.getElementById("canvas1"));
+            chart1.setOption(option1);
+
+            setTimeout(function() {
+                var option1 = {
+                    series: [{
+                        type: 'radar',
+                        name: "My First dataset",
+                        data: [65, 59, 90, 81, 56, 55, 40]
+                    }, {
+                        type: 'radar',
+                        name: "My Second dataset",
+                        data: [28, 48, 40, 19, 96, 27, 100]
+                    }, {
+                        type: 'radar',
+                        name: "My Third dataset",
+                        data: [18, 44, 43, 12, 56, 57, 180]
+                    }]
+                };
+                chart1.setOption(option1);
+            }, 2000);
+
+            var option2 = {
+                tooltip: {},
+                animationDuration: 2000,
+                radar: {
+                    indicator: [{
+                        name: "Eating"
+                    }, {
+                        name: "Drinking"
+                    }, {
+                        name: "Sleeping"
+                    }, {
+                        name: "Designing"
+                    }, {
+                        name: "Coding"
+                    }, {
+                        name: "Cycling"
+                    }, {
+                        name: "Running"
+                    }],
+                    shape: 'circle'
+                },
+                series: [{
+                    type: 'radar',
+                    name: "My First dataset",
+                    lineStyle: {
+                        type: 'dashed'
+                    },
+                    data: [65, 59, 90, 81, 56, 55, 40]
+                }, {
+                    type: 'radar',
+                    name: "My Second dataset",
+                    showPoint: false,
+                    showArea: true,
+                    data: [28, 48, 40, 19, 96, 27, 100]
+                }]
+            };
+            var chart2 = new pandora.painter.Charts(document.getElementById("canvas2"));
+            chart2.setOption(option2);
+
+        }, true);
+    </script>
+</body>
+
+</html>

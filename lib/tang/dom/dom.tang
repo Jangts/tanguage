@@ -1,0 +1,34 @@
+@module;
+/*!
+ * tanguage framework source code
+ *
+ * static dom
+ *
+ * Date 2017-04-06
+ */
+
+use $ arr/
+use $ dom/selector
+use $ dom/Events
+
+// var module = this.module;
+
+namespace dom {
+    var _ = pandora,
+    doc = root.document,
+    query = this.sizzle || this.selector;
+
+    public cache(elem) {
+        if (elem) {
+            return elem.tangram_js_id = elem.tangram_js_id || .({});
+        }
+    }
+
+    @include 'dom/styles';
+    @include 'dom/attributes';
+    @include 'dom/classnames';
+    @include 'dom/elements';
+    @include 'dom/events';
+
+    module.exports = this; 
+}

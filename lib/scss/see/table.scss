@@ -1,0 +1,293 @@
+$table_cell_widths: 140,
+80,
+70,
+60,
+50,
+40;
+$table_cell_maxwidths: 540,
+580,
+670,
+860,
+950,
+1040;
+.table {
+    margin: 20px auto 10px;
+    border-radius: 5px;
+    cursor: default;
+    font-size: 12px;
+    font-size: 0.6rem;
+    thead tr,
+    tr.head-row {
+        height: 40px;
+        background-color: transparent !important;
+        border-bottom: solid 5px white;
+        th {
+            height: 40px;
+            line-height: 40px;
+        }
+    }
+    tr {
+        height: 30px;
+        th {
+            height: 40px;
+            line-height: 40px;
+            padding: 0px 10px;
+            font-size: 13px;
+            font-size: 0.65rem;
+            font-weight: normal;
+            background: #666;
+            color: #FFF;
+        }
+        th.lightpurple {
+            background: #C6C;
+        }
+        th.lightdatered {
+            background: #C66;
+        }
+        th.lightmagenta {
+            background: #F38;
+        }
+        th.lightazure {
+            background: #0CF;
+        }
+        td {
+            height: 30px;
+            line-height: 30px;
+            padding: 0px 10px;
+            color: #333;
+            font-weight: normal;
+            font-size: 12px;
+            font-size: 0.6rem;
+            text-align: center;
+            vertical-align: middle;
+            &.al-left {
+                text-align: left;
+            }
+            &.al-right {
+                text-align: right;
+            }
+            &.al-just {
+                text-align: justify;
+            }
+            &.al-top {
+                vertical-align: top;
+            }
+            &.al-bottom {
+                vertical-align: bottom;
+            }
+            &.al-base {
+                vertical-align: baseline;
+            }
+            a {
+                display: inline;
+            }
+            a.block {
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+            .tang-td-click {
+                display: block;
+            }
+            .on {
+                color: #090;
+            }
+            .off {
+                color: #666;
+            }
+        }
+        td.lightpurple .off {
+            color: #969;
+        }
+        td.lightdatered .off {
+            color: #966;
+        }
+        td.lightmagenta .off {
+            color: #936;
+        }
+        td.lightazure .off {
+            color: #369;
+        }
+        @each $width in $table_cell_widths {
+            >.w#{$width} {
+                width: #{$width}px;
+            }
+        }
+        @each $width in $table_cell_maxwidths {
+            >.m#{$width} {
+                max-width: #{$width}px;
+            }
+        }
+        @for $i from 1 through 21 {
+            >.w#{$i}in21 {
+                width: percentage($i/21);
+            }
+        }
+        @for $i from 11 through 21 {
+            >.m#{$i}in21 {
+                max-width: percentage($i/21);
+            }
+        }
+    }
+    tr.tang-tips {
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+        background: rgba(204, 204, 204, .3);
+        td {
+            height: 100px;
+            line-height: 100px;
+            color: #999;
+        }
+    }
+    tr.tang-tips:hover {
+        background: rgba(204, 204, 204, .3);
+        cursor: text;
+        td {
+            cursor: text;
+        }
+    }
+    tr.tang-creator {
+        height: 40px;
+        border-top: solid 5px white;
+        background-color: transparent !important;
+        td {
+            background-color: #6c9;
+            height: 40px;
+            font-size: 14px;
+            font-size: 0.7rem;
+            line-height: 40px;
+            color: white;
+        }
+        td:hover {
+            background-color: #3a6;
+        }
+    }
+    tr:nth-child(odd) {
+        background-color: #ddd;
+        background: rgba(204, 204, 204, .3);
+    }
+    tr:nth-child(even) {
+        background-color: #eee;
+        background: rgba(153, 153, 153, .3);
+    }
+    tr:hover {
+        background: rgba(153, 153, 153, .4);
+        td {
+            cursor: pointer;
+        }
+    }
+    td:nth-child(odd) {
+        background: rgba(153, 153, 153, .3);
+    }
+    td:nth-child(even) {
+        background: rgba(204, 204, 204, .3);
+    }
+}
+
+.table[stripe] {
+    td {
+        background: transparent;
+    }
+}
+
+.table[border] {
+    border-collapse: separate;
+    border: solid 1px #ccc;
+    tr {
+        background: transparent;
+        th {
+            height: 30px;
+            line-height: 30px;
+            font-weight: bold;
+        }
+        td:first-child {
+            border-left: none;
+        }
+        td {
+            background: transparent;
+        }
+    }
+    tr:hover {
+        background: rgba(153, 153, 153, .1);
+        td {
+            color: #222;
+            cursor: pointer;
+        }
+    }
+    tr:first-child {
+        td {
+            border-top: none;
+        }
+    }
+}
+
+.table[border="2"] {
+    border-collapse: separate;
+    border: solid 2px #ccc;
+    tr {
+        th {
+            background: #ddd;
+            color: #444;
+        }
+        td {
+            border-top: solid 2px #ccc;
+            border-left: solid 2px #ccc;
+        }
+    }
+}
+
+@each $name,
+$index,
+$alias,
+$color,
+$bgcolor,
+$bordercolor in $commoncolors {
+    @if($index>0) {
+        @if($alias=='default') {
+            .table[border],
+            .table[border=#{$name}] {
+                border-collapse: separate;
+                border: solid 1px $bordercolor;
+                tr {
+                    th {
+                        background: $bgcolor;
+                        color: $color;
+                    }
+                    td {
+                        border-top: solid 1px $bordercolor;
+                        border-left: solid 1px $bordercolor;
+                    }
+                }
+                tr.tang-tips {
+                    background: rgba(204, 204, 204, .3);
+                    td {
+                        color: $bordercolor;
+                    }
+                }
+            }
+        }
+        @else {
+            .table[border=#{$name}] {
+                border-collapse: separate;
+                border: solid 1px $bordercolor;
+                tr {
+                    th {
+                        background: $bgcolor;
+                        color: $color;
+                    }
+                    td {
+                        border-top: solid 1px $bordercolor;
+                        border-left: solid 1px $bordercolor;
+                    }
+                }
+                tr.tang-tips {
+                    background: rgba(204, 204, 204, .3);
+                    td {
+                        color: $bordercolor;
+                    }
+                }
+            }
+        }
+    }
+}

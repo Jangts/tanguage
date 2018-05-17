@@ -1,0 +1,77 @@
+@charset "UTF-8";
+
+/*********************************************
+ ******** tanguage SEE UI framework ********
+ **********  class _.see.ScrollBar  **********
+ **********       theme   dark      **********
+ *********************************************/
+
+.scrollbar.default-light {
+    .scroll-bar-vertical {
+        width: 3px;
+        .scroll-bar {
+            width: 3px;
+            cursor: default;
+            .scroll-rail {
+                width: 3px;
+                margin: 0;
+                background: #999;
+                z-index: 100;
+            }
+            .scroll-dragger {
+                width: 3px;
+                margin: 0;
+                background: #ccc;
+                position: absolute;
+                z-index: 200;
+                cursor: pointer;
+            }
+            .scroll-dragger:hover {
+                background: #fff;
+            }
+        }
+        .scroll-button-prev {
+            display: none;
+            width: 0px;
+            height: 0px
+        }
+        .scroll-button-next {
+            display: none;
+            width: 0px;
+            height: 0px
+        }
+    }
+    .scroll-bar-horizontal {
+        .scroll-bar {
+            height: 3px;
+            cursor: default;
+            .scroll-rail {
+                height: 3px;
+                margin: 0;
+                background: #999;
+                z-index: 100;
+            }
+            .scroll-dragger {
+                height: 3px;
+                margin: 0;
+                background: #ccc;
+                position: absolute;
+                z-index: 200;
+                cursor: pointer;
+            }
+            .scroll-dragger:hover {
+                background: #fff;
+            }
+        }
+        .scroll-button-prev {
+            display: none;
+            width: 0px;
+            height: 0px
+        }
+        .scroll-button-next {
+            display: none;
+            width: 0px;
+            height: 0px
+        }
+    }
+}

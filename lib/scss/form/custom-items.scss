@@ -1,0 +1,41 @@
+.tang-form {
+    .tang-inputs {
+        .custom-items {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin: 7px 0;
+            line-height: 24px;
+            font-family: inherit;
+            font-size: 12px;
+            font-size: 0.6rem;
+            color: #666;
+            textarea.edit-text-area {
+                width: 100%;
+                height: 170px;
+                resize: vertical;
+            }
+            .tang-simpleeditor {
+                border: solid 1px #ddd;
+                border-radius: 3px;
+                input[type=radio],
+                input[type=checkbox] {
+                    width: 20px;
+                    height: 14px;
+                    margin: 0;
+                }
+            }
+        }
+    }
+}
+
+.tang-form[data-type=pages] {
+    .tang-inputs[data-type=blocks] {
+        .custom-items {
+            margin: 0 0 7px;
+            .tang-simpleeditor {
+                border-radius: 0;
+            }
+        }
+    }
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Editor</title>
+    <script src="../../../lib/dist/runtime.js" data-tang-debug></script>
+    <link rel="stylesheet" type="text/css" href="../../../lib/dist/see/see.css" />
+    <link rel="stylesheet" type="text/css" href="../../../lib/dist/see/fa.css" />
+    <style>
+        body>div {
+            margin: 20px;
+        }
+        
+        .myeditor {
+            width: 900px;
+            height: 300px;
+        }
+        
+        textarea.myeditor {
+            width: 898px;
+            height: 298px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="myeditor">tanguage SimpleEditor</div>
+    <script>
+        tang.init().block([
+            '$_/dom/Elements',
+            '$_/form/SimpleEditor/'
+        ], function(pandora, root, imports, undefined) {
+            var _ = pandora,
+                document = root.document,
+                console = root.console;
+
+            var editor = pandora.form.careatEditors('.myeditor')[0];
+            console.log(editor);
+        }, true);
+    </script>
+</body>
+
+</html>

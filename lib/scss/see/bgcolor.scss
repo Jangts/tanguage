@@ -1,0 +1,54 @@
+$colorpairs: (fff, #FFFFFF, #111111),
+(f6, #F6F6F6, #555),
+(999, #999999, #FFFFFF),
+(666, #666666, #FFFFFF),
+(333, #333333, #EEEEEE),
+(222, #222, #EEEEEE),
+(111, #111111, #EEEEEE),
+(000, #000000, #EEEEEE);
+@each $name,
+$bgcolor,
+$color in $colorpairs {
+    .bg-#{$name} {
+        background-color: $bgcolor;
+        color: $color;
+    }
+}
+
+@each $name,
+$index,
+$alias,
+$color,
+$bgcolor,
+$bordercolor in $commoncolors {
+    @if($alias=='') {
+        [data-color=#{$name}] {
+            background-color: $bgcolor;
+            border-color: $bordercolor;
+            color: $color;
+        }
+    }
+    @else if($alias=='default') {
+        [data-color],
+        [data-color=#{$name}],
+        [data-color=#{$alias}] {
+            background-color: $bgcolor;
+            border-color: $bordercolor;
+            color: $color;
+        }
+        [data-color=#{$alias}]:hover {
+            background-color: $bordercolor;
+        }
+    }
+    @else {
+        [data-color=#{$name}],
+        [data-color=#{$alias}] {
+            background-color: $bgcolor;
+            border-color: $bordercolor;
+            color: $color;
+        }
+        [data-color=#{$alias}]:hover {
+            background-color: $bordercolor;
+        }
+    }
+}

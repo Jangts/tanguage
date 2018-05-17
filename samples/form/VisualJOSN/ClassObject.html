@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual JOSN For Class Object</title>
+    <script src="../../../lib/dist/runtime.js" data-tang-debug></script>
+    <link rel="stylesheet" type="text/css" href="../../../lib/dist/see/see.css" />
+    <link rel="stylesheet" type="text/css" href="../../../lib/dist/see/fa.css" />
+    <style>
+        .myinputs {
+            width: 900px;
+        }
+        
+        .myinputs input[data-prop-name] {
+            width: 118px;
+            height: 24px;
+            margin: 10px;
+            padding: 0 5px;
+            border: solid 1px #9cf;
+            border-radius: 4px;
+        }
+        
+        button {
+            width: auto;
+            height: 24px;
+            padding: 0 10px;
+            margin: 10px;
+            line-height: 24px;
+            border-radius: 3px;
+            font-size: 12px;
+            background-color: #9cf;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <form>
+        <input name="myinput" value='{"name":"Yang Chi","age":27,"city":"wuhan"}' />
+        <div class="myinputs"></div>
+        <div class="myinputs"></div>
+        <button onclick="resetInputValue()">重置绑定INPUT的值</button>
+    </form>
+    <script>
+        tangram.auto([
+            '$_/dom/Elements',
+            '$_/form/VisualJOSN/ClassObject'
+        ], function(pandora, root, imports, undefined) {
+            var _ = pandora,
+                document = root.document,
+                console = root.console,
+                $ = pandora.dom.select;
+
+            var visualObject1 = new pandora.form.VisualJOSN.ClassObject($('.myinputs')[0], [
+                ["name", "text", "Zhang San"],
+                ["age", "number", 3, 18],
+                ["city", "", 'guangzhou', ['', 'wuhan', 'guangzhou', 'beijing'], ['保密', 'Wuhan', 'Guangzhou', 'Beijing']]
+            ]).input({});
+
+            var visualObject2 = new pandora.form.VisualJOSN.ClassObject($('.myinputs')[1], [
+                ["name"],
+                ["age", "number", 3, 27],
+                ["city", "", ['', 'wuhan', 'guangzhou', 'beijing'], ['保密', 'Wuhan', 'Guangzhou', 'Beijing']]
+            ], $('[name="myinput"]')[0]);
+
+            console.log(visualObject1, visualObject2);
+
+
+            root.resetInputValue = function() {
+                var json = visualObject2.getJSON();
+                alert(json);
+                alert($('[name="myinput"]').val());
+            }
+        });
+    </script>
+</body>
+
+</html>

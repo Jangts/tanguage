@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEMPLATE</title>
+    <script src="../../../lib/dist/runtime.js" data-tang-debug></script>
+</head>
+
+<body>
+    <div id="view"></div>
+    <script id="template" type="text/template">
+        <table width="360" border="1" cellspacing="1" cellpadding="1">
+            <tr>
+                <td>
+                    <%echo(this.data.greeting);%>,
+                        <%echo(this.data.name);%>
+                </td>
+                <%var arr = [1, 2, 3, 4, 5, 6, 7]; for(var i = 0; i < arr.length; i++){%>
+                    <td>
+                        <%=arr[i]%>
+                    </td>
+                    <%}%>
+            </tr>
+        </table>
+    </script>
+    <script>
+        tang.init().block([
+            '$_/dom/Template'
+        ], function(pandora, root, imports, undefined) {
+            var document = root.document;
+            var view = document.getElementById('view');
+            var template = document.getElementById('template').innerHTML;
+            var temp = new pandora.dom.Template(template, {
+                greeting: 'Hello',
+                name: 'tanguage',
+            });
+            view.innerHTML = temp.echo();
+            console.log(temp);
+        }, true);
+    </script>
+</body>
+
+</html>

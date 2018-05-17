@@ -1,0 +1,280 @@
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+html {
+    font-size: 125%; // 现代浏览器（pc端默认为16px，125%即20pc）
+}
+
+body {
+    font-size: 14px; // 传统浏览器（pc端14px，其他端不考虑）
+    font-size: 0.7rem; // 现代浏览器（pc端根字号为20px，70%仍旧是14px）
+}
+
+.tang-form {
+    display: block;
+    width: auto;
+    height: auto;
+    line-height: 0;
+    font-size: 0;
+    color: #666;
+    .inputs-section {
+        min-width: 800px;
+        margin: 10px 0;
+        padding-bottom: 20px;
+        border-top: solid 1px #e6e6e6;
+    }
+    .inputs-section,
+    .inputs-section.on {
+        display: block;
+    }
+    .inputs-section.off {
+        display: none;
+    }
+    .inputs-section:first-child {
+        border-top: none;
+    }
+    .tang-inputs {
+        display: block;
+        min-height: 40px; // margin-bottom: 10px;
+        padding-left: 120px;
+        overflow: hidden;
+        >.input-label {
+            display: block;
+            position: absolute;
+            width: 110px;
+            top: 8px;
+            left: 0;
+            line-height: 24px;
+            font-size: 14px;
+            font-size: 0.7rem;
+            text-align: right;
+            overflow: hidden;
+        }
+        >font,
+        >.input-tips {
+            display: block;
+            position: absolute;
+            width: 30%;
+            top: 8px;
+            right: 0;
+            line-height: 24px;
+            font-size: 12px;
+            font-size: 0.6rem;
+            text-align: right;
+            overflow: hidden;
+        }
+        >.input-tips.quater {
+            width: 25%;
+        }
+        >.input-tips.half {
+            width: 50%;
+        }
+        >input,
+        >select,
+        >textarea,
+        >.input-area {
+            width: 100%;
+            margin: 8px 0;
+        }
+        >input.w24,
+        >select.w24 {
+            width: 24%;
+        }
+        >input.w30,
+        >select.w30 {
+            width: 30%;
+        }
+        >input.w48,
+        >select.w48 {
+            width: 48%;
+        }
+        >input.w68,
+        >select.w68 {
+            width: 68%;
+        }
+        >input.w72,
+        >select.w72 {
+            width: 72%;
+        }
+        input,
+        select,
+        textarea {
+            padding: 0 5px;
+            border: solid 1px #ddd;
+            border-radius: 3px;
+            background-color: transparent;
+            line-height: 24px;
+            font-family: inherit;
+            font-size: 12px;
+            font-size: 0.6rem;
+            color: #666;
+        }
+        input,
+        select {
+            display: inline-block;
+            height: 24px;
+        }
+        input[type=radio],
+        input[type=checkbox] {
+            vertical-align: middle;
+            width: 20px;
+            height: 14px;
+            margin: 0 !important;
+        }
+        input.use-tp.datetime-item,
+        input.use-tp.fulldate-item,
+        input.use-tp.timeofday-item {
+            cursor: pointer;
+        }
+        input[type=hidden],
+        input[hidden] {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+        input.num-item,
+        input[type=number] {
+            text-align: right;
+        }
+        input[type=number] {
+            padding: 0 10px;
+        }
+        textarea,
+        textarea.text-area {
+            height: 78px;
+            resize: none;
+        }
+        textarea.long-item {
+            height: 156px;
+            resize: none;
+        }
+        textarea.high-item {
+            height: 390px;
+            resize: vertical;
+        }
+        .radios,
+        .checkboxes {
+            display: block;
+            width: 100%;
+            height: 40px;
+            label,
+            .radio-label,
+            .checkbox-label {
+                display: inline-block;
+                margin: 8px 24px 0 0;
+                line-height: 24px;
+                font-size: 12px;
+                font-size: 0.6rem;
+                color: #999;
+                font-style: normal;
+            }
+            i {
+                font-style: normal;
+            }
+            input,
+            input[type=radio],
+            input[type=checkbox] {
+                vertical-align: middle;
+                width: 20px;
+                height: 14px;
+                margin: 0 !important;
+            }
+            input:first-child {
+                margin-left: 0;
+            }
+            input:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+    .tang-inputs.inline-inputs {
+        .inputs-line {
+            display: block;
+            width: 100%;
+            height: 40px;
+            border-bottom: solid 1px #eee;
+        }
+        .inline-label {
+            line-height: 24px;
+            font-size: 12px;
+            font-size: 0.6rem;
+            color: #999;
+            margin: 0 24px 0 0;
+            font-style: normal;
+            i {
+                font-style: normal;
+            }
+        }
+        .inline-label:last-child {
+            margin: 0;
+        }
+        .radio-label,
+        .checkbox-label {
+            display: inline-block;
+            margin: 8px 24px 0 0;
+            line-height: 24px;
+            font-size: 12px;
+            font-size: 0.6rem;
+            color: #999;
+            font-style: normal;
+            i {
+                font-style: normal;
+            }
+            input,
+            input[type=radio],
+            input[type=checkbox] {
+                vertical-align: middle;
+                width: 20px;
+                height: 14px;
+                margin: 0 !important;
+            }
+        }
+        .inputs-line+.inputs-line {
+            .radio-label,
+            .checkbox-label {
+                margin: 0 24px 0 0;
+            }
+        }
+        .inputs-line:last-child {
+            border-bottom: none;
+            .radio-label,
+            .checkbox-label {
+                margin-bottom: 8px;
+            }
+        }
+        input,
+        select {
+            width: 20%;
+            margin: 8px 5px;
+        }
+        input:first-child,
+        select:first-child {
+            margin-left: 0;
+        }
+        input:last-child,
+        select:last-child {
+            margin-right: 0;
+        }
+        input.num-item,
+        input[type=number] {
+            width: 10%;
+        }
+    }
+    .tang-inputs[data-type=hidden] {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+}
+
+@import 'tabs';
+@import 'pages';
+@import 'pictures';
+@import 'custom-items';

@@ -1,0 +1,95 @@
+@module;
+/*!
+ * tanguage framework source code
+ *
+ * class Elements
+ *
+ * Date: 2017-04-06
+ */
+;
+use $ util/bool as bool
+use $ arr/
+use $ math/easing
+use $ dom/Animation
+
+namespace dom;
+
+var _ = pandora,
+query = $..sizzle || $..selector;
+
+@include 'Elements/variables';
+
+// Declare Class 'domElements' Extends 'Iterator'
+class .Elements extends ..Iterator {
+    context = document;
+    _init (selector, context) {
+        if (bool.isOuterHTML(selector)) {
+            this.isElFragment = true;
+            this.context = context || this.context;
+            Elements = $..createByString(this.selector = selector);
+            for (var i = 0; i < Elements.length; i++) {
+                this.push(Elements[i]);
+            }
+        } else {
+            this.selector = selector;
+            this.context = context || this.context;
+            var Elements = [];
+            if (selector) {
+                switch (typeof (selector)) {
+                    case 'string':
+                    // console.log(query);
+                        Elements = query(selector, this.context);
+                        break;
+                    case 'object':
+                        switch (..util.type(selector, true)) {
+                            case 'HTMLDocument':
+                            case 'Global':
+                            case 'Element':
+                                Elements.push(arguments[0]);
+                                break;
+                            case 'Object':
+                                Elements = $..selector.byAttr(selector);
+                                break;
+                            case 'Elements':
+                                Elements = arguments[0];
+                                break;
+                            case 'Array':
+                                // console.log(arguments[0]);
+                                for (var i = 0; i < arguments[0].length; i++) {
+                                    ..util.type(arguments[0][i]) == 'Element' && Elements.push(arguments[0][i]);
+                                }
+                                break;
+                        }
+                        break;
+                }
+                for (var i = 0; i < Elements.length; i++) {
+                    this.push(Elements[i]);
+                }
+            }
+        }
+    }
+}
+
+@include 'Elements/basic';
+@include 'Elements/attributes';
+@include 'Elements/styles';
+@include 'Elements/events';
+@include 'Elements/form';
+@include 'Elements/animation';
+
+//Expends Public Static Methods 'query' For 'dom'
+public select = (selector, context) {
+    return new $..Elements(selector, context);
+}
+
+public $ = select;
+
+//Expends Public Static Methods 'extend' For 'dom/query'
+
+extends .select {
+     extend (object, rewrite) {
+        ..extend($..Elements.prototype, rewrite, object);
+    }
+}
+
+this.module.exports = select;

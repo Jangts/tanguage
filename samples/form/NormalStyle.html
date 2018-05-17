@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normal Style Form</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../lib/dist/see/see.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/dist/form/style.css" />
+    <script src="../../lib/dist/runtime.js" data-tang-debug></script>
+    <style>
+        .tang-form {
+            margin: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <form class="tang-form" name="myform" method="PUT" action="">
+        <section class="inputs-section">
+            <div class="tang-inputs" data-type="primer">
+                <label class="input-label">新闻引题</label>
+                <input type="text" name="PRIMER" value="" placeholder="引题">
+            </div>
+            <div class="tang-inputs" data-type="title">
+                <label class="input-label">新闻副标题</label>
+                <input class="Title" name="TITLE" type="text" value="" placeholder="在这里输入文章标题">
+            </div>
+            <div class="tang-inputs" data-type="subtitle">
+                <label class="input-label">新闻副标题</label>
+                <input type="text" name="SUBTITLE" value="" placeholder="副标题">
+            </div>
+            <div class="tang-inputs">
+                <label class="input-label">新闻分类</label>
+                <select class="sel-items" name="FOLDER">
+                    <option value="7">集团新闻</option>
+                    <option value="8" selected="selected">行业动态</option>
+                </select>
+            </div>
+            <div class="tang-inputs inline-inputs">
+                <label class="input-label">来源</label>
+                <label class="inline-label"><input class="text-item" name="PRESS" value="中国食品科技网" type="text"></label>
+                <label class="inline-label"><i>URL</i><input class="text-item" name="ORIGINATE_URL" value="" type="text"></label>
+            </div>
+            <div class="tang-inputs">
+                <label class="input-label">原文发布日期</label>
+                <input class="use-tp fulldate-item" name="PRESS_DATE" type="text" value="2018-03-09">
+            </div>
+            <div class="tang-inputs inline-inputs">
+                <label class="input-label">记者</label>
+                <label class="inline-label"><i>通讯员</i><input class="text-item" name="REPORTER" value="" type="text"></label>
+                <label class="inline-label"><i>摄影</i> <input class="text-item" name="PHOTOGRAPHER" type="text" value=""></label>
+            </div>
+            <div class="tang-inputs" data-type="blocks">
+                <label class="input-label">内容概述</label>
+                <textarea class="text-area" name="ABSTRACT"></textarea>
+            </div>
+            <div class="tang-inputs inline-inputs">
+                <label class="input-label">是否全职</label>
+                <label class="radio-label">
+                    <input name="IS_FULLTIME" type="radio" value="0">否</label>
+                <label class="radio-label">
+                    <input name="IS_FULLTIME" type="radio" value="1" checked="checked">是</label>
+            </div>
+            <div class="tang-inputs" data-type="blocks"><label class="input-label">列表缩略图</label>
+                <figure class="figure-items">
+                    <div class="image pic-uploader">
+                        <input class="pic-src" hidden="hidden" name="THUMB" value="images/figure.jpg" type="hidden">
+                        <input class="pic-changer" type="file" value="">
+                        <img class="pic-displayer" src="images/figure.jpg" data-reset-src="images/figure.jpg">
+                        <i class="pic-mask"></i>
+                        <i class="pic-resetter" data-src="images/figure.jpg">使用默认图片</i>
+                    </div>
+                </figure>
+            </div>
+            <div class="tang-inputs" data-type="blocks">
+                <label class="input-label">文章内容</label>
+                <div class="custom-items"><textarea class="edit-text-area" name="CONTENT"></textarea></div>
+            </div>
+            <div class="tang-inputs">
+                <label class="input-label">文章评级</label>
+                <select class="sel-items" name="RANK">
+                    <option value="1">★</option>
+                    <option value="2">★★</option>
+                    <option value="4">★★★</option>
+                    <option value="3">★★★★</option>
+                    <option value="5">★★★★★</option>
+                    <option value="6" selected="selected">★★★★★★</option>
+                    <option value="7">★★★★★★★</option>
+                </select>
+            </div>
+            <div class="tang-inputs inline-inputs" data-type="blocks">
+                <label class="input-label">复选框</label>
+                <div class="inputs-line">
+                    <label class="checkbox-label">
+                        <input name="checkbox11" type="checkbox" value="0">11</label>
+                    <label class="checkbox-label">
+                        <input name="checkbox12" type="checkbox" value="1" checked="checked">12</label>
+                </div>
+                <div class="inputs-line">
+                    <label class="checkbox-label">
+                        <input name="checkbox21" type="checkbox" value="0">21</label>
+                    <label class="checkbox-label">
+                        <input name="checkbox22" type="checkbox" value="1" checked="checked">22</label>
+                </div>
+            </div>
+            <div class="tang-inputs">
+                <label class="input-label">本站发布时间</label>
+                <input class="use-tp datetime-item" readonly="readonly" name="PUBTIME" value="2017-01-12 16:41:15" type="text">
+            </div>
+            <div class="tang-inputs">
+                <label class="input-label">排序级数</label>
+                <input class="num-item" name="LEVEL" type="number" value="0">
+            </div>
+        </section>
+    </form>
+    <script>
+        tangram.auto([
+            '$_/form/SimpleEditor/',
+            '$_/Time/Picker/'
+        ], function(_) {
+            var editors = pandora.form.careatEditors('textarea.edit-text-area', {});
+        });
+    </script>
+</body>
+
+</html>

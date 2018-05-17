@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalendar</title>
+    <script src="../../lib/dist/runtime.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../lib/dist/see/see.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/dist/Time/widgets.css" />
+    <style>
+        .kalendar {
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <kalendar id="mykld"></kalendar>
+
+    <script>
+        tang.init().block(['$_/Time/', '$_/Time/Kalendar'], (_) => {
+            var $ = pandora.dom.select,
+                kalendar = new pandora.util.Time.Kalendar('mykld');
+            kalendar.drawEvents([false, true, true, false, false, false, false, true, false, false, false, false, false, false, true, false, true, true, false, false, false, false, true, false, false, false, false, false, false, true]);
+
+            $(kalendar.Element).on('click', '.month.prev-month', function() {
+                kalendar.prevMonth();
+            }).on('click', '.month.next-month', function() {
+                kalendar.nextMonth();
+            });
+        }, true);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,117 @@
+<html lang="zh-cn">
+
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SLIDER P/N BUTTONS</title>
+    <script src="../../../lib/dist/runtime.js" data-tang-debug></script>
+    <link rel="stylesheet" type="text/css" href="../../../lib/dist/see/see.css" />
+    <link rel="stylesheet" type="text/css" href="../../../lib/dist/see/fa.css" />
+    <link rel="stylesheet" type="text/css" href="../../../lib/dist/view/Slider/style.css" />
+    <style>
+        .tang h510 {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .tang-slider .cutter.big-lt {
+            left: 420px;
+        }
+        
+        .tang-slider .cutter.big-gt {
+            right: 420px;
+        }
+        
+        .tang-slider .cutter.lt-in-circle,
+        .tang-slider .cutter.ll-in-circle,
+        .tang-slider .cutter.bl-in-circle {
+            left: 100px;
+        }
+        
+        .tang-slider .cutter.gt-in-circle,
+        .tang-slider .cutter.lg-in-circle,
+        .tang-slider .cutter.bg-in-circle {
+            right: 100px;
+        }
+        
+        .tang-slider .cutter.ll-in-circle {
+            top: 30%;
+        }
+        
+        .tang-slider .cutter.lg-in-circle {
+            top: 30%;
+        }
+        
+        .tang-slider .cutter.bl-in-circle {
+            top: 70%;
+        }
+        
+        .tang-slider .cutter.bg-in-circle {
+            top: 70%;
+        }
+        
+        .tang-slider .cutter.ll-in-bigcircle,
+        .tang-slider .cutter.lg-in-bigcircle {
+            top: 30%;
+        }
+        
+        .tang-slider .cutter.bl-in-bigcircle,
+        .tang-slider .cutter.bg-in-bigcircle {
+            top: 70%;
+        }
+    </style>
+</head>
+
+<body class="tang-see">
+    <section class="h480">
+        <div class="tang-slider" data-use-slider-type="slide">
+            <div class="ov-hide stage width-full hfull">
+                <div class="troupe">
+                    <section class="actor">
+                        <img src="images/slider-0.jpg">
+                    </section>
+                    <section class="actor">
+                        <img src="images/slider-1.jpg">
+                    </section>
+                    <section class="actor">
+                        <img src="images/slider-2.jpg">
+                    </section>
+                </div>
+                <div class="lt-in-circle cutter goto-prev"></div>
+                <div class="gt-in-circle cutter goto-next"></div>
+                <div class="lt-in-bigcircle cutter goto-prev"></div>
+                <div class="gt-in-bigcircle cutter goto-next"></div>
+
+                <div class="ll-in-circle cutter goto-prev"></div>
+                <div class="lg-in-circle cutter goto-next"></div>
+                <div class="ll-in-bigcircle cutter goto-prev"></div>
+                <div class="lg-in-bigcircle cutter goto-next"></div>
+
+                <div class="bl-in-circle cutter goto-prev"></div>
+                <div class="bg-in-circle cutter goto-next"></div>
+                <div class="bl-in-bigcircle cutter goto-prev"></div>
+                <div class="bg-in-bigcircle cutter goto-next"></div>
+
+                <div class="big-lt cutter goto-prev"></div>
+                <div class="big-gt cutter goto-next"></div>
+            </div>
+        </div>
+    </section>
+    <script>
+        tang.init().block(['$_/dom/Elements', '$_/view/Slider/'], function(pandora, root, imports, undefined) {
+            var $ = pandora.dom.select;
+            console.log(pandora.dom.Elements.prototype.each);
+            
+            $('.tang-slider[data-use-slider-type]').each(function() {
+                var type = $(this).data('useSliderType');
+                new pandora.view.Slider(this, type, {
+                    speed: 4000,
+                    duration: 1000,
+                    autoplay: false
+                });
+            });
+        }, true);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>tanguage pie chart</title>
+    <script src="../../../lib/dist/runtime.js" data-tang-debug></script>
+    <style>
+        div {
+            float: left;
+            width: 360px;
+            max-width: 100%;
+            height: 600px;
+            margin: 10px 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvas1"> </div>
+    <div id="canvas2"> </div>
+    <div id="canvas3"> </div>
+    <script>
+        tang.init().block([
+            '$_/painter/Charts/modules/animation',
+            '$_/painter/Charts/modules/tooltip',
+            '$_/painter/Charts/types/Pie'
+        ], function(pandora, root, imports, undefined) {
+            document = root.document;
+            var location = root.location;
+            var option1 = {
+                tooltip: {
+                    show: true,
+                },
+                animationDuration: 2000,
+                series: [{
+                    type: 'pie',
+                    name: "Pie One Up",
+                    center: ['50%', '25%'],
+                    radius: [0, '75%', '80%'],
+                    data: [{
+                        value: 300,
+                        name: "Red"
+                    }, {
+                        value: 50,
+                        name: "Yellow"
+                    }, {
+                        value: 60,
+                        name: "Green"
+                    }, {
+                        value: 120,
+                        name: "Dark Green"
+                    }, {
+                        value: 80,
+                        name: "Blue"
+                    }, {
+                        value: 240,
+                        name: "Dark Blue"
+                    }, {
+                        value: 180,
+                        name: "Grey Purple"
+                    }]
+                }, {
+                    type: 'pie',
+                    name: "Pie One Down",
+                    center: ['50%', '75%'],
+                    radius: ['50%', '75%', '80%'],
+                    data: [{
+                        value: 300,
+                        name: "Red"
+                    }, {
+                        value: 50,
+                        name: "Yellow"
+                    }, {
+                        value: 60,
+                        name: "Green"
+                    }, {
+                        value: 120,
+                        name: "Dark Green"
+                    }, {
+                        value: 80,
+                        name: "Blue"
+                    }, {
+                        value: 240,
+                        name: "Dark Blue"
+                    }, {
+                        value: 180,
+                        name: "Grey Purple"
+                    }]
+                }]
+            };
+            var option2 = {
+                tooltip: {
+                    show: true,
+                },
+                animationDuration: 2000,
+                series: [{
+                    type: 'pie',
+                    name: "Pie Two Up",
+                    center: ['50%', '25%'],
+                    roseType: 'angle',
+                    data: [{
+                        value: 300,
+                        name: "Red"
+                    }, {
+                        value: 50,
+                        name: "Yellow"
+                    }, {
+                        value: 60,
+                        name: "Green"
+                    }, {
+                        value: 120,
+                        name: "Dark Green"
+                    }, {
+                        value: 80,
+                        name: "Blue"
+                    }, {
+                        value: 240,
+                        name: "Dark Blue"
+                    }, {
+                        value: 180,
+                        name: "Grey Purple"
+                    }]
+                }, {
+                    type: 'pie',
+                    name: "Pie Two Down",
+                    center: ['50%', '75%'],
+                    radius: [0, '75%', '80%'],
+                    roseType: 'radius',
+                    data: [{
+                        value: 300,
+                        name: "Red"
+                    }, {
+                        value: 50,
+                        name: "Yellow"
+                    }, {
+                        value: 60,
+                        name: "Green"
+                    }, {
+                        value: 120,
+                        name: "Dark Green"
+                    }, {
+                        value: 80,
+                        name: "Blue"
+                    }, {
+                        value: 240,
+                        name: "Dark Blue"
+                    }, {
+                        value: 180,
+                        name: "Grey Purple"
+                    }]
+                }]
+            };
+            var option3 = {
+                tooltip: {
+                    show: true,
+                },
+                animationDuration: 2000,
+                series: [{
+                    type: 'pie',
+                    name: "Pie Three Up",
+                    center: ['50%', '25%'],
+                    roseType: 'area',
+                    data: [{
+                        value: 300,
+                        name: "Red"
+                    }, {
+                        value: 50,
+                        name: "Yellow"
+                    }, {
+                        value: 60,
+                        name: "Green"
+                    }, {
+                        value: 120,
+                        name: "Dark Green"
+                    }, {
+                        value: 80,
+                        name: "Blue"
+                    }, {
+                        value: 240,
+                        name: "Dark Blue"
+                    }, {
+                        value: 180,
+                        name: "Grey Purple"
+                    }]
+                }, {
+                    type: 'pie',
+                    name: "Pie Three Down",
+                    center: ['50%', '75%'],
+                    radius: ['15%', '75%', '80%'],
+                    roseType: 'area',
+                    data: [{
+                        value: 300,
+                        name: "Red"
+                    }, {
+                        value: 50,
+                        name: "Yellow"
+                    }, {
+                        value: 60,
+                        name: "Green"
+                    }, {
+                        value: 120,
+                        name: "Dark Green"
+                    }, {
+                        value: 80,
+                        name: "Blue"
+                    }, {
+                        value: 240,
+                        name: "Dark Blue"
+                    }, {
+                        value: 180,
+                        name: "Grey Purple"
+                    }]
+                }]
+            };
+            var chart1 = new pandora.painter.Charts(document.getElementById("canvas1"));
+            var chart2 = new pandora.painter.Charts(document.getElementById("canvas2"));
+            var chart3 = new pandora.painter.Charts(document.getElementById("canvas3"));
+            chart1.setOption(option1);
+            chart2.setOption(option2);
+            chart3.setOption(option3);
+        }, true);
+    </script>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,231 @@
+.tang-form {
+    .tang-inputs {
+        figure,
+        .figure-items,
+        .video-item {
+            display: block;
+            width: 100%;
+            margin: 7px 0;
+            .pic-uploader {
+                display: block;
+                width: 100% !important;
+                height: 70px !important;
+                padding: 19px;
+                border: solid 1px #ddd;
+                border-radius: 3px;
+                overflow: hidden;
+                input {
+                    display: block;
+                    width: 100%;
+                    height: 30px;
+                    line-height: 30px;
+                    padding: 0 10px;
+                    border: solid 1px #ddd;
+                    border-radius: 3px;
+                }
+                .pic-displayer,
+                .pic-mask,
+                .pic-bluemask,
+                .pic-changer,
+                input[type=file].pic-changer,
+                .pic-resetter {
+                    display: none;
+                }
+            }
+            .pic-uploader.actived {
+                box-sizing: content-box;
+                text-align: center;
+                .pic-displayer {
+                    display: block;
+                    max-width: 100%;
+                    max-height: 100%;
+                    margin: auto;
+                }
+                .pic-mask {
+                    z-index: 10;
+                }
+                .pic-bluemask {
+                    z-index: 30;
+                }
+                input {
+                    display: none;
+                }
+                input[type=file] {
+                    position: absolute;
+                    width: 0;
+                    height: 0;
+                    top: 0;
+                    left: 0;
+                    opacity: 0;
+                }
+                .pic-mask,
+                .pic-changer,
+                input[type=file].pic-changer {
+                    display: block;
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    top: 0;
+                    left: 0;
+                }
+                .pic-bluemask {
+                    display: block;
+                    position: absolute;
+                    width: 100%;
+                    height: 0;
+                    top: 100%;
+                    left: 0;
+                    background-color: #498bea;
+                }
+                .pic-changer,
+                input[type=file].pic-changer {
+                    z-index: 20;
+                    cursor: pointer;
+                }
+                .pic-resetter {
+                    display: block;
+                    position: absolute;
+                    width: 100%;
+                    height: 24px;
+                    left: 0;
+                    background-color: #498bea;
+                    line-height: 24px;
+                    text-align: center;
+                    color: #fff;
+                    font-style: normal;
+                    font-size: 12px;
+                    font-size: 0.6rem;
+                    opacity: 0;
+                    z-index: 100;
+                    cursor: pointer;
+                    transition: opacity ease-in-out .3s, top ease-in-out .3s;
+                }
+            }
+            .pic-uploader.actived:hover {
+                .pic-mask {
+                    background-color: rgba(0, 0, 0, 0.3);
+                }
+                .pic-resetter {
+                    opacity: 1;
+                }
+            }
+        }
+        figure,
+        .figure-items {
+            .pic-uploader.actived {
+                display: inline-block;
+                padding: 19px;
+                border: solid 1px #ddd;
+                border-radius: 3px;
+                margin-right: 1%;
+                .pic-displayer {
+                    top: 50%;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    transform: translateY(-50%);
+                }
+                .pic-resetter {
+                    top: 160px;
+                }
+            }
+            .pic-uploader.actived,
+            .pic-uploader.actived[data-subtype=photo],
+            .pic-uploader.actived[data-subtype=photo3x2] {
+                width: 180px !important;
+                height: 120px !important;
+            }
+            .pic-uploader.actived[data-subtype=photo2x3] {
+                width: 80px !important;
+                height: 120px !important;
+            }
+            .pic-uploader.actived[data-subtype=avatar],
+            .pic-uploader.actived[data-subtype=avatar1x1] {
+                width: 120px !important;
+                height: 120px !important;
+            }
+            .pic-uploader.actived[data-subtype=figure],
+            .pic-uploader.actived[data-subtype=figure4x3] {
+                width: 160px !important;
+                height: 120px !important;
+            }
+            .pic-uploader.actived[data-subtype=figure3x4] {
+                width: 90px !important;
+                height: 120px !important;
+            }
+            .pic-uploader.actived[data-subtype=banner] {
+                width: 30% !important;
+                height: 90px !important;
+                .pic-resetter {
+                    top: 130px;
+                }
+            }
+            .pic-uploader.actived[data-subtype=banner100] {
+                display: block;
+                width: 100% !important;
+                height: 120px !important;
+                margin-right: 0;
+                // .pic-resetter {
+                //     top: 160px;
+                // }
+            }
+            .pic-uploader.actived:hover {
+                .pic-resetter {
+                    top: 136px;
+                }
+            }
+            .pic-uploader.actived[data-subtype=banner]:hover {
+                .pic-resetter {
+                    top: 106px;
+                }
+            }
+            // .pic-uploader.actived[data-subtype=banner100]:hover {
+            //     .pic-resetter {
+            //         top: 136px;
+            //     }
+            // }
+        }
+        .video-item {
+            .pic-uploader.actived {
+                display: block;
+                padding: 0;
+                border: 0;
+                border-radius: 3px;
+                .pic-displayer {
+                    width: 100%;
+                    height: 100%;
+                }
+                .pic-resetter {
+                    top: 180px;
+                }
+            }
+            .pic-uploader.actived:hover {
+                .pic-resetter {
+                    top: 156px;
+                }
+            }
+            .pic-uploader.actived,
+            .pic-uploader.actived[data-subtype=video4x3] {
+                width: 240px !important;
+                height: 180px !important;
+            }
+            .pic-uploader.actived[data-subtype=video16x9] {
+                width: 320px !important;
+                height: 180px !important;
+            }
+        }
+    }
+}
+
+.tang-form[data-type=pages] {
+    .tang-inputs[data-type=blocks] {
+        figure,
+        .figure-items,
+        .video-item {
+            margin: 0 0 7px;
+            .pic-uploader.actived {
+                border-radius: 0;
+            }
+        }
+    }
+}

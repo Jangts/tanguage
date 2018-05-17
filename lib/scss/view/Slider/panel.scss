@@ -1,0 +1,287 @@
+@charset "UTF-8";
+
+/*
+ * Panel Position
+ * 面板位置
+ */
+
+.tang-slider {
+    .panel {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        z-index: 999;
+        font-size: 0px;
+        .slider-anchor {
+            display: inline-block;
+            overflow: hidden;
+            cursor: pointer;
+        }
+    }
+    .panel.upon-remote {
+        top: 0px;
+        text-align: right;
+    }
+    .panel.top-remote {
+        top: 0px;
+        text-align: right;
+    }
+    .panel.middle-remote {
+        top: 50%;
+        margin-top: -50px;
+        text-align: right;
+    }
+    .panel.bottom-remote {
+        bottom: 0px;
+        text-align: right;
+    }
+    .panel.under-remote {
+        bottom: -30px;
+        text-align: center;
+    }
+    /*
+ * Buttons Position
+ * 按钮位置
+ */
+    .panel.panel.al-left {
+        left: 0;
+        right: auto;
+        text-align: left;
+    }
+    .panel.panel.al-right {
+        left: auto;
+        right: 0;
+        text-align: right;
+    }
+    .panel.panel.al-center {
+        left: 0;
+        right: 0;
+        margin: auto;
+        text-align: center;
+    }
+    .panel.panel.al-just {
+        left: 0;
+        right: 0;
+        text-align: justify;
+    }
+    .panel.middle-remote.al-center,
+    .panel.middle-remote.al-just {
+        display: none !important;
+    }
+    /*
+ * Buttons Style
+ * 按钮样式
+ */
+    /*---| 圆/点/圈 |---*/
+    /*- circles -*/
+    .panel.circles {
+        height: 40px;
+        .slider-anchor {
+            width: 20px;
+            height: 20px;
+            margin: 8px 10px;
+            border-style: solid;
+            border-width: 2px;
+            border-radius: 10px;
+            opacity: .8;
+        }
+    }
+    .panel.circles.al-left {
+        padding-left: 10px;
+    }
+    .panel.circles.al-right {
+        padding-right: 10px;
+    }
+    /*- points -*/
+    .panel.points {
+        height: 30px;
+        .slider-anchor {
+            opacity: .8;
+            width: 12px;
+            height: 12px;
+            margin: 9px 5px;
+            border-radius: 6px;
+        }
+    }
+    .panel.points.al-left {
+        padding-left: 10px;
+    }
+    .panel.points.al-right {
+        padding-right: 10px;
+    }
+    /*- rings -*/
+    .panel.rings {
+        height: 40px;
+        .slider-anchor {
+            width: 16px;
+            height: 16px;
+            margin: 10px 5px;
+            border-style: solid;
+            border-width: 2px;
+            border-radius: 8px;
+        }
+    }
+    /*- small rings -*/
+    .panel.rings-sm {
+        height: 30px;
+        .slider-anchor {
+            width: 10px;
+            height: 10px;
+            margin: 10px 5px;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 5px;
+        }
+    }
+    .panel.rings.al-left,
+    .panel.rings-sm.al-left {
+        padding-left: 10px;
+    }
+    .panel.rings.al-right,
+    .panel.rings-sm.al-right {
+        padding-right: 10px;
+    }
+    /*---| 方形 |---*/
+    /*- square -*/
+    .panel.squares,
+    .panel.squares-rd {
+        height: 30px;
+        .slider-anchor {
+            width: 10px;
+            height: 10px;
+            margin: 10px 5px;
+        }
+    }
+    .panel.squares.al-left,
+    .panel.squares-rd.al-left {
+        padding-left: 10px;
+    }
+    .panel.squares.al-right,
+    .panel.squares-rd.al-right {
+        padding-right: 10px;
+    }
+    /*- rounded square -*/
+    .panel.squares-rd {
+        height: 40px;
+        .slider-anchor {
+            width: 16px;
+            height: 16px;
+            margin: 12px 6px;
+            border-radius: 3px;
+        }
+    }
+    /*- rectangles -*/
+    .panel.rectangles,
+    .panel.rectangles-rd {
+        height: 30px;
+        .slider-anchor {
+            width: 16px;
+            height: 10px;
+            margin: 10px 6px;
+        }
+    }
+    .panel.rectangles.al-left,
+    .panel.rectangles-rd.al-left {
+        padding-left: 10px;
+    }
+    .panel.rectangles.al-right,
+    .panel.rectangles-rd.al-right {
+        padding-right: 10px;
+    }
+    /*- round rectangles -*/
+    .panel.rectangles-rd .slider-anchor {
+        border-radius: 3px;
+    }
+    /*---| 条状 |---*/
+    /*- bars -*/
+    .panel.bars,
+    .panel.bars-rd {
+        height: 30px;
+        .slider-anchor {
+            width: 24px;
+            height: 6px;
+            margin: 12px 3px;
+        }
+    }
+    .panel.bars.al-left,
+    .panel.bars-rd.al-left {
+        padding-left: 10px;
+    }
+    .panel.bars.al-right,
+    .panel.bars-rd.al-right {
+        padding-right: 10px;
+    }
+    /*- rounded bars -*/
+    .panel.bars-rd {
+        .slider-anchor {
+            border-radius: 3px;
+        }
+    }
+    /*---| 线形 |---*/
+    /*- lines -*/
+    .panel.lines,
+    .panel.lines-wb {
+        height: 30px;
+        .slider-anchor {
+            width: 50px;
+            height: 1px;
+            margin: 12px 5px;
+        }
+    }
+    .panel.lines.al-left,
+    .panel.lines-wb.al-left {
+        padding-left: 10px;
+    }
+    .panel.lines.al-right,
+    .panel.lines-wb.al-right {
+        padding-right: 10px;
+    }
+    .panel.lines-wb {
+        .slider-anchor {
+            border-style: solid;
+            border-width: 1px;
+        }
+        /*- lines with border -*/
+        .slider-anchor.active {
+            width: 48px;
+            height: 1px;
+        }
+    }
+    /*---| 索引 |---*/
+    /*- context -*/
+    /*- thumbs -*/
+    .panel.context,
+    .panel.thumbs {
+        width: 100%;
+        height: 50px;
+        .slider-anchor {
+            height: 50px;
+            border-top: rgba(255, 255, 255, .5) solid 1px;
+            border-right: rgba(255, 255, 255, .5) solid 1px;
+            line-height: 50px;
+            font-size: 14px;
+            font-size: 0.7rem;
+            transition: background-color ease-in .3s;
+        }
+    }
+    .panel.thumbs {
+        height: 80px;
+        font-size: 0;
+    }
+    .panel.context.middle-remote,
+    .panel.thumbs.middle-remote {
+        width: 200px;
+        height: 100%;
+        top: 0;
+        margin-top: 0;
+        box-sizing: content-box;
+        .slider-anchor {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+    }
+    .panel.thumbs.middle-remote {
+        width: 160px;
+    }
+}

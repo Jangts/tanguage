@@ -1,0 +1,1431 @@
+@charset "UTF-8";
+
+/*********************************************
+ ******** tanguage SEE UI framework ********
+ **********   class  _.see.Silder   **********
+ *********************************************/
+
+
+/****************
+/*	Common
+/************************************************/
+
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+html {
+    font-size: 125%;
+}
+
+body {
+    font-size: 14px;
+    font-size: 0.7rem;
+}
+
+.tang-slider .stage {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    display: block;
+}
+
+.tang-slider .stage>* {
+    display: block;
+    position: absolute;
+}
+
+.tang-slider .stage .troupe {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0;
+    z-index: 0;
+}
+
+.tang-slider .stage .troupe .actor {
+    float: left;
+    height: 100%;
+    top: 0px;
+    z-index: 100;
+}
+
+.tang-slider .stage .troupe .actor img {
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.tang-slider .cutter.goto-prev,
+.tang-slider .slide .cutter.goto-next {
+    cursor: pointer;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.tang-slider .cutter.auto-hide {
+    opacity: 0;
+}
+
+.tang-slider .tang-slider:hover .cutter.auto-hide {
+    opacity: 1;
+}
+
+.tang-slider .cutter.left-col,
+.tang-slider .cutter.right-col,
+.tang-slider .cutter.up-col,
+.tang-slider .cutter.down-col {
+    width: 100%;
+    height: 100%;
+    background-color: #FFF;
+    opacity: .8;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.tang-slider .cutter.left-col {
+    top: 0px;
+    right: 100%;
+}
+
+.tang-slider .cutter.right-col {
+    top: 0px;
+    left: 100%;
+}
+
+.tang-slider .cutter.up-col {
+    bottom: 100%;
+    left: 0;
+}
+
+.tang-slider .cutter.down-col {
+    top: 100%;
+    left: 0;
+}
+
+.tang-slider .cutter {
+    position: absolute;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 999;
+}
+
+.tang-slider .cutter.left-circle,
+.tang-slider .cutter.right-circle,
+.tang-slider .cutter.lt-in-circle,
+.tang-slider .cutter.gt-in-circle,
+.tang-slider .cutter.ll-in-circle,
+.tang-slider .cutter.lg-in-circle,
+.tang-slider .cutter.bl-in-circle,
+.tang-slider .cutter.bg-in-circle {
+    width: 40px;
+    height: 40px;
+    top: 50%;
+    margin-top: -20px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.tang-slider .cutter.left-bigcircle,
+.tang-slider .cutter.right-bigcircle,
+.tang-slider .cutter.lt-in-bigcircle,
+.tang-slider .cutter.gt-in-bigcircle,
+.tang-slider .cutter.ll-in-bigcircle,
+.tang-slider .cutter.lg-in-bigcircle,
+.tang-slider .cutter.bl-in-bigcircle,
+.tang-slider .cutter.bg-in-bigcircle {
+    width: 80px;
+    height: 80px;
+    top: 50%;
+    margin-top: -40px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.tang-slider .cutter.lt-in-circle::before,
+.tang-slider .cutter.gt-in-circle::before,
+.tang-slider .cutter.ll-in-circle::before,
+.tang-slider .cutter.lg-in-circle::before,
+.tang-slider .cutter.bl-in-circle::before,
+.tang-slider .cutter.bg-in-circle::before,
+.tang-slider .cutter.lt-in-bigcircle::before,
+.tang-slider .cutter.gt-in-bigcircle::before,
+.tang-slider .cutter.ll-in-bigcircle::before,
+.tang-slider .cutter.lg-in-bigcircle::before,
+.tang-slider .cutter.bl-in-bigcircle::before,
+.tang-slider .cutter.bg-in-bigcircle::before {
+    font-family: FontAwesome;
+    display: block;
+    width: 110%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    line-height: 42px;
+    text-align: center;
+    text-decoration: none;
+    color: #FFF;
+}
+
+.tang-slider .cutter.big-lt,
+.tang-slider .cutter.big-gt {
+    width: 40px;
+    height: 80px;
+    top: 50%;
+    margin-top: -40px;
+    background: transparent;
+}
+
+.tang-slider .cutter.big-lt::before,
+.tang-slider .cutter.big-gt::before {
+    font-family: FontAwesome;
+    line-height: 82px;
+    font-size: 72px;
+    font-size: 3.6rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.tang-slider .cutter.left-circle,
+.tang-slider .cutter.left-bigcircle,
+.tang-slider .cutter.lt-in-circle,
+.tang-slider .cutter.lt-in-bigcircle,
+.tang-slider .cutter.ll-in-circle,
+.tang-slider .cutter.ll-in-bigcircle,
+.tang-slider .cutter.bl-in-circle,
+.tang-slider .cutter.bl-in-bigcircle {
+    left: 10px;
+}
+
+.tang-slider .cutter.lt-in-circle::before,
+.tang-slider .cutter.lt-in-bigcircle::before,
+.tang-slider .cutter.ll-in-circle::before,
+.tang-slider .cutter.ll-in-bigcircle::before,
+.tang-slider .cutter.bl-in-circle::before,
+.tang-slider .cutter.bl-in-bigcircle::before {
+    margin-left: -10%;
+}
+
+.tang-slider .cutter.lt-in-circle::before {
+    font-size: 24px;
+    font-size: 1.2rem;
+    content: "\f104";
+}
+
+.tang-slider .cutter.ll-in-circle::before {
+    font-size: 30px;
+    font-size: 1.5rem;
+    content: "<";
+}
+
+.tang-slider .cutter.bl-in-circle::before {
+    font-size: 21px;
+    font-size: 1.05rem;
+    content: "\f053";
+}
+
+.tang-slider .cutter.lt-in-bigcircle::before,
+.tang-slider .cutter.ll-in-bigcircle::before,
+.tang-slider .cutter.bl-in-bigcircle::before {
+    line-height: 82px;
+}
+
+.tang-slider .cutter.lt-in-bigcircle::before {
+    font-size: 48px;
+    font-size: 2.4rem;
+    content: "\f104";
+}
+
+.tang-slider .cutter.ll-in-bigcircle::before {
+    font-size: 60px;
+    font-size: 3rem;
+    content: "<";
+}
+
+.tang-slider .cutter.bl-in-bigcircle::before {
+    font-size: 36px;
+    font-size: 1.8rem;
+    content: "\f053";
+}
+
+.tang-slider .cutter.big-lt {
+    text-align: left;
+    left: 10px;
+}
+
+.tang-slider .cutter.big-lt:before {
+    text-align: left;
+    content: "\f104";
+}
+
+.tang-slider .cutter.right-circle,
+.tang-slider .cutter.right-bigcircle,
+.tang-slider .cutter.gt-in-circle,
+.tang-slider .cutter.gt-in-bigcircle,
+.tang-slider .cutter.lg-in-circle,
+.tang-slider .cutter.lg-in-bigcircle,
+.tang-slider .cutter.bg-in-circle,
+.tang-slider .cutter.bg-in-bigcircle {
+    right: 10px;
+}
+
+.tang-slider .cutter.gt-in-circle::before {
+    font-size: 24px;
+    font-size: 1.2rem;
+    content: "\f105";
+}
+
+.tang-slider .cutter.lg-in-circle::before {
+    font-size: 30px;
+    font-size: 1.5rem;
+    content: ">";
+}
+
+.tang-slider .cutter.bg-in-circle::before {
+    font-size: 21px;
+    font-size: 1.05rem;
+    content: "\f054";
+}
+
+.tang-slider .cutter.gt-in-bigcircle::before,
+.tang-slider .cutter.lg-in-bigcircle::before,
+.tang-slider .cutter.bg-in-bigcircle::before {
+    line-height: 82px;
+}
+
+.tang-slider .cutter.gt-in-bigcircle::before {
+    font-size: 48px;
+    font-size: 2.4rem;
+    content: "\f105";
+}
+
+.tang-slider .cutter.lg-in-bigcircle::before {
+    font-size: 60px;
+    font-size: 3rem;
+    content: ">";
+}
+
+.tang-slider .cutter.bg-in-bigcircle::before {
+    font-size: 36px;
+    font-size: 1.8em;
+    content: "\f054";
+}
+
+.tang-slider .cutter.big-gt {
+    text-align: right;
+    right: 10px;
+}
+
+.tang-slider .cutter.big-gt:before {
+    text-align: right;
+    content: "\f105";
+}
+
+
+/*
+ * Panel Position
+ * 面板位置
+ */
+
+.tang-slider {
+    /*
+ * Buttons Position
+ * 按钮位置
+ */
+    /*
+ * Buttons Style
+ * 按钮样式
+ */
+    /*---| 圆/点/圈 |---*/
+    /*- circles -*/
+    /*- points -*/
+    /*- rings -*/
+    /*- small rings -*/
+    /*---| 方形 |---*/
+    /*- square -*/
+    /*- rounded square -*/
+    /*- rectangles -*/
+    /*- round rectangles -*/
+    /*---| 条状 |---*/
+    /*- bars -*/
+    /*- rounded bars -*/
+    /*---| 线形 |---*/
+    /*- lines -*/
+    /*---| 索引 |---*/
+    /*- context -*/
+    /*- thumbs -*/
+}
+
+.tang-slider .panel {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    z-index: 999;
+    font-size: 0px;
+}
+
+.tang-slider .panel .slider-anchor {
+    display: inline-block;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.tang-slider .panel.upon-remote {
+    top: 0px;
+    text-align: right;
+}
+
+.tang-slider .panel.top-remote {
+    top: 0px;
+    text-align: right;
+}
+
+.tang-slider .panel.middle-remote {
+    top: 50%;
+    margin-top: -50px;
+    text-align: right;
+}
+
+.tang-slider .panel.bottom-remote {
+    bottom: 0px;
+    text-align: right;
+}
+
+.tang-slider .panel.under-remote {
+    bottom: -30px;
+    text-align: center;
+}
+
+.tang-slider .panel.panel.al-left {
+    left: 0;
+    right: auto;
+    text-align: left;
+}
+
+.tang-slider .panel.panel.al-right {
+    left: auto;
+    right: 0;
+    text-align: right;
+}
+
+.tang-slider .panel.panel.al-center {
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+}
+
+.tang-slider .panel.panel.al-just {
+    left: 0;
+    right: 0;
+    text-align: justify;
+}
+
+.tang-slider .panel.middle-remote.al-center,
+.tang-slider .panel.middle-remote.al-just {
+    display: none !important;
+}
+
+.tang-slider .panel.circles {
+    height: 40px;
+}
+
+.tang-slider .panel.circles .slider-anchor {
+    width: 20px;
+    height: 20px;
+    margin: 8px 10px;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    opacity: .8;
+}
+
+.tang-slider .panel.circles.al-left {
+    padding-left: 10px;
+}
+
+.tang-slider .panel.circles.al-right {
+    padding-right: 10px;
+}
+
+.tang-slider .panel.points {
+    height: 30px;
+}
+
+.tang-slider .panel.points .slider-anchor {
+    opacity: .8;
+    width: 12px;
+    height: 12px;
+    margin: 9px 5px;
+    border-radius: 6px;
+}
+
+.tang-slider .panel.points.al-left {
+    padding-left: 10px;
+}
+
+.tang-slider .panel.points.al-right {
+    padding-right: 10px;
+}
+
+.tang-slider .panel.rings {
+    height: 40px;
+}
+
+.tang-slider .panel.rings .slider-anchor {
+    width: 16px;
+    height: 16px;
+    margin: 10px 5px;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 8px;
+}
+
+.tang-slider .panel.rings-sm {
+    height: 30px;
+}
+
+.tang-slider .panel.rings-sm .slider-anchor {
+    width: 10px;
+    height: 10px;
+    margin: 10px 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+.tang-slider .panel.rings.al-left,
+.tang-slider .panel.rings-sm.al-left {
+    padding-left: 10px;
+}
+
+.tang-slider .panel.rings.al-right,
+.tang-slider .panel.rings-sm.al-right {
+    padding-right: 10px;
+}
+
+.tang-slider .panel.squares,
+.tang-slider .panel.squares-rd {
+    height: 30px;
+}
+
+.tang-slider .panel.squares .slider-anchor,
+.tang-slider .panel.squares-rd .slider-anchor {
+    width: 10px;
+    height: 10px;
+    margin: 10px 5px;
+}
+
+.tang-slider .panel.squares.al-left,
+.tang-slider .panel.squares-rd.al-left {
+    padding-left: 10px;
+}
+
+.tang-slider .panel.squares.al-right,
+.tang-slider .panel.squares-rd.al-right {
+    padding-right: 10px;
+}
+
+.tang-slider .panel.squares-rd {
+    height: 40px;
+}
+
+.tang-slider .panel.squares-rd .slider-anchor {
+    width: 16px;
+    height: 16px;
+    margin: 12px 6px;
+    border-radius: 3px;
+}
+
+.tang-slider .panel.rectangles,
+.tang-slider .panel.rectangles-rd {
+    height: 30px;
+}
+
+.tang-slider .panel.rectangles .slider-anchor,
+.tang-slider .panel.rectangles-rd .slider-anchor {
+    width: 16px;
+    height: 10px;
+    margin: 10px 6px;
+}
+
+.tang-slider .panel.rectangles.al-left,
+.tang-slider .panel.rectangles-rd.al-left {
+    padding-left: 10px;
+}
+
+.tang-slider .panel.rectangles.al-right,
+.tang-slider .panel.rectangles-rd.al-right {
+    padding-right: 10px;
+}
+
+.tang-slider .panel.rectangles-rd .slider-anchor {
+    border-radius: 3px;
+}
+
+.tang-slider .panel.bars,
+.tang-slider .panel.bars-rd {
+    height: 30px;
+}
+
+.tang-slider .panel.bars .slider-anchor,
+.tang-slider .panel.bars-rd .slider-anchor {
+    width: 24px;
+    height: 6px;
+    margin: 12px 3px;
+}
+
+.tang-slider .panel.bars.al-left,
+.tang-slider .panel.bars-rd.al-left {
+    padding-left: 10px;
+}
+
+.tang-slider .panel.bars.al-right,
+.tang-slider .panel.bars-rd.al-right {
+    padding-right: 10px;
+}
+
+.tang-slider .panel.bars-rd .slider-anchor {
+    border-radius: 3px;
+}
+
+.tang-slider .panel.lines,
+.tang-slider .panel.lines-wb {
+    height: 30px;
+}
+
+.tang-slider .panel.lines .slider-anchor,
+.tang-slider .panel.lines-wb .slider-anchor {
+    width: 50px;
+    height: 1px;
+    margin: 12px 5px;
+}
+
+.tang-slider .panel.lines.al-left,
+.tang-slider .panel.lines-wb.al-left {
+    padding-left: 10px;
+}
+
+.tang-slider .panel.lines.al-right,
+.tang-slider .panel.lines-wb.al-right {
+    padding-right: 10px;
+}
+
+.tang-slider .panel.lines-wb {
+    /*- lines with border -*/
+}
+
+.tang-slider .panel.lines-wb .slider-anchor {
+    border-style: solid;
+    border-width: 1px;
+}
+
+.tang-slider .panel.lines-wb .slider-anchor.active {
+    width: 48px;
+    height: 1px;
+}
+
+.tang-slider .panel.context,
+.tang-slider .panel.thumbs {
+    width: 100%;
+    height: 50px;
+}
+
+.tang-slider .panel.context .slider-anchor,
+.tang-slider .panel.thumbs .slider-anchor {
+    height: 50px;
+    border-top: rgba(255, 255, 255, 0.5) solid 1px;
+    border-right: rgba(255, 255, 255, 0.5) solid 1px;
+    line-height: 50px;
+    font-size: 14px;
+    font-size: 0.7rem;
+    transition: background-color ease-in .3s;
+}
+
+.tang-slider .panel.thumbs {
+    height: 80px;
+    font-size: 0;
+}
+
+.tang-slider .panel.context.middle-remote,
+.tang-slider .panel.thumbs.middle-remote {
+    width: 200px;
+    height: 100%;
+    top: 0;
+    margin-top: 0;
+    box-sizing: content-box;
+}
+
+.tang-slider .panel.context.middle-remote .slider-anchor,
+.tang-slider .panel.thumbs.middle-remote .slider-anchor {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.tang-slider .panel.thumbs.middle-remote {
+    width: 160px;
+}
+
+
+/*
+ * Anchor Colors
+ * 锚点颜色
+ */
+
+
+/**** TYPES ****/
+
+
+/* Without Border **/
+
+.tang-slider {
+    /* Circles */
+    /* With Border */
+    /**** COLOURS ****/
+    /* default:gray */
+    /* red */
+    /* orange */
+    /* brown */
+    /* yellow */
+    /* green */
+    /* darkgreen */
+    /* Circles */
+    /* With Border */
+    /**** COLOURS ****/
+    /* default:gray */
+    /* red */
+    /* orange */
+    /* brown */
+    /* yellow */
+    /* green */
+    /* darkgreen */
+    /* cyan */
+    /* blue */
+    /* darkblue */
+    /* purple */
+    /* magenta */
+    /* pink */
+    /* white */
+    /* dark */
+    /* black */
+    /**** Only Border ****/
+    /* cyan */
+    /* blue */
+    /* darkblue */
+    /* purple */
+    /* magenta */
+    /* pink */
+    /* white */
+    /* dark */
+    /* black */
+    /**** Only Border ****/
+}
+
+.tang-slider .panel.bars .slider-anchor,
+.tang-slider .panel.bars-rd .slider-anchor,
+.tang-slider .panel.rectangles .slider-anchor,
+.tang-slider .panel.squares .slider-anchor,
+.tang-slider .panel.squares-rd .slider-anchor,
+.tang-slider .panel.points .slider-anchor,
+.tang-slider .panel.lines .slider-anchor {
+    background-color: #DDD;
+}
+
+.tang-slider .panel.circles .slider-anchor {
+    background-color: #DDD;
+    border-color: #DDD;
+}
+
+.tang-slider .panel.lines-wb .slider-anchor,
+.tang-slider .panel.rings .slider-anchor,
+.tang-slider .panel.rings-sm .slider-anchor {
+    background-color: transparent;
+    border-color: #888;
+}
+
+.tang-slider .panel.squares .slider-anchor.active,
+.tang-slider .panel.squares-rd .slider-anchor.active,
+.tang-slider .panel.rectangles .slider-anchor.active,
+.tang-slider .panel.bars .slider-anchor.active,
+.tang-slider .panel.bars-rd .slider-anchor.active,
+.tang-slider .panel.points .slider-anchor.active,
+.tang-slider .panel.lines .slider-anchor.active,
+.tang-slider .panel.rings .slider-anchor:hover,
+.tang-slider .panel.rings-sm .slider-anchor:hover {
+    background-color: #888;
+}
+
+.tang-slider .panel.circles .slider-anchor.active,
+.tang-slider .panel.lines-wb .slider-anchor.active,
+.tang-slider .panel.rings .slider-anchor.active,
+.tang-slider .panel.rings-sm .slider-anchor.active {
+    background-color: #888;
+    border-color: #888;
+}
+
+.tang-slider .panel.red.squares .slider-anchor.active,
+.tang-slider .panel.red.squares-rd .slider-anchor.active,
+.tang-slider .panel.red.rectangles .slider-anchor.active,
+.tang-slider .panel.red.bars .slider-anchor.active,
+.tang-slider .panel.red.bars-rd .slider-anchor.active,
+.tang-slider .panel.red.points .slider-anchor.active,
+.tang-slider .panel.red.lines .slider-anchor.active,
+.tang-slider .panel.red.rings .slider-anchor:hover,
+.tang-slider .panel.red.rings-sm .slider-anchor:hover {
+    background-color: #F03;
+}
+
+.tang-slider .panel.red.circles .slider-anchor.active,
+.tang-slider .panel.red.lines-wb .slider-anchor.active,
+.tang-slider .panel.red.rings .slider-anchor.active,
+.tang-slider .panel.red.rings-sm .slider-anchor.active {
+    background-color: #FCC;
+    border-color: #F03;
+}
+
+.tang-slider .panel.orange.squares .slider-anchor.active,
+.tang-slider .panel.orange.squares-rd .slider-anchor.active,
+.tang-slider .panel.orange.rectangles .slider-anchor.active,
+.tang-slider .panel.orange.bars .slider-anchor.active,
+.tang-slider .panel.orange.bars-rd .slider-anchor.active,
+.tang-slider .panel.orange.points .slider-anchor.active,
+.tang-slider .panel.orange.lines .slider-anchor.active,
+.tang-slider .panel.orange.rings .slider-anchor:hover,
+.tang-slider .panel.orange.rings-sm .slider-anchor:hover {
+    background-color: #F60;
+}
+
+.tang-slider .panel.orange.circles .slider-anchor.active,
+.tang-slider .panel.orange.lines-wb .slider-anchor.active,
+.tang-slider .panel.orange.rings .slider-anchor.active,
+.tang-slider .panel.orange.rings-sm .slider-anchor.active {
+    background-color: #FC9;
+    border-color: #F60;
+}
+
+.tang-slider .panel.brown.squares .slider-anchor.active,
+.tang-slider .panel.brown.squares-rd .slider-anchor.active,
+.tang-slider .panel.brown.rectangles .slider-anchor.active,
+.tang-slider .panel.brown.bars .slider-anchor.active,
+.tang-slider .panel.brown.bars-rd .slider-anchor.active,
+.tang-slider .panel.brown.points .slider-anchor.active,
+.tang-slider .panel.brown.lines .slider-anchor.active,
+.tang-slider .panel.brown.rings .slider-anchor:hover,
+.tang-slider .panel.brown.rings-sm .slider-anchor:hover {
+    background-color: #C93;
+}
+
+.tang-slider .panel.brown.circles .slider-anchor.active,
+.tang-slider .panel.brown.lines-wb .slider-anchor.active,
+.tang-slider .panel.brown.rings .slider-anchor.active,
+.tang-slider .panel.brown.rings-sm .slider-anchor.active {
+    background-color: #FC9;
+    border-color: #C93;
+}
+
+.tang-slider .panel.yellow.squares .slider-anchor.active,
+.tang-slider .panel.yellow.squares-rd .slider-anchor.active,
+.tang-slider .panel.yellow.rectangles .slider-anchor.active,
+.tang-slider .panel.yellow.bars .slider-anchor.active,
+.tang-slider .panel.yellow.bars-rd .slider-anchor.active,
+.tang-slider .panel.yellow.points .slider-anchor.active,
+.tang-slider .panel.yellow.lines .slider-anchor.active,
+.tang-slider .panel.yellow.rings .slider-anchor:hover,
+.tang-slider .panel.yellow.rings-sm .slider-anchor:hover {
+    background-color: #CC0;
+}
+
+.tang-slider .panel.yellow.circles .slider-anchor.active,
+.tang-slider .panel.yellow.lines-wb .slider-anchor.active,
+.tang-slider .panel.yellow.rings .slider-anchor.active,
+.tang-slider .panel.yellow.rings-sm .slider-anchor.active {
+    background-color: #FFC;
+    border-color: #CC0;
+}
+
+.tang-slider .panel.green.squares .slider-anchor.active,
+.tang-slider .panel.green.squares-rd .slider-anchor.active,
+.tang-slider .panel.green.rectangles .slider-anchor.active,
+.tang-slider .panel.green.bars .slider-anchor.active,
+.tang-slider .panel.green.bars-rd .slider-anchor.active,
+.tang-slider .panel.green.points .slider-anchor.active,
+.tang-slider .panel.green.lines .slider-anchor.active,
+.tang-slider .panel.green.rings .slider-anchor:hover,
+.tang-slider .panel.green.rings-sm .slider-anchor:hover {
+    background-color: #6C6;
+}
+
+.tang-slider .panel.green.circles .slider-anchor.active,
+.tang-slider .panel.green.lines-wb .slider-anchor.active,
+.tang-slider .panel.green.rings .slider-anchor.active,
+.tang-slider .panel.green.rings-sm .slider-anchor.active {
+    background-color: #CFC;
+    border-color: #6C6;
+}
+
+.tang-slider .panel.darkgreen.squares .slider-anchor.active,
+.tang-slider .panel.darkgreen.squares-rd .slider-anchor.active,
+.tang-slider .panel.darkgreen.rectangles .slider-anchor.active,
+.tang-slider .panel.darkgreen.bars .slider-anchor.active,
+.tang-slider .panel.darkgreen.bars-rd .slider-anchor.active,
+.tang-slider .panel.darkdarkgreen.points .slider-anchor.active,
+.tang-slider .panel.darkgreen.lines .slider-anchor.active,
+.tang-slider .panel.darkgreen.rings .slider-anchor:hover,
+.tang-slider .panel.darkgreen.rings-sm .slider-anchor:hover {
+    background-color: #090;
+}
+
+.tang-slider .panel.darkgreen.circles .slider-anchor.active,
+.tang-slider .panel.darkgreen.lines-wb .slider-anchor.active,
+.tang-slider .panel.darkgreen.rings .slider-anchor.active,
+.tang-slider .panel.darkgreen.rings-sm .slider-anchor.active {
+    background-color: #CFC;
+    border-color: #090;
+}
+
+.tang-slider .panel.bars .slider-anchor,
+.tang-slider .tang-slider .panel.bars-rd .slider-anchor,
+.tang-slider .tang-slider .panel.rectangles .slider-anchor,
+.tang-slider .tang-slider .panel.squares .slider-anchor,
+.tang-slider .tang-slider .panel.squares-rd .slider-anchor,
+.tang-slider .tang-slider .panel.points .slider-anchor,
+.tang-slider .tang-slider .panel.lines .slider-anchor {
+    background-color: #DDD;
+}
+
+.tang-slider .tang-slider .panel.circles .slider-anchor {
+    background-color: #DDD;
+    border-color: #DDD;
+}
+
+.tang-slider .tang-slider .panel.lines-wb .slider-anchor,
+.tang-slider .tang-slider .panel.rings .slider-anchor,
+.tang-slider .tang-slider .panel.rings-sm .slider-anchor {
+    background-color: transparent;
+    border-color: #888;
+}
+
+.tang-slider .tang-slider .panel.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.rings-sm .slider-anchor:hover {
+    background-color: #888;
+}
+
+.tang-slider .tang-slider .panel.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.rings-sm .slider-anchor.active {
+    background-color: #888;
+    border-color: #888;
+}
+
+.tang-slider .tang-slider .panel.red.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.red.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.red.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.red.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.red.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.red.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.red.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.red.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.red.rings-sm .slider-anchor:hover {
+    background-color: #F03;
+}
+
+.tang-slider .tang-slider .panel.red.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.red.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.red.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.red.rings-sm .slider-anchor.active {
+    background-color: #FCC;
+    border-color: #F03;
+}
+
+.tang-slider .tang-slider .panel.orange.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.orange.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.orange.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.orange.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.orange.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.orange.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.orange.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.orange.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.orange.rings-sm .slider-anchor:hover {
+    background-color: #F60;
+}
+
+.tang-slider .tang-slider .panel.orange.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.orange.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.orange.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.orange.rings-sm .slider-anchor.active {
+    background-color: #FC9;
+    border-color: #F60;
+}
+
+.tang-slider .tang-slider .panel.brown.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.brown.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.brown.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.brown.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.brown.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.brown.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.brown.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.brown.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.brown.rings-sm .slider-anchor:hover {
+    background-color: #C93;
+}
+
+.tang-slider .tang-slider .panel.brown.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.brown.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.brown.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.brown.rings-sm .slider-anchor.active {
+    background-color: #FC9;
+    border-color: #C93;
+}
+
+.tang-slider .tang-slider .panel.yellow.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.yellow.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.yellow.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.yellow.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.yellow.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.yellow.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.yellow.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.yellow.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.yellow.rings-sm .slider-anchor:hover {
+    background-color: #CC0;
+}
+
+.tang-slider .tang-slider .panel.yellow.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.yellow.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.yellow.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.yellow.rings-sm .slider-anchor.active {
+    background-color: #FFC;
+    border-color: #CC0;
+}
+
+.tang-slider .tang-slider .panel.green.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.green.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.green.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.green.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.green.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.green.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.green.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.green.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.green.rings-sm .slider-anchor:hover {
+    background-color: #6C6;
+}
+
+.tang-slider .tang-slider .panel.green.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.green.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.green.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.green.rings-sm .slider-anchor.active {
+    background-color: #CFC;
+    border-color: #6C6;
+}
+
+.tang-slider .tang-slider .panel.darkgreen.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkgreen.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkgreen.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkgreen.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkgreen.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkdarkgreen.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkgreen.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkgreen.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.darkgreen.rings-sm .slider-anchor:hover {
+    background-color: #090;
+}
+
+.tang-slider .tang-slider .panel.darkgreen.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkgreen.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkgreen.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkgreen.rings-sm .slider-anchor.active {
+    background-color: #CFC;
+    border-color: #090;
+}
+
+.tang-slider .tang-slider .panel.cyan.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.cyan.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.cyan.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.cyan.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.cyan.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.cyan.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.cyan.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.cyan.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.cyan.rings-sm .slider-anchor:hover {
+    background-color: #6CF;
+}
+
+.tang-slider .tang-slider .panel.cyan.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.cyan.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.cyan.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.cyan.rings-sm .slider-anchor.active {
+    background-color: #CFF;
+    border-color: #6CF;
+}
+
+.tang-slider .tang-slider .panel.blue.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.blue.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.blue.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.blue.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.blue.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.blue.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.blue.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.blue.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.blue.rings-sm .slider-anchor:hover {
+    background-color: #08F;
+}
+
+.tang-slider .tang-slider .panel.blue.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.blue.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.blue.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.blue.rings-sm .slider-anchor.active {
+    background-color: #6FF;
+    border-color: #08F;
+}
+
+.tang-slider .tang-slider .panel.darkblue.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkblue.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkblue.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkblue.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkblue.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkblue.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkblue.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkblue.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.darkblue.rings-sm .slider-anchor:hover {
+    background-color: #038;
+}
+
+.tang-slider .tang-slider .panel.darkblue.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkblue.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkblue.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.darkblue.rings-sm .slider-anchor.active {
+    background-color: #6CF;
+    border-color: #038;
+}
+
+.tang-slider .tang-slider .panel.purple.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.purple.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.purple.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.purple.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.purple.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.purple.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.purple.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.purple.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.purple.rings-sm .slider-anchor:hover {
+    background-color: #D0C;
+}
+
+.tang-slider .tang-slider .panel.purple.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.purple.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.purple.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.purple.rings-sm .slider-anchor.active {
+    background-color: #FCE;
+    border-color: #D0C;
+}
+
+.tang-slider .tang-slider .panel.magenta.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.magenta.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.magenta.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.magenta.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.magenta.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.magenta.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.magenta.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.magenta.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.magenta.rings-sm .slider-anchor:hover {
+    background-color: #F07;
+}
+
+.tang-slider .tang-slider .panel.magenta.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.magenta.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.magenta.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.magenta.rings-sm .slider-anchor.active {
+    background-color: #F9C;
+    border-color: #F07;
+}
+
+.tang-slider .tang-slider .panel.pink.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.pink.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.pink.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.pink.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.pink.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.pink.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.pink.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.pink.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.pink.rings-sm .slider-anchor:hover {
+    background-color: #F69;
+}
+
+.tang-slider .tang-slider .panel.pink.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.pink.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.pink.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.pink.rings-sm .slider-anchor.active {
+    background-color: #F9F;
+    border-color: #F69;
+}
+
+.tang-slider .tang-slider .panel.white.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.white.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.white.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.white.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.white.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.white.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.white.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.white.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.white.rings-sm .slider-anchor:hover {
+    background-color: #FFF;
+}
+
+.tang-slider .tang-slider .panel.white.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.white.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.white.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.white.rings-sm .slider-anchor.active {
+    background-color: #DDD;
+    border-color: #FFF;
+}
+
+.tang-slider .tang-slider .panel.dark.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.dark.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.dark.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.dark.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.dark.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.dark.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.dark.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.dark.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.dark.rings-sm .slider-anchor:hover {
+    background-color: #333;
+}
+
+.tang-slider .tang-slider .panel.dark.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.dark.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.dark.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.dark.rings-sm .slider-anchor.active {
+    background-color: #666;
+    border-color: #333;
+}
+
+.tang-slider .tang-slider .panel.black.squares .slider-anchor.active,
+.tang-slider .tang-slider .panel.black.squares-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.black.rectangles .slider-anchor.active,
+.tang-slider .tang-slider .panel.black.bars .slider-anchor.active,
+.tang-slider .tang-slider .panel.black.bars-rd .slider-anchor.active,
+.tang-slider .tang-slider .panel.black.points .slider-anchor.active,
+.tang-slider .tang-slider .panel.black.lines .slider-anchor.active,
+.tang-slider .tang-slider .panel.black.rings .slider-anchor:hover,
+.tang-slider .tang-slider .panel.black.rings-sm .slider-anchor:hover {
+    background-color: #000;
+}
+
+.tang-slider .tang-slider .panel.black.circles .slider-anchor.active,
+.tang-slider .tang-slider .panel.black.lines-wb .slider-anchor.active,
+.tang-slider .tang-slider .panel.black.rings .slider-anchor.active,
+.tang-slider .tang-slider .panel.black.rings-sm .slider-anchor.active {
+    background-color: #666;
+    border-color: #000;
+}
+
+.tang-slider .panel.cyan.squares .slider-anchor.active,
+.tang-slider .panel.cyan.squares-rd .slider-anchor.active,
+.tang-slider .panel.cyan.rectangles .slider-anchor.active,
+.tang-slider .panel.cyan.bars .slider-anchor.active,
+.tang-slider .panel.cyan.bars-rd .slider-anchor.active,
+.tang-slider .panel.cyan.points .slider-anchor.active,
+.tang-slider .panel.cyan.lines .slider-anchor.active,
+.tang-slider .panel.cyan.rings .slider-anchor:hover,
+.tang-slider .panel.cyan.rings-sm .slider-anchor:hover {
+    background-color: #6CF;
+}
+
+.tang-slider .panel.cyan.circles .slider-anchor.active,
+.tang-slider .panel.cyan.lines-wb .slider-anchor.active,
+.tang-slider .panel.cyan.rings .slider-anchor.active,
+.tang-slider .panel.cyan.rings-sm .slider-anchor.active {
+    background-color: #CFF;
+    border-color: #6CF;
+}
+
+.tang-slider .panel.blue.squares .slider-anchor.active,
+.tang-slider .panel.blue.squares-rd .slider-anchor.active,
+.tang-slider .panel.blue.rectangles .slider-anchor.active,
+.tang-slider .panel.blue.bars .slider-anchor.active,
+.tang-slider .panel.blue.bars-rd .slider-anchor.active,
+.tang-slider .panel.blue.points .slider-anchor.active,
+.tang-slider .panel.blue.lines .slider-anchor.active,
+.tang-slider .panel.blue.rings .slider-anchor:hover,
+.tang-slider .panel.blue.rings-sm .slider-anchor:hover {
+    background-color: #08F;
+}
+
+.tang-slider .panel.blue.circles .slider-anchor.active,
+.tang-slider .panel.blue.lines-wb .slider-anchor.active,
+.tang-slider .panel.blue.rings .slider-anchor.active,
+.tang-slider .panel.blue.rings-sm .slider-anchor.active {
+    background-color: #6FF;
+    border-color: #08F;
+}
+
+.tang-slider .panel.darkblue.squares .slider-anchor.active,
+.tang-slider .panel.darkblue.squares-rd .slider-anchor.active,
+.tang-slider .panel.darkblue.rectangles .slider-anchor.active,
+.tang-slider .panel.darkblue.bars .slider-anchor.active,
+.tang-slider .panel.darkblue.bars-rd .slider-anchor.active,
+.tang-slider .panel.darkblue.points .slider-anchor.active,
+.tang-slider .panel.darkblue.lines .slider-anchor.active,
+.tang-slider .panel.darkblue.rings .slider-anchor:hover,
+.tang-slider .panel.darkblue.rings-sm .slider-anchor:hover {
+    background-color: #038;
+}
+
+.tang-slider .panel.darkblue.circles .slider-anchor.active,
+.tang-slider .panel.darkblue.lines-wb .slider-anchor.active,
+.tang-slider .panel.darkblue.rings .slider-anchor.active,
+.tang-slider .panel.darkblue.rings-sm .slider-anchor.active {
+    background-color: #6CF;
+    border-color: #038;
+}
+
+.tang-slider .panel.purple.squares .slider-anchor.active,
+.tang-slider .panel.purple.squares-rd .slider-anchor.active,
+.tang-slider .panel.purple.rectangles .slider-anchor.active,
+.tang-slider .panel.purple.bars .slider-anchor.active,
+.tang-slider .panel.purple.bars-rd .slider-anchor.active,
+.tang-slider .panel.purple.points .slider-anchor.active,
+.tang-slider .panel.purple.lines .slider-anchor.active,
+.tang-slider .panel.purple.rings .slider-anchor:hover,
+.tang-slider .panel.purple.rings-sm .slider-anchor:hover {
+    background-color: #D0C;
+}
+
+.tang-slider .panel.purple.circles .slider-anchor.active,
+.tang-slider .panel.purple.lines-wb .slider-anchor.active,
+.tang-slider .panel.purple.rings .slider-anchor.active,
+.tang-slider .panel.purple.rings-sm .slider-anchor.active {
+    background-color: #FCE;
+    border-color: #D0C;
+}
+
+.tang-slider .panel.magenta.squares .slider-anchor.active,
+.tang-slider .panel.magenta.squares-rd .slider-anchor.active,
+.tang-slider .panel.magenta.rectangles .slider-anchor.active,
+.tang-slider .panel.magenta.bars .slider-anchor.active,
+.tang-slider .panel.magenta.bars-rd .slider-anchor.active,
+.tang-slider .panel.magenta.points .slider-anchor.active,
+.tang-slider .panel.magenta.lines .slider-anchor.active,
+.tang-slider .panel.magenta.rings .slider-anchor:hover,
+.tang-slider .panel.magenta.rings-sm .slider-anchor:hover {
+    background-color: #F07;
+}
+
+.tang-slider .panel.magenta.circles .slider-anchor.active,
+.tang-slider .panel.magenta.lines-wb .slider-anchor.active,
+.tang-slider .panel.magenta.rings .slider-anchor.active,
+.tang-slider .panel.magenta.rings-sm .slider-anchor.active {
+    background-color: #F9C;
+    border-color: #F07;
+}
+
+.tang-slider .panel.pink.squares .slider-anchor.active,
+.tang-slider .panel.pink.squares-rd .slider-anchor.active,
+.tang-slider .panel.pink.rectangles .slider-anchor.active,
+.tang-slider .panel.pink.bars .slider-anchor.active,
+.tang-slider .panel.pink.bars-rd .slider-anchor.active,
+.tang-slider .panel.pink.points .slider-anchor.active,
+.tang-slider .panel.pink.lines .slider-anchor.active,
+.tang-slider .panel.pink.rings .slider-anchor:hover,
+.tang-slider .panel.pink.rings-sm .slider-anchor:hover {
+    background-color: #F69;
+}
+
+.tang-slider .panel.pink.circles .slider-anchor.active,
+.tang-slider .panel.pink.lines-wb .slider-anchor.active,
+.tang-slider .panel.pink.rings .slider-anchor.active,
+.tang-slider .panel.pink.rings-sm .slider-anchor.active {
+    background-color: #F9F;
+    border-color: #F69;
+}
+
+.tang-slider .panel.white.squares .slider-anchor.active,
+.tang-slider .panel.white.squares-rd .slider-anchor.active,
+.tang-slider .panel.white.rectangles .slider-anchor.active,
+.tang-slider .panel.white.bars .slider-anchor.active,
+.tang-slider .panel.white.bars-rd .slider-anchor.active,
+.tang-slider .panel.white.points .slider-anchor.active,
+.tang-slider .panel.white.lines .slider-anchor.active,
+.tang-slider .panel.white.rings .slider-anchor:hover,
+.tang-slider .panel.white.rings-sm .slider-anchor:hover {
+    background-color: #FFF;
+}
+
+.tang-slider .panel.white.circles .slider-anchor.active,
+.tang-slider .panel.white.lines-wb .slider-anchor.active,
+.tang-slider .panel.white.rings .slider-anchor.active,
+.tang-slider .panel.white.rings-sm .slider-anchor.active {
+    background-color: #DDD;
+    border-color: #FFF;
+}
+
+.tang-slider .panel.dark.squares .slider-anchor.active,
+.tang-slider .panel.dark.squares-rd .slider-anchor.active,
+.tang-slider .panel.dark.rectangles .slider-anchor.active,
+.tang-slider .panel.dark.bars .slider-anchor.active,
+.tang-slider .panel.dark.bars-rd .slider-anchor.active,
+.tang-slider .panel.dark.points .slider-anchor.active,
+.tang-slider .panel.dark.lines .slider-anchor.active,
+.tang-slider .panel.dark.rings .slider-anchor:hover,
+.tang-slider .panel.dark.rings-sm .slider-anchor:hover {
+    background-color: #333;
+}
+
+.tang-slider .panel.dark.circles .slider-anchor.active,
+.tang-slider .panel.dark.lines-wb .slider-anchor.active,
+.tang-slider .panel.dark.rings .slider-anchor.active,
+.tang-slider .panel.dark.rings-sm .slider-anchor.active {
+    background-color: #666;
+    border-color: #333;
+}
+
+.tang-slider .panel.black.squares .slider-anchor.active,
+.tang-slider .panel.black.squares-rd .slider-anchor.active,
+.tang-slider .panel.black.rectangles .slider-anchor.active,
+.tang-slider .panel.black.bars .slider-anchor.active,
+.tang-slider .panel.black.bars-rd .slider-anchor.active,
+.tang-slider .panel.black.points .slider-anchor.active,
+.tang-slider .panel.black.lines .slider-anchor.active,
+.tang-slider .panel.black.rings .slider-anchor:hover,
+.tang-slider .panel.black.rings-sm .slider-anchor:hover {
+    background-color: #000;
+}
+
+.tang-slider .panel.black.circles .slider-anchor.active,
+.tang-slider .panel.black.lines-wb .slider-anchor.active,
+.tang-slider .panel.black.rings .slider-anchor.active,
+.tang-slider .panel.black.rings-sm .slider-anchor.active {
+    background-color: #666;
+    border-color: #000;
+}
+
+.tang-slider.colx3 .cutter {
+    width: 100%;
+    height: 100%;
+    background-color: #FFF;
+    opacity: .8;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.tang-slider.colx3 .cutter.goto-prev {
+    top: 0px;
+    right: 100%;
+}
+
+.tang-slider.colx3 .cutter.goto-next {
+    top: 0px;
+    left: 100%;
+}

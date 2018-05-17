@@ -1,0 +1,73 @@
+.se-toolbar {
+    width: 100%;
+    background-color: #FDFDFE; // border-bottom: 1px solid #DDD;
+    overflow: visible;
+    font-size: 0;
+    line-height: 0;
+    z-index: 2048;
+    .se-toolgroup {
+        display: inline-block;
+        border-left: 1px solid #DDD;
+        overflow: visible;
+        &:first-child {
+            border-left: none;
+        }
+    }
+    .se-tool {
+        float: left;
+        width: auto;
+        min-width: 30px;
+        height: 30px;
+        line-height: 30px;
+        color: #444;
+        font-size: 14px;
+        font-size: 0.7rem;
+        text-align: center;
+        cursor: pointer;
+        overflow: hidden;
+        &:hover {
+            background-color: #09C;
+            color: #FFF;
+        }
+        &.active {
+            background-color: #09C;
+            color: #FFF;
+        }
+        &.invalid {
+            background-color: transparent;
+            color: #AAA;
+            cursor: default;
+        }
+        &.invalid:hover {
+            background-color: transparent;
+            color: #AAA;
+        }
+        &.separator {
+            min-width: 10px;
+            color: #E6E6E6;
+            cursor: default;
+        }
+        &.separator:before {
+            content: '|';
+        }
+        &.separator:hover {
+            background-color: transparent;
+            color: #E6E6E6;
+        }
+        &.linebreak {
+            width: 100%;
+            height: 1px;
+            background-color: #E6E6E6;
+            margin: 0px;
+        }
+        &.linebreak:hover {
+            background-color: #E6E6E6;
+        }
+    }
+    .se-clear {
+        clear: both;
+    }
+    @import "toolarea-icons";
+    @import "toolarea-pickers";
+    @import "toolarea-dialogs";
+}

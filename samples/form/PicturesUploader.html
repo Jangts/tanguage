@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Uploads</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../lib/dist/see/see.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/dist/form/style.css" />
+    <script src="../../lib/dist/runtime.js" data-tang-debug></script>
+    <style>
+        body {
+            background-color: #EEE;
+        }
+        
+        .tang-form {
+            width: 1160px;
+            margin: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <form class="tang-form" name="myform" method="PUT" action="">
+        <section class="inputs-section">
+            <div class="input-section tang-inputs">
+                <label class="input-label">列表缩略图</label>
+                <figure class="figure-items">
+                    <div id="mypic1" data-subtype="avatar1x1" data-reset-src="images/phone.jpg" class="pic-uploader">
+                        <input class="pic-src" hidden="hidden" name="THUMB" value="images/phone.jpg" type="hidden">
+                        <input class="pic-changer" type="file" value="">
+                        <img class="pic-displayer" src="images/phone.jpg">
+                        <i class="pic-mask"></i>
+                        <i class="pic-resetter">重置或清除</i>
+                    </div>
+                </figure>
+            </div>
+            <div class="input-section tang-inputs">
+                <label class="input-label">通栏海报图</label>
+                <figure class="figure-items">
+                    <div id="mypic2" data-subtype="banner100" data-reset-src="images/banner100.jpg" class="pic-uploader">
+                        <input class="pic-src" hidden="hidden" name="THUMB" value="images/banner100.jpg" type="hidden">
+                    </div>
+                </figure>
+            </div>
+            <div class="input-section tang-inputs">
+                <label class="input-label">相关视频</label>
+                <div class="video-item">
+                    <div id="myvideo1" data-subtype="video4x3" class="pic-uploader" data-reset-src="images/video4x3.mp4">
+                        <input class="pic-src" hidden="hidden" name="THUMB" value="images/phone.jpg" type="hidden">
+                        <input class="pic-changer" type="file" value="">
+                        <video class="pic-displayer" src="images/video4x3.mp4" autoplay loop muted>
+                            <img class="pic-displayer" src="../../lib/dist/form/images/video.jpg">
+                        </video>
+
+                        <i class="pic-mask"></i>
+                        <i class="pic-resetter">重置或清除</i>
+                    </div>
+                </div>
+            </div>
+            <div class="input-section tang-inputs">
+                <label class="input-label">相关视频</label>
+                <div class="video-item">
+                    <div id="myvideo2" data-subtype="video16x9" class="pic-uploader" data-reset-src="images/video16x9.mp4">
+                        <input class="pic-src" hidden="hidden" name="THUMB" value="images/video16x9.mp4" type="hidden">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+    <script>
+        tangram.auto([
+            '$_/form/PicturesUploader',
+        ], function(_) {
+            var mypic1 = new pandora.form.PicturesUploader('mypic1', {}),
+                mypic2 = new pandora.form.PicturesUploader('mypic2', {}),
+                myvideo1 = new pandora.form.PicturesUploader('myvideo1', {
+                    type: 'video'
+                }),
+                myvideo2 = new pandora.form.PicturesUploader('myvideo2', {
+                    type: 'video'
+                });
+            console.log(mypic1, mypic2, myvideo1, myvideo2);
+        });
+    </script>
+</body>
+
+</html>

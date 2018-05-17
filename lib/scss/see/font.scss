@@ -1,0 +1,43 @@
+// Background Colour 
+
+
+// Font Colour 
+$colors: (fff:#FFFFFF, e6:#E6E6E6, ccc:#CCCCCC, 888:#888888, 999:#999999, 666:#666666, 000:#000000, "red":#FF0000, "violet":#003AA6, "modena":#036);
+@each $name,
+$color in $colors {
+    .ft-#{$name} {
+        color: $color;
+    }
+}
+
+// Font Size 
+$sizes: 11,
+12,
+13,
+14,
+15,
+16,
+17,
+18,
+21,
+24,
+27,
+30,
+36,
+48,
+60,
+72;
+@each $size in $sizes {
+    .ft-#{$size} {
+        font-size: #{$size}px;
+        font-size: #{$size/20}rem;
+    }
+}
+
+.ft-lighter {
+    font-weight: lighter;
+}
+
+.ft-blod {
+    font-weight: bold;
+}

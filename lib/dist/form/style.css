@@ -1,0 +1,880 @@
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+html {
+    font-size: 125%;
+}
+
+body {
+    font-size: 14px;
+    font-size: 0.7rem;
+}
+
+.tang-form {
+    display: block;
+    width: auto;
+    height: auto;
+    line-height: 0;
+    font-size: 0;
+    color: #666;
+}
+
+.tang-form .inputs-section {
+    min-width: 800px;
+    margin: 10px 0;
+    padding-bottom: 20px;
+    border-top: solid 1px #e6e6e6;
+}
+
+.tang-form .inputs-section,
+.tang-form .inputs-section.on {
+    display: block;
+}
+
+.tang-form .inputs-section.off {
+    display: none;
+}
+
+.tang-form .inputs-section:first-child {
+    border-top: none;
+}
+
+.tang-form .tang-inputs {
+    display: block;
+    min-height: 40px;
+    padding-left: 120px;
+    overflow: hidden;
+}
+
+.tang-form .tang-inputs>.input-label {
+    display: block;
+    position: absolute;
+    width: 110px;
+    top: 8px;
+    left: 0;
+    line-height: 24px;
+    font-size: 14px;
+    font-size: 0.7rem;
+    text-align: right;
+    overflow: hidden;
+}
+
+.tang-form .tang-inputs>font,
+.tang-form .tang-inputs>.input-tips {
+    display: block;
+    position: absolute;
+    width: 30%;
+    top: 8px;
+    right: 0;
+    line-height: 24px;
+    font-size: 12px;
+    font-size: 0.6rem;
+    text-align: right;
+    overflow: hidden;
+}
+
+.tang-form .tang-inputs>.input-tips.quater {
+    width: 25%;
+}
+
+.tang-form .tang-inputs>.input-tips.half {
+    width: 50%;
+}
+
+.tang-form .tang-inputs>input,
+.tang-form .tang-inputs>select,
+.tang-form .tang-inputs>textarea,
+.tang-form .tang-inputs>.input-area {
+    width: 100%;
+    margin: 8px 0;
+}
+
+.tang-form .tang-inputs>input.w24,
+.tang-form .tang-inputs>select.w24 {
+    width: 24%;
+}
+
+.tang-form .tang-inputs>input.w30,
+.tang-form .tang-inputs>select.w30 {
+    width: 30%;
+}
+
+.tang-form .tang-inputs>input.w48,
+.tang-form .tang-inputs>select.w48 {
+    width: 48%;
+}
+
+.tang-form .tang-inputs>input.w68,
+.tang-form .tang-inputs>select.w68 {
+    width: 68%;
+}
+
+.tang-form .tang-inputs>input.w72,
+.tang-form .tang-inputs>select.w72 {
+    width: 72%;
+}
+
+.tang-form .tang-inputs input,
+.tang-form .tang-inputs select,
+.tang-form .tang-inputs textarea {
+    padding: 0 5px;
+    border: solid 1px #ddd;
+    border-radius: 3px;
+    background-color: transparent;
+    line-height: 24px;
+    font-family: inherit;
+    font-size: 12px;
+    font-size: 0.6rem;
+    color: #666;
+}
+
+.tang-form .tang-inputs input,
+.tang-form .tang-inputs select {
+    display: inline-block;
+    height: 24px;
+}
+
+.tang-form .tang-inputs input[type=radio],
+.tang-form .tang-inputs input[type=checkbox] {
+    vertical-align: middle;
+    width: 20px;
+    height: 14px;
+    margin: 0 !important;
+}
+
+.tang-form .tang-inputs input.use-tp.datetime-item,
+.tang-form .tang-inputs input.use-tp.fulldate-item,
+.tang-form .tang-inputs input.use-tp.timeofday-item {
+    cursor: pointer;
+}
+
+.tang-form .tang-inputs input[type=hidden],
+.tang-form .tang-inputs input[hidden] {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+.tang-form .tang-inputs input.num-item,
+.tang-form .tang-inputs input[type=number] {
+    text-align: right;
+}
+
+.tang-form .tang-inputs input[type=number] {
+    padding: 0 10px;
+}
+
+.tang-form .tang-inputs textarea,
+.tang-form .tang-inputs textarea.text-area {
+    height: 78px;
+    resize: none;
+}
+
+.tang-form .tang-inputs textarea.long-item {
+    height: 156px;
+    resize: none;
+}
+
+.tang-form .tang-inputs textarea.high-item {
+    height: 390px;
+    resize: vertical;
+}
+
+.tang-form .tang-inputs .radios,
+.tang-form .tang-inputs .checkboxes {
+    display: block;
+    width: 100%;
+    height: 40px;
+}
+
+.tang-form .tang-inputs .radios label,
+.tang-form .tang-inputs .radios .radio-label,
+.tang-form .tang-inputs .radios .checkbox-label,
+.tang-form .tang-inputs .checkboxes label,
+.tang-form .tang-inputs .checkboxes .radio-label,
+.tang-form .tang-inputs .checkboxes .checkbox-label {
+    display: inline-block;
+    margin: 8px 24px 0 0;
+    line-height: 24px;
+    font-size: 12px;
+    font-size: 0.6rem;
+    color: #999;
+    font-style: normal;
+}
+
+.tang-form .tang-inputs .radios i,
+.tang-form .tang-inputs .checkboxes i {
+    font-style: normal;
+}
+
+.tang-form .tang-inputs .radios input,
+.tang-form .tang-inputs .radios input[type=radio],
+.tang-form .tang-inputs .radios input[type=checkbox],
+.tang-form .tang-inputs .checkboxes input,
+.tang-form .tang-inputs .checkboxes input[type=radio],
+.tang-form .tang-inputs .checkboxes input[type=checkbox] {
+    vertical-align: middle;
+    width: 20px;
+    height: 14px;
+    margin: 0 !important;
+}
+
+.tang-form .tang-inputs .radios input:first-child,
+.tang-form .tang-inputs .checkboxes input:first-child {
+    margin-left: 0;
+}
+
+.tang-form .tang-inputs .radios input:last-child,
+.tang-form .tang-inputs .checkboxes input:last-child {
+    margin-right: 0;
+}
+
+.tang-form .tang-inputs.inline-inputs .inputs-line {
+    display: block;
+    width: 100%;
+    height: 40px;
+    border-bottom: solid 1px #eee;
+}
+
+.tang-form .tang-inputs.inline-inputs .inline-label {
+    line-height: 24px;
+    font-size: 12px;
+    font-size: 0.6rem;
+    color: #999;
+    margin: 0 24px 0 0;
+    font-style: normal;
+}
+
+.tang-form .tang-inputs.inline-inputs .inline-label i {
+    font-style: normal;
+}
+
+.tang-form .tang-inputs.inline-inputs .inline-label:last-child {
+    margin: 0;
+}
+
+.tang-form .tang-inputs.inline-inputs .radio-label,
+.tang-form .tang-inputs.inline-inputs .checkbox-label {
+    display: inline-block;
+    margin: 8px 24px 0 0;
+    line-height: 24px;
+    font-size: 12px;
+    font-size: 0.6rem;
+    color: #999;
+    font-style: normal;
+}
+
+.tang-form .tang-inputs.inline-inputs .radio-label i,
+.tang-form .tang-inputs.inline-inputs .checkbox-label i {
+    font-style: normal;
+}
+
+.tang-form .tang-inputs.inline-inputs .radio-label input,
+.tang-form .tang-inputs.inline-inputs .radio-label input[type=radio],
+.tang-form .tang-inputs.inline-inputs .radio-label input[type=checkbox],
+.tang-form .tang-inputs.inline-inputs .checkbox-label input,
+.tang-form .tang-inputs.inline-inputs .checkbox-label input[type=radio],
+.tang-form .tang-inputs.inline-inputs .checkbox-label input[type=checkbox] {
+    vertical-align: middle;
+    width: 20px;
+    height: 14px;
+    margin: 0 !important;
+}
+
+.tang-form .tang-inputs.inline-inputs .inputs-line+.inputs-line .radio-label,
+.tang-form .tang-inputs.inline-inputs .inputs-line+.inputs-line .checkbox-label {
+    margin: 0 24px 0 0;
+}
+
+.tang-form .tang-inputs.inline-inputs .inputs-line:last-child {
+    border-bottom: none;
+}
+
+.tang-form .tang-inputs.inline-inputs .inputs-line:last-child .radio-label,
+.tang-form .tang-inputs.inline-inputs .inputs-line:last-child .checkbox-label {
+    margin-bottom: 8px;
+}
+
+.tang-form .tang-inputs.inline-inputs input,
+.tang-form .tang-inputs.inline-inputs select {
+    width: 20%;
+    margin: 8px 5px;
+}
+
+.tang-form .tang-inputs.inline-inputs input:first-child,
+.tang-form .tang-inputs.inline-inputs select:first-child {
+    margin-left: 0;
+}
+
+.tang-form .tang-inputs.inline-inputs input:last-child,
+.tang-form .tang-inputs.inline-inputs select:last-child {
+    margin-right: 0;
+}
+
+.tang-form .tang-inputs.inline-inputs input.num-item,
+.tang-form .tang-inputs.inline-inputs input[type=number] {
+    width: 10%;
+}
+
+.tang-form .tang-inputs[data-type=hidden] {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+.tang-form[data-type=tabs] .inputs-section.on {
+    display: block;
+}
+
+.tang-form[data-type=tabs] .inputs-section,
+.tang-form[data-type=tabs] .inputs-section.off {
+    display: none;
+}
+
+.tang-form[data-type=pages] .inputs-section {
+    height: auto;
+    margin: 10px auto;
+    padding: 0 19px;
+    border: #DDD 1px solid;
+    background-color: #fff;
+    padding-bottom: 19px;
+}
+
+.tang-form[data-type=pages] .tang-inputs {
+    height: auto;
+    min-height: 30px;
+    border-bottom: 1px #E6E6E6 solid;
+}
+
+.tang-form[data-type=pages] .tang-inputs>.input-label {
+    height: 24px;
+    top: 3px;
+    background-color: #f9f9f9;
+    line-height: 24px;
+    color: #282828;
+    font-size: 14px;
+    font-size: 0.7rem;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.tang-form[data-type=pages] .tang-inputs input,
+.tang-form[data-type=pages] .tang-inputs select,
+.tang-form[data-type=pages] .tang-inputs textarea {
+    margin: 0;
+    border: none;
+    background-color: transparent;
+    line-height: 30px;
+    color: #555;
+    font-size: 12px;
+    font-size: 0.6rem;
+    outline: none;
+}
+
+.tang-form[data-type=pages] .tang-inputs input,
+.tang-form[data-type=pages] .tang-inputs select {
+    height: 30px;
+    padding: 0;
+}
+
+.tang-form[data-type=pages] .tang-inputs select {
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.tang-form[data-type=pages] .tang-inputs .radios,
+.tang-form[data-type=pages] .tang-inputs .checkboxes {
+    height: 30px;
+}
+
+.tang-form[data-type=pages] .tang-inputs.inline-inputs .inputs-line {
+    height: 30px;
+    border-bottom: solid 1px #e6e6e6;
+}
+
+.tang-form[data-type=pages] .tang-inputs.inline-inputs .inline-label {
+    line-height: 30px;
+}
+
+.tang-form[data-type=pages] .tang-inputs.inline-inputs .radio-label,
+.tang-form[data-type=pages] .tang-inputs.inline-inputs .checkbox-label {
+    margin: 0 24px 0 0;
+    line-height: 30px;
+}
+
+.tang-form[data-type=pages] .tang-inputs.inline-inputs .radio-label>input,
+.tang-form[data-type=pages] .tang-inputs.inline-inputs .checkbox-label>input {
+    width: 24px;
+    margin: 3px 0;
+}
+
+.tang-form[data-type=pages] .tang-inputs.inline-inputs .inputs-line:last-child {
+    border-bottom: none;
+}
+
+.tang-form[data-type=pages] .tang-inputs.inline-inputs .inputs-line:last-child .radio-label,
+.tang-form[data-type=pages] .tang-inputs.inline-inputs .inputs-line:last-child .checkbox-label {
+    margin: 0 24px 0 0;
+}
+
+.tang-form[data-type=pages] .tang-inputs.inline-inputs input,
+.tang-form[data-type=pages] .tang-inputs.inline-inputs select {
+    margin: 0 5px;
+}
+
+.tang-form[data-type=pages] .tang-inputs.inline-inputs input:first-child,
+.tang-form[data-type=pages] .tang-inputs.inline-inputs select:first-child {
+    margin-left: 0;
+}
+
+.tang-form[data-type=pages] .tang-inputs.inline-inputs input:last-child,
+.tang-form[data-type=pages] .tang-inputs.inline-inputs select:last-child {
+    margin-right: 0;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=primer],
+.tang-form[data-type=pages] .tang-inputs[data-type=title],
+.tang-form[data-type=pages] .tang-inputs[data-type=subtitle] {
+    margin-left: 0;
+    border-bottom: none;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=primer]>.input-label,
+.tang-form[data-type=pages] .tang-inputs[data-type=title]>.input-label,
+.tang-form[data-type=pages] .tang-inputs[data-type=subtitle]>.input-label {
+    display: none;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=primer] input,
+.tang-form[data-type=pages] .tang-inputs[data-type=title] input,
+.tang-form[data-type=pages] .tang-inputs[data-type=subtitle] input {
+    width: 100%;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=primer] {
+    padding: 5px 0px 4px;
+    border-bottom: #EEE dashed 1px;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=primer] input {
+    width: 100%;
+    text-align: left;
+    font-size: 18px;
+    font-size: 0.9rem;
+    line-height: 25px;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=title] {
+    padding: 10px 0;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=title] input {
+    text-align: center;
+    font-size: 24px;
+    font-size: 1.2rem;
+    line-height: 35px;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=subtitle] {
+    padding: 4px 0px 5px;
+    border-top: #EEE dashed 1px;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=subtitle] input {
+    text-align: right;
+    font-size: 18px;
+    font-size: 0.9rem;
+    line-height: 25px;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks] {
+    min-height: 60px;
+    padding-left: 0;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks]>.input-label {
+    position: relative;
+    height: 27px;
+    top: 0;
+    margin-top: 3px;
+    line-height: 27px;
+    overflow: hidden;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks]>font,
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks]>.input-tips {
+    height: 27px;
+    top: 0;
+    line-height: 27px;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks] .inputs-line {
+    border-top: solid 1px #eee;
+    border-bottom: none;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks] textarea {
+    border: solid 1px #eee;
+    margin-bottom: 8px;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=tags]:last-child {
+    height: 42px;
+    margin: -1px -19px -19px -19px;
+    padding: 0 20px 0 50px;
+    background: url(images/tag-icon.jpg) no-repeat left;
+    border-top: #DDD 1px solid;
+    border-bottom: none;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=tags]:last-child input {
+    margin: 6px 0;
+}
+
+.tang-form .tang-inputs figure,
+.tang-form .tang-inputs .figure-items,
+.tang-form .tang-inputs .video-item {
+    display: block;
+    width: 100%;
+    margin: 7px 0;
+}
+
+.tang-form .tang-inputs figure .pic-uploader,
+.tang-form .tang-inputs .figure-items .pic-uploader,
+.tang-form .tang-inputs .video-item .pic-uploader {
+    display: block;
+    width: 100% !important;
+    height: 70px !important;
+    padding: 19px;
+    border: solid 1px #ddd;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.tang-form .tang-inputs figure .pic-uploader input,
+.tang-form .tang-inputs .figure-items .pic-uploader input,
+.tang-form .tang-inputs .video-item .pic-uploader input {
+    display: block;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    border: solid 1px #ddd;
+    border-radius: 3px;
+}
+
+.tang-form .tang-inputs figure .pic-uploader .pic-displayer,
+.tang-form .tang-inputs figure .pic-uploader .pic-mask,
+.tang-form .tang-inputs figure .pic-uploader .pic-bluemask,
+.tang-form .tang-inputs figure .pic-uploader .pic-changer,
+.tang-form .tang-inputs figure .pic-uploader input[type=file].pic-changer,
+.tang-form .tang-inputs figure .pic-uploader .pic-resetter,
+.tang-form .tang-inputs .figure-items .pic-uploader .pic-displayer,
+.tang-form .tang-inputs .figure-items .pic-uploader .pic-mask,
+.tang-form .tang-inputs .figure-items .pic-uploader .pic-bluemask,
+.tang-form .tang-inputs .figure-items .pic-uploader .pic-changer,
+.tang-form .tang-inputs .figure-items .pic-uploader input[type=file].pic-changer,
+.tang-form .tang-inputs .figure-items .pic-uploader .pic-resetter,
+.tang-form .tang-inputs .video-item .pic-uploader .pic-displayer,
+.tang-form .tang-inputs .video-item .pic-uploader .pic-mask,
+.tang-form .tang-inputs .video-item .pic-uploader .pic-bluemask,
+.tang-form .tang-inputs .video-item .pic-uploader .pic-changer,
+.tang-form .tang-inputs .video-item .pic-uploader input[type=file].pic-changer,
+.tang-form .tang-inputs .video-item .pic-uploader .pic-resetter {
+    display: none;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived,
+.tang-form .tang-inputs .video-item .pic-uploader.actived {
+    box-sizing: content-box;
+    text-align: center;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived .pic-displayer,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived .pic-displayer,
+.tang-form .tang-inputs .video-item .pic-uploader.actived .pic-displayer {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived .pic-mask,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived .pic-mask,
+.tang-form .tang-inputs .video-item .pic-uploader.actived .pic-mask {
+    z-index: 10;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived .pic-bluemask,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived .pic-bluemask,
+.tang-form .tang-inputs .video-item .pic-uploader.actived .pic-bluemask {
+    z-index: 30;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived input,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived input,
+.tang-form .tang-inputs .video-item .pic-uploader.actived input {
+    display: none;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived input[type=file],
+.tang-form .tang-inputs .figure-items .pic-uploader.actived input[type=file],
+.tang-form .tang-inputs .video-item .pic-uploader.actived input[type=file] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived .pic-mask,
+.tang-form .tang-inputs figure .pic-uploader.actived .pic-changer,
+.tang-form .tang-inputs figure .pic-uploader.actived input[type=file].pic-changer,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived .pic-mask,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived .pic-changer,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived input[type=file].pic-changer,
+.tang-form .tang-inputs .video-item .pic-uploader.actived .pic-mask,
+.tang-form .tang-inputs .video-item .pic-uploader.actived .pic-changer,
+.tang-form .tang-inputs .video-item .pic-uploader.actived input[type=file].pic-changer {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived .pic-bluemask,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived .pic-bluemask,
+.tang-form .tang-inputs .video-item .pic-uploader.actived .pic-bluemask {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 0;
+    top: 100%;
+    left: 0;
+    background-color: #498bea;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived .pic-changer,
+.tang-form .tang-inputs figure .pic-uploader.actived input[type=file].pic-changer,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived .pic-changer,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived input[type=file].pic-changer,
+.tang-form .tang-inputs .video-item .pic-uploader.actived .pic-changer,
+.tang-form .tang-inputs .video-item .pic-uploader.actived input[type=file].pic-changer {
+    z-index: 20;
+    cursor: pointer;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived .pic-resetter,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived .pic-resetter,
+.tang-form .tang-inputs .video-item .pic-uploader.actived .pic-resetter {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 24px;
+    left: 0;
+    background-color: #498bea;
+    line-height: 24px;
+    text-align: center;
+    color: #fff;
+    font-style: normal;
+    font-size: 12px;
+    font-size: 0.6rem;
+    opacity: 0;
+    z-index: 100;
+    cursor: pointer;
+    transition: opacity ease-in-out .3s, top ease-in-out .3s;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived:hover .pic-mask,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived:hover .pic-mask,
+.tang-form .tang-inputs .video-item .pic-uploader.actived:hover .pic-mask {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived:hover .pic-resetter,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived:hover .pic-resetter,
+.tang-form .tang-inputs .video-item .pic-uploader.actived:hover .pic-resetter {
+    opacity: 1;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived {
+    display: inline-block;
+    padding: 19px;
+    border: solid 1px #ddd;
+    border-radius: 3px;
+    margin-right: 1%;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived .pic-displayer,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived .pic-displayer {
+    top: 50%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived .pic-resetter,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived .pic-resetter {
+    top: 160px;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived,
+.tang-form .tang-inputs figure .pic-uploader.actived[data-subtype=photo],
+.tang-form .tang-inputs figure .pic-uploader.actived[data-subtype=photo3x2],
+.tang-form .tang-inputs .figure-items .pic-uploader.actived,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived[data-subtype=photo],
+.tang-form .tang-inputs .figure-items .pic-uploader.actived[data-subtype=photo3x2] {
+    width: 180px !important;
+    height: 120px !important;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived[data-subtype=photo2x3],
+.tang-form .tang-inputs .figure-items .pic-uploader.actived[data-subtype=photo2x3] {
+    width: 80px !important;
+    height: 120px !important;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived[data-subtype=avatar],
+.tang-form .tang-inputs figure .pic-uploader.actived[data-subtype=avatar1x1],
+.tang-form .tang-inputs .figure-items .pic-uploader.actived[data-subtype=avatar],
+.tang-form .tang-inputs .figure-items .pic-uploader.actived[data-subtype=avatar1x1] {
+    width: 120px !important;
+    height: 120px !important;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived[data-subtype=figure],
+.tang-form .tang-inputs figure .pic-uploader.actived[data-subtype=figure4x3],
+.tang-form .tang-inputs .figure-items .pic-uploader.actived[data-subtype=figure],
+.tang-form .tang-inputs .figure-items .pic-uploader.actived[data-subtype=figure4x3] {
+    width: 160px !important;
+    height: 120px !important;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived[data-subtype=figure3x4],
+.tang-form .tang-inputs .figure-items .pic-uploader.actived[data-subtype=figure3x4] {
+    width: 90px !important;
+    height: 120px !important;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived[data-subtype=banner],
+.tang-form .tang-inputs .figure-items .pic-uploader.actived[data-subtype=banner] {
+    width: 30% !important;
+    height: 90px !important;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived[data-subtype=banner] .pic-resetter,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived[data-subtype=banner] .pic-resetter {
+    top: 130px;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived[data-subtype=banner100],
+.tang-form .tang-inputs .figure-items .pic-uploader.actived[data-subtype=banner100] {
+    display: block;
+    width: 100% !important;
+    height: 120px !important;
+    margin-right: 0;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived:hover .pic-resetter,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived:hover .pic-resetter {
+    top: 136px;
+}
+
+.tang-form .tang-inputs figure .pic-uploader.actived[data-subtype=banner]:hover .pic-resetter,
+.tang-form .tang-inputs .figure-items .pic-uploader.actived[data-subtype=banner]:hover .pic-resetter {
+    top: 106px;
+}
+
+.tang-form .tang-inputs .video-item .pic-uploader.actived {
+    display: block;
+    padding: 0;
+    border: 0;
+    border-radius: 3px;
+}
+
+.tang-form .tang-inputs .video-item .pic-uploader.actived .pic-displayer {
+    width: 100%;
+    height: 100%;
+}
+
+.tang-form .tang-inputs .video-item .pic-uploader.actived .pic-resetter {
+    top: 180px;
+}
+
+.tang-form .tang-inputs .video-item .pic-uploader.actived:hover .pic-resetter {
+    top: 156px;
+}
+
+.tang-form .tang-inputs .video-item .pic-uploader.actived,
+.tang-form .tang-inputs .video-item .pic-uploader.actived[data-subtype=video4x3] {
+    width: 240px !important;
+    height: 180px !important;
+}
+
+.tang-form .tang-inputs .video-item .pic-uploader.actived[data-subtype=video16x9] {
+    width: 320px !important;
+    height: 180px !important;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks] figure,
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks] .figure-items,
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks] .video-item {
+    margin: 0 0 7px;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks] figure .pic-uploader.actived,
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks] .figure-items .pic-uploader.actived,
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks] .video-item .pic-uploader.actived {
+    border-radius: 0;
+}
+
+.tang-form .tang-inputs .custom-items {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 7px 0;
+    line-height: 24px;
+    font-family: inherit;
+    font-size: 12px;
+    font-size: 0.6rem;
+    color: #666;
+}
+
+.tang-form .tang-inputs .custom-items textarea.edit-text-area {
+    width: 100%;
+    height: 170px;
+    resize: vertical;
+}
+
+.tang-form .tang-inputs .custom-items .tang-simpleeditor {
+    border: solid 1px #ddd;
+    border-radius: 3px;
+}
+
+.tang-form .tang-inputs .custom-items .tang-simpleeditor input[type=radio],
+.tang-form .tang-inputs .custom-items .tang-simpleeditor input[type=checkbox] {
+    width: 20px;
+    height: 14px;
+    margin: 0;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks] .custom-items {
+    margin: 0 0 7px;
+}
+
+.tang-form[data-type=pages] .tang-inputs[data-type=blocks] .custom-items .tang-simpleeditor {
+    border-radius: 0;
+}

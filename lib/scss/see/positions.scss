@@ -1,0 +1,199 @@
+// Position 
+$posis: relative,
+absolute,
+fixed;
+@each $posi in $posis {
+    .#{$posi} {
+        position: $posi;
+    }
+}
+
+// .hf-screen {
+//     width: 50%;
+//     height: 50%;
+//     bottom: 50%;
+//     left: 50%;
+//     overflow: visible;
+// }
+// .hf-top {
+//     height: 50%;
+//     bottom: 50%;
+//     overflow: visible;
+// }
+// .hf-right {
+//     width: 50%;
+//     left: 50%;
+//     overflow: visible;
+// }
+// .hf-bottom {
+//     height: 50%;
+//     top: 50%;
+//     overflow: visible;
+// }
+// .hf-left {
+//     width: 50%;
+//     right: 50%;
+//     overflow: visible;
+// }
+// Pulls 
+.pl-left {
+    float: left;
+}
+
+.pl-right {
+    float: right;
+}
+
+.absolute.pl-left {
+    float: none;
+    left: 0;
+    top: 0;
+}
+
+.absolute.pl-right {
+    float: none;
+    right: 0;
+    top: 0;
+}
+
+.pl-center {
+    display: block;
+    margin: auto;
+}
+
+.pl-top {
+    position: absolute;
+    top: 0px;
+}
+
+.pl-bottom {
+    position: absolute;
+    bottom: 0px;
+}
+
+$pds: 5,
+10,
+15,
+20,
+25;
+// Paddings 
+@each $d in $pds {
+    @if($d==5) {
+        .pa-0#{$d} {
+            padding: #{$d}px;
+        }
+        .pa-h0#{$d} {
+            padding: 0 #{$d}px;
+        }
+        .pa-v0#{$d} {
+            padding: #{$d}px 0;
+        }
+    }
+    @else if($d <10) {
+        .pa-h0#{$d} {
+            padding: 0 #{$d}px;
+        }
+    }
+    @else {
+        .pa-#{$d} {
+            padding: #{$d}px;
+        }
+        .pa-h#{$d} {
+            padding: 0 #{$d}px;
+        }
+        .pa-v#{$d} {
+            padding: #{$d}px 0;
+        }
+    }
+}
+
+.pa-t0 {
+    padding-top: 0px;
+}
+
+.pa-r0 {
+    padding-right: 0px;
+}
+
+.pa-b0 {
+    padding-bottom: 0px;
+}
+
+.pa-l0 {
+    padding-left: 0px;
+}
+
+// .pa-v0 {
+//     padding-top: 0px;
+//     padding-bottom: 0px;
+// }
+// .pa-h0 {
+//     padding-right: 0px;
+//     padding-left: 0px;
+// }
+// Margins 
+$mds: 5,
+10,
+15,
+20,
+25,
+30,
+40,
+50,
+60;
+@each $d in $mds {
+    @if($d <10) {
+        .ma-0#{$d} {
+            margin: #{$d}px;
+        }
+        .ma-t0#{$d} {
+            margin-top: #{$d}px;
+        }
+        .ma-r0#{$d} {
+            margin-right: #{$d}px;
+        }
+        .ma-b0#{$d} {
+            margin-bottom: #{$d}px;
+        }
+        .ma-l0#{$d} {
+            margin-left: #{$d}px;
+        }
+        .ma-v0#{$d} {
+            margin: #{$d}px auto;
+        }
+        .ma-h0#{$d} {
+            margin: 0 #{$d}px;
+        }
+        .ma-x0#{$d} {
+            margin-right: -#{$d/2}px;
+            margin-left: -#{$d/2}px;
+        }
+    }
+    @else {
+        .ma-#{$d} {
+            margin: #{$d}px;
+        }
+        .ma-t#{$d} {
+            margin-top: #{$d}px;
+        }
+        .ma-r#{$d} {
+            margin-right: #{$d}px;
+        }
+        .ma-b#{$d} {
+            margin-bottom: #{$d}px;
+        }
+        .ma-l#{$d} {
+            margin-left: #{$d}px;
+        }
+        .ma-v#{$d} {
+            margin: #{$d}px auto;
+        }
+        .ma-h#{$d} {
+            margin: 0 #{$d}px;
+        }
+        .ma-x#{$d} {
+            margin-right: -#{$d/2}px;
+            margin-left: -#{$d/2}px;
+        }
+    }
+}

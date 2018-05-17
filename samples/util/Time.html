@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIME</title>
+    <script src="../../lib/dist/runtime.js" data-tang-debug></script>
+</head>
+
+<body>
+    <script>
+        tang.init().block(['$_/util/Time'], function(pandora, root, imports, undefined) {
+            var document = root.document;
+
+            var div = document.createElement('div');
+            div.style.margin = "0 auto";
+            div.style.textAlign = "center";
+            div.style.fontSize = "14px";
+            div.style.lineHeight = "20px";
+            div.innerHTML = '';
+
+            document.body.appendChild(div);
+
+            div.innerHTML += 'input (Empty) :<br />';
+            div.innerHTML += new pandora.util.Time().date();
+
+            div.innerHTML += '<br /><br />input "January 12,2006 22:19:35" :<br />';
+            div.innerHTML += new pandora.util.Time("January 12,2006 22:19:35").date();
+
+            div.innerHTML += '<br /><br />input "January 12,2006" :<br />';
+            div.innerHTML += new pandora.util.Time("January 12,2006").date();
+
+            div.innerHTML += '<br /><br />input "1/12/2006 22:19:35" :<br />';
+            div.innerHTML += new pandora.util.Time("1/12/2006 22:19:35").date();
+
+            div.innerHTML += '<br /><br />input "1-12-2006" :<br />';
+            div.innerHTML += new pandora.util.Time("1-12-2006").date();
+
+            div.innerHTML += '<br /><br />input "2006/1/12 22:19:35" :<br />';
+            div.innerHTML += new pandora.util.Time("2006/1/12 22:19:35").date();
+
+            div.innerHTML += '<br /><br />input "yesterday" :<br />';
+            div.innerHTML += new pandora.util.Time("yesterday").date();
+
+            div.innerHTML += '<br /><br />input 2006,1,12,22,19,35 :<br />';
+            div.innerHTML += new pandora.util.Time(2006, 1, 12, 22, 19, 35).date();
+
+            div.innerHTML += '<br /><br />input 2006,1,12 :<br />';
+            div.innerHTML += new pandora.util.Time(2006, 1, 12).date();
+
+            div.innerHTML += '<br /><br />input 1468323729000 :<br />';
+            div.innerHTML += new pandora.util.Time(1468323729000).date();
+
+            div.innerHTML += '<br /><br />input [2006,1,12,22] :<br />';
+            div.innerHTML += new pandora.util.Time([2006, 1, 12, 22]).date();
+
+            div.innerHTML += '<br /><br />input {Y : \'1991\', m : \'1\', d : \'4\'} :<br />';
+            div.innerHTML += new pandora.util.Time({
+                Y: '1991',
+                m: '1',
+                d: '19'
+            }).date();
+        }, true);
+    </script>
+</body>
+
+</html>

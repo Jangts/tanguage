@@ -1,0 +1,109 @@
+// Widths 
+.container {
+    width: 100%;
+}
+
+.wfull {
+    width: 100%;
+    max-width: 100%;
+}
+
+$widths: 1920,
+1440,
+1366,
+1280,
+1200,
+1180,
+1100,
+1080,
+1000,
+990,
+950,
+790,
+760,
+720,
+660,
+600,
+560,
+510,
+520,
+460,
+420,
+410,
+380,
+360,
+310,
+320,
+260,
+220,
+210,
+160;
+@each $width in $widths {
+    .w#{$width} {
+        width: 100%;
+        max-width: #{$width}px;
+        margin: auto;
+    }
+    .wi.w#{$width} {
+        max-width: #{$width}px !important;
+        min-width: #{$width}px !important;
+    }
+    .container.w#{$width} {
+        // position: absolute;
+        min-width: #{$width}px;
+        left: 50%;
+        margin-left: -#{$width/2}px;
+    }
+    .max-w#{$width} {
+        max-width: #{$width}px;
+    }
+}
+
+// Heights 
+.hfull {
+    height: 100%;
+    max-height: 100%;
+}
+
+$heights: 30,
+50,
+90,
+100,
+120,
+150,
+180,
+210,
+240,
+250,
+260,
+270,
+280,
+290,
+300,
+310,
+320,
+330,
+360,
+390,
+420,
+450,
+480,
+510,
+560,
+600,
+660,
+690,
+750;
+@each $height in $heights {
+    .h#{$height} {
+        height: #{$height}px;
+        max-height: #{$height}px;
+    }
+    .hi.h#{$height} {
+        max-height: #{$height}px !important;
+        min-height: #{$height}px !important;
+    }
+    .min-h#{$height} {
+        min-height: #{$height}px;
+    }
+}

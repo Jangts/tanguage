@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript Database Table</title>
+    <script src="../../lib/dist/runtime.js" data-tang-debug></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="test"></div>
+    <script>
+        tang.init().block(['$_/dom/Elements', '$_/data/Sheet'], function(pandora, root, imports, undefined) {
+            console.log(pandora.dom);
+            var $ = pandora.dom.select,
+                db = new pandora.data.Sheet('mytable');
+            // db.drop();
+            // db = new pandora.data.Sheet('mytable');
+
+            // db.add('city', '', {})
+            //     .add('code', '', {
+            //         type: 'string',
+            //         pattern: '\\w+'
+            //     })
+            //     //     //     .drop('price')
+            //     .add('price', 10, {
+            //         type: 'number'
+            //     });
+
+            // db.add('_code', '', {
+            //         type: 'string',
+            //         pattern: '\\w+'
+            //     })
+            //     .drop('code')
+            //     .alter('_code', 'code');
+
+            // db.insert({
+            //     city: 'New York',
+            //     code: 'ny'
+            // });
+
+            // db.update(4, {
+            //     city: 'New York'
+            // }).update(8, {
+            //     code: 'ny'
+            // });
+            // console.log(db.delete(1, 3, 5, 7, 9), db.select(), db.select(2, 4, 7, 8, 23));
+            // 
+
+            // console.log(db.insert({
+            //     city: 'New York',
+            //     code: 'ny'
+            // }));
+
+
+            // pandora.data.Sheet.exec("select * from mytable order by palce desc");
+            // pandora.data.Sheet.exec("select id, price,city from mytable where (code == '') order by id desc limit 1,9");
+            // pandora.data.Sheet.exec("delete from mytable where (code == ''||id<=100)");
+            // pandora.data.Sheet.exec("update mytable set {city:'BeiJing'} where (id < 30)");
+            // pandora.data.Sheet.exec("insert into mytable values {city:'BeiJing', code:'bj'},{city:'London',code: 'ld'} , {city:'London',code: 'ld'}");
+
+            db.render(400, 1, $('#test')[0]);
+        }, true);
+    </script>
+</body>
+
+</html>

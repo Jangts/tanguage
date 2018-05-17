@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIEWMODEL</title>
+    <script src="../../lib/dist/runtime.js" data-tang-debug></script>
+</head>
+
+<body>
+    <div id="demo"></div>
+    <script>
+        tang.init().block([
+            '$_/dom/ViewModel',
+            '$_/dom/Template'
+        ], function(pandora, root, imports, undefined) {
+            var _ = pandora,
+                document = root.document,
+                console = root.console;
+
+            var ViewModel = pandora.dom.ViewModel;
+            var demo = new ViewModel({
+                elem: document.getElementById('demo'),
+                template: `
+            <div>
+                <section>
+                    <span>name:</span> {@name}
+                </section>
+                <section>
+                    <span>time:</span> {@time}
+                </section>
+            <div>`,
+                data: {
+                    name: 'YangRAM',
+                    type: 'Computer Software',
+                    time: 2016,
+                    attrs: {
+                        lang: 'PHP',
+                        framework: 'TNI'
+                    }
+                },
+                render: function() {
+                    var temp = new pandora.dom.Template(this.template, this.data);
+                    this.elem.innerHTML = temp.echo();
+                }
+            });
+
+            setTimeout(function() {
+                demo.name = 'YangRAM Moses';
+                demo.time = 2017;
+            }, 3000);
+        }, true);
+    </script>
+</body>
+
+</html>

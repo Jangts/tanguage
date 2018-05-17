@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Simple Editor</title>
+    <script src="../../../lib/dist/runtime.js" data-tang-debug></script>
+    <link rel="stylesheet" type="text/css" href="../../../lib/dist/see/see.css" />
+    <link rel="stylesheet" type="text/css" href="../../../lib/dist/see/fa.css" />
+    <style>
+        body>div {
+            margin: 20px;
+        }
+        
+        .myeditor {
+            width: 900px;
+            height: 300px;
+        }
+        
+        textarea.myeditor {
+            width: 898px;
+            height: 298px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="myeditor"><textarea>tanguage SimpleEditor 1</textarea></div>
+    <div class="myeditor">tanguage SimpleEditor 2</div>
+    <div><textarea class="myeditor">tanguage SimpleEditor 3</textarea></div>
+    <script>
+        tang.init().block([
+            '$_/dom/Elements',
+            '$_/form/SimpleEditor/'
+        ], function(pandora, root, imports, undefined) {
+            var _ = pandora,
+                document = root.document,
+                console = root.console;
+
+            var editors = pandora.form.careatEditors('.myeditor', {
+                fragments: [{
+                    name: '分页符',
+                    code: '{{@page_break}}'
+                }, {
+                    name: '分页符2',
+                    code: '{{@page_break2}}'
+                }]
+            });
+            console.log(editors);
+        }, true);
+    </script>
+</body>
+
+</html>

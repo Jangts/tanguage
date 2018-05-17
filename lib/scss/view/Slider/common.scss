@@ -1,0 +1,290 @@
+@charset "UTF-8";
+
+/****************
+/*	Common
+/************************************************/
+
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+html {
+    font-size: 125%; // 现代浏览器（pc端默认为16px，125%即20pc）
+}
+
+body {
+    font-size: 14px; // 传统浏览器（pc端14px，其他端不考虑）
+    font-size: 0.7rem; // 现代浏览器（pc端根字号为20px，70%仍旧是14px）
+}
+
+.tang-slider {
+    .stage {
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        display: block;
+        >* {
+            display: block;
+            position: absolute;
+        }
+        .troupe {
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0;
+            z-index: 0;
+        }
+        .troupe .actor {
+            float: left;
+            height: 100%;
+            top: 0px;
+            z-index: 100;
+        }
+        .troupe .actor img {
+            width: 100%;
+            height: 100%;
+            min-width: 100%;
+            min-height: 100%;
+        }
+    }
+    /*	UP-DOWN Turner
+/*----------------------------------------------*/
+    .cutter.goto-prev,
+    .slide .cutter.goto-next {
+        cursor: pointer;
+        -webkit-transition: all .3s ease;
+        -moz-transition: all .3s ease;
+        transition: all .3s ease;
+    }
+    .cutter.auto-hide {
+        opacity: 0;
+    }
+    .tang-slider:hover .cutter.auto-hide {
+        opacity: 1;
+    }
+    /*---| Three Columns |---*/
+    .cutter.left-col,
+    .cutter.right-col,
+    .cutter.up-col,
+    .cutter.down-col {
+        width: 100%;
+        height: 100%;
+        background-color: #FFF;
+        opacity: .8;
+        cursor: pointer;
+        z-index: 100;
+    }
+    .cutter.left-col {
+        top: 0px;
+        right: 100%;
+    }
+    .cutter.right-col {
+        top: 0px;
+        left: 100%;
+    }
+    .cutter.up-col {
+        bottom: 100%;
+        left: 0;
+    }
+    .cutter.down-col {
+        top: 100%;
+        left: 0;
+    }
+    /*---| Previous And Next |---*/
+    .cutter {
+        position: absolute;
+        overflow: hidden;
+        cursor: pointer;
+        z-index: 999;
+    }
+    .cutter.left-circle,
+    .cutter.right-circle,
+    .cutter.lt-in-circle,
+    .cutter.gt-in-circle,
+    .cutter.ll-in-circle,
+    .cutter.lg-in-circle,
+    .cutter.bl-in-circle,
+    .cutter.bg-in-circle {
+        width: 40px;
+        height: 40px;
+        top: 50%;
+        margin-top: -20px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.6);
+    }
+    .cutter.left-bigcircle,
+    .cutter.right-bigcircle,
+    .cutter.lt-in-bigcircle,
+    .cutter.gt-in-bigcircle,
+    .cutter.ll-in-bigcircle,
+    .cutter.lg-in-bigcircle,
+    .cutter.bl-in-bigcircle,
+    .cutter.bg-in-bigcircle {
+        width: 80px;
+        height: 80px;
+        top: 50%;
+        margin-top: -40px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.6);
+    }
+    .cutter.lt-in-circle::before,
+    .cutter.gt-in-circle::before,
+    .cutter.ll-in-circle::before,
+    .cutter.lg-in-circle::before,
+    .cutter.bl-in-circle::before,
+    .cutter.bg-in-circle::before,
+    .cutter.lt-in-bigcircle::before,
+    .cutter.gt-in-bigcircle::before,
+    .cutter.ll-in-bigcircle::before,
+    .cutter.lg-in-bigcircle::before,
+    .cutter.bl-in-bigcircle::before,
+    .cutter.bg-in-bigcircle::before {
+        font-family: FontAwesome;
+        display: block;
+        width: 110%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        line-height: 42px;
+        text-align: center;
+        text-decoration: none;
+        color: #FFF;
+    }
+    .cutter.big-lt,
+    .cutter.big-gt {
+        width: 40px;
+        height: 80px;
+        top: 50%;
+        margin-top: -40px;
+        background: transparent;
+    }
+    .cutter.big-lt::before,
+    .cutter.big-gt::before {
+        font-family: FontAwesome;
+        line-height: 82px;
+        font-size: 72px;
+        font-size: 3.6rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+    /*---| Previous |---*/
+    .cutter.left-circle,
+    .cutter.left-bigcircle,
+    .cutter.lt-in-circle,
+    .cutter.lt-in-bigcircle,
+    .cutter.ll-in-circle,
+    .cutter.ll-in-bigcircle,
+    .cutter.bl-in-circle,
+    .cutter.bl-in-bigcircle {
+        left: 10px;
+    }
+    .cutter.lt-in-circle::before,
+    .cutter.lt-in-bigcircle::before,
+    .cutter.ll-in-circle::before,
+    .cutter.ll-in-bigcircle::before,
+    .cutter.bl-in-circle::before,
+    .cutter.bl-in-bigcircle::before {
+        margin-left: -10%;
+    }
+    .cutter.lt-in-circle::before {
+        font-size: 24px;
+        font-size: 1.2rem;
+        content: "\f104";
+    }
+    .cutter.ll-in-circle::before {
+        font-size: 30px;
+        font-size: 1.5rem;
+        content: "<";
+    }
+    .cutter.bl-in-circle::before {
+        font-size: 21px;
+        font-size: 1.05rem;
+        content: "\f053";
+    }
+    .cutter.lt-in-bigcircle::before,
+    .cutter.ll-in-bigcircle::before,
+    .cutter.bl-in-bigcircle::before {
+        line-height: 82px;
+    }
+    .cutter.lt-in-bigcircle::before {
+        font-size: 48px;
+        font-size: 2.4rem;
+        content: "\f104";
+    }
+    .cutter.ll-in-bigcircle::before {
+        font-size: 60px;
+        font-size: 3rem;
+        content: "<";
+    }
+    .cutter.bl-in-bigcircle::before {
+        font-size: 36px;
+        font-size: 1.8rem;
+        content: "\f053";
+    }
+    .cutter.big-lt {
+        text-align: left;
+        left: 10px;
+    }
+    .cutter.big-lt:before {
+        text-align: left;
+        content: "\f104";
+    }
+    /*---| Next |---*/
+    .cutter.right-circle,
+    .cutter.right-bigcircle,
+    .cutter.gt-in-circle,
+    .cutter.gt-in-bigcircle,
+    .cutter.lg-in-circle,
+    .cutter.lg-in-bigcircle,
+    .cutter.bg-in-circle,
+    .cutter.bg-in-bigcircle {
+        right: 10px;
+    }
+    .cutter.gt-in-circle::before {
+        font-size: 24px;
+        font-size: 1.2rem;
+        content: "\f105";
+    }
+    .cutter.lg-in-circle::before {
+        font-size: 30px;
+        font-size: 1.5rem;
+        content: ">";
+    }
+    .cutter.bg-in-circle::before {
+        font-size: 21px;
+        font-size: 1.05rem;
+        content: "\f054";
+    }
+    .cutter.gt-in-bigcircle::before,
+    .cutter.lg-in-bigcircle::before,
+    .cutter.bg-in-bigcircle::before {
+        line-height: 82px;
+    }
+    .cutter.gt-in-bigcircle::before {
+        font-size: 48px;
+        font-size: 2.4rem;
+        content: "\f105";
+    }
+    .cutter.lg-in-bigcircle::before {
+        font-size: 60px;
+        font-size: 3rem;
+        content: ">";
+    }
+    .cutter.bg-in-bigcircle::before {
+        font-size: 36px;
+        font-size: 1.8em;
+        content: "\f054";
+    }
+    .cutter.big-gt {
+        text-align: right;
+        right: 10px;
+    }
+    .cutter.big-gt:before {
+        text-align: right;
+        content: "\f105";
+    }
+}

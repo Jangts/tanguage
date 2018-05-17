@@ -1,0 +1,111 @@
+.se-tool .se-icon {
+    display: block;
+}
+
+.se-icon:before {
+    font-family: 'FontAwesome';
+    font-style: normal;
+    content: '\f042';
+}
+
+.bold .se-icon:before {
+    content: '\f032';
+}
+
+.italic .se-icon:before {
+    content: '\f033';
+}
+
+.underline .se-icon:before {
+    content: '\f0cd';
+}
+
+.strikethrough .se-icon:before {
+    content: '\f0cc';
+}
+
+.fontsize .se-icon:before {
+    content: '\f034';
+}
+
+.forecolor .se-icon:before {
+    content: '\f040';
+}
+
+.backcolor .se-icon:before {
+    content: '\f14b';
+}
+
+.justifyleft .se-icon:before {
+    content: '\f036';
+}
+
+.justifycenter .se-icon:before {
+    content: '\f037';
+}
+
+.justifyright .se-icon:before {
+    content: '\f038';
+}
+
+.justifyfull .se-icon:before {
+    content: '\f039';
+}
+
+.insertunorderedlist .se-icon:before {
+    content: '\f0ca';
+}
+
+.insertorderedlist .se-icon:before {
+    content: '\f0cb';
+}
+
+.header .se-icon:before,
+.h1 .se-icon:before,
+.h2 .se-icon:before,
+.h3 .se-icon:before,
+.h4 .se-icon:before,
+.h5 .se-icon:before,
+.h6 .se-icon:before {
+    content: '\f1dc';
+}
+
+.blockquote .se-icon:before {
+    content: '\f10d';
+}
+
+.removeformat .se-icon:before {
+    content: '\f12d';
+}
+
+.createlink .se-icon:before {
+    content: '\f0c1';
+}
+
+.unlink .se-icon:before {
+    content: '\f127';
+}
+
+.inserttable .se-icon:before {
+    content: '\f0ce';
+}
+
+.insertfile .se-icon:before {
+    content: '\f0c6';
+}
+
+.insertemoticon .se-icon:before {
+    content: '\f118';
+}
+
+.insertvideo .se-icon:before {
+    content: '\f03d';
+}
+
+.insertimage .se-icon:before {
+    content: '\f03e';
+}
+
+.insertfragments .se-icon:before {
+    content: '\f12e';
+}

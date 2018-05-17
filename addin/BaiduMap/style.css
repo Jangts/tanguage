@@ -1,0 +1,58 @@
+html {
+    font-size: 125%;
+}
+
+body {
+    font-size: 14px;
+    font-size: 0.7rem;
+}
+
+.tang-addin-map {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.tang-addin-map {
+    width: 100%;
+    min-width: 320px;
+    height: 100%;
+    min-height: 240px;
+    border: #ccc solid 0px;
+    margin: auto;
+}
+
+.tang-addin-map #platform div {
+    overflow: visible;
+}
+
+.tang-addin-map #platform span {
+    overflow: visible;
+}
+
+.tang-addin-map img {
+    max-width: none !important;
+    max-height: none !important;
+}
+
+.tang-addin-map .iw_poi_title {
+    color: #CC5522;
+    font-size: 14px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    overflow: hidden;
+    padding-right: 13px;
+    white-space: nowrap
+}
+
+.tang-addin-map .iw_poi_content {
+    font: 12px arial, sans-serif;
+    overflow: visible;
+    padding-top: 4px;
+    white-space: -moz-pre-wrap;
+    word-wrap: break-word
+}
