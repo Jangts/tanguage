@@ -16,18 +16,18 @@
     }
     else if (typeof root.define === 'function' && root.define.amd) {
         // AMD
-        root.define('tangram_js_sugar', [], function () {
+        root.define('tanguage_script', [], function () {
             return factory(root);
         });
     }
     else if (typeof root.tang === 'object' && typeof root.tang.init === 'function') {
         // TNS
         root.tang.init();
-        root.tangram.module.exports = factory(root);
-        // console.log(root.tangram.module.exports);
+        root.tang.module.exports = factory(root);
+        // console.log(root.tang.module.exports);
     }
     else {
-        root.tangram_js_sugar = factory(root);
+        root.tanguage_script = factory(root);
     }
 }(this, function (root) {
     var _this = this;
@@ -1415,15 +1415,15 @@
                     }
                     for (var index_4 = 0; index_4 < array.length; index_4++) {
                         var element = array[index_4].trim();
-                        if (position && display === 'block')
-                            position.head = true;
+                        // if (position && display === 'block') position.head = true;
                         if (index_4) {
+                            // console.log(element);
                             lines.push({
                                 type: 'line',
                                 subtype: 'assignment',
                                 posi: position,
                                 display: display,
-                                value: element + ' = ' + value + endmark
+                                value: element + ' = '
                             });
                         }
                         else {
@@ -1441,14 +1441,8 @@
                                     display: 'inline',
                                     posi: position,
                                     value: _symbol + ' ' + element + ' = '
-                                }, {
-                                    type: 'line',
-                                    subtype: 'sentence',
-                                    display: 'inline',
-                                    posi: void 0,
-                                    value: value + endmark
                                 });
-                                value = element;
+                                // value = element;
                             }
                             else {
                                 // console.log(element);
@@ -1460,6 +1454,15 @@
                                     this.error('Unexpected Definition `' + symbol + '` at char ' + position.col + ' on line ' + position.line + '.');
                                 }
                             }
+                        }
+                        if (index_4 === array.length - 1) {
+                            lines.push({
+                                type: 'line',
+                                subtype: 'sentence',
+                                display: 'inline',
+                                posi: void 0,
+                                value: value + endmark
+                            });
                         }
                     }
                 }
@@ -1796,6 +1799,7 @@
                         this.pushSentencesToAST(body, vars, code_1, !inOrder && (lines[index_7].display === 'block'), lines[index_7].posi);
                         break;
                     case 'variable':
+                    case 'assignment':
                         body.push({
                             type: 'code',
                             posi: lines[index_7].posi,

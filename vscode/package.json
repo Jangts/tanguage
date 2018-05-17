@@ -1,8 +1,8 @@
 {
-    "name": "tang-js-sugar",
+    "name": "tanguage",
     "displayName": "tanguage sugar",
     "description": "tanguage syntactic sugar",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "publisher": "jangts",
     "engines": {
         "vscode": "^1.22.0"
@@ -24,7 +24,7 @@
                 ".tf"
             ],
             "mimetypes": [
-                "text/tanguage-sugar"
+                "text/tanguage"
             ],
             "configuration": "./configs/tang-language-configuration.json"
         }, {

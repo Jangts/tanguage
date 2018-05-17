@@ -8,18 +8,18 @@
 ;
 this.tang.init().auto([
     '$_/async/',
-    '$_/../../sugar/compiler/lib/sugar as tangram_js_sugar'
+    '$_/../../compiler/js/sugar as tanguage_script'
 ], function (_, root, imports) {
-    var tangram_js_sugar = imports.tangram_js_sugar, sugars = [], scripts = document.getElementsByTagName('script');
+    var tanguage_script = imports.tanguage_script, sugars = [], scripts = document.getElementsByTagName('script');
     // console.log(imports);
     for (var index = 0; index < scripts.length; index++) {
         var script = scripts[index];
-        if (script.type === "text/tanguage-sugar") {
+        if (script.type === "text/tanguage") {
             if (script.src) {
                 var src = script.src;
                 var i = 0;
                 _.async.ajax(src, function (data) {
-                    var sugar = tangram_js_sugar(data).compile().run(function (content) {
+                    var sugar = tanguage_script(data).compile().run(function (content) {
                         console.log(this.ast);
                         // console.log(this.posimap, this.mappings);
                         console.log(true, content);
@@ -33,7 +33,7 @@ this.tang.init().auto([
                 // ;
             }
             else {
-                tangram_js_sugar(script.innerHTML).compile().run(function (content) {
+                tanguage_script(script.innerHTML).compile().run(function (content) {
                     console.log(this.ast);
                     console.log(content);
                 }, function () {

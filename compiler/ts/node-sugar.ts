@@ -12,7 +12,7 @@
 const fs = require('fs');
 const glob = require("glob");
 const path = require('path');
-const tangram_js_sugar = require('./sugar.js');
+const tanguage_script = require('./sugar.js');
 const vlq = require('./vlq.js');
 const commands = ['compile', 'test', 'cdir', 'build', 'help', 'version'];
 
@@ -92,7 +92,7 @@ let handlers = {
         o = path.resolve(o);
         console.log('compile tang file ' + i + '...');
         var script = fs.readFileSync(i, 'utf-8');
-        var sugar = tangram_js_sugar(script, i);
+        var sugar = tanguage_script(script, i);
         sugar.onReadFile = onReadFile;
         sugar.compile();
         if (options.generateSourceMap){
@@ -213,13 +213,13 @@ switch (options.command) {
         break;
 }
 
-// node ./../../sugar/compiler/lib/node-sugar.js test -map
+// node ./../../compiler/js/node-sugar.js test -map
 
 // node-sugar cdir ./tang/ ./dist/ -map -c
-// node ./../sugar/compiler/lib/node-sugar.js cdir ./tang/ ./dist/ -map -c
+// node ./../compiler/js/node-sugar.js cdir ./tang/ ./dist/ -map -c
 
 // node-sugar cdir  ./tang/view/Slider/ ./dist/view/Slider/ -c -map
-// node ./../sugar/compiler/lib/node-sugar.js cdir ./tang/view/Slider/ ./dist/view/Slider/ -c -map
-// node ./../sugar/compiler/lib/node-sugar.js cdir ./tang/view/Slider/ ./dist/view/Slider/ -map
+// node ./../compiler/js/node-sugar.js cdir ./tang/view/Slider/ ./dist/view/Slider/ -c -map
+// node ./../compiler/js/node-sugar.js cdir ./tang/view/Slider/ ./dist/view/Slider/ -map
 
-// node ./../sugar/compiler/lib/node-sugar.js cdir ./tang/dom/ ./dist/dom/ -c -map
+// node ./../compiler/js/node-sugar.js cdir ./tang/dom/ ./dist/dom/ -c -map

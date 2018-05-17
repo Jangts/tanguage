@@ -1,6 +1,6 @@
 {
     "name": "tanguage",
-    "version": "0.9.9",
+    "version": "0.9.10",
     "description": "A Web Front-end Development Framework",
     "main": "./lib/dist/runtime.js",
     "deprecated": false,

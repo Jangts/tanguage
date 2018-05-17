@@ -60,7 +60,7 @@ _utf8_decode = (utftext) {
 
 
 //常用字符串处理函数
-namespace str {
+namespace str with {
     trim(str) {
         return str.replace(/(^\s*)|(\s*$)/g, '');
     }

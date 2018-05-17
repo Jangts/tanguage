@@ -302,7 +302,7 @@
                             }]
                         },
                         {
-                            "begin": "(?=(?i:type\\s*=\\s*('|\"|)(text/(tanguage-sugar|tang|x-tang)[\\s\"'>])))",
+                            "begin": "(?=(?i:type\\s*=\\s*('|\"|)(text/(tanguage|tang|x-tanguage|x-tang)[\\s\"'>])))",
                             "end": "((<))(?=/(?i:script))",
                             "patterns": [{
                                     "begin": "(^[ \\t]+)?(?=//)",

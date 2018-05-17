@@ -22,7 +22,7 @@
     "tang template": {
         "prefix": "script",
         "body": [
-            "<script type=\"text/tanguage-sugar\"/>",
+            "<script type=\"text/tanguage\"/>",
             "\tuse ${1:\\$_/dom/Elements};",
             "\tuse ${2:\\$_/} ${3:as ${4:var}};$0",
             "\t",
