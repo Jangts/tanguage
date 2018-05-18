@@ -1,6 +1,6 @@
 {
     "name": "tanguage",
-    "version": "0.9.10",
+    "version": "0.9.11",
     "description": "A Web Front-end Development Framework",
     "main": "./lib/dist/runtime.js",
     "deprecated": false,
@@ -11,9 +11,8 @@
     "bundleDependencies": [],
     "devDependencies": {},
     "scripts": {
-        "help": "node-sugar help",
-        "clib": "node-sugar cdir ./lib/tang/ ./lib/dist/ -map -c",
-        "tang": "node ./compiler/js/node-sugar.js cdir ./lib/tang/ ./lib/dist/ -map -c"
+        "help": "node ./compiler/js/node-sugar.js help",
+        "clib": "node ./compiler/js/node-sugar.js cdir ./lib/tang/ ./lib/dist/ -map -c"
     },
     "repository": {
         "type": "git",

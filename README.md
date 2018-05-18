@@ -8,6 +8,8 @@
 
 ### Written and Designed By Jang Ts
 
-### http://tangram.js.cn
+### [homepage](http://tangram.js.cn)
+
+### [wiki](https://github.com/Jangts/tanguage/wiki)
 
 ### Date: 2017-04-06

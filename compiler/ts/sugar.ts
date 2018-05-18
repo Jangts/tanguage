@@ -3,7 +3,7 @@
  * Core Code
  *
  * Written and Designed By Jang Ts
- * http://tangram.js.cn
+ * https://github.com/Jangts/tanguage/wiki
  */
 
 ;
@@ -1388,9 +1388,9 @@
                             // console.log(element);
                             lines.push({
                                 type: 'line',
-                                subtype: 'assignment',
+                                subtype: 'sentence',
                                 posi: position,
-                                display: display,
+                                display: 'inline',
                                 value: element + ' = '
                             });
                         } else {
@@ -1598,7 +1598,7 @@
                         break;
 
                     case 'variable':
-                    case 'assignment':
+                    // case 'assignment':
                         preast.push([{
                             type: 'code',
                             posi: lines[index].posi,
@@ -1747,7 +1747,7 @@
                         break;
 
                     case 'variable':
-                    case 'assignment':
+                    // case 'assignment':
                         body.push({
                             type: 'code',
                             posi: lines[index].posi,

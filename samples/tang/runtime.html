@@ -17,7 +17,7 @@ _init (source, data, includes) {
         this.intermediate = compile(source);
         var string = this.intermediate.split(spliter),
             codes = [],
-            rs = this.results = [];
+            rs = this.results = this[results] = this['results'] = [];
         include = (name) {
             if (name && includes[name] && (typeof includes[name].echo === '')) {
                 rs.push(includes[name].echo());

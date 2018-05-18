@@ -3,7 +3,7 @@
  * Web Entrance
  *
  * Written and Designed By Jang Ts
- * http://tangram.js.cn
+ * https://github.com/Jangts/tanguage/wiki
  */
 ;
 this.tang.init().auto([
