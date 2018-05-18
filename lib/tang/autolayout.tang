@@ -6,7 +6,7 @@ use $ see/NavMenu
 namespace see;
 
 let _ = pandora,
-$ = _.dom.select;
+$ = _.dom.$;
 
 extends .Scrollbar {
     auto () {

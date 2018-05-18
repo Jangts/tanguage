@@ -1,4 +1,4 @@
-public animator (elem, options) {
+public animator = (elem, options) {
     if (elem) {
         var elemStorage = pandora.storage.get($..cache(elem));
         if (elemStorage.Animation) {

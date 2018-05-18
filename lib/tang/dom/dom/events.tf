@@ -1,4 +1,4 @@
-public remove (elem, context) {
+public remove = (elem, context) {
     if (context && _.util.type(context) == 'Element' && elem.parentNode == context) {
         $..events.remove(elem);
         context.removeChild(elem);
@@ -11,7 +11,7 @@ public remove (elem, context) {
 
 namespace events with {
     fire (elem, event, eventType) {
-        elem.tangram_js_id && @(elem.tangram_js_id).Events && @(elem.tangram_js_id).Events.fire(event, eventType);
+        elem.tanguage_id && @(elem.tanguage_id).Events && @(elem.tanguage_id).Events.fire(event, eventType);
         return this;
     },
     add (elem, eventType, selector, data, handler) {
@@ -29,8 +29,8 @@ namespace events with {
         return this;
     },
     remove (elem, eventType, selector, handler) {
-        if (elem.tangram_js_id && @(elem.tangram_js_id).Events) {
-            var Events = @(elem.tangram_js_id).Events;
+        if (elem.tanguage_id && @(elem.tanguage_id).Events) {
+            var Events = @(elem.tanguage_id).Events;
             if (handler) {
                 Events.removeHandler(eventType, selector, handler);
             } else {
@@ -41,8 +41,8 @@ namespace events with {
                         Events.removeType(eventType);
                     } else {
                         Events.remove();
-                        elem.tangram_js_id.Events = undefined;
-                        delete elem.tangram_js_id.Events;
+                        elem.tanguage_id.Events = undefined;
+                        delete elem.tanguage_id.Events;
                     }
                 }
             }

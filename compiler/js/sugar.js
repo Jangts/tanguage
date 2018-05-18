@@ -1,5 +1,5 @@
 /*!
- * tanguage framework syntactic sugar
+ * tanguage script compiler
  * Core Code
  *
  * Written and Designed By Jang Ts
@@ -151,8 +151,8 @@
     }, stringRepeat = function (string, number) {
         return new Array(number + 1).join(string);
     };
-    var Sugar = /** @class */ (function () {
-        function Sugar(input, source, toES6, run) {
+    var Script = /** @class */ (function () {
+        function Script(input, source, toES6, run) {
             if (source === void 0) { source = ''; }
             if (toES6 === void 0) { toES6 = false; }
             if (run === void 0) { run = false; }
@@ -197,7 +197,7 @@
                 this.run();
             }
         }
-        Sugar.prototype.compile = function () {
+        Script.prototype.compile = function () {
             // console.log(this.input);
             var newcontent = this.markPosition(this.input, 0);
             var string = this.encode(newcontent);
@@ -222,10 +222,10 @@
             // console.log(this.replacements);
             return this;
         };
-        Sugar.prototype.error = function (str) {
-            throw 'tanguage sugar Error: ' + str;
+        Script.prototype.error = function (str) {
+            throw 'tanguage script Error: ' + str;
         };
-        Sugar.prototype.markPosition = function (string, sourceid) {
+        Script.prototype.markPosition = function (string, sourceid) {
             if (sourceid === void 0) { sourceid = 0; }
             var lines = string.split(/\r{0,1}\n/);
             // console.log(lines);
@@ -256,7 +256,7 @@
             // console.log(newlines.join("\r\n"));
             return newlines.join("\r\n");
         };
-        Sugar.prototype.tidyPosition = function (string) {
+        Script.prototype.tidyPosition = function (string) {
             var on = true;
             while (on) {
                 on = false;
@@ -314,7 +314,7 @@
             string = string.replace(/::::/g, '::: :');
             return string;
         };
-        Sugar.prototype.encode = function (string) {
+        Script.prototype.encode = function (string) {
             var _this = this;
             // console.log(string);
             string = string
@@ -358,12 +358,12 @@
             string = string.replace(/(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om)\s+)?___boundary_[A-Z0-9_]{36}_(\d+)_as_string___\s*(\:|\(|\=)/g, function (match, posi, desc, type, index, after) {
                 // console.log(posi, desc, this.replacements[index][1]);
                 if (_this.replacements[index][1]) {
-                    return /*"\r\n" + */ _this.replacements[index][1] + '___boundary_' + index + '_as_propname___' + after;
+                    return "\r\n" + _this.replacements[index][1] + '___boundary_' + index + '_as_propname___' + after;
                 }
                 if (desc) {
-                    return /*"\r\n" + */ posi + desc + '___boundary_' + index + '_as_propname___' + after;
+                    return "\r\n" + posi + desc + '___boundary_' + index + '_as_propname___' + after;
                 }
-                return /*"\r\n" + */ '___boundary_' + index + '_as_propname___' + after;
+                return "\r\n" + '___boundary_' + index + '_as_propname___' + after;
             });
             // console.log(string);
             string = string
@@ -393,7 +393,7 @@
             // console.log(this.replacements);
             return string;
         };
-        Sugar.prototype.replaceUsing = function (string) {
+        Script.prototype.replaceUsing = function (string) {
             var _this = this;
             return string.replace(replaceExpRegPattern.use, function (match, posi, $, url, as, alias, variables, posimembers, members) {
                 // console.log(arguments);
@@ -412,7 +412,7 @@
                 return '___boundary_' + _this.uid + '_' + index + '_as_using___;';
             });
         };
-        Sugar.prototype.replaceStrings = function (string, ignoreComments) {
+        Script.prototype.replaceStrings = function (string, ignoreComments) {
             var _this = this;
             if (ignoreComments === void 0) { ignoreComments = false; }
             string = string.replace(/\\+(`|")/g, function (match) {
@@ -505,7 +505,7 @@
             // console.log(this.replacements);
             return string;
         };
-        Sugar.prototype.replaceTemplate = function (string) {
+        Script.prototype.replaceTemplate = function (string) {
             var lines = string.replace(/"/g, function () {
                 return '@boundary_7_as_mark::';
             }).replace(/`/g, '').split(/\r{0,1}\n/);
@@ -620,7 +620,7 @@
             // a();
             return string;
         };
-        Sugar.prototype.replaceIncludes = function (string) {
+        Script.prototype.replaceIncludes = function (string) {
             var _this = this;
             if (this.sources.length) {
                 var on_1 = true;
@@ -655,12 +655,12 @@
             }
             return string;
         };
-        Sugar.prototype.onReadFile = function (match, source) {
+        Script.prototype.onReadFile = function (match, source) {
             if (source === void 0) { source = void 0; }
             // console.log(match, source);
             return "/* include '" + match + "' not be supported. */\r\n";
         };
-        Sugar.prototype.replaceBrackets = function (string) {
+        Script.prototype.replaceBrackets = function (string) {
             var _this = this;
             var left = string.indexOf('[');
             var right = string.indexOf(']');
@@ -701,7 +701,7 @@
             }
             return string;
         };
-        Sugar.prototype.replaceBraces = function (string) {
+        Script.prototype.replaceBraces = function (string) {
             var left = string.indexOf('{');
             var right = string.indexOf('}');
             var count = 0;
@@ -721,6 +721,7 @@
                     else {
                         var index = left;
                     }
+                    console.log(left, right, string.substr(index, 256));
                     this.error('Unexpected `' + (right >= 0 ? '}' : '{') + '` in `' + this.decode(string.substr(index, 256)) + '`');
                 }
             }
@@ -731,7 +732,7 @@
             }
             return string;
         };
-        Sugar.prototype.replaceCodeSegments = function (string) {
+        Script.prototype.replaceCodeSegments = function (string) {
             var _this = this;
             var matched = false;
             string = string.replace(replaceExpRegPattern.class, function (match, posi, body) {
@@ -878,7 +879,7 @@
                 }
             });
         };
-        Sugar.prototype.replaceParentheses = function (string) {
+        Script.prototype.replaceParentheses = function (string) {
             var _this = this;
             string = this.replaceWords(string);
             var left = string.indexOf('(');
@@ -921,7 +922,7 @@
             string = this.replaceArrowFunctions(string);
             return string;
         };
-        Sugar.prototype.replaceWords = function (string) {
+        Script.prototype.replaceWords = function (string) {
             var _this = this;
             // console.log(string);
             return string.replace(replaceWords, function (match, posi, word, after) {
@@ -939,7 +940,7 @@
                 return ";\r\n" + '@boundary_' + index + '_as_keyword::' + after;
             });
         };
-        Sugar.prototype.recheckFnOrCallLikes = function (string) {
+        Script.prototype.recheckFnOrCallLikes = function (string) {
             var _this = this;
             string = string.replace(replaceExpRegPattern.expression, function (match, posi, expname, exp, expindex, closure, closureindex) {
                 // console.log(match, posi, expname, exp, expindex, closure, closureindex);
@@ -960,7 +961,7 @@
             });
             return string;
         };
-        Sugar.prototype.replaceOperators = function (string) {
+        Script.prototype.replaceOperators = function (string) {
             var _this = this;
             var on = true;
             while (on) {
@@ -1082,7 +1083,7 @@
                 return '';
             });
         };
-        Sugar.prototype.replaceCalls = function (string) {
+        Script.prototype.replaceCalls = function (string) {
             var _this = this;
             // console.log(string);
             string = string.replace(replaceExpRegPattern.log, function (match, posi, args) {
@@ -1118,7 +1119,7 @@
                 }
             }));
         };
-        Sugar.prototype.replaceCallsChain = function (string) {
+        Script.prototype.replaceCallsChain = function (string) {
             var _this = this;
             // console.log(string);
             return string.replace(replaceExpRegPattern.callschain, function (match, posi, _index) {
@@ -1128,7 +1129,7 @@
                 return '___boundary_' + _this.uid + '_' + index + '_as_callschain___';
             });
         };
-        Sugar.prototype.replaceArrowFunctions = function (string) {
+        Script.prototype.replaceArrowFunctions = function (string) {
             var _this = this;
             var arrow = string.match(/(->|=>)/);
             // console.log(arrow);
@@ -1176,7 +1177,7 @@
             }
             return string;
         };
-        Sugar.prototype.getPosition = function (string) {
+        Script.prototype.getPosition = function (string) {
             if (string) {
                 // console.log(string);
                 var match = string.match(/@(\d+)L(\d+)P(\d+)(O*)(\d*):{0,3}/);
@@ -1199,7 +1200,7 @@
             }
             return void 0;
         };
-        Sugar.prototype.pickTretOfMatch = function (match_as_statement, isblock) {
+        Script.prototype.pickTretOfMatch = function (match_as_statement, isblock) {
             if (isblock === void 0) { isblock = true; }
             var tret_of_match = match_as_statement[3].trim();
             if (tret_of_match
@@ -1213,7 +1214,7 @@
             }
             return null;
         };
-        Sugar.prototype.getLines = function (string, vars, inOrder) {
+        Script.prototype.getLines = function (string, vars, inOrder) {
             if (inOrder === void 0) { inOrder = false; }
             // console.log(string);
             string = string
@@ -1265,7 +1266,7 @@
             // console.log(lines);
             return lines;
         };
-        Sugar.prototype.pushSentenceToLines = function (lines, code, display) {
+        Script.prototype.pushSentenceToLines = function (lines, code, display) {
             value = code.trim();
             if (value && !value.match(/^@\d+L\d+P\d+O?\d*:::$/)) {
                 var match_as_statement = value.match(/^(@\d+L\d+P\d+O?\d*:::)?\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_([a-z]+)___([\r\n]+|$)/);
@@ -1331,7 +1332,7 @@
                 }
             }
         };
-        Sugar.prototype.pushVariablesToLines = function (lines, vars, posi, code, symbol, inOrder) {
+        Script.prototype.pushVariablesToLines = function (lines, vars, posi, code, symbol, inOrder) {
             if (inOrder === void 0) { inOrder = false; }
             var display;
             var clauses = code.split(/,\s*(@\d+L\d+P\d+O?\d*:::)*/);
@@ -1363,7 +1364,7 @@
                 this.pushVariableToLines(lines, vars, clauses[c], clauses[c + 1], symbol, display);
             }
         };
-        Sugar.prototype.pushVariableToLines = function (lines, vars, posi, code, symbol, display) {
+        Script.prototype.pushVariableToLines = function (lines, vars, posi, code, symbol, display) {
             if (display === void 0) { display = 'block'; }
             if (code) {
                 if (this.toES6 && symbol !== 'public') {
@@ -1384,7 +1385,7 @@
                 }
             }
         };
-        Sugar.prototype.pushVariableToLine = function (lines, vars, code, symbol, posi, display, _symbol, endmark) {
+        Script.prototype.pushVariableToLine = function (lines, vars, code, symbol, posi, display, _symbol, endmark) {
             if (posi === void 0) { posi = ''; }
             if (display === void 0) { display = 'inline'; }
             if (_symbol === void 0) { _symbol = ''; }
@@ -1468,7 +1469,7 @@
                 }
             }
         };
-        Sugar.prototype.pushVariablesToLine = function (lines, vars, match, symbol, _symbol, value, position, endmark) {
+        Script.prototype.pushVariablesToLine = function (lines, vars, match, symbol, _symbol, value, position, endmark) {
             if (_symbol === void 0) { _symbol = ''; }
             if (endmark === void 0) { endmark = ','; }
             var type, elements = [];
@@ -1501,7 +1502,7 @@
                 }
             }
         };
-        Sugar.prototype.pushVariableValueToLine = function (lines, vars, type, symbol, _symbol, value, position, endmark) {
+        Script.prototype.pushVariableValueToLine = function (lines, vars, type, symbol, _symbol, value, position, endmark) {
             var anonvar;
             if (value.match(/^[\$a-zA-Z_][\$\w]*(\s*\.\s*[\$a-zA-Z_][\$\w]*)*$/) && !value.match(/___boundary_[A-Z0-9_]{36}_(\d+)_as_[a-z]+___/)) {
                 if (type === '...') {
@@ -1548,7 +1549,7 @@
                 return anonvar;
             }
         };
-        Sugar.prototype.pushSetToVars = function (lines, vars, type, index, length, symbol, _symbol, variable, value, position, endmark) {
+        Script.prototype.pushSetToVars = function (lines, vars, type, index, length, symbol, _symbol, variable, value, position, endmark) {
             var _value, __value;
             if (type === '...') {
                 _value = 'pandora.remove(' + value + ', \'' + variable + '\')';
@@ -1580,7 +1581,7 @@
                 value: __value
             });
         };
-        Sugar.prototype.pushSetsToVars = function (lines, vars, type, index, symbol, _symbol, variable, value, position, endmark) {
+        Script.prototype.pushSetsToVars = function (lines, vars, type, index, symbol, _symbol, variable, value, position, endmark) {
             var _value, __value;
             variable = variable.replace(/\.+/, '');
             // console.log(variable);
@@ -1611,7 +1612,7 @@
                 value: __value
             });
         };
-        Sugar.prototype.pushVariableToVars = function (vars, symbol, variable, position) {
+        Script.prototype.pushVariableToVars = function (vars, symbol, variable, position) {
             if (vars.self[variable] !== void 0) {
                 if (vars.self[variable] === 'let' || symbol === 'let') {
                     this.error(' Variable `' + variable + '` has already been declared at char ' + position.col + ' on line ' + position.line + '.');
@@ -1630,7 +1631,7 @@
                 vars.root.public[variable] = variable;
             }
         };
-        Sugar.prototype.pickReplacePosis = function (lines, vars) {
+        Script.prototype.pickReplacePosis = function (lines, vars) {
             var imports = [], using_as = {}, preast = [];
             for (var index_5 = 0; index_5 < lines.length; index_5++) {
                 // console.log(lines[index]);
@@ -1702,7 +1703,7 @@
             // console.log(imports, preast);
             return preast;
         };
-        Sugar.prototype.pushSentencesToPREAST = function (preast, vars, code, display, lineposi) {
+        Script.prototype.pushSentencesToPREAST = function (preast, vars, code, display, lineposi) {
             if (preast === void 0) { preast = []; }
             if (display === void 0) { display = 'block'; }
             if (code) {
@@ -1746,7 +1747,7 @@
                 return preast;
             }
         };
-        Sugar.prototype.buildAST = function (preast, vars) {
+        Script.prototype.buildAST = function (preast, vars) {
             // console.log(preast);
             var ast = {
                 type: 'codes',
@@ -1785,7 +1786,7 @@
             this.ast = ast;
             return this;
         };
-        Sugar.prototype.pushBodyToAST = function (body, vars, code, inOrder) {
+        Script.prototype.pushBodyToAST = function (body, vars, code, inOrder) {
             if (body === void 0) { body = []; }
             if (inOrder === void 0) { inOrder = false; }
             var lines = code ? this.getLines(code, vars, inOrder) : [];
@@ -1820,7 +1821,7 @@
             // console.log(body);
             return body;
         };
-        Sugar.prototype.pushSentencesToAST = function (body, vars, code, isblock, lineposi) {
+        Script.prototype.pushSentencesToAST = function (body, vars, code, isblock, lineposi) {
             if (body === void 0) { body = []; }
             if (isblock === void 0) { isblock = true; }
             if (code) {
@@ -1852,7 +1853,7 @@
             }
             return body;
         };
-        Sugar.prototype.pushReplacementsToAST = function (body, vars, code, isblock, lineposi) {
+        Script.prototype.pushReplacementsToAST = function (body, vars, code, isblock, lineposi) {
             // console.log(code);
             // code = code.trim();
             if (code.trim()) {
@@ -1879,7 +1880,7 @@
             }
             return body;
         };
-        Sugar.prototype.pushRowsToAST = function (body, vars, code, isblock, lineposi) {
+        Script.prototype.pushRowsToAST = function (body, vars, code, isblock, lineposi) {
             var rows = code.split(/[\r\n]+/);
             // console.log(array);
             for (var r = 0; r < rows.length; r++) {
@@ -1890,7 +1891,7 @@
             }
             return body;
         };
-        Sugar.prototype.pushCodeToAST = function (body, vars, code, isblock, lineposi) {
+        Script.prototype.pushCodeToAST = function (body, vars, code, isblock, lineposi) {
             var display = isblock ? 'block' : 'inline';
             var position = this.getPosition(code) || lineposi;
             if (position) {
@@ -1911,7 +1912,7 @@
             }
             return body;
         };
-        Sugar.prototype.walk = function (element, vars, inOrder) {
+        Script.prototype.walk = function (element, vars, inOrder) {
             if (vars === void 0) { vars = false; }
             // console.log(element);
             switch (element.type) {
@@ -1977,7 +1978,7 @@
                     };
             }
         };
-        Sugar.prototype.walkArray = function (index, display, vars) {
+        Script.prototype.walkArray = function (index, display, vars) {
             var body = [], position = this.getPosition(this.replacements[index][1]), clauses = this.replacements[index][0].replace(/([\[\s\]])/g, '').split(',');
             // console.log(this.replacements[index], clauses);
             for (var c = 0; c < clauses.length; c++) {
@@ -1998,7 +1999,7 @@
                 body: body
             };
         };
-        Sugar.prototype.walkArrowFn = function (index, display, vars) {
+        Script.prototype.walkArrowFn = function (index, display, vars) {
             var matches = this.replacements[index][0].match(matchExpRegPattern.arrowfn);
             // console.log(this.replacements[index], matches);
             var subtype = 'fn';
@@ -2043,7 +2044,7 @@
                 body: this.checkFnBody(localvars, args, matches[4])
             };
         };
-        Sugar.prototype.walkCall = function (index, display, vars, type) {
+        Script.prototype.walkCall = function (index, display, vars, type) {
             // console.log(this.replacements[index]);
             var name = [], args = [], matches = this.replacements[index][0].match(matchExpRegPattern.call), position = this.getPosition(this.replacements[index][1]), nameArr = matches[1].split('___boundary_' + this.uid), paramArr = this.replacements[matches[2]][0].split(/([\(,\)])/);
             // console.log(this.getLines(this.replacements[matches[2]][0], vars));
@@ -2119,7 +2120,7 @@
                 args: args
             };
         };
-        Sugar.prototype.walkCallsChain = function (index, display, vars, type) {
+        Script.prototype.walkCallsChain = function (index, display, vars, type) {
             var _this = this;
             var code = this.replacements[index][0], position = this.getPosition(this.replacements[index][1]), calls = [];
             code.replace(/(@\d+L\d+P\d+O*\d*:::)?\.___boundary_[A-Z0-9_]{36}_(\d+)_as_callmethod___/g, function (match, posi, _index) {
@@ -2142,7 +2143,7 @@
                 calls: calls
             };
         };
-        Sugar.prototype.walkClass = function (index, display, vars) {
+        Script.prototype.walkClass = function (index, display, vars) {
             if (vars === void 0) { vars = true; }
             // console.log(this.replacements[index]);
             var matches = this.replacements[index][0].match(matchExpRegPattern.class);
@@ -2206,7 +2207,7 @@
                 body: this.checkClassBody(vars, matches[7] || '')
             };
         };
-        Sugar.prototype.walkClosure = function (index, display, vars) {
+        Script.prototype.walkClosure = function (index, display, vars) {
             // console.log(this.replacements[index]);
             var localvars = {
                 parent: vars,
@@ -2229,7 +2230,7 @@
                 body: body
             };
         };
-        Sugar.prototype.walkExtends = function (index, display, vars) {
+        Script.prototype.walkExtends = function (index, display, vars) {
             // console.log(this.replacements[index]);
             var matches = this.replacements[index][0].match(matchExpRegPattern.extends);
             var position = this.getPosition(this.replacements[index][1]);
@@ -2280,7 +2281,7 @@
                 body: body
             };
         };
-        Sugar.prototype.walkFnLike = function (index, display, vars, type) {
+        Script.prototype.walkFnLike = function (index, display, vars, type) {
             var _this = this;
             // console.log(index, this.replacements[index]);
             var tem = {
@@ -2463,7 +2464,7 @@
                 body: this.checkFnBody(localvars, args, matches[5])
             };
         };
-        Sugar.prototype.walkParentheses = function (index, display, vars) {
+        Script.prototype.walkParentheses = function (index, display, vars) {
             var body = [], clauses = this.replacements[index][0].replace(/([\[\s\]])/g, '').split(/\s*(,)/), position = this.getPosition(this.replacements[index][1]);
             for (var c = 0; c < clauses.length; c++) {
                 if (c) {
@@ -2485,7 +2486,7 @@
                 body: body
             };
         };
-        Sugar.prototype.walkObject = function (index, display, vars) {
+        Script.prototype.walkObject = function (index, display, vars) {
             if (vars === void 0) { vars = true; }
             return {
                 type: 'object',
@@ -2495,7 +2496,7 @@
                 body: this.checkObjMember(vars, this.replacements[index][0])
             };
         };
-        Sugar.prototype.checkProp = function (vars, posi, type, attr, array) {
+        Script.prototype.checkProp = function (vars, posi, type, attr, array) {
             // console.log(posi);
             // console.log(type, posi, attr, array);
             var position = this.getPosition(posi);
@@ -2568,7 +2569,7 @@
                 ]
             };
         };
-        Sugar.prototype.checkClassBody = function (vars, code) {
+        Script.prototype.checkClassBody = function (vars, code) {
             // console.log(code);
             var body = [], array = code.replace('_as_function___', '_as_function___;').split(/[;,\r\n]+/);
             // console.log(code);
@@ -2641,7 +2642,7 @@
             }
             return body;
         };
-        Sugar.prototype.checkObjMember = function (vars, code) {
+        Script.prototype.checkObjMember = function (vars, code) {
             var that = this, body = [], bodyIndex = -1, lastIndex = 0, array = code.split(/\s*[\{,\}]\s*/);
             // console.log(code, array);
             for (var index_11 = 0; index_11 < array.length; index_11++) {
@@ -2710,7 +2711,7 @@
             }
             return body;
         };
-        Sugar.prototype.checkArgs = function (code, localvars) {
+        Script.prototype.checkArgs = function (code, localvars) {
             var args = code.split(/\s*,\s*/), keys = [], keysArray = void 0, vals = [];
             // console.log(code, args);
             for (var index_12 = 0; index_12 < args.length; index_12++) {
@@ -2743,7 +2744,7 @@
                 vals: vals
             };
         };
-        Sugar.prototype.checkFnBody = function (vars, args, code) {
+        Script.prototype.checkFnBody = function (vars, args, code) {
             code = code.trim();
             // console.log(code);
             var body = [];
@@ -2788,7 +2789,7 @@
             // console.log(code, body);
             return body;
         };
-        Sugar.prototype.generate = function () {
+        Script.prototype.generate = function () {
             // console.log(this.replacements);
             // console.log(this.ast.body);
             var head = [];
@@ -2804,7 +2805,7 @@
             // console.log(this.output);
             return this;
         };
-        Sugar.prototype.pushPostionsToMap = function (position, codes) {
+        Script.prototype.pushPostionsToMap = function (position, codes) {
             if (codes === void 0) { codes = undefined; }
             if (position && (typeof position === 'object')) {
                 var index_14 = this.posimap.length;
@@ -2817,9 +2818,9 @@
             }
             return '';
         };
-        Sugar.prototype.pushHeader = function (codes, array) {
+        Script.prototype.pushHeader = function (codes, array) {
             codes.push('/*!');
-            codes.push("\r\n" + ' * tanguage framework sugar compiled code');
+            codes.push("\r\n" + ' * tanguage script compiled code');
             codes.push("\r\n" + ' *');
             codes.push("\r\n" + ' * Datetime: ' + (new Date()).toUTCString());
             codes.push("\r\n" + ' */');
@@ -2860,7 +2861,7 @@
             }
             return codes;
         };
-        Sugar.prototype.pushAlias = function (codes, vars, alias) {
+        Script.prototype.pushAlias = function (codes, vars, alias) {
             for (var key in vars.locals) {
                 codes.push("\r\n\tvar " + vars.locals[key] + ' = ' + key + ';');
             }
@@ -2880,7 +2881,7 @@
             }
             return codes;
         };
-        Sugar.prototype.pushCodes = function (codes, vars, array, layer, namespace) {
+        Script.prototype.pushCodes = function (codes, vars, array, layer, namespace) {
             if (namespace === void 0) { namespace = this.namespace; }
             // console.log(codes, array);
             // console.log(array);
@@ -2892,7 +2893,7 @@
             }
             return codes;
         };
-        Sugar.prototype.pushElement = function (codes, vars, element, layer, namespace) {
+        Script.prototype.pushElement = function (codes, vars, element, layer, namespace) {
             if (namespace === void 0) { namespace = this.namespace; }
             var indent = "\r\n" + stringRepeat("\t", layer);
             switch (element.type) {
@@ -2966,7 +2967,7 @@
             }
             return codes;
         };
-        Sugar.prototype.pushArrayCodes = function (codes, element, layer, namespace) {
+        Script.prototype.pushArrayCodes = function (codes, element, layer, namespace) {
             var elements = [];
             if (element.posi) {
                 this.pushPostionsToMap(element.posi, codes);
@@ -3001,7 +3002,7 @@
             codes.push(']');
             return codes;
         };
-        Sugar.prototype.pushArrayElements = function (elements, body, vars, _layer, namespace) {
+        Script.prototype.pushArrayElements = function (elements, body, vars, _layer, namespace) {
             for (var index_17 = 0; index_17 < body.length; index_17++) {
                 if (body[index_17].value) {
                     elements.push(this.pushPostionsToMap(body[index_17].posi) + body[index_17].value);
@@ -3016,7 +3017,7 @@
                 }
             }
         };
-        Sugar.prototype.pushCallCodes = function (codes, element, layer, namespace) {
+        Script.prototype.pushCallCodes = function (codes, element, layer, namespace) {
             var naming = this.pushCodes([], element.vars, element.name, layer, namespace);
             // console.log(element);
             // console.log(element.name.length, element.name[0], naming);
@@ -3081,7 +3082,7 @@
             }
             return codes;
         };
-        Sugar.prototype.pushCallArgs = function (args, body, vars, _layer, namespace) {
+        Script.prototype.pushCallArgs = function (args, body, vars, _layer, namespace) {
             for (var index_18 = 0; index_18 < body.length; index_18++) {
                 var param = body[index_18].body;
                 var paramCodes = [];
@@ -3093,7 +3094,7 @@
                 // console.log(element.name[0].value, param, paramCodes);
             }
         };
-        Sugar.prototype.pushCallsCodes = function (codes, element, layer, namespace) {
+        Script.prototype.pushCallsCodes = function (codes, element, layer, namespace) {
             var elements = [];
             var _layer = layer;
             var indent;
@@ -3125,7 +3126,7 @@
             }
             return codes;
         };
-        Sugar.prototype.pushClassCodes = function (codes, element, layer, namespace) {
+        Script.prototype.pushClassCodes = function (codes, element, layer, namespace) {
             var indent1 = "\r\n" + stringRepeat("\t", layer);
             var indent2 = "\r\n" + stringRepeat("\t", layer + 1);
             var elements = [];
@@ -3168,7 +3169,7 @@
                     codes.push('extends ' + element.base);
                 }
                 else {
-                    codes.push(element.base + ',');
+                    codes.push(element.base + ', ');
                 }
             }
             codes.push('{');
@@ -3327,7 +3328,7 @@
             }
             return codes;
         };
-        Sugar.prototype.pushFunctionCodes = function (codes, element, layer, namespace) {
+        Script.prototype.pushFunctionCodes = function (codes, element, layer, namespace) {
             var indent = "\r\n" + stringRepeat("\t", layer);
             if (element.posi) {
                 var posi = this.pushPostionsToMap(element.posi);
@@ -3388,7 +3389,7 @@
             codes.push(indent + '}');
             return codes;
         };
-        Sugar.prototype.pushExtendsCodes = function (codes, element, layer, namespace) {
+        Script.prototype.pushExtendsCodes = function (codes, element, layer, namespace) {
             var indent1 = "\r\n" + stringRepeat("\t", layer);
             var indent2 = "\r\n" + stringRepeat("\t", layer + 1);
             var indent3 = "\r\n" + stringRepeat("\t", layer + 2);
@@ -3430,7 +3431,7 @@
             codes.push(indent1);
             return codes;
         };
-        Sugar.prototype.pushExpressionCodes = function (codes, element, layer, namespace) {
+        Script.prototype.pushExpressionCodes = function (codes, element, layer, namespace) {
             var indent1 = "\r\n" + stringRepeat("\t", layer);
             var indent2 = "\r\n" + stringRepeat("\t", layer);
             if (element.posi) {
@@ -3466,7 +3467,7 @@
             }
             return codes;
         };
-        Sugar.prototype.pushExpandClassCodes = function (codes, element, layer, namespace) {
+        Script.prototype.pushExpandClassCodes = function (codes, element, layer, namespace) {
             var indent1 = "\r\n" + stringRepeat("\t", layer);
             var indent2 = "\r\n" + stringRepeat("\t", layer + 1);
             if (element.posi) {
@@ -3567,7 +3568,7 @@
             // console.log(elements, static_elements); 
             return codes;
         };
-        Sugar.prototype.pushOverrideMethod = function (elements, overrides, indent2, indent3) {
+        Script.prototype.pushOverrideMethod = function (elements, overrides, indent2, indent3) {
             for (var fname in overrides) {
                 if (overrides.hasOwnProperty(fname)) {
                     // console.log(overrides[fname]);
@@ -3591,7 +3592,7 @@
                 }
             }
         };
-        Sugar.prototype.pushTravelCodes = function (codes, element, layer, namespace) {
+        Script.prototype.pushTravelCodes = function (codes, element, layer, namespace) {
             var index = codes.length, indent = "\r\n" + stringRepeat("\t", layer);
             // console.log(element);
             codes.push(indent + 'pandora.each(');
@@ -3610,7 +3611,7 @@
             codes.push(indent);
             return codes;
         };
-        Sugar.prototype.pushObjCodes = function (codes, element, layer, namespace) {
+        Script.prototype.pushObjCodes = function (codes, element, layer, namespace) {
             var indent1 = "\r\n" + stringRepeat("\t", layer);
             var indent2 = "\r\n" + stringRepeat("\t", layer + 1);
             // console.log(element);
@@ -3664,7 +3665,7 @@
             codes.push('}');
             return codes;
         };
-        Sugar.prototype.pushFooter = function (codes, vars) {
+        Script.prototype.pushFooter = function (codes, vars) {
             // console.log(vars.root.public);
             for (var name_3 in vars.root.public) {
                 codes.push("\r\n\tpandora." + this.namespace + name_3 + ' = ' + vars.root.public[name_3] + ';');
@@ -3677,7 +3678,7 @@
             }
             return codes;
         };
-        Sugar.prototype.resetVarsRoot = function (vars) {
+        Script.prototype.resetVarsRoot = function (vars) {
             var root = vars.root;
             for (var varname in vars.self) {
                 if (vars.self.hasOwnProperty(varname)) {
@@ -3699,7 +3700,7 @@
                 }
             }
         };
-        Sugar.prototype.fixVariables = function (vars) {
+        Script.prototype.fixVariables = function (vars) {
             vars.index = this.closurecount;
             // console.log(vars);
             // console.log(vars.type, vars);
@@ -3780,7 +3781,7 @@
             // console.log(vars);
             this.closurecount++;
         };
-        Sugar.prototype.patchVariables = function (code, vars) {
+        Script.prototype.patchVariables = function (code, vars) {
             var _this = this;
             // console.log(code, vars);
             if (code) {
@@ -3803,7 +3804,7 @@
             // console.log(code);
             return '';
         };
-        Sugar.prototype.patchVariable = function (varname, vars) {
+        Script.prototype.patchVariable = function (varname, vars) {
             // if (varname === 'document')
             //     console.log(!vars.root.fixed['includes'](varname) || (vars.root.private[varname] !== vars), vars.root.fixed, vars.root.private);
             // console.log('before:', varname, vars);
@@ -3852,7 +3853,7 @@
             // console.log('after:', varname);
             return varname;
         };
-        Sugar.prototype.patchNamespace = function (node, vars) {
+        Script.prototype.patchNamespace = function (node, vars) {
             if (node === '.') {
                 return 'pandora';
             }
@@ -3862,7 +3863,7 @@
             // console.log(this.namespace);
             return ('pandora.' + this.namespace).replace(/\.+$/, '');
         };
-        Sugar.prototype.restoreStrings = function (string, last) {
+        Script.prototype.restoreStrings = function (string, last) {
             var that = this;
             if (last) {
                 var pattern = this.lastPattern;
@@ -3879,7 +3880,7 @@
                 return that.replacements[arguments[1]][0];
             }).replace(/(@\d+L\d+P\d+O?\d*:::)/g, '');
         };
-        Sugar.prototype.decode = function (string) {
+        Script.prototype.decode = function (string) {
             string = string.replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
             var matches = string.match(/___boundary_([A-Z0-9_]{37})?(\d+)_as_[a-z]+___/);
             while (matches) {
@@ -3890,7 +3891,7 @@
             // console.log(string);
             return string.replace(/(@\d+L\d+P\d+O?\d*:::)/g, '');
         };
-        Sugar.prototype.trim = function (string) {
+        Script.prototype.trim = function (string) {
             var _this = this;
             // 此处的replace在整理完成后，将进行分析归纳，最后改写为callback形式的
             // console.log(string);
@@ -3939,7 +3940,7 @@
             });
             return string;
         };
-        Sugar.prototype.pickUpMap = function (string) {
+        Script.prototype.pickUpMap = function (string) {
             var lines = string.split(/\r{0,1}\n/);
             var _lines = [];
             var mappings = [];
@@ -3968,7 +3969,7 @@
             // console.log(mappings)
             return _lines.join("\r\n");
         };
-        Sugar.prototype.run = function (precall, callback) {
+        Script.prototype.run = function (precall, callback) {
             if (precall === void 0) { precall = null; }
             if (callback === void 0) { callback = function (content) { }; }
             if (!this.output) {
@@ -3978,10 +3979,10 @@
             eval(this.output);
             callback.call(this);
         };
-        return Sugar;
+        return Script;
     }());
     return function (input, run) {
-        return new Sugar(input, run);
+        return new Script(input, run);
     };
 }));
 //# sourceMappingURL=sugar.js.map

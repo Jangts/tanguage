@@ -78,18 +78,16 @@ class .Elements extends ..Iterator {
 @include 'Elements/animation';
 
 //Expends Public Static Methods 'query' For 'dom'
-public select = (selector, context) {
+public $ = (selector, context) {
     return new $..Elements(selector, context);
 }
 
-public $ = select;
-
 //Expends Public Static Methods 'extend' For 'dom/query'
 
-extends .select {
+extends .$ {
      extend (object, rewrite) {
         ..extend($..Elements.prototype, rewrite, object);
     }
 }
 
-this.module.exports = select;
+this.module.exports = $;

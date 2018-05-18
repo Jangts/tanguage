@@ -18,16 +18,17 @@ namespace dom {
     doc = root.document,
     query = this.sizzle || this.selector;
 
-    public cache(elem) {
+    public cache = (elem) {
         if (elem) {
-            return elem.tangram_js_id = elem.tangram_js_id || .({});
+            return elem.tanguage_id = elem.tanguage_id || .({});
         }
-    }
+    };
 
     @include 'dom/styles';
     @include 'dom/attributes';
     @include 'dom/classnames';
     @include 'dom/elements';
+    @include 'dom/selector';
     @include 'dom/events';
 
     module.exports = this; 
