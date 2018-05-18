@@ -23,7 +23,7 @@ expands .Elements {
         var Elements = [];
         var node;
         this.each(() {
-            if (node = $..getClosestParent(this, tagName)) {
+            if (node = $..closest(this, tagName)) {
                 Elements.push(node);
             }
         });

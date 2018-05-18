@@ -13,7 +13,7 @@ namespace view;
 let _ = pandora,
 doc = root.document,
 location = root.location,
-$ = _.dom.$;
+$ = _.dom.select;
 
 $..Slider.extend({
     name: 'colx3',

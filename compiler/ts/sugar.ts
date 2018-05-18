@@ -1,5 +1,5 @@
 /*!
- * tanguage script compiler
+ * tanguage framework syntactic sugar
  * Core Code
  *
  * Written and Designed By Jang Ts
@@ -166,7 +166,7 @@
             return new Array(number + 1).join(string);
         };
 
-    class Script {
+    class Sugar {
         uid: string
         input: string
         isMainBlock: boolean = true
@@ -223,7 +223,7 @@
                 this.run();
             }
         }
-        compile(): Script {
+        compile(): Sugar {
             // console.log(this.input);
             let newcontent: string = this.markPosition(this.input, 0);
             let string = this.encode(newcontent);
@@ -249,7 +249,7 @@
             return this;
         }
         error(str) {
-            throw 'tanguage script Error: ' + str;
+            throw 'tanguage sugar Error: ' + str;
         }
         markPosition(string, sourceid: number = 0) {
             let lines = string.split(/\r{0,1}\n/);
@@ -380,12 +380,12 @@
             string = string.replace(/(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om)\s+)?___boundary_[A-Z0-9_]{36}_(\d+)_as_string___\s*(\:|\(|\=)/g, (match, posi, desc, type, index, after) => {
                 // console.log(posi, desc, this.replacements[index][1]);
                 if (this.replacements[index][1]) {
-                    return "\r\n" + this.replacements[index][1] + '___boundary_' + index + '_as_propname___' + after;
+                    return /*"\r\n" + */this.replacements[index][1] + '___boundary_' + index + '_as_propname___' + after;
                 }
                 if (desc) {
-                    return "\r\n" + posi + desc + '___boundary_' + index + '_as_propname___' + after;
+                    return /*"\r\n" + */posi + desc + '___boundary_' + index + '_as_propname___' + after;
                 }
-                return "\r\n" + '___boundary_' + index + '_as_propname___' + after;
+                return /*"\r\n" + */'___boundary_' + index + '_as_propname___' + after;
             });
             // console.log(string);
             string = string
@@ -714,7 +714,6 @@
                     } else {
                         var index = left;
                     }
-                    console.log(left, right, string.substr(index, 256));
                     this.error('Unexpected `' + (right >= 0 ? '}' : '{') + '` in `' + this.decode(string.substr(index, 256)) + '`');
                 }
             }
@@ -1699,7 +1698,7 @@
                 return preast;
             }
         }
-        buildAST(preast: object[], vars: any): Script {
+        buildAST(preast: object[], vars: any): Sugar {
             // console.log(preast);
             let ast = {
                 type: 'codes',
@@ -2726,7 +2725,7 @@
             // console.log(code, body);
             return body;
         }
-        generate(): Script {
+        generate(): Sugar {
             // console.log(this.replacements);
             // console.log(this.ast.body);
             let head: string[] = [];
@@ -2756,7 +2755,7 @@
         }
         pushHeader(codes: string[], array: any[]): string[] {
             codes.push('/*!');
-            codes.push("\r\n" + ' * tanguage script compiled code');
+            codes.push("\r\n" + ' * tanguage framework sugar compiled code');
             codes.push("\r\n" + ' *');
             codes.push("\r\n" + ' * Datetime: ' + (new Date()).toUTCString());
             codes.push("\r\n" + ' */');
@@ -3089,7 +3088,7 @@
                 if (toES6) {
                     codes.push('extends ' + element.base);
                 } else {
-                    codes.push(element.base + ', ');
+                    codes.push(element.base + ',');
                 }
             }
             codes.push('{');
@@ -3886,6 +3885,6 @@
     }
 
     return function (input, run) {
-        return new Script(input, run);
+        return new Sugar(input, run);
     };
 }));

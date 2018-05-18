@@ -1,6 +1,6 @@
 {
     "name": "tanguage",
-    "version": "0.9.14",
+    "version": "0.9.11",
     "description": "A Web Front-end Development Framework",
     "main": "./lib/dist/runtime.js",
     "deprecated": false,
@@ -11,12 +11,8 @@
     "bundleDependencies": [],
     "devDependencies": {},
     "scripts": {
-        "help": "node-sugar help",
-        "clib": "node-sugar cdir ./lib/tang/ ./lib/dist/ -map -c",
-        "scss-TimePicker": "node-sass ./lib/scss/app/TimePicker/main.scss ./lib/dist/app/TimePicker/style.css",
-        "test-help": "node ./compiler/js/node-sugar.js help",
-        "test-clib": "node ./compiler/js/node-sugar.js cdir ./lib/tang/ ./lib/dist/ -map -c",
-        "test-dom": "node ./compiler/js/node-sugar.js ./lib/tang/dom/dom.tang ./lib/dist/dom/dom.js -map -c"
+        "help": "node ./compiler/js/node-sugar.js help",
+        "clib": "node ./compiler/js/node-sugar.js cdir ./lib/tang/ ./lib/dist/ -map -c"
     },
     "repository": {
         "type": "git",
