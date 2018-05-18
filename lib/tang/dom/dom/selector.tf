@@ -1,7 +1,7 @@
 public
 contain =  $..hasChildNode,
 
-selector = (selector, context) {
+querySelector = (selector, context) {
     context = context || document;
     var Elements = [];
     switch (typeof(selector)) {
@@ -52,11 +52,12 @@ getClosestParent = (node, tagName, containSelf) {
     if (!containSelf) {
         node = node.parentNode;
     
-    while (node != undefined && node != null) {
-        if (node.tagName === tagName) {
-            return node;
+        while (node != undefined && node != null) {
+            if (node.tagName === tagName) {
+                return node;
+            }
+            node = node.parentNode;
         }
-        node = node.parentNode;
     }
     return null;
 };

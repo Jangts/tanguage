@@ -13,7 +13,7 @@ namespace view;
 let _ = pandora,
 doc = root.document,
 location = root.location,
-$ = _.dom.select;
+$ = _.dom.$;
 
 $..Slider.extend({
     name: 'seamless',
