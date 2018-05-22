@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:32 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	highlight.languages.nix = {
 		'comment': /\/\*[\s\S]*?\*\/|#.*/,
@@ -42,5 +43,5 @@ tang.init().block([
 		'punctuation': /[{}()[\].,:;]/
 	};
 	highlight.languages.nix.string.inside.interpolation.inside.rest = _.copy(highlight.languages.nix);
-}, true);
+});
 //# sourceMappingURL=nix.js.map

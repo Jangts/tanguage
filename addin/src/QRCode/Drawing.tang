@@ -1,3 +1,4 @@
+@module;
 /*!
 * tanguage framework source code
 *
@@ -5,7 +6,6 @@
 *
 * Date: 2017-04-06
 */
-
 
 use $ util/bool;
 use ~SVGDrawing;

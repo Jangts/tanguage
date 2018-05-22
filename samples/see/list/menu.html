@@ -166,7 +166,8 @@
         </ul>
     </nav>
     <script type="text/javascript">
-        tang.init().block('$_/see/Menu', function(pandora, root, imports, undefined) {
+        tang.init().block('$_/see/', function(pandora, root, imports, undefined) {
+            console.log([pandora.see]);
             new pandora.see.Menu('mainnav');
         }, true);
     </script>

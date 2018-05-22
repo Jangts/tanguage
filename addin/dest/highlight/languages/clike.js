@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:31 GMT
+ * Datetime: Tue, 22 May 2018 08:28:50 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	pandora.highlight.languages.clike = {
 		'comment': [{
 			pattern: /(^|[^\\])\/\*[\w\W]*?\*\//,
@@ -34,5 +35,5 @@ tang.init().block([
 		'operator': /--?|\+\+?|!=?=?|<=?|>=?|==?=?|&&?|\|\|?|\?|\*|\/|~|\^|%/,
 		'punctuation': /[{}[\];(),.:]/
 	};
-}, true);
+});
 //# sourceMappingURL=clike.js.map

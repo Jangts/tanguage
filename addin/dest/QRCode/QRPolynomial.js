@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:34 GMT
+ * Datetime: Tue, 22 May 2018 08:28:53 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'$_/math/qrcode'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var _ = pandora;
 	var declare = pandora.declareClass;
 	var QRMath = _.QRCode.math;
@@ -55,5 +56,5 @@ tang.init().block([
 			return new _.QRCode.QRPolynomial(num,0).mod(e);
 		}
 	});
-}, true);
+});
 //# sourceMappingURL=QRPolynomial.js.map

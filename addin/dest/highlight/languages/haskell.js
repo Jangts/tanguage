@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:31 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	pandora.highlight.languages.haskell = {
 		'comment': {
 			pattern: /(^|[^-!#$%*+=?&@|~.:<>^\\\/])(--[^-!#$%*+=?&@|~.:<>^\\\/].*|{-[\w\W]*?-})/m,
@@ -29,5 +30,5 @@ tang.init().block([
 		'constant': /\b([A-Z][_a-zA-Z0-9']*\.)*[A-Z][_a-zA-Z0-9']*\b/,
 		'punctuation': /[{}[\];(),.:]/
 	};
-}, true);
+});
 //# sourceMappingURL=haskell.js.map

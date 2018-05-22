@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:32 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	pandora.highlight.languages.nim = {
 		'comment': /#.*/,
 		'string': /(?:(?:\b(?!\d)(?:\w|\\x[8-9a-fA-F][0-9a-fA-F])+)?(?:"""[\s\S]*?"""(?!")|"(?:\\[\s\S]|""|[^"\\])*")|'(?:\\(?:\d+|x[\da-fA-F]{2}|.)|[^'])')/,
@@ -31,5 +32,5 @@ tang.init().block([
 		},
 		'punctuation': /[({\[]\.|\.[)}\]]|[`(){}\[\],:]/
 	};
-}, true);
+});
 //# sourceMappingURL=nim.js.map

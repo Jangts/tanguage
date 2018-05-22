@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:30 GMT
+ * Datetime: Tue, 22 May 2018 08:28:50 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,7 @@ tang.init().block([
 	'~/../',
 	'~/../languages/javascript'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	highlight.languages.actionscript = highlight.languages.extend('javascript', {
 		'keyword': /\b(?:as|break|case|catch|class|const|default|delete|do|else|extends|finally|for|function|if|implements|import|in|instanceof|interface|internal|is|native|new|null|package|private|protected|public|return|super|switch|this|throw|try|typeof|use|var|void|while|with|dynamic|each|final|get|include|namespace|native|override|set|static)\b/,
@@ -26,5 +27,5 @@ tang.init().block([
 			}
 		});
 	}
-}, true);
+});
 //# sourceMappingURL=actionscript.js.map

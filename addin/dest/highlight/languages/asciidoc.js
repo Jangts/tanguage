@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:30 GMT
+ * Datetime: Tue, 22 May 2018 08:28:50 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	var attributes = {
 		pattern: /(^[ \t]*)\[(?!\[)(?:(["'$`])(?:(?!\2)[^\\]|\\.)*\2|\[(?:[^\]\\]|\\.)*\]|[^\]\\]|\\.)*\]/m,
@@ -236,5 +237,5 @@ tang.init().block([
 			env.attributes['title'] = env.content.replace(/&amp;/, '&');
 		};
 	});
-}, true);
+});
 //# sourceMappingURL=asciidoc.js.map

@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:30 GMT
+ * Datetime: Tue, 22 May 2018 08:28:50 GMT
  */
 ;
 // tang.config({});
@@ -10,6 +10,7 @@ tang.init().block([
 	'$_/util/type',
 	'$_/dom/'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var _ = pandora;
 	var query = _.dom.sizzle || _.dom.selector;
 	var doc = global.document;
@@ -297,5 +298,5 @@ tang.init().block([
 			}
 		}
 	});
-}, true);
+});
 //# sourceMappingURL=highlight.js.map

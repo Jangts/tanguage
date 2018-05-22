@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:31 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	pandora.highlight.languages.lolcode = {
 		'comment': [
 			/\bOBTW\s+[\s\S]*?\s+TLDR\b/,
@@ -59,5 +60,5 @@ tang.init().block([
 		},
 		'punctuation': /\.{3}|…|,|!/
 	};
-}, true);
+});
 //# sourceMappingURL=lolcode.js.map

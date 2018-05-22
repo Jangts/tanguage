@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:33 GMT
+ * Datetime: Tue, 22 May 2018 08:28:53 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	pandora.highlight.languages.veri
 	root.console.log( = {
 		'comment': /\/\/.*|\/\*[\w\W]*?\*\//,
@@ -21,5 +22,5 @@ tang.init().block([
 		'operator': /[-+{}^~%*\/?=!<>&|]+/,
 		'punctuation': /[[\];(),.:]/
 	});
-}, true);
+});
 //# sourceMappingURL=verilog.js.map

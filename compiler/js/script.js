@@ -520,10 +520,11 @@
             }).replace(/`/g, '').split(/\r{0,1}\n/);
             var codes = [];
             // console.log(match);
-            if (this.last_closed) {
+            if (this.last_closed && this.last_opens.length) {
                 var i = this.last_opens.length - 1;
                 // console.log(i);
                 var opens = this.last_opens[i];
+                // console.log(this.last_opens, this.last_opens.length, i);
                 this.last_opens.length = i;
             }
             else {
@@ -3695,7 +3696,7 @@
         Script.prototype.pushFooter = function (codes, vars) {
             // console.log(vars.root.public);
             for (var name_3 in vars.root.public) {
-                codes.push("\r\n\tpandora." + this.namespace + name_3 + ' = ' + vars.root.public[name_3] + ';');
+                codes.push("\r\n\tpandora('" + this.namespace + name_3 + "', " + vars.root.public[name_3] + ");");
             }
             if (this.isMainBlock) {
                 codes.push("\r\n" + '}, true);');

@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:31 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,7 @@ tang.init().block([
 	'~/../',
 	'~/../languages/clike'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	highlight.languages.csharp = highlight.languages.extend('clike', {
 		'keyword': /\b(abstract|as|async|await|base|bool|break|byte|case|catch|char|checked|class|const|continue|decimal|default|delegate|do|double|else|enum|event|explicit|extern|false|finally|fixed|float|for|foreach|goto|if|implicit|in|int|interface|internal|is|lock|long|namespace|new|null|object|operator|out|override|params|private|protected|public|readonly|ref|return|sbyte|sealed|short|sizeof|stackalloc|static|string|struct|switch|this|throw|true|try|typeof|uint|ulong|unchecked|unsafe|ushort|using|virtual|void|volatile|while|add|alias|ascending|async|await|descending|dynamic|from|get|global|group|into|join|let|orderby|partial|remove|select|set|value|var|where|yield)\b/,
@@ -29,5 +30,5 @@ tang.init().block([
 			}
 		}
 	});
-}, true);
+});
 //# sourceMappingURL=csharp.js.map

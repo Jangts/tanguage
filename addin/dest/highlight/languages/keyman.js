@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:31 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	pandora.highlight.languages.keyman = {
 		'comment': /\bc\s.*/i,
 		'function': /\[\s*((CTRL|SHIFT|ALT|LCTRL|RCTRL|LALT|RALT|CAPS|NCAPS)\s+)*([TKU]_[a-z0-9_?]+|".+?"|'.+?')\s*\]/i,
@@ -22,5 +23,5 @@ tang.init().block([
 		'operator': /[+>\\,()]/,
 		'tag': /\$(keyman|kmfl|weaver|keymanweb|keymanonly):/i
 	};
-}, true);
+});
 //# sourceMappingURL=keyman.js.map

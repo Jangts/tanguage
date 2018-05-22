@@ -1,3 +1,4 @@
+@module;
 use $ dom/;
 use @ api.map.baidu.com/getscript?v=1.1&ak=&services=true&t=20130716024058;
 use @ api.map.baidu.com/res/11/bmap.css;

@@ -1,3 +1,4 @@
+@module;
 use $ data/;
 use $ async/;
 use $ dom/Elements;

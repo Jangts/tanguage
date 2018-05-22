@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:31 GMT
+ * Datetime: Tue, 22 May 2018 08:28:50 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,7 @@ tang.init().block([
 	'~/../',
 	'~/../languages/clike'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	highlight.languages.c = highlight.languages.extend('clike', {
 		'keyword': /\b(asm|typeof|inline|auto|break|case|char|const|continue|default|do|double|else|enum|extern|float|for|goto|if|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while)\b/,
@@ -36,5 +37,5 @@ tang.init().block([
 	});
 	delete highlight.languages.c['class-name'];
 	delete highlight.languages.c['boolean'];
-}, true);
+});
 //# sourceMappingURL=c.js.map

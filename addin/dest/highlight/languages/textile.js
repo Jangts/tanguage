@@ -1,14 +1,15 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:33 GMT
+ * Datetime: Tue, 22 May 2018 08:28:52 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../',
 	'~/../languages/css'
-], function (pandora, root, imports, undefined) {;
+], function (pandora, root, imports, undefined) {
+	var module = this.module;;
 	var highlight = pandora.highlight;
 	var modifierRegex = '(?:\\([^|)]+\\)|\\[[^\\]]+\\]|\\{[^}]+\\})+';
 	var modifierTokens = {
@@ -209,5 +210,5 @@ tang.init().block([
 	highlight.languages.textile['phrase'].inside['table'].inside['footnote'] = nestedPatterns['footnote'];
 	highlight.languages.textile['phrase'].inside['table'].inside['acronym'] = nestedPatterns['acronym'];
 	highlight.languages.textile['phrase'].inside['table'].inside['mark'] = nestedPatterns['mark'];
-}, true);
+});
 //# sourceMappingURL=textile.js.map

@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:31 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,7 @@ tang.init().block([
 	'~/../',
 	'~/../languages/javascript'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	var comment = /#(?!\{).+/;
 	var interpolation = {
@@ -71,5 +72,5 @@ tang.init().block([
 	highlight.languages.insertBefore('coffeescript', 'keyword', {
 		'property': /(?!\d)\w+(?=\s*:(?!:))/
 	});
-}, true);
+});
 //# sourceMappingURL=coffeescript.js.map

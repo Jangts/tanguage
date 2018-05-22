@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:31 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,7 @@ tang.init().block([
 	'~/../',
 	'~/../languages/clike'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	highlight.languages.dart = highlight.languages.extend('clike', {
 		'string': [/r?("""|''')[\s\S]*?\1/, /r?("|')(\\?.)*?\1/],
@@ -21,5 +22,5 @@ tang.init().block([
 			alias: 'symbol'
 		}
 	});
-}, true);
+});
 //# sourceMappingURL=dart.js.map

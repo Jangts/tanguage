@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:30 GMT
+ * Datetime: Tue, 22 May 2018 08:28:50 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	highlight.languages.apacheconf = {
 		'comment': /#.*/,
@@ -56,5 +57,5 @@ tang.init().block([
 		'variable': /(\$|%)\{?(\w\.?(\+|\-|:)?)+\}?/,
 		'regex': /\^?.*\$|\^.*\$?/
 	};
-}, true);
+});
 //# sourceMappingURL=apacheconf.js.map

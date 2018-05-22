@@ -1,11 +1,12 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:34 GMT
+ * Datetime: Tue, 22 May 2018 08:28:53 GMT
  */
 ;
 // tang.config({});
 tang.init().block([], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var _ = pandora;
 	var declare = pandora.declareClass;
 	var doc = global.document;
@@ -64,5 +65,5 @@ tang.init().block([], function (pandora, root, imports, undefined) {
 			this.Element.removeChild(this.Element.lastChild);
 		}
 	});
-}, true);
+});
 //# sourceMappingURL=SVGDrawing.js.map

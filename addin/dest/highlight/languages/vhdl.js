@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:33 GMT
+ * Datetime: Tue, 22 May 2018 08:28:53 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	pandora.highlight.languages.vhdl = {
 		'comment': /--.+/,
 		'vhdl-vectors': {
@@ -27,5 +28,5 @@ tang.init().block([
 		'operator': /[<>]=?|:=|[-+*\/&=]|\b(?:abs|not|mod|rem|sll|srl|sla|sra|rol|ror|and|or|nand|xnor|xor|nor)\b/i,
 		'punctuation': /[{}[\];(),.:]/
 	};
-}, true);
+});
 //# sourceMappingURL=vhdl.js.map

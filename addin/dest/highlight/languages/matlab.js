@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:32 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	pandora.highlight.languages.matlab = {
 		'string': /\B'(?:''|[^'\n])*'/,
 		'comment': [
@@ -20,5 +21,5 @@ tang.init().block([
 		'operator': /\.?[*^\/\\']|[+\-:@]|[<>=~]=?|&&?|\|\|?/,
 		'punctuation': /\.{3}|[.,;\[\](){}!]/
 	};
-}, true);
+});
 //# sourceMappingURL=matlab.js.map

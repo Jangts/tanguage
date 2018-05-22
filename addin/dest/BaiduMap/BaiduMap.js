@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:30 GMT
+ * Datetime: Tue, 22 May 2018 08:28:50 GMT
  */
 ;
 // tang.config({});
@@ -10,6 +10,7 @@ tang.init().block([
 	'//api.map.baidu.com/getscript?v=1.1&ak=&services=true&t=20130716024058',
 	'//api.map.baidu.com/res/11/bmap.css'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var doc = global.document;
 	var BMap = global.BMap;
 	var BMAP_NAVIGATION_CONTROL_LARGE = global.BMAP_NAVIGATION_CONTROL_LARGE;
@@ -134,5 +135,5 @@ tang.init().block([
 		}
 	});
 	
-}, true);
+});
 //# sourceMappingURL=BaiduMap.js.map

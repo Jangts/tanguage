@@ -1,14 +1,15 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:31 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../',
 	'~/../languages/coffeescript'
-], function (pandora, root, imports, undefined) {;
+], function (pandora, root, imports, undefined) {
+	var module = this.module;;
 	var highlight = pandora.highlight;
 	var handlebars_pattern = /\{\{\{[\w\W]+?\}\}\}|\{\{[\w\W]+?\}\}/g;
 	highlight.languages.haml = {
@@ -139,5 +140,5 @@ tang.init().block([
 		}
 	}
 	highlight.languages.insertBefore('haml', 'filter', all_filters);
-}, true);
+});
 //# sourceMappingURL=haml.js.map

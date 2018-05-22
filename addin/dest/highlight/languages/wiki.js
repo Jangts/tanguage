@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:33 GMT
+ * Datetime: Tue, 22 May 2018 08:28:53 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,7 @@ tang.init().block([
 	'~/../',
 	'~/../languages/markup'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	highlight.languages.wiki = highlight.languages.extend('markup', {
 		'block-comment': {
@@ -75,5 +76,5 @@ tang.init().block([
 			}
 		}
 	});
-}, true);
+});
 //# sourceMappingURL=wiki.js.map

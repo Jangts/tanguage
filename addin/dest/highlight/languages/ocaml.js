@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:32 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	pandora.highlight.languages.ocaml = {
 		'comment': /\(\*[\s\S]*?\*\)/,
 		'string': [
@@ -28,5 +29,5 @@ tang.init().block([
 		'operator': /:=|[=<>@^|&+\-*\/$%!?~][!$%&\*+\-.\/:<=>?@^|~]*|\b(?:and|asr|land|lor|lxor|lsl|lsr|mod|nor|or)\b/,
 		'punctuation': /[(){}\[\]|_.,:;]/
 	};
-}, true);
+});
 //# sourceMappingURL=ocaml.js.map

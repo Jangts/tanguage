@@ -531,10 +531,11 @@
             }).replace(/`/g, '').split(/\r{0,1}\n/);
             let codes: string[] = []
             // console.log(match);
-            if (this.last_closed){
+            if (this.last_closed && this.last_opens.length){
                 let i = this.last_opens.length - 1;
                 // console.log(i);
                 var opens: number = this.last_opens[i];
+                // console.log(this.last_opens, this.last_opens.length, i);
                 this.last_opens.length = i;
             }else{
                 var opens: number = 0;
@@ -3603,7 +3604,7 @@
         pushFooter(codes: string[], vars: any): string[] {
             // console.log(vars.root.public);
             for (const name in vars.root.public) {
-                codes.push("\r\n\tpandora." + this.namespace + name + ' = ' + vars.root.public[name] + ';');
+                codes.push("\r\n\tpandora('" + this.namespace + name + "', " + vars.root.public[name] + ");");
             }
             if (this.isMainBlock) {
                 codes.push("\r\n" + '}, true);');

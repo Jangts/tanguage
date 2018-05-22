@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:32 GMT
+ * Datetime: Tue, 22 May 2018 08:28:52 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	var inside = {
 		'url': /url\((["']?).*?\1\)/i,
@@ -94,5 +95,5 @@ tang.init().block([
 		'interpolation': inside.interpolation,
 		'punctuation': /[{}()\[\];:.]/
 	};
-}, true);
+});
 //# sourceMappingURL=stylus.js.map

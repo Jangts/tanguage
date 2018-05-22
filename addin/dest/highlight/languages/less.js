@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:31 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,7 @@ tang.init().block([
 	'~/../',
 	'~/../languages/css'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	highlight.languages.less = highlight.languages.extend('css', {
 		'comment': [/\/\*[\w\W]*?\*\//, {
@@ -48,5 +49,5 @@ function
 			alias: 'function'
 		}
 	});
-}, true);
+});
 //# sourceMappingURL=less.js.map

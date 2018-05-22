@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:33 GMT
+ * Datetime: Tue, 22 May 2018 08:28:53 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	pandora.highlight.languages.yaml = {
 		'scalar': {
 			pattern: /([\-:]\s*(![^\s]+)?[ \t]*[|>])[ \t]*(?:((?:\r?\n|\r)[ \t]+)[^\r\n]+(?:\3[^\r\n]+)*)/,
@@ -52,5 +53,5 @@ tang.init().block([
 		'important': /[&*][\w]+/,
 		'punctuation': /---|[:[\]{}\-,|>?]|\.\.\./
 	};
-}, true);
+});
 //# sourceMappingURL=yaml.js.map

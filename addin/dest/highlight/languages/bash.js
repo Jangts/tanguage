@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:30 GMT
+ * Datetime: Tue, 22 May 2018 08:28:50 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,7 @@ tang.init().block([
 	'~/../',
 	'~/../languages/bash'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	var insideString = {
 		variable: [{
@@ -68,5 +69,5 @@ tang.init().block([
 	inside.boolean = highlight.languages.bash.boolean;
 	inside.operator = highlight.languages.bash.operator;
 	inside.punctuation = highlight.languages.bash.punctuation;
-}, true);
+});
 //# sourceMappingURL=bash.js.map

@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:32 GMT
+ * Datetime: Tue, 22 May 2018 08:28:52 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,7 @@ tang.init().block([
 	'~/../',
 	'~/../languages/markup'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	var smarty_pattern = /\{\*[\w\W]+?\*\}|\{[\w\W]+?\}/g;
 	var smarty_litteral_start = '{literal}';
@@ -103,5 +104,5 @@ tang.init().block([
 		}
 		env.element.innerHTML = env.highlightedCode;
 	});
-}, true);
+});
 //# sourceMappingURL=smarty.js.map

@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:33 GMT
+ * Datetime: Tue, 22 May 2018 08:28:53 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,7 @@ tang.init().block([
 	'$_/util/bool',
 	'~SVGDrawing'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var _ = pandora;
 	var declare = pandora.declareClass;
 	var doc = global.document;
@@ -179,5 +180,5 @@ tang.init().block([
 			});
 		}
 	}
-}, true);
+});
 //# sourceMappingURL=Drawing.js.map

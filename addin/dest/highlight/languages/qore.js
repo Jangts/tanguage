@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:32 GMT
+ * Datetime: Tue, 22 May 2018 08:28:52 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,7 @@ tang.init().block([
 	'~/../',
 	'~/../languages/clike'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = pandora.highlight;
 	highlight.languages.qore = highlight.languages.extend('clike', {
 		'comment': {
@@ -26,5 +27,5 @@ tang.init().block([
 		},
 		'function': /\$?\b(?!\d)\w+(?=\()/
 	});
-}, true);
+});
 //# sourceMappingURL=qore.js.map

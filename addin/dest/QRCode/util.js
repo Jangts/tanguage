@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:34 GMT
+ * Datetime: Tue, 22 May 2018 08:28:53 GMT
  */
 ;
 // tang.config({});
@@ -10,6 +10,7 @@ tang.init().block([
 	'~QR8bitByte',
 	'~QRPolynomial'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var _ = pandora;
 	var QRMath = _.QRCode.math;
 	var QRMode = _.QRCode.QR8bitByte.QRMode;
@@ -233,5 +234,5 @@ tang.init().block([
 			return lostPoint;
 		}
 	});
-}, true);
+});
 //# sourceMappingURL=util.js.map

@@ -1,13 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:31 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	pandora.highlight.languages.erlang = {
 		'comment': /%.+/,
 		'string': /"(?:\\?.)*?"/,
@@ -45,5 +46,5 @@ tang.init().block([
 		'atom': /\b[a-z][\w@]*/,
 		'punctuation': /[()[\]{}:;,.#|]|<<|>>/
 	};
-}, true);
+});
 //# sourceMappingURL=erlang.js.map

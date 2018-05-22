@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:31 GMT
+ * Datetime: Tue, 22 May 2018 08:28:51 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,7 @@ tang.init().block([
 	'~/../',
 	'~/../languages/markup'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var highlight = _.view.highlight;
 	highlight.languages.markdown = highlight.languages.extend('markup',  {});
 	highlight.languages.insertBefore('markdown', 'prolog', {
@@ -90,5 +91,5 @@ tang.init().block([
 	highlight.languages.markdown['italic'].inside['url'] = _.copy(highlight.languages.markdown['url']);
 	highlight.languages.markdown['bold'].inside['italic'] = _.copy(highlight.languages.markdown['italic']);
 	highlight.languages.markdown['italic'].inside['bold'] = _.copy(highlight.languages.markdown['bold']);
-}, true);
+});
 //# sourceMappingURL=markdown.js.map

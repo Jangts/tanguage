@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:31:32 GMT
+ * Datetime: Tue, 22 May 2018 08:28:52 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,7 @@ tang.init().block([
 	'~/../',
 	'~/../languages/clike'
 ], function (pandora, root, imports, undefined) {
+	var module = this.module;
 	var doc = global.document;
 	var location = global.location;
 	var highlight = pandora.highlight;
@@ -95,5 +96,5 @@ tang.init().block([
 			}
 		}
 	});
-}, true);
+});
 //# sourceMappingURL=php.js.map
