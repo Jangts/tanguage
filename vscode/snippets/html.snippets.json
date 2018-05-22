@@ -29,7 +29,7 @@
             "\tvar _ = pandora,",
             "\tvar doc = global.document,",
             "\tuse console = global.console,",
-            "\tuse $ = _.dom.select;",
+            "\tuse $ = _.dom.$;",
             "\t",
             "\t$0",
             "</script>"

@@ -2,7 +2,7 @@ tang.init().block([
     '$_/data/', '$_/async/',
     '$_/dom/Elements'
 ], function(_, global, imports, undefined) {
-    var $ = _.dom.select,
+    var $ = _.dom.$,
         doc = global.document,
         body = doc.body || doc.getElementsByTagName('body')[0],
         isSupportWebp = !![].map && doc.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0;

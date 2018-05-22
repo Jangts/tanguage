@@ -2178,7 +2178,7 @@ img {
     margin-left: -30px;
 }
 
-.tang-see .table {
+.tang-see table {
     margin: 20px auto 10px;
     border-radius: 5px;
     cursor: default;
@@ -2186,24 +2186,24 @@ img {
     font-size: 0.6rem;
 }
 
-.tang-see .table thead tr,
-.tang-see .table tr.head-row {
+.tang-see table thead tr,
+.tang-see table tr.head-row {
     height: 40px;
     background-color: transparent !important;
     border-bottom: solid 5px white;
 }
 
-.tang-see .table thead tr th,
-.tang-see .table tr.head-row th {
+.tang-see table thead tr th,
+.tang-see table tr.head-row th {
     height: 40px;
     line-height: 40px;
 }
 
-.tang-see .table tr {
+.tang-see table tr {
     height: 30px;
 }
 
-.tang-see .table tr th {
+.tang-see table tr th {
     height: 40px;
     line-height: 40px;
     padding: 0px 10px;
@@ -2214,23 +2214,23 @@ img {
     color: #FFF;
 }
 
-.tang-see .table tr th.lightpurple {
+.tang-see table tr th.lightpurple {
     background: #C6C;
 }
 
-.tang-see .table tr th.lightdatered {
+.tang-see table tr th.lightdatered {
     background: #C66;
 }
 
-.tang-see .table tr th.lightmagenta {
+.tang-see table tr th.lightmagenta {
     background: #F38;
 }
 
-.tang-see .table tr th.lightazure {
+.tang-see table tr th.lightazure {
     background: #0CF;
 }
 
-.tang-see .table tr td {
+.tang-see table tr td {
     height: 30px;
     line-height: 30px;
     padding: 0px 10px;
@@ -2242,249 +2242,249 @@ img {
     vertical-align: middle;
 }
 
-.tang-see .table tr td a {
+.tang-see table tr td a {
     display: inline;
 }
 
-.tang-see .table tr td a.block {
+.tang-see table tr td a.block {
     display: block;
     width: 100%;
     height: 100%;
 }
 
-.tang-see .table tr td .tang-td-click {
+.tang-see table tr td .tang-td-click {
     display: block;
 }
 
-.tang-see .table tr td .on {
+.tang-see table tr td .on {
     color: #090;
 }
 
-.tang-see .table tr td .off {
+.tang-see table tr td .off {
     color: #666;
 }
 
-.tang-see .table tr td.lightpurple .off {
+.tang-see table tr td.lightpurple .off {
     color: #969;
 }
 
-.tang-see .table tr td.lightdatered .off {
+.tang-see table tr td.lightdatered .off {
     color: #966;
 }
 
-.tang-see .table tr td.lightmagenta .off {
+.tang-see table tr td.lightmagenta .off {
     color: #936;
 }
 
-.tang-see .table tr td.lightazure .off {
+.tang-see table tr td.lightazure .off {
     color: #369;
 }
 
-.tang-see .table tr>.w140 {
+.tang-see table tr>.w140 {
     width: 140px;
 }
 
-.tang-see .table tr>.w80 {
+.tang-see table tr>.w80 {
     width: 80px;
 }
 
-.tang-see .table tr>.w70 {
+.tang-see table tr>.w70 {
     width: 70px;
 }
 
-.tang-see .table tr>.w60 {
+.tang-see table tr>.w60 {
     width: 60px;
 }
 
-.tang-see .table tr>.w50 {
+.tang-see table tr>.w50 {
     width: 50px;
 }
 
-.tang-see .table tr>.w40 {
+.tang-see table tr>.w40 {
     width: 40px;
 }
 
-.tang-see .table tr>.m540 {
+.tang-see table tr>.m540 {
     max-width: 540px;
 }
 
-.tang-see .table tr>.m580 {
+.tang-see table tr>.m580 {
     max-width: 580px;
 }
 
-.tang-see .table tr>.m670 {
+.tang-see table tr>.m670 {
     max-width: 670px;
 }
 
-.tang-see .table tr>.m860 {
+.tang-see table tr>.m860 {
     max-width: 860px;
 }
 
-.tang-see .table tr>.m950 {
+.tang-see table tr>.m950 {
     max-width: 950px;
 }
 
-.tang-see .table tr>.m1040 {
+.tang-see table tr>.m1040 {
     max-width: 1040px;
 }
 
-.tang-see .table tr>.w1in21 {
+.tang-see table tr>.w1in21 {
     width: 4.7619%;
 }
 
-.tang-see .table tr>.w2in21 {
+.tang-see table tr>.w2in21 {
     width: 9.52381%;
 }
 
-.tang-see .table tr>.w3in21 {
+.tang-see table tr>.w3in21 {
     width: 14.28571%;
 }
 
-.tang-see .table tr>.w4in21 {
+.tang-see table tr>.w4in21 {
     width: 19.04762%;
 }
 
-.tang-see .table tr>.w5in21 {
+.tang-see table tr>.w5in21 {
     width: 23.80952%;
 }
 
-.tang-see .table tr>.w6in21 {
+.tang-see table tr>.w6in21 {
     width: 28.57143%;
 }
 
-.tang-see .table tr>.w7in21 {
+.tang-see table tr>.w7in21 {
     width: 33.33333%;
 }
 
-.tang-see .table tr>.w8in21 {
+.tang-see table tr>.w8in21 {
     width: 38.09524%;
 }
 
-.tang-see .table tr>.w9in21 {
+.tang-see table tr>.w9in21 {
     width: 42.85714%;
 }
 
-.tang-see .table tr>.w10in21 {
+.tang-see table tr>.w10in21 {
     width: 47.61905%;
 }
 
-.tang-see .table tr>.w11in21 {
+.tang-see table tr>.w11in21 {
     width: 52.38095%;
 }
 
-.tang-see .table tr>.w12in21 {
+.tang-see table tr>.w12in21 {
     width: 57.14286%;
 }
 
-.tang-see .table tr>.w13in21 {
+.tang-see table tr>.w13in21 {
     width: 61.90476%;
 }
 
-.tang-see .table tr>.w14in21 {
+.tang-see table tr>.w14in21 {
     width: 66.66667%;
 }
 
-.tang-see .table tr>.w15in21 {
+.tang-see table tr>.w15in21 {
     width: 71.42857%;
 }
 
-.tang-see .table tr>.w16in21 {
+.tang-see table tr>.w16in21 {
     width: 76.19048%;
 }
 
-.tang-see .table tr>.w17in21 {
+.tang-see table tr>.w17in21 {
     width: 80.95238%;
 }
 
-.tang-see .table tr>.w18in21 {
+.tang-see table tr>.w18in21 {
     width: 85.71429%;
 }
 
-.tang-see .table tr>.w19in21 {
+.tang-see table tr>.w19in21 {
     width: 90.47619%;
 }
 
-.tang-see .table tr>.w20in21 {
+.tang-see table tr>.w20in21 {
     width: 95.2381%;
 }
 
-.tang-see .table tr>.w21in21 {
+.tang-see table tr>.w21in21 {
     width: 100%;
 }
 
-.tang-see .table tr>.m11in21 {
+.tang-see table tr>.m11in21 {
     max-width: 52.38095%;
 }
 
-.tang-see .table tr>.m12in21 {
+.tang-see table tr>.m12in21 {
     max-width: 57.14286%;
 }
 
-.tang-see .table tr>.m13in21 {
+.tang-see table tr>.m13in21 {
     max-width: 61.90476%;
 }
 
-.tang-see .table tr>.m14in21 {
+.tang-see table tr>.m14in21 {
     max-width: 66.66667%;
 }
 
-.tang-see .table tr>.m15in21 {
+.tang-see table tr>.m15in21 {
     max-width: 71.42857%;
 }
 
-.tang-see .table tr>.m16in21 {
+.tang-see table tr>.m16in21 {
     max-width: 76.19048%;
 }
 
-.tang-see .table tr>.m17in21 {
+.tang-see table tr>.m17in21 {
     max-width: 80.95238%;
 }
 
-.tang-see .table tr>.m18in21 {
+.tang-see table tr>.m18in21 {
     max-width: 85.71429%;
 }
 
-.tang-see .table tr>.m19in21 {
+.tang-see table tr>.m19in21 {
     max-width: 90.47619%;
 }
 
-.tang-see .table tr>.m20in21 {
+.tang-see table tr>.m20in21 {
     max-width: 95.2381%;
 }
 
-.tang-see .table tr>.m21in21 {
+.tang-see table tr>.m21in21 {
     max-width: 100%;
 }
 
-.tang-see .table tr.tang-tips {
+.tang-see table tr.tang-tips {
     height: 100px;
     line-height: 100px;
     text-align: center;
     background: rgba(204, 204, 204, 0.3);
 }
 
-.tang-see .table tr.tang-tips td {
+.tang-see table tr.tang-tips td {
     height: 100px;
     line-height: 100px;
     color: #999;
 }
 
-.tang-see .table tr.tang-tips:hover {
+.tang-see table tr.tang-tips:hover {
     background: rgba(204, 204, 204, 0.3);
     cursor: text;
 }
 
-.tang-see .table tr.tang-tips:hover td {
+.tang-see table tr.tang-tips:hover td {
     cursor: text;
 }
 
-.tang-see .table tr.tang-creator {
+.tang-see table tr.tang-creator {
     height: 40px;
     border-top: solid 5px white;
     background-color: transparent !important;
 }
 
-.tang-see .table tr.tang-creator td {
+.tang-see table tr.tang-creator td {
     background-color: #6c9;
     height: 40px;
     font-size: 14px;
@@ -2493,300 +2493,300 @@ img {
     color: white;
 }
 
-.tang-see .table tr.tang-creator td:hover {
+.tang-see table tr.tang-creator td:hover {
     background-color: #3a6;
 }
 
-.tang-see .table tr:nth-child(odd) {
+.tang-see table tr:nth-child(odd) {
     background-color: #ddd;
     background: rgba(204, 204, 204, 0.3);
 }
 
-.tang-see .table tr:nth-child(even) {
+.tang-see table tr:nth-child(even) {
     background-color: #eee;
     background: rgba(153, 153, 153, 0.3);
 }
 
-.tang-see .table tr:hover {
+.tang-see table tr:hover {
     background: rgba(153, 153, 153, 0.4);
 }
 
-.tang-see .table tr:hover td {
+.tang-see table tr:hover td {
     cursor: pointer;
 }
 
-.tang-see .table td:nth-child(odd) {
+.tang-see table td:nth-child(odd) {
     background: rgba(153, 153, 153, 0.3);
 }
 
-.tang-see .table td:nth-child(even) {
+.tang-see table td:nth-child(even) {
     background: rgba(204, 204, 204, 0.3);
 }
 
-.tang-see .table[stripe] td {
+.tang-see table[stripe] td {
     background: transparent;
 }
 
-.tang-see .table[border] {
+.tang-see table[border] {
     border-collapse: separate;
     border: solid 1px #ccc;
 }
 
-.tang-see .table[border] tr {
+.tang-see table[border] tr {
     background: transparent;
 }
 
-.tang-see .table[border] tr th {
+.tang-see table[border] tr th {
     height: 30px;
     line-height: 30px;
     font-weight: bold;
 }
 
-.tang-see .table[border] tr td:first-child {
+.tang-see table[border] tr td:first-child {
     border-left: none;
 }
 
-.tang-see .table[border] tr td {
+.tang-see table[border] tr td {
     background: transparent;
 }
 
-.tang-see .table[border] tr:hover {
+.tang-see table[border] tr:hover {
     background: rgba(153, 153, 153, 0.1);
 }
 
-.tang-see .table[border] tr:hover td {
+.tang-see table[border] tr:hover td {
     color: #222;
     cursor: pointer;
 }
 
-.tang-see .table[border] tr:first-child td {
+.tang-see table[border] tr:first-child td {
     border-top: none;
 }
 
-.tang-see .table[border="2"] {
+.tang-see table[border="2"] {
     border-collapse: separate;
     border: solid 2px #ccc;
 }
 
-.tang-see .table[border="2"] tr th {
+.tang-see table[border="2"] tr th {
     background: #ddd;
     color: #444;
 }
 
-.tang-see .table[border="2"] tr td {
+.tang-see table[border="2"] tr td {
     border-top: solid 2px #ccc;
     border-left: solid 2px #ccc;
 }
 
-.tang-see .table[border],
-.tang-see .table[border=ashy] {
+.tang-see table[border],
+.tang-see table[border=ashy] {
     border-collapse: separate;
     border: solid 1px #CCC;
 }
 
-.tang-see .table[border] tr th,
-.tang-see .table[border=ashy] tr th {
+.tang-see table[border] tr th,
+.tang-see table[border=ashy] tr th {
     background: #DDD;
     color: #444;
 }
 
-.tang-see .table[border] tr td,
-.tang-see .table[border=ashy] tr td {
+.tang-see table[border] tr td,
+.tang-see table[border=ashy] tr td {
     border-top: solid 1px #CCC;
     border-left: solid 1px #CCC;
 }
 
-.tang-see .table[border] tr.tang-tips,
-.tang-see .table[border=ashy] tr.tang-tips {
+.tang-see table[border] tr.tang-tips,
+.tang-see table[border=ashy] tr.tang-tips {
     background: rgba(204, 204, 204, 0.3);
 }
 
-.tang-see .table[border] tr.tang-tips td,
-.tang-see .table[border=ashy] tr.tang-tips td {
+.tang-see table[border] tr.tang-tips td,
+.tang-see table[border=ashy] tr.tang-tips td {
     color: #CCC;
 }
 
-.tang-see .table[border=gray] {
+.tang-see table[border=gray] {
     border-collapse: separate;
     border: solid 1px #888;
 }
 
-.tang-see .table[border=gray] tr th {
+.tang-see table[border=gray] tr th {
     background: #999;
     color: #FFF;
 }
 
-.tang-see .table[border=gray] tr td {
+.tang-see table[border=gray] tr td {
     border-top: solid 1px #888;
     border-left: solid 1px #888;
 }
 
-.tang-see .table[border=gray] tr.tang-tips {
+.tang-see table[border=gray] tr.tang-tips {
     background: rgba(204, 204, 204, 0.3);
 }
 
-.tang-see .table[border=gray] tr.tang-tips td {
+.tang-see table[border=gray] tr.tang-tips td {
     color: #888;
 }
 
-.tang-see .table[border=dark] {
+.tang-see table[border=dark] {
     border-collapse: separate;
     border: solid 1px #181818;
 }
 
-.tang-see .table[border=dark] tr th {
+.tang-see table[border=dark] tr th {
     background: #282828;
     color: #DDD;
 }
 
-.tang-see .table[border=dark] tr td {
+.tang-see table[border=dark] tr td {
     border-top: solid 1px #181818;
     border-left: solid 1px #181818;
 }
 
-.tang-see .table[border=dark] tr.tang-tips {
+.tang-see table[border=dark] tr.tang-tips {
     background: rgba(204, 204, 204, 0.3);
 }
 
-.tang-see .table[border=dark] tr.tang-tips td {
+.tang-see table[border=dark] tr.tang-tips td {
     color: #181818;
 }
 
-.tang-see .table[border=red] {
+.tang-see table[border=red] {
     border-collapse: separate;
     border: solid 1px #BE1E2D;
 }
 
-.tang-see .table[border=red] tr th {
+.tang-see table[border=red] tr th {
     background: #d9334f;
     color: #FFF;
 }
 
-.tang-see .table[border=red] tr td {
+.tang-see table[border=red] tr td {
     border-top: solid 1px #BE1E2D;
     border-left: solid 1px #BE1E2D;
 }
 
-.tang-see .table[border=red] tr.tang-tips {
+.tang-see table[border=red] tr.tang-tips {
     background: rgba(204, 204, 204, 0.3);
 }
 
-.tang-see .table[border=red] tr.tang-tips td {
+.tang-see table[border=red] tr.tang-tips td {
     color: #BE1E2D;
 }
 
-.tang-see .table[border=nacarat] {
+.tang-see table[border=nacarat] {
     border-collapse: separate;
     border: solid 1px #EF5125;
 }
 
-.tang-see .table[border=nacarat] tr th {
+.tang-see table[border=nacarat] tr th {
     background: #ff5c0e;
     color: #FFF;
 }
 
-.tang-see .table[border=nacarat] tr td {
+.tang-see table[border=nacarat] tr td {
     border-top: solid 1px #EF5125;
     border-left: solid 1px #EF5125;
 }
 
-.tang-see .table[border=nacarat] tr.tang-tips {
+.tang-see table[border=nacarat] tr.tang-tips {
     background: rgba(204, 204, 204, 0.3);
 }
 
-.tang-see .table[border=nacarat] tr.tang-tips td {
+.tang-see table[border=nacarat] tr.tang-tips td {
     color: #EF5125;
 }
 
-.tang-see .table[border=yellow] {
+.tang-see table[border=yellow] {
     border-collapse: separate;
     border: solid 1px #f0ad4e;
 }
 
-.tang-see .table[border=yellow] tr th {
+.tang-see table[border=yellow] tr th {
     background: #FDBB11;
     color: #FFF;
 }
 
-.tang-see .table[border=yellow] tr td {
+.tang-see table[border=yellow] tr td {
     border-top: solid 1px #f0ad4e;
     border-left: solid 1px #f0ad4e;
 }
 
-.tang-see .table[border=yellow] tr.tang-tips {
+.tang-see table[border=yellow] tr.tang-tips {
     background: rgba(204, 204, 204, 0.3);
 }
 
-.tang-see .table[border=yellow] tr.tang-tips td {
+.tang-see table[border=yellow] tr.tang-tips td {
     color: #f0ad4e;
 }
 
-.tang-see .table[border=green] {
+.tang-see table[border=green] {
     border-collapse: separate;
     border: solid 1px #0dad51;
 }
 
-.tang-see .table[border=green] tr th {
+.tang-see table[border=green] tr th {
     background: #7FBA42;
     color: #FFF;
 }
 
-.tang-see .table[border=green] tr td {
+.tang-see table[border=green] tr td {
     border-top: solid 1px #0dad51;
     border-left: solid 1px #0dad51;
 }
 
-.tang-see .table[border=green] tr.tang-tips {
+.tang-see table[border=green] tr.tang-tips {
     background: rgba(204, 204, 204, 0.3);
 }
 
-.tang-see .table[border=green] tr.tang-tips td {
+.tang-see table[border=green] tr.tang-tips td {
     color: #0dad51;
 }
 
-.tang-see .table[border=azure] {
+.tang-see table[border=azure] {
     border-collapse: separate;
     border: solid 1px #398ed8;
 }
 
-.tang-see .table[border=azure] tr th {
+.tang-see table[border=azure] tr th {
     background: #33A5DD;
     color: #FFF;
 }
 
-.tang-see .table[border=azure] tr td {
+.tang-see table[border=azure] tr td {
     border-top: solid 1px #398ed8;
     border-left: solid 1px #398ed8;
 }
 
-.tang-see .table[border=azure] tr.tang-tips {
+.tang-see table[border=azure] tr.tang-tips {
     background: rgba(204, 204, 204, 0.3);
 }
 
-.tang-see .table[border=azure] tr.tang-tips td {
+.tang-see table[border=azure] tr.tang-tips td {
     color: #398ed8;
 }
 
-.tang-see .table[border=magenta] {
+.tang-see table[border=magenta] {
     border-collapse: separate;
     border: solid 1px #D41C53;
 }
 
-.tang-see .table[border=magenta] tr th {
+.tang-see table[border=magenta] tr th {
     background: #e73a7f;
     color: #FFF;
 }
 
-.tang-see .table[border=magenta] tr td {
+.tang-see table[border=magenta] tr td {
     border-top: solid 1px #D41C53;
     border-left: solid 1px #D41C53;
 }
 
-.tang-see .table[border=magenta] tr.tang-tips {
+.tang-see table[border=magenta] tr.tang-tips {
     background: rgba(204, 204, 204, 0.3);
 }
 
-.tang-see .table[border=magenta] tr.tang-tips td {
+.tang-see table[border=magenta] tr.tang-tips td {
     color: #D41C53;
 }
 
