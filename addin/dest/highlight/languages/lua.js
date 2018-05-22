@@ -1,14 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:18:02 GMT
+ * Datetime: Tue, 22 May 2018 02:31:31 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
-	_.highlight.languages.lua = {
+	pandora.highlight.languages.lua = {
 		'comment': /^#!.+|--(?:\[(=*)\[[\s\S]*?\]\1\]|.*)/m,
 		'string': /(["'])(?:(?!\1)[^\\\r\n]|\\z(?:\r\n|\s)|\\(?:\r\n|[\s\S]))*\1|\[(=*)\[[\s\S]*?\]\2\]/,
 		'number': /\b0x[a-f\d]+\.?[a-f\d]*(?:p[+-]?\d+)?\b|\b\d+(?:\.\B|\.?\d*(?:e[+-]?\d+)?\b)|\B\.\d+(?:e[+-]?\d+)?\b/i,

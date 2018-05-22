@@ -1,14 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:18:02 GMT
+ * Datetime: Tue, 22 May 2018 02:31:31 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
-	_.highlight.languages.keyman = {
+	pandora.highlight.languages.keyman = {
 		'comment': /\bc\s.*/i,
 		'function': /\[\s*((CTRL|SHIFT|ALT|LCTRL|RCTRL|LALT|RALT|CAPS|NCAPS)\s+)*([TKU]_[a-z0-9_?]+|".+?"|'.+?')\s*\]/i,
 		'string': /("|')((?!\1).)*\1/,

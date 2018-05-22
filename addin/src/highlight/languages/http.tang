@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.http = {
+..highlight.languages.http = {
     'request-line': {
         pattern: /^(POST|GET|PUT|DELETE|OPTIONS|PATCH|TRACE|CONNECT)\b\shttps?:\/\/\S+\sHTTP\/[0-9.]+/m,
         inside: {

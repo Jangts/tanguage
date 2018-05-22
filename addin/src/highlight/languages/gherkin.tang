@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.gherkin = {
+..highlight.languages.gherkin = {
     'pystring': {
         pattern: /("""|''')[\s\S]+?\1/,
         alias: 'string'

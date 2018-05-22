@@ -1,14 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:18:02 GMT
+ * Datetime: Tue, 22 May 2018 02:31:31 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
-	_.highlight.languages.docker = {
+	pandora.highlight.languages.docker = {
 		'keyword': {
 			pattern: /(^\s*)(?:ONBUILD|FROM|MAINTAINER|RUN|EXPOSE|ENV|ADD|COPY|VOLUME|USER|WORKDIR|CMD|LABEL|ENTRYPOINT)(?=\s)/mi,
 			lookbehind: true

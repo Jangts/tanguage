@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.ocaml = {
+..highlight.languages.ocaml = {
     'comment': /\(\*[\s\S]*?\*\)/,
     'string': [
         /"(?:\\.|[^\\\r\n"])*"/,

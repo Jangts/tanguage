@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.eiffel = {
+..highlight.languages.eiffel = {
     'string': [
         // Aligned-verbatim-strings
         /"([^[]*)\[[\s\S]+?\]\1"/,

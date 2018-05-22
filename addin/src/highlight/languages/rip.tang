@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.rip = {
+..highlight.languages.rip = {
     'comment': /#.*/,
 
     'keyword': /(?:=>|->)|\b(?:class|if|else|switch|case|return|exit|try|catch|finally|raise)\b/,

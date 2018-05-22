@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.keyman = {
+..highlight.languages.keyman = {
     'comment': /\bc\s.*/i,
     'function': /\[\s*((CTRL|SHIFT|ALT|LCTRL|RCTRL|LALT|RALT|CAPS|NCAPS)\s+)*([TKU]_[a-z0-9_?]+|".+?"|'.+?')\s*\]/i, // virtual key
     'string': /("|')((?!\1).)*\1/,

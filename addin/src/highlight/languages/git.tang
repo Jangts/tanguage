@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.git = {
+..highlight.languages.git = {
     /*
      * A simple one line comment like in a git status command
      * For instance:

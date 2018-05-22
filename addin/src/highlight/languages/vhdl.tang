@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.vhdl = {
+..highlight.languages.vhdl = {
     'comment': /--.+/,
     // support for all logic vectors
     'vhdl-vectors': {

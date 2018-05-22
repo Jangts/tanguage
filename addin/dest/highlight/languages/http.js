@@ -1,14 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:18:02 GMT
+ * Datetime: Tue, 22 May 2018 02:31:31 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
-	_.highlight.languages.http = {
+	pandora.highlight.languages.http = {
 		'request-line': {
 			pattern: /^(POST|GET|PUT|DELETE|OPTIONS|PATCH|TRACE|CONNECT)\b\shttps?:\/\/\S+\sHTTP\/[0-9.]+/m,
 			inside: {

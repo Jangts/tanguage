@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.lua = {
+..highlight.languages.lua = {
     'comment': /^#!.+|--(?:\[(=*)\[[\s\S]*?\]\1\]|.*)/m,
     // \z may be used to skip the following space
     'string': /(["'])(?:(?!\1)[^\\\r\n]|\\z(?:\r\n|\s)|\\(?:\r\n|[\s\S]))*\1|\[(=*)\[[\s\S]*?\]\2\]/,

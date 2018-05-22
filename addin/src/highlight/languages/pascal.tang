@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.pascal = {
+..highlight.languages.pascal = {
     'comment': [/\(\*[\s\S]+?\*\)/, /\{[\s\S]+?\}/, /\/\/.*/],
     'string': /(?:'(?:''|[^'\r\n])*'|#[&$%]?[a-f\d]+)+|\^[a-z]/i,
     'keyword': [{

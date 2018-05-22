@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.nasm = {
+..highlight.languages.nasm = {
     'comment': /;.*$/m,
     'string': /("|'|`)(\\?.)*?\1/m,
     'label': {

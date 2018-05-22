@@ -1,14 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:18:03 GMT
+ * Datetime: Tue, 22 May 2018 02:31:32 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
-	_.highlight.languages.r = {
+	pandora.highlight.languages.r = {
 		'comment': /#.*/,
 		'string': /(['"])(?:\\?.)*?\1/,
 		'percent-operator': {

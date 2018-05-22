@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.monkey = {
+..highlight.languages.monkey = {
     'string': /"[^"\r\n]*"/,
     'comment': [
         /^#Rem\s+[\s\S]*?^#End/im,

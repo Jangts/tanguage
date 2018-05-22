@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:18:02 GMT
+ * Datetime: Tue, 22 May 2018 02:31:32 GMT
  */
 ;
 // tang.config({});
@@ -10,7 +10,7 @@ tang.init().block([
 ], function (pandora, root, imports, undefined) {
 	var doc = global.document;
 	var location = global.location;
-	var highlight = _.highlight;
+	var highlight = pandora.highlight;
 	highlight.languages.markup = {
 		'comment': /<!--[\w\W]*?-->/,
 		'prolog': /<\?[\w\W]+?\?>/,

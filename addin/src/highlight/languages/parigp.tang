@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.parigp = {
+..highlight.languages.parigp = {
     'comment': /\/\*[\s\S]*?\*\/|\\\\.*/,
     'string': /"(?:[^"\\]|\\.)*"/,
     // PARI/GP does not care about white spaces at all

@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.makefile = {
+..highlight.languages.makefile = {
     'comment': {
         pattern: /(^|[^\\])#(?:\\(?:\r\n|[\s\S])|.)*/,
         lookbehind: true

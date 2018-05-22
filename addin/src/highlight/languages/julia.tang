@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.julia = {
+..highlight.languages.julia = {
     'comment': {
         pattern: /(^|[^\\])#.*/,
         lookbehind: true

@@ -9,7 +9,7 @@
 use ~/../languages/clike;
 var doc = global.document,
     location = global.location,
-    highlight = _.highlight;
+    highlight = ..highlight;
 highlight.languages.powershell = {
     'comment': [{
             pattern: /(^|[^`])<#[\w\W]*?#>/,

@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.erlang = {
+..highlight.languages.erlang = {
     'comment': /%.+/,
     'string': /"(?:\\?.)*?"/,
     'quoted-function': {

@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.fortran = {
+..highlight.languages.fortran = {
     'quoted-number': {
         pattern: /[BOZ](['"])[A-F0-9]+\1/i,
         alias: 'number'

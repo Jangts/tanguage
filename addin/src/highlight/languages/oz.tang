@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.oz = {
+..highlight.languages.oz = {
     'comment': /\/\*[\s\S]*?\*\/|%.*/,
     'string': /"(?:[^"\\]|\\[\s\S])*"/,
     'atom': {

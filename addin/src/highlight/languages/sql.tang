@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.sql = {
+..highlight.languages.sql = {
     'comment': {
         pattern: /(^|[^\\])(?:\/\*[\w\W]*?\*\/|(?:--|\/\/|#).*)/,
         lookbehind: true

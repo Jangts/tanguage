@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.python = {
+..highlight.languages.python = {
     'triple-quoted-string': {
         pattern: /"""[\s\S]+?"""|'''[\s\S]+?'''/,
         alias: 'string'

@@ -10,4 +10,4 @@
 use ~/../;
 use ~/../languages/markup;
 
-_.highlight.languages.html = _.highlight.languages.markup;
+..highlight.languages.html = ..highlight.languages.markup;

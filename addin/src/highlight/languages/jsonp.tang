@@ -10,4 +10,4 @@
 use ~/../;
 use ~/../languages/json;
 
-_.highlight.languages.jsonp = _.highlight.languages.json;
+..highlight.languages.jsonp = ..highlight.languages.json;

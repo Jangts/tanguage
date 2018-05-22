@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.sas = {
+..highlight.languages.sas = {
     'datalines': {
         pattern: /^\s*(?:(?:data)?lines|cards);[\s\S]+?(?:\r?\n|\r);/im,
         alias: 'string',

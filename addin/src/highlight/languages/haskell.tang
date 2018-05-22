@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.haskell = {
+..highlight.languages.haskell = {
     'comment': {
         pattern: /(^|[^-!#$%*+=?&@|~.:<>^\\\/])(--[^-!#$%*+=?&@|~.:<>^\\\/].*|{-[\w\W]*?-})/m,
         lookbehind: true

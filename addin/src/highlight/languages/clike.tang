@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.clike = {
+..highlight.languages.clike = {
     'comment': [{
             pattern: /(^|[^\\])\/\*[\w\W]*?\*\//,
             lookbehind: true

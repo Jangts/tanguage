@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.apl = {
+..highlight.languages.apl = {
     'comment': /(?:⍝|#[! ]).*$/m,
     'string': /'(?:[^'\r\n]|'')*'/,
     'number': /¯?(?:\d*\.?\d+(?:e[+¯]?\d+)?|¯|∞)(?:j¯?(?:\d*\.?\d+(?:e[\+¯]?\d+)?|¯|∞))?/i,

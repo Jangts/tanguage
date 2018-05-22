@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.matlab = {
+..highlight.languages.matlab = {
     // We put string before comment, because of printf() patterns that contain "%"
     'string': /\B'(?:''|[^'\n])*'/,
     'comment': [

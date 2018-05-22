@@ -10,7 +10,7 @@
 use ~/../;
 use ~/../languages/markup;
 
-_.highlight.languages.twig = {
+..highlight.languages.twig = {
     'comment': /\{#[\s\S]*?#\}/,
     'tag': {
         pattern: /\{\{[\s\S]*?\}\}|\{%[\s\S]*?%\}/,

@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.verilog = {
+..highlight.languages.verilog = {
     'comment': /\/\/.*|\/\*[\w\W]*?\*\//,
     'string': /"(?:\\(?:\r\n|[\s\S])|[^"\\\r\n])*"/,
     // support for any kernel function (ex: $display())

@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.perl = {
+..highlight.languages.perl = {
     'comment': [{
             // POD
             pattern: /(^\s*)=\w+[\s\S]*?=cut.*/m,

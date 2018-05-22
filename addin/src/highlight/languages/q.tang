@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.q = {
+..highlight.languages.q = {
     'string': /"(?:\\.|[^"\\\r\n])*"/,
     'comment': [
         // From http://code.kx.com/wiki/Reference/Slash:

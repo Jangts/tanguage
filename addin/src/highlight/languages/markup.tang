@@ -9,7 +9,7 @@
 use ~/../;
 var doc = global.document,
     location = global.location,
-    highlight = _.highlight;
+    highlight = ..highlight;
 highlight.languages.markup = {
     'comment': /<!--[\w\W]*?-->/,
     'prolog': /<\?[\w\W]+?\?>/,

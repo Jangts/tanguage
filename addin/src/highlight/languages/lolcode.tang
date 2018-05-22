@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.lolcode = {
+..highlight.languages.lolcode = {
     'comment': [
         /\bOBTW\s+[\s\S]*?\s+TLDR\b/,
         /\bBTW.+/

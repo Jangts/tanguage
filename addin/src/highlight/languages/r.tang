@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.r = {
+..highlight.languages.r = {
     'comment': /#.*/,
     'string': /(['"])(?:\\?.)*?\1/,
     'percent-operator': {

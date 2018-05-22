@@ -1,5 +1,5 @@
 /*!
- * tanguage framework syntactic sugar
+ * tanguage script compiler
  * Web Entrance
  *
  * Written and Designed By Jang Ts
@@ -8,10 +8,9 @@
 ;
 this.tang.init().auto([
     '$_/async/',
-    '$_/../../compiler/js/sugar as tanguage_script'
+    '$_/../../compiler/js/script as tanguage_script'
 ], function (_, root, imports) {
-    var tanguage_script = imports.tanguage_script,
-    sugars = [], scripts = document.getElementsByTagName('script');
+    var tanguage_script = imports.tanguage_script, tangs = [], scripts = document.getElementsByTagName('script');
     // console.log(imports);
     for (var index = 0; index < scripts.length; index++) {
         var script = scripts[index];
@@ -20,10 +19,9 @@ this.tang.init().auto([
                 var src = script.src;
                 var i = 0;
                 _.async.ajax(src, function (data) {
-                    let sugar = tanguage_script(data).compile().run(function (content) {
+                    var tang = tanguage_script(data).compile().run(function (content) {
                         console.log(this.ast);
                         // console.log(this.posimap, this.mappings);
-
                         console.log(true, content);
                         // console.log(data);
                         // console.log(this.min());
@@ -33,7 +31,8 @@ this.tang.init().auto([
                     });
                 });
                 // ;
-            } else {
+            }
+            else {
                 tanguage_script(script.innerHTML).compile().run(function (content) {
                     console.log(this.ast);
                     console.log(content);
@@ -45,3 +44,4 @@ this.tang.init().auto([
         }
     }
 });
+//# sourceMappingURL=web-tang.js.map

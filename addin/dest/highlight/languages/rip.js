@@ -1,14 +1,14 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:18:03 GMT
+ * Datetime: Tue, 22 May 2018 02:31:32 GMT
  */
 ;
 // tang.config({});
 tang.init().block([
 	'~/../'
 ], function (pandora, root, imports, undefined) {
-	_.highlight.languages.rip = {
+	pandora.highlight.languages.rip = {
 		'comment': /#.*/,
 		'keyword': /(?:=>|->)|\b(?:class|if|else|switch|case|return|exit|try|catch|finally|raise)\b/,
 		'builtin': /@|\bSystem\b/,

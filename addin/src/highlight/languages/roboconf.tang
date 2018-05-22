@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.roboconf = {
+..highlight.languages.roboconf = {
     'comment': /#.*/,
     'keyword': {
         'pattern': /(^|\s)(?:(?:facet|instance of)(?=[ \t]+[\w-]+[ \t]*\{)|(?:external|import)\b)/,

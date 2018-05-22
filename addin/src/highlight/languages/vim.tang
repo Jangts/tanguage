@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.vim = {
+..highlight.languages.vim = {
     'string': /"(?:[^"\\\r\n]|\\.)*"|'(?:[^'\r\n]|'')*'/,
     'comment': /".*/,
     'function': /\w+(?=\()/,

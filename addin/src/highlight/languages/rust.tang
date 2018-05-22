@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.rust = {
+..highlight.languages.rust = {
     'comment': [{
         pattern: /(^|[^\\])\/\*[\w\W]*?\*\//,
         lookbehind: true

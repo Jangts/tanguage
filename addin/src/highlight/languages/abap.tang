@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.abap = {
+..highlight.languages.abap = {
     'comment': /^\*.*/m,
     'string': /(`|')(\\?.)*?\1/m,
     'string-template': {

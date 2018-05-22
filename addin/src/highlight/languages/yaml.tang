@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.yaml = {
+..highlight.languages.yaml = {
     'scalar': {
         pattern: /([\-:]\s*(![^\s]+)?[ \t]*[|>])[ \t]*(?:((?:\r?\n|\r)[ \t]+)[^\r\n]+(?:\3[^\r\n]+)*)/,
         lookbehind: true,

@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.json = {
+..highlight.languages.json = {
     'property': /".*?"(?=\s*:)/ig,
     'string': /"(?!:)(\\?[^"])*?"(?!:)/g,
     'number': /\b-?(0x[\dA-Fa-f]+|\d*\.?\d+([Ee]-?\d+)?)\b/g,

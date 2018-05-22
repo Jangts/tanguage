@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.scheme = {
+..highlight.languages.scheme = {
     'comment': /;.*/,
     'string': /"(?:[^"\\\r\n]|\\.)*?"|'[^('\s]*/,
     'keyword': {

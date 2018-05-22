@@ -7,7 +7,7 @@
  */
 ;
 use ~/../;
-_.highlight.languages.rest = {
+..highlight.languages.rest = {
     'table': [{
             pattern: /(\s*)(?:\+[=-]+)+\+(?:\r?\n|\r)(?:\1(?:[+|].+)+[+|](?:\r?\n|\r))+\1(?:\+[=-]+)+\+/,
             lookbehind: true,

@@ -10,8 +10,8 @@
 use ~/../;
 use ~/../languages/c;
 
-_.highlight.languages.bison = _.highlight.languages.extend('c', {});
-_.highlight.languages.insertBefore('bison', 'comment', {
+..highlight.languages.bison = ..highlight.languages.extend('c', {});
+..highlight.languages.insertBefore('bison', 'comment', {
     'bison': {
         // This should match all the beginning of the file
         // including the prologue(s), the bison declarations and

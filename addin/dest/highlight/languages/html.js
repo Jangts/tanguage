@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:18:02 GMT
+ * Datetime: Tue, 22 May 2018 02:31:31 GMT
  */
 ;
 // tang.config({});
@@ -9,6 +9,6 @@ tang.init().block([
 	'~/../',
 	'~/../languages/markup'
 ], function (pandora, root, imports, undefined) {
-	_.highlight.languages.html = _.highlight.languages.markup;
+	pandora.highlight.languages.html = pandora.highlight.languages.markup;
 }, true);
 //# sourceMappingURL=html.js.map

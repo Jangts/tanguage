@@ -9,7 +9,7 @@
 use ~/../;
 use ~/../languages/autoit;
 
-_.highlight.languages.autoit = {
+..highlight.languages.autoit = {
     "comment": [/;.*/, {
         // The multi-line comments delimiters can actually be commented out with ";"
         pattern: /(^\s*)#(?:comments-start|cs)[\s\S]*?^\s*#(?:comments-end|ce)/m,

@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 22 May 2018 02:18:02 GMT
+ * Datetime: Tue, 22 May 2018 02:31:30 GMT
  */
 ;
 // tang.config({});
@@ -9,8 +9,8 @@ tang.init().block([
 	'~/../',
 	'~/../languages/c'
 ], function (pandora, root, imports, undefined) {
-	_.highlight.languages.bison = _.highlight.languages.extend('c',  {});
-	_.highlight.languages.insertBefore('bison', 'comment', {
+	pandora.highlight.languages.bison = pandora.highlight.languages.extend('c',  {});
+	pandora.highlight.languages.insertBefore('bison', 'comment', {
 		'bison': {
 			pattern: /^[\s\S]*?%%[\s\S]*?%%/,
 			inside: {
