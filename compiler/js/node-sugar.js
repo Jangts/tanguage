@@ -202,11 +202,11 @@ switch (options.command) {
     default:
         break;
 }
-// node ./../../compiler/js/node-sugar.js test -map
-// node-sugar cdir ./tang/ ./dist/ -map -c
-// node ./../compiler/js/node-sugar.js cdir ./tang/ ./dist/ -map -c
-// node-sugar cdir  ./tang/view/Slider/ ./dist/view/Slider/ -c -map
-// node ./../compiler/js/node-sugar.js cdir ./tang/view/Slider/ ./dist/view/Slider/ -c -map
-// node ./../compiler/js/node-sugar.js cdir ./tang/view/Slider/ ./dist/view/Slider/ -map
-// node ./../compiler/js/node-sugar.js cdir ./tang/dom/ ./dist/dom/ -c -map
+// node ./../../compiler/js/node-tang.js test -map
+// node-tang cdir ./tang/ ./dist/ -map -c
+// node ./../compiler/js/node-tang.js cdir ./tang/ ./dist/ -map -c
+// node-tang cdir  ./tang/view/Slider/ ./dist/view/Slider/ -c -map
+// node ./../compiler/js/node-tang.js cdir ./tang/view/Slider/ ./dist/view/Slider/ -c -map
+// node ./../compiler/js/node-tang.js cdir ./tang/view/Slider/ ./dist/view/Slider/ -map
+// node ./../compiler/js/node-tang.js cdir ./tang/dom/ ./dist/dom/ -c -map
 //# sourceMappingURL=node-sugar.js.map

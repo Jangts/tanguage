@@ -1,6 +1,6 @@
 {
     "name": "tanguage",
-    "version": "0.9.14",
+    "version": "0.9.16",
     "description": "A Web Front-end Development Framework",
     "main": "./lib/dist/runtime.js",
     "deprecated": false,
@@ -11,12 +11,14 @@
     "bundleDependencies": [],
     "devDependencies": {},
     "scripts": {
-        "help": "node-sugar help",
-        "clib": "node-sugar cdir ./lib/tang/ ./lib/dist/ -map -c",
+        "help": "node-tang help",
+        "clib": "node-tang cdir ./lib/tang/ ./lib/dist/ -map -c",
+        "addin": "node-tang cdir ./addin/src/ ./addin/dest/ -map -c",
         "scss-TimePicker": "node-sass ./lib/scss/app/TimePicker/main.scss ./lib/dist/app/TimePicker/style.css",
-        "test-help": "node ./compiler/js/node-sugar.js help",
-        "test-clib": "node ./compiler/js/node-sugar.js cdir ./lib/tang/ ./lib/dist/ -map -c",
-        "test-dom": "node ./compiler/js/node-sugar.js ./lib/tang/dom/dom.tang ./lib/dist/dom/dom.js -map -c"
+        "test-help": "node ./compiler/js/node-tang.js help",
+        "test-clib": "node ./compiler/js/node-tang.js cdir ./lib/tang/ ./lib/dist/ -map -c",
+        "test-addin": "node ./compiler/js/node-tang.js cdir ./addin/src/ ./addin/dest/ -map -c",
+        "test-dom": "node ./compiler/js/node-tang.js ./lib/tang/dom/dom.tang ./lib/dist/dom/dom.js -map -c"
     },
     "repository": {
         "type": "git",
@@ -26,7 +28,7 @@
         "tanguage"
     ],
     "bin": {
-        "node-sugar": "./compiler/js/node-sugar.js"
+        "node-tang": "./compiler/js/node-tang.js"
     },
     "author": {
         "name": "Jangts"

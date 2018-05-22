@@ -1,0 +1,20 @@
+/*!
+ * tanguage framework source code
+ *
+ * static highlight.language
+ *
+ * Date: 2017-04-06
+ */
+;
+use ~/../;
+..highlight.languages.ini = {
+    'comment': /^[ \t]*;.*$/m,
+    'important': /\[.*?\]/,
+    'constant': /^[ \t]*[^\s=]+?(?=[ \t]*=)/m,
+    'attr-value': {
+        pattern: /=.*/,
+        inside: {
+            'punctuation': /^[=]/
+        }
+    }
+};

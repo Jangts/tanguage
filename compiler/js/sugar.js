@@ -105,7 +105,7 @@
         module: /^((\s*@\d+L\d+P0:::)*\s*(@\d+L\d+P0*):::(\s*))?@module[;\s]*/,
         namespace: /[\r\n]((@\d+L\d+P0):::)?(\s*)namespace\s+(\.{0,1}[\$a-zA-Z_][\$\w\.]*)\s*(;|\r|\n)/,
         // 位置是在replace usings 和 strings 之后才tidy的，所以还存在后接空格
-        use: /(@\d+L\d+P\d+:::)\s*use(\s*\$)?\s+([\~\$\w\.\/\\\?\=\&]+)(\s+as(\s+(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)|\s*(@\d+L\d+P\d+:::\s*)?\{(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)*)\})(@\d+L\d+P\d+:::\s*)?)?\s*[;\r\n]/g,
+        use: /(@\d+L\d+P\d+:::)\s*use\s*(\$|@)?\s+([\~\$\w\.\/\\\?\=\&]+)(\s+as(\s+(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)|\s*(@\d+L\d+P\d+:::\s*)?\{(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)*)\})(@\d+L\d+P\d+:::\s*)?)?\s*[;\r\n]/g,
         include: /\s*@include\s+___boundary_[A-Z0-9_]{36}_(\d+)_as_string___[;\r\n]+/g,
         extends: /(@\d+L\d+P\d+O*\d*:::)?(ns|namespace|extends)\s+((\.{0,3})[\$a-zA-Z_][\$\w\.]*)(\s+with)?\s*\{([^\{\}]*?)\}/g,
         class: /(@\d+L\d+P\d+O*\d*:::)?((class|expands)(\s+\.{0,3}[\$a-zA-Z_][\$\w\.]*)?(\s+extends\s+\.{0,3}[\$a-zA-Z_][\$\w\.]*|ignore)?\s*\{[^\{\}]*?\})/g,
@@ -181,7 +181,7 @@
             this.output = undefined;
             this.blockreserved = ['pandora', 'root'];
             this.xvars = [];
-            this.replacements = [['{}'], ['/='], ['/'], [' +'], [' -'], [' === '], [' + '], ['\"'], ['"\\r\\n"']];
+            this.replacements = [['{}'], ['/='], ['/'], [' +'], [' -'], [' === '], [' + '], ['\"'], ['"\\r\\n"'], ['[^\\/']];
             this.mappings = [];
             if (toES6) {
                 this.toES6 = true;
@@ -400,7 +400,12 @@
                 // console.log(match, ':', posi, url, as, alias);
                 var index = _this.replacements.length;
                 if ($) {
-                    url = '$_/' + url;
+                    if ($ === '@') {
+                        url = '//' + url;
+                    }
+                    else {
+                        url = '$_/' + url;
+                    }
                 }
                 if (members) {
                     // console.log(members);
@@ -419,11 +424,15 @@
                 var index = _this.replacements.length;
                 _this.replacements.push([match]);
                 return '@boundary_' + index + '_as_mark::';
-            }).replace(/\\+(`|")/g, function (match) {
+            })
+                .replace(/\\+(`|")/g, function (match) {
                 var index = _this.replacements.length;
                 _this.replacements.push([match]);
                 return '@boundary_' + index + '_as_mark::';
-            }).replace(/\\[^\r\n](@\d+L\d+P\d+O?\d*:::)*/g, function (match) {
+            })
+                .replace(/\[@\d+L\d+P\d+O?\d*:::\^\//g, '@boundary_9_as_mark::')
+                .replace(/(=|:)\s*\/=/g, '$1 /\\=')
+                .replace(/\\[^\r\n](@\d+L\d+P\d+O?\d*:::)*/g, function (match) {
                 var index = _this.replacements.length;
                 _this.replacements.push([match]);
                 return '@boundary_' + index + '_as_mark::';
@@ -493,7 +502,7 @@
                 else {
                     // console.log(string, matches, match);
                     // console.log(matches, match);
-                    this_1.error('Unexpected `' + matches[1] + '` in `' + this_1.decode(string.substr(matches.index, 256)) + '`');
+                    this_1.error('Unexpected `' + matches[1] + '` in `' + this_1.decode(string.substr(matches.index)).substr(0, 256) + '`');
                 }
                 matches = string.match(matchExpRegPattern.string);
             };
@@ -692,12 +701,12 @@
                     else {
                         var index = left;
                     }
-                    this.error('Unexpected `' + (right >= 0 ? ']' : '[') + '` in `' + this.decode(string.substr(index, 256)) + '`');
+                    this.error('Unexpected `' + (right >= 0 ? ']' : '[') + '` in `' + this.decode(string.substr(index)).substr(0, 256) + '`');
                 }
             }
             if (right >= 0) {
                 var index = right;
-                this.error('Unexpected `]` in `' + this.decode(string.substr(index, 256)) + '`');
+                this.error('Unexpected `]` in `' + this.decode(string.substr(index)).substr(0, 256) + '`');
             }
             return string;
         };
@@ -721,14 +730,14 @@
                     else {
                         var index = left;
                     }
-                    console.log(left, right, string.substr(index, 256));
-                    this.error('Unexpected `' + (right >= 0 ? '}' : '{') + '` in `' + this.decode(string.substr(index, 256)) + '`');
+                    // console.log(left, right, string.substr(index, 256));
+                    this.error('Unexpected `' + (right >= 0 ? '}' : '{') + '` in `' + this.decode(string.substr(index)).substr(0, 256) + '`');
                 }
             }
             if (right >= 0) {
                 var index = right;
                 // console.log(string);
-                this.error('Unexpected `}` in `' + this.decode(string.substr(index, 256)) + '`');
+                this.error('Unexpected `}` in `' + this.decode(string.substr(index)).substr(0, 256) + '`');
             }
             return string;
         };
@@ -910,12 +919,12 @@
                         var index = left;
                     }
                     // console.log(string);
-                    this.error('Unexpected `' + (right >= 0 ? ')' : '(') + '` in `' + this.decode(string.substr(index, 256)) + '`');
+                    this.error('Unexpected `' + (right >= 0 ? ')' : '(') + '` in `' + this.decode(string.substr(index)).substr(0, 256) + '`');
                 }
             }
             if (right >= 0) {
                 var index = right;
-                this.error('Unexpected `)` in `' + this.decode(string.substr(index, 256)) + '`');
+                this.error('Unexpected `)` in `' + this.decode(string.substr(index)).substr(0, 256) + '`');
             }
             string = this.replaceOperators(string);
             string = this.replaceCalls(string);
@@ -2283,6 +2292,30 @@
         };
         Script.prototype.walkFnLike = function (index, display, vars, type) {
             var _this = this;
+            function push(semicolons, lines) {
+                for (var index_8 = 0; index_8 < lines.length; index_8++) {
+                    if (lines[index_8].type === 'codes') {
+                        semicolons = push(semicolons, lines[index_8].body);
+                        continue;
+                    }
+                    if (lines[index_8].posi)
+                        lines[index_8].posi.head = false;
+                    if (lines[index_8].value) {
+                        if (lines[index_8].value.match(/;/)) {
+                            if (semicolons < 2) {
+                                lines[index_8].value = lines[index_8].value.replace(/;\s*/, '; ');
+                                semicolons++;
+                            }
+                            else {
+                                // console.log(lines[index].value);
+                                lines[index_8].value = lines[index_8].value.replace(/;\s*/, '');
+                            }
+                        }
+                    }
+                    head.body.push(lines[index_8]);
+                }
+                return semicolons;
+            }
             // console.log(index, this.replacements[index]);
             var tem = {
                 fnlike: /(^|(function|def|public|method)\s+)?([\$a-zA-Z_][\$\w]*)?\s*\(([^\(\)]*)\)\s*\{([^\{\}]*?)\}/
@@ -2311,14 +2344,8 @@
                             body: []
                         };
                         var lines = this.pushBodyToAST([], localvars_1, headline, true);
-                        for (var index_8 = 0; index_8 < lines.length; index_8++) {
-                            if (lines[index_8].posi)
-                                lines[index_8].posi.head = false;
-                            if ((index_8 === lines.length - 1) && lines[index_8].value) {
-                                lines[index_8].value = lines[index_8].value.replace(/;$/, '');
-                            }
-                            head.body.push(lines[index_8]);
-                        }
+                        var semicolons = push(0, lines);
+                        // console.log(semicolons, lines);
                     }
                     else {
                         var head = this.pushSentencesToAST([], localvars_1, headline, false, this.getPosition(headline))[0] || (function () {
@@ -3887,6 +3914,12 @@
                 // console.log(matches, this.replacements[matches[2]]);
                 string = string.replace(matches[0], this.replacements[matches[2]][0]).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
                 matches = string.match(/___boundary_([A-Z0-9_]{37})?(\d+)_as_[a-z]+___/);
+            }
+            matches = string.match(/@boundary_(\d+)_as_[a-z]+::/);
+            while (matches) {
+                // console.log(matches, this.replacements[matches[2]]);
+                string = string.replace(matches[0], this.replacements[matches[1]][0]).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
+                matches = string.match(/@boundary_(\d+)_as_[a-z]+::/);
             }
             // console.log(string);
             return string.replace(/(@\d+L\d+P\d+O?\d*:::)/g, '');

@@ -1,0 +1,13 @@
+/*!
+ * tanguage framework source code
+ *
+ * static highlight.language
+ *
+ * Date: 2017-04-06
+ */
+;
+
+use ~/../;
+use ~/../languages/markup;
+
+..highlight.languages.svg = ..highlight.languages.markup;
