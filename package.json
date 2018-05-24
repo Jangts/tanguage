@@ -15,6 +15,8 @@
         "clib": "node-tang cdir ./lib/tang/ ./lib/dist/ -map -c",
         "addin": "node-tang cdir ./addin/src/ ./addin/dest/ -map -c",
         "scss-TimePicker": "node-sass ./lib/scss/app/TimePicker/main.scss ./lib/dist/app/TimePicker/style.css",
+        "scss-form": "node-sass ./lib/scss/form/main.scss ./lib/dist/form/style.css",
+        "scss-SimpleEditor": "node-sass ./lib/scss/form/SimpleEditor/main.scss ./lib/dist/form/SimpleEditor/style.css",
         "test-help": "node ./compiler/js/node-tang.js help",
         "test-clib": "node ./compiler/js/node-tang.js cdir ./lib/tang/ ./lib/dist/ -map -c",
         "test-addin": "node ./compiler/js/node-tang.js cdir ./addin/src/ ./addin/dest/ -map -c",

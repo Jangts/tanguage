@@ -162,6 +162,7 @@
             }
             .pic-uploader.actived[data-subtype=banner100] {
                 display: block;
+                box-sizing: border-box;
                 width: 100% !important;
                 height: 120px !important;
                 margin-right: 0;

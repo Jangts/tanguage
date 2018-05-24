@@ -5,88 +5,89 @@
  *
  * Date: 2017-04-06
  */
-;
-tang.init().block('$_/util/bool', function(pandora, root, imports, undefined) {
-    var _ = pandora,
-        declare = pandora.declareClass,
 
-        doc = root.document,
-        console = root.console;
+use $ util/bool;
+use $ dom/;
 
+var _ = pandora,
+doc = root.document,
+console = root.console;
+
+namespace form {
     var isGetSelection = window.getSelection ? true : false,
-        getRangeHtml = function(range) {
-            var div = doc.createElement('div')
-            div.appendChild(range.cloneContents());
-            return div.innerHTML;
-        },
-        getSelectionRange = function(selection) {
-            if (selection.rangeCount > 0) {
-                this.originRange = selection.getRangeAt(0);
+    getRangeHtml = function(range) {
+        var div = doc.createElement('div')
+        div.appendChild(range.cloneContents());
+        return div.innerHTML;
+    },
+    getSelectionRange = function(selection) {
+        if (selection.rangeCount > 0) {
+            this.originRange = selection.getRangeAt(0);
 
-                this.commonNode = this.originRange.commonAncestorContainer;
-                this.startNode = this.originRange.startContainer || selection.anchorNode;
-                this.startOffset = this.originRange.startOffset || selection.anchorOffset;
-                this.endNode = this.originRange.endContainer || selection.focusNode;
-                this.endOffset = this.originRange.endOffset || selection.focusOffset;
+            this.commonNode = this.originRange.commonAncestorContainer;
+            this.startNode = this.originRange.startContainer || selection.anchorNode;
+            this.startOffset = this.originRange.startOffset || selection.anchorOffset;
+            this.endNode = this.originRange.endContainer || selection.focusNode;
+            this.endOffset = this.originRange.endOffset || selection.focusOffset;
 
-                this.text = this.originRange.toString();
-                this.html = getRangeHtml(this.originRange);
+            this.text = this.originRange.toString();
+            this.html = getRangeHtml(this.originRange);
 
-                this.type = selection.type;
-                this.collapsed = this.originRange.collapsed;
+            this.type = selection.type;
+            this.collapsed = this.originRange.collapsed;
 
-            } else {
-                this.originRange = undefined;
+        } else {
+            this.originRange = undefined;
 
-                this.commonNode = null;
-                this.startNode = null;
-                this.startOffset = 0;
-                this.endNode = null;
-                this.endOffset = 0;
-
-                this.text = '';
-                this.html = '';
-
-                this.type = 'Caret';
-                this.collapsed = true;
-            }
-        },
-        docSelectionRange = function() {
-            this.originRange = doc.selection.createRange();
-
-            this.commonNode = this.originRange.parentElement();
+            this.commonNode = null;
             this.startNode = null;
             this.startOffset = 0;
             this.endNode = null;
             this.endOffset = 0;
 
-            this.text = this.originRange.text;
-            this.html = this.originRange.htmlText;
+            this.text = '';
+            this.html = '';
+
+            this.type = 'Caret';
+            this.collapsed = true;
+        }
+    },
+    docSelectionRange = function() {
+        this.originRange = doc.selection.createRange();
+
+        this.commonNode = this.originRange.parentElement();
+        this.startNode = null;
+        this.startOffset = 0;
+        this.endNode = null;
+        this.endOffset = 0;
+
+        this.text = this.originRange.text;
+        this.html = this.originRange.htmlText;
 
 
-            if (this.originRange.text == '') {
-                this.type = 'Caret';
-                this.collapsed = true;
-            } else {
-                this.type = 'Range';
-                this.collapsed = false;
-            }
-        };
+        if (this.originRange.text == '') {
+            this.type = 'Caret';
+            this.collapsed = true;
+        } else {
+            this.type = 'Range';
+            this.collapsed = false;
+        }
+    };
 
-    declare('form.SimpleEditor.Range', {
-        isGetSelection: isGetSelection,
-        originRange: undefined,
-        type: 'Caret',
-        collapsed: true,
-        commonNode: null,
-        commonElem: null,
-        startNode: null,
-        startOffset: 0,
-        endNode: null,
-        endOffset: 0,
-        text: '',
-        html: '',
-        _init: function(range) {
+    class .Range {
+        isGetSelection= isGetSelection;
+        originRange= undefined;
+        type= 'Caret';
+        collapsed= true;
+        commonNode= null;
+        commonElem= null;
+        startNode= null;
+        startOffset= 0;
+        endNode= null;
+        endOffset= 0;
+        text= '';
+        html= '';
+        _init(range) {
             if (isGetSelection) {
                 var selection = window.getSelection();
                 if (range && range.originRange) {
@@ -101,15 +102,15 @@ tang.init().block('$_/util/bool', function(pandora, root, imports, undefined) {
                 docSelectionRange.call(this);
             }
             this.commonElem = this.commonNode && (_.util.bool.isEl(this.commonNode) ? this.commonNode : this.commonNode.parentNode) || null;
-        },
-        isBelongTo: function(textElem) {
+        }
+        isBelongTo(textElem) {
             if (this.commonNode) {
                 var elem = this.commonNode.nodeType === 1 ? this.commonNode : this.commonNode.parentNode;
                 return textElem && elem && (textElem === elem || _.dom.contain(textElem, elem))
             }
             return false;
-        },
-        isEmpty: function() {
+        }
+        isEmpty() {
             if (this.originRange && this.startNode) {
                 if (this.startNode === this.endNode) {
                     if (this.startOffset === this.endOffset) {
@@ -118,8 +119,8 @@ tang.init().block('$_/util/bool', function(pandora, root, imports, undefined) {
                 }
             }
             return false;
-        },
-        selectElem: function(elem, toStart, isContent) {
+        }
+        selectElem(elem, toStart, isContent) {
             if (!elem) {
                 return
             }
@@ -139,8 +140,8 @@ tang.init().block('$_/util/bool', function(pandora, root, imports, undefined) {
                 this.collapse(toStart);
             }
             return this;
-        },
-        selectInput: function(input, toStart) {
+        }
+        selectInput(input, toStart) {
             if (input && typeof input.focus == 'function') {
                 input.focus();
                 this._init();
@@ -149,8 +150,8 @@ tang.init().block('$_/util/bool', function(pandora, root, imports, undefined) {
                 this.collapse(toStart);
             }
             return null;
-        },
-        collapse: function(toStart) {
+        }
+        collapse(toStart) {
             if (toStart == null) {
                 // 默认为 false
                 toStart = false;
@@ -171,37 +172,37 @@ tang.init().block('$_/util/bool', function(pandora, root, imports, undefined) {
                 this.originRange.collapse(toStart);
                 this.originRange.select();
             }
-        },
-        setEnd: function(node, offse) {
+        }
+        setEnd(node, offse) {
             if (this.originRange.setEnd) {
                 this.originRange.setEnd(node, offset);
             }
             return this;
-        },
+        }
         // 封装 doc.queryCommandValue
-        queryCommandValue: function(name) {
+        queryCommandValue(name) {
             if (doc.queryCommandValue) {
                 return doc.queryCommandValue(name);
             }
             return '';
-        },
+        }
 
         // 封装 doc.queryCommandState
-        queryCommandState: function(name) {
+        queryCommandState(name) {
             if (doc.queryCommandState) {
                 return doc.queryCommandState(name);
             }
             return false;
-        },
+        }
 
         // 封装 doc.queryCommandSupported
-        queryCommandSupported: function(name) {
+        queryCommandSupported(name) {
             if (doc.queryCommandSupported) {
                 return doc.queryCommandSupported(name);
             }
             return false;
-        },
-        execCommand: function(cmd, val, isDialog) {
+        }
+        execCommand(cmd, val, isDialog) {
             //console.log(this);
             isDialog = isDialog || false;
             if (isGetSelection) {
@@ -210,8 +211,8 @@ tang.init().block('$_/util/bool', function(pandora, root, imports, undefined) {
                 this.originRange.execCommand(cmd, isDialog, val);
             }
             return this;
-        },
-        insert: function(text) {
+        }
+        insert(text) {
             if (this.originRange.insertNode) {
                 var fragment = this.originRange.createContextualFragment(text);
                 this.originRange.deleteContents();
@@ -219,8 +220,8 @@ tang.init().block('$_/util/bool', function(pandora, root, imports, undefined) {
             } else if (range.pasteHTML) {
                 this.originRange.pasteHTML(text)
             }
-        },
-        changeCase: function(tolower) {
+        }
+        changeCase(tolower) {
             if (this.html) {
                 if (tolower) {
                     var text = this.html.toLowerCase();
@@ -235,8 +236,8 @@ tang.init().block('$_/util/bool', function(pandora, root, imports, undefined) {
                     this.originRange.pasteHTML(text)
                 }
             }
-        },
-        insertHTML: function(html) {
+        }
+        insertHTML(html) {
 
             // 保证传入的参数是 html 代码
             var test = /^<.+>$/.test(html)
@@ -257,12 +258,14 @@ tang.init().block('$_/util/bool', function(pandora, root, imports, undefined) {
                 // IE <= 10
                 this.originRange.pasteHTML(html)
             }
-        },
-        insertElem: function(elem) {
+        }
+        insertElem(elem) {
             if (this.originRange.insertNode) {
                 this.originRange.deleteContents();
                 this.originRange.insertNode(elem);
             }
         }
-    });
-});
+    }
+}
+
+this.module.exports = ..form.Range;

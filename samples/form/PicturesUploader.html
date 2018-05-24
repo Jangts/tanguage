@@ -52,7 +52,7 @@
                         <input class="pic-src" hidden="hidden" name="THUMB" value="images/phone.jpg" type="hidden">
                         <input class="pic-changer" type="file" value="">
                         <video class="pic-displayer" src="images/video4x3.mp4" autoplay loop muted>
-                            <img class="pic-displayer" src="../../lib/dist/form/images/video.jpg">
+                            <img class="pic-displayer" src="../../lib/dist/form/static/video.jpg">
                         </video>
 
                         <i class="pic-mask"></i>
@@ -71,9 +71,9 @@
         </section>
     </form>
     <script>
-        tangram.auto([
+        tang.auto([
             '$_/form/PicturesUploader',
-        ], function(_) {
+        ], function(pandora, root, imports, undefined) {
             var mypic1 = new pandora.form.PicturesUploader('mypic1', {}),
                 mypic2 = new pandora.form.PicturesUploader('mypic2', {}),
                 myvideo1 = new pandora.form.PicturesUploader('myvideo1', {

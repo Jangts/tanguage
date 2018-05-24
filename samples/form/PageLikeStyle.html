@@ -125,10 +125,10 @@
         </section>
     </form>
     <script>
-        tangram.auto([
+        tang.auto([
             '$_/form/SimpleEditor/',
             '$_/Time/Picker/'
-        ], function(_) {
+        ], function(pandora, root, imports, undefined) {
             var editors = pandora.form.careatEditors('textarea.edit-text-area', {});
         });
     </script>

@@ -11,7 +11,7 @@
 
 <body>
 
-    <script type="text/tanguage">
+    <script type="text/tanguage-">
 
 @module;
 
@@ -205,6 +205,49 @@ public see = (types = ['list', 'navmenu']){
         </script>
     <script src="../../compiler/js/web-tang.js"></script>
     <script>
+        var string = 'foo';
+        var boolean = true;
+        var object = {
+            foo:'foo',
+            bar:'bar'
+        }
+        var array = ['foo', 'bar']
+        for (const key in string) {
+            if (object.hasOwnProperty(key)) {
+                const element = object[key];
+                console.log(element);
+            }
+        }
+        for (const key in boolean) {
+            if (object.hasOwnProperty(key)) {
+                const element = object[key];
+                console.log(element);
+            }
+        }
+        for (const key in object) {
+            if (object.hasOwnProperty(key)) {
+                const element = object[key];
+                console.log(element);
+            }
+        }
+        for (const key in null) {
+            if (object.hasOwnProperty(key)) {
+                const element = object[key];
+                console.log(element);
+            }
+        }
+        for (const key in array) {
+            if (object.hasOwnProperty(key)) {
+                const element = object[key];
+                console.log(element);
+            }
+        }
+        for (const key in undefined) {
+            if (object.hasOwnProperty(key)) {
+                const element = object[key];
+                console.log(element);
+            }
+        }
         setTimeout(function() {
             // console.log(div);
         }, 5000);
