@@ -5,24 +5,14 @@
  * 
  * Date: 2015-09-04
  */
-;
-tang.init().block(['$_/form/SimpleEditor/commands/insert.cmds'], function(pandora, root, imports, undefined) {
-    var _ = pandora,
+(() {
+    var emoticons = {};
 
-        console = root.console,
-
-        parameters = pandora.storage.get(new _.Identifier('EDITOR_PARAMS').toString()),
-        regMethod = pandora.storage.get(new _.Identifier('EDITOR_REG_M').toString()),
-        regCommand = pandora.storage.get(new _.Identifier('EDITOR_REG_CMD').toString()),
-        regCreater = pandora.storage.get(new _.Identifier('EDITOR_REG_C').toString()),
-        regDialog = pandora.storage.get(new _.Identifier('EDITOR_REG_D').toString()),
-        emoticons = {};
-
-    regMethod('insertEmoticon', function(val) {
+    regMethod('insertEmoticon', (val) {
         return this.execCommand('insertemoticon', val);
     });
 
-    regCommand('insertemoticon', function(val) {
+    regCommand('insertemoticon', (val) {
         if (val && val.pack && val.name) {
             if (emoticons[val.pack] && emoticons[val.pack][val.name]) {
                 if (this.options.emoticonsType == 'code') {
@@ -41,7 +31,7 @@ tang.init().block(['$_/form/SimpleEditor/commands/insert.cmds'], function(pandor
         return this;
     });
 
-    regCreater('insertemoticon', function() {
+    regCreater('insertemoticon', () {
         var pack = this.options.emoticonsTable && emoticons[this.options.emoticonsTable] ? this.options.emoticonsTable : parameters.emoticonsTable;
         var emtb = emoticons[pack];
         var path = parameters.basePath + 'emoticons/' + pack + '/';
@@ -53,7 +43,7 @@ tang.init().block(['$_/form/SimpleEditor/commands/insert.cmds'], function(pandor
         return html;
     });
 
-    regDialog('insertemoticon', function(val) {
+    regDialog('insertemoticon', (val) {
         if (val) {
             var arr = val.split(/,\s*/);
             if (arr.length > 1) {
@@ -67,9 +57,11 @@ tang.init().block(['$_/form/SimpleEditor/commands/insert.cmds'], function(pandor
     });
 
     // regEmoticon:
-    pandora.storage.set(function(theme, images) {
+    var regEmoticon = (theme, images) {
         if (emoticons[theme] === undefined) {
             emoticons[theme] = images;
         }
-    }, 'EDITOR_REG_EMT');
-});
+    };
+
+    @include 'emoticons/default';
+}());

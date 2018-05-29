@@ -5,27 +5,14 @@
  * 
  * Date: 2015-09-04
  */
-;
-tang.init().block([
-    '$_/dom/',
-    '$_/form/SimpleEditor/commands/insert.cmds'
-], function(pandora, root, imports, undefined) {
-    var _ = pandora,
+(() {
 
-        console = root.console,
-        query = _.dom.sizzle || _.dom.selector,
-
-        regMethod = pandora.storage.get(new _.Identifier('EDITOR_REG_M').toString()),
-        regCommand = pandora.storage.get(new _.Identifier('EDITOR_REG_CMD').toString()),
-        regCreater = pandora.storage.get(new _.Identifier('EDITOR_REG_C').toString()),
-        regDialog = pandora.storage.get(new _.Identifier('EDITOR_REG_D').toString());
-
-    regMethod('insertVideo', function(val) {
+    regMethod('insertVideo', (val) {
         return this.execCommand('insertvideo', val);
     });
 
     var videoHTML = {
-        'swf': function(src, width, height) {
+        'swf'(src, width, height) {
             var html = '<embed src="' + src + '"';
             html += ' allowFullScreen="true" quality="high"';
             if (width) {
@@ -37,7 +24,7 @@ tang.init().block([
             html += ' align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>';
             return html;
         },
-        'webm': function(src, width, height) {
+        'webm'(src, width, height) {
             var html = '<video src="' + src + '" controls="controls"';
             if (width) {
                 html += ' width="' + width + '"';
@@ -48,7 +35,7 @@ tang.init().block([
             html += '>您的浏览器不支持 video 标签。</video>';
             return html;
         },
-        'mp4': function(src, width, height) {
+        'mp4'(src, width, height) {
             var html = '<video src="' + src + '" controls="controls"';
             if (width) {
                 html += ' width="' + width + '"';
@@ -59,7 +46,7 @@ tang.init().block([
             html += '>您的浏览器不支持 video 标签。</video>';
             return html;
         },
-        'ogg': function(src, width, height) {
+        'ogg'(src, width, height) {
             var html = '<video src="' + src + '" controls="controls"';
             if (width) {
                 html += ' width="' + width + '"';
@@ -72,7 +59,7 @@ tang.init().block([
         }
     };
 
-    regCommand('insertvideo', function(val) {
+    regCommand('insertvideo', (val) {
         if (val) {
             if (val.code && val.code != '') {
                 this.execCommand('insert', val.code);
@@ -88,7 +75,7 @@ tang.init().block([
         return this;
     });
 
-    regCreater('insertvideo', function() {
+    regCreater('insertvideo', () {
         var html = '<dialog class="se-dialog">';
         // html += '<span class="se-title">Insert Video</span>';
         html += '<textarea class="se-code" placeholder="Embedded code"></textarea>';
@@ -112,7 +99,7 @@ tang.init().block([
         return html;
     });
 
-    regDialog('insertvideo', function(btn) {
+    regDialog('insertvideo', (btn) {
         var dialog = _.dom.closest(btn, 'dialog');
         var textarea = query('.se-code', dialog)[0];
         if (textarea && textarea.value != '') {
@@ -134,4 +121,4 @@ tang.init().block([
         }
         return null;
     });
-});
+}());

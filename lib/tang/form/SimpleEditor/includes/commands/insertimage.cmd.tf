@@ -5,30 +5,12 @@
  * 
  * Date: 2015-09-04
  */
-;
-tang.init().block([
-    '$_/util/bool',
-    '$_/dom/',
-    '$_/draw/canvas',
-    '$_/form/SimpleEditor/commands/insert.cmds'
-], function(pandora, root, imports, undefined) {
-    var _ = pandora,
-        declare = pandora.declareClass,
-
-        doc = root.document,
-        console = root.console,
-        query = _.dom.sizzle || _.dom.selector,
-
-        regMethod = pandora.storage.get(new _.Identifier('EDITOR_REG_M').toString()),
-        regCommand = pandora.storage.get(new _.Identifier('EDITOR_REG_CMD').toString()),
-        regCreater = pandora.storage.get(new _.Identifier('EDITOR_REG_C').toString()),
-        regDialog = pandora.storage.get(new _.Identifier('EDITOR_REG_D').toString());
-
-    regMethod('insertImage', function(val) {
+(() {
+    regMethod('insertImage', (val) {
         return this.execCommand('insertimage', val);
     });
 
-    regCommand('insertimage', function(val) {
+    regCommand('insertimage', (val) {
         if (_.util.bool.isStr(val)) {
             var html = '<img src="' + val + '" />';
             this.execCommand('insert', html);
@@ -46,7 +28,7 @@ tang.init().block([
         return this;
     });
 
-    regCreater('insertimage', function() {
+    regCreater('insertimage', () {
         var html = '<dialog class="se-dialog">';
         // html += '<span class="se-title">Insert Pictures</span>';
         html += '<div class="se-url">';
@@ -62,7 +44,7 @@ tang.init().block([
         return html;
     });
 
-    regDialog('insertimage', function(btn) {
+    regDialog('insertimage', (btn) {
         var dialog = _.dom.closest(btn, 'dialog');
         var input = query('.se-url .se-input', dialog)[0];
         if (input && input.value) {
@@ -71,29 +53,29 @@ tang.init().block([
         return null;
     });
 
-    regDialog('uploadimage', function(btn) {
+    regDialog('uploadimage', (btn) {
         var dialog = _.dom.closest(btn, 'dialog');
         var images = query('.se-show', dialog)[0];
         var files = images.files;
         if (files && files.length > 0) {
             var that = this;
             if (_.util.bool.isFn(this.transfer)) {
-                this.transfer(files, function(val, failed) {
+                this.transfer(files, (val, failed) {
                     if (failed) {
                         alert(failed + 'pictures upload failed');
                     }
                     that.execCommand('insertimage', val);
-                    _.each(that.loadmasks, function(i, loadmask) {
+                    _.each(that.loadmasks, (i, loadmask) {
                         _.dom.toggleClass(loadmask, 'on', false);
                     });
                 });
-                _.each(that.loadmasks, function(i, loadmask) {
+                _.each(that.loadmasks, (i, loadmask) {
                     _.dom.toggleClass(loadmask, 'on', true);
                 });
             } else {
                 var url;
-                _.each(files, function(i, file) {
-                    _.draw.canvas.fileToBase64(file, function(url) {
+                _.each(files, (i, file) {
+                    _.draw.canvas.fileToBase64(file, (url) {
                         that.execCommand('insertimage', url);
                     });
                 });
@@ -101,4 +83,4 @@ tang.init().block([
             images.files = undefined;
         }
     });
-});
+}());

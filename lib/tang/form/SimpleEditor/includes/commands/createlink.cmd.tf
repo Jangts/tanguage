@@ -5,26 +5,12 @@
  * 
  * Date: 2015-09-04
  */
-;
-tang.init().block([
-    '$_/util/bool',
-    '$_/dom/'
-], function(pandora, root, imports, undefined) {
-    var _ = pandora,
-
-        console = root.console,
-        query = _.dom.sizzle || _.dom.selector,
-
-        regMethod = pandora.storage.get(new _.Identifier('EDITOR_REG_M').toString()),
-        regCommand = pandora.storage.get(new _.Identifier('EDITOR_REG_CMD').toString()),
-        regCreater = pandora.storage.get(new _.Identifier('EDITOR_REG_C').toString()),
-        regDialog = pandora.storage.get(new _.Identifier('EDITOR_REG_D').toString());
-
-    regMethod('createLink', function(val) {
+ns {
+    regMethod('createLink', (val) {
         return this.execCommand('createlink', val);
     });
 
-    regCommand('createlink', function(val) {
+    regCommand('createlink', (val) {
         if (val && _.util.bool.isUrl(val.url)) {
             var url = 'http://temp.';
             url += new _.Identifier();
@@ -35,7 +21,7 @@ tang.init().block([
             this.selection.getRange().execCommand('createlink', url);
             this.selection.collapseRange();
             var a = query('a[href="' + url + '"]');
-            _.each(a, function() {
+            _.each(a, () {
                 this.href = val.url;
                 if (val.isNew) {
                     this.target = '_blank';
@@ -47,7 +33,7 @@ tang.init().block([
         return this;
     });
 
-    regCreater('createlink', function() {
+    regCreater('createlink', () {
         var html = '<dialog class="se-dialog">';
         // html += '<span class="se-title">Insert link</span>';
         html += '<div class="se-url">';
@@ -63,7 +49,7 @@ tang.init().block([
         return html;
     });
 
-    regDialog('createlink', function(btn) {
+    regDialog('createlink', (btn) {
         var dialog = _.dom.closest(btn, 'dialog');
         var input = query('.se-url .se-input', dialog)[0];
         var checkbox = query('.se-check .se-checkbox', dialog)[0]
@@ -75,4 +61,4 @@ tang.init().block([
         }
         return null;
     });
-});
+}

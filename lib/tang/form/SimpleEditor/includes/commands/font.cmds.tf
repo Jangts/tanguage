@@ -5,17 +5,7 @@
  * 
  * Date: 2015-09-04
  */
-;
-tang.init().block([
-    '$_/dom/'
-], function(pandora, root, imports, undefined) {
-    var _ = pandora,
-
-        console = root.console,
-
-        regCommand = pandora.storage.get(new _.Identifier('EDITOR_REG_CMD').toString()),
-        regCreater = pandora.storage.get(new _.Identifier('EDITOR_REG_C').toString()),
-
+ns {
         defaults = {
             colorTable: [
                 ['#000000', '#444444', '#666666', '#999999', '#CCCCCC', '#EEEEEE', '#F3F3F3', '#FFFFFF'],
@@ -39,7 +29,7 @@ tang.init().block([
                 '7': '48px'
             },
         },
-        currentElem = function(range) {
+        currentElem = (range) {
             if (range.commonElem === range.commonNode) {
                 if (range.startNode === range.commonNode) {
                     if (_.dom.contain(this.richarea, range.commonElem)) {
@@ -49,17 +39,17 @@ tang.init().block([
             }
         },
         commands = {
-            'fontsize': function(val) {
+            'fontsize'(val) {
                 this.selection.getRange().execCommand('fontsize', val);
                 this.selection.saveRange();
                 this.onchange();
             },
-            'forecolor': function(val) {
+            'forecolor'(val) {
                 this.selection.getRange().execCommand('forecolor', val);
                 this.selection.saveRange();
                 this.onchange();
             },
-            'backcolor': function(val) {
+            'backcolor'(val) {
                 this.selection.getRange().execCommand('backcolor', val);
                 this.selection.saveRange();
                 this.onchange();
@@ -67,7 +57,7 @@ tang.init().block([
         },
 
         creators = {
-            'fontsize': function() {
+            'fontsize'() {
                 var html = '<ul class="se-pick">';
                 var fontSizeTable = this.options.fontSizeTable || defaults.fontSizeTable;
                 for (var i in fontSizeTable) {
@@ -78,7 +68,7 @@ tang.init().block([
                 html += '</ul>';
                 return html;
             },
-            'forecolor': function() {
+            'forecolor'() {
                 var html = '<ul class="se-pick">';
                 var colorTable = this.options.colorTable || defaults.colorTable;
                 for (var n = 0; n < colorTable.length; n++) {
@@ -93,7 +83,7 @@ tang.init().block([
                 html += '</ul>';
                 return html;
             },
-            'backcolor': function() {
+            'backcolor'() {
                 var html = '<ul class="se-pick">';
                 var colorTable = this.options.colorTable || defaults.colorTable;
                 for (var n = 0; n < colorTable.length; n++) {
@@ -110,11 +100,11 @@ tang.init().block([
             }
         };
 
-    _.each(commands, function(cmd, handler) {
+    _.each(commands, (cmd, handler) {
         regCommand(cmd, handler);
     });
 
-    _.each(creators, function(cmd, handler) {
+    _.each(creators, (cmd, handler) {
         regCreater(cmd, handler, true);
     });
-});
+}

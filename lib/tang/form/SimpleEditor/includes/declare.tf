@@ -1,3 +1,9 @@
+/**
+ * forms inspection and submission and ect.
+ * @class 'SimpleEditor'
+ * @constructor
+ * @param {Mix, Object }
+ */
 class .SimpleEditor {
     cElement= null;
     mainareas= null;

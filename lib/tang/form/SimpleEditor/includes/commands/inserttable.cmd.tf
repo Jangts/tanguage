@@ -5,26 +5,13 @@
  * 
  * Date: 2015-09-04
  */
-;
-tang.init().block([
-    '$_/dom/',
-    '$_/form/SimpleEditor/commands/insert.cmds'
-], function(pandora, root, imports, undefined) {
-    var _ = pandora,
+(() {
 
-        console = root.console,
-        query = _.dom.sizzle || _.dom.selector,
-
-        regMethod = pandora.storage.get(new _.Identifier('EDITOR_REG_M').toString()),
-        regCommand = pandora.storage.get(new _.Identifier('EDITOR_REG_CMD').toString()),
-        regCreater = pandora.storage.get(new _.Identifier('EDITOR_REG_C').toString()),
-        regDialog = pandora.storage.get(new _.Identifier('EDITOR_REG_D').toString());
-
-    regMethod('insertTable', function(val) {
+    regMethod('insertTable', (val) {
         return this.execCommand('inserttable', val);
     });
 
-    regCommand('inserttable', function(val) {
+    regCommand('inserttable', (val) {
         if (val) {
             var rows = parseInt(val.rows) || 1;
             var columns = parseInt(val.columns) || 1;
@@ -51,7 +38,7 @@ tang.init().block([
         return this;
     });
 
-    regCreater('inserttable', function() {
+    regCreater('inserttable', () {
         var html = '<dialog class="se-dialog">';
         // html += '<span class="se-title">Insert Table</span>';
         html += '<div class="se-attr"><div class="se-attr-left">';
@@ -70,7 +57,7 @@ tang.init().block([
         return html;
     });
 
-    regDialog('inserttable', function(btn) {
+    regDialog('inserttable', (btn) {
         var dialog = _.dom.closest(btn, 'dialog');
         var rowsInput = query('.se-attr .se-table-rows', dialog)[0];
         var columnsInput = query('.se-attr .se-table-columns', dialog)[0];
@@ -86,4 +73,4 @@ tang.init().block([
         }
         return null;
     });
-});
+}());

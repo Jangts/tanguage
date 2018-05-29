@@ -5,28 +5,21 @@
  * 
  * Date: 2015-09-04
  */
-;
-tang.init().block(['$_/form/SimpleEditor/commands/insert.cmds'], function(pandora, root, imports, undefined) {
-    var _ = pandora,
+(() {
+    var codesFragments = [];
 
-        console = root.console;
-
-    var regCommand = pandora.storage.get(new _.Identifier('EDITOR_REG_CMD').toString()),
-        regCreater = pandora.storage.get(new _.Identifier('EDITOR_REG_C').toString()),
-        codesFragments = [];
-
-    regCommand('insertfragments', function(val) {
+    regCommand('insertfragments', (val) {
         if (val && codesFragments[val]) {
             this.execCommand('insert', codesFragments[val]);
         }
         return this;
     });
 
-    regCreater('insertfragments', function() {
+    regCreater('insertfragments', () {
         var fragments = this.options.fragments || [];
         if (fragments.length) {
             var html = '<ul class="se-pick">';
-            _.each(fragments, function(i, fragment) {
+            _.each(fragments, (i, fragment) {
                 codesFragments.push(fragment.code);
                 html += '<li class="se-font data-se-cmd" data-se-cmd="insertfragments" data-se-val="' + i + '">' + fragment.name + '</li>';
             });
@@ -35,4 +28,4 @@ tang.init().block(['$_/form/SimpleEditor/commands/insert.cmds'], function(pandor
         }
         return '';
     }, true);
-});
+}());

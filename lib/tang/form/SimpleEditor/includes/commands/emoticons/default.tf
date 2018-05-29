@@ -3,12 +3,7 @@
  * 
  * Date: 2015-09-04
  */
-;
-tang.init().block('$_/form/SimpleEditor/commands/insertemoticon.cmd', function(pandora, root, imports, undefined) {
-    var _ = pandora,
-
-        regEmoticon = pandora.storage.get(new _.Identifier('EDITOR_REG_EMT').toString());
-
+(() {
     regEmoticon('default', {
         '微笑': 'wx.gif',
         '晕': 'y.gif',
@@ -31,4 +26,4 @@ tang.init().block('$_/form/SimpleEditor/commands/insertemoticon.cmd', function(p
         '泪': 'lei.gif',
         '酷': 'cool.gif'
     });
-});
+}());

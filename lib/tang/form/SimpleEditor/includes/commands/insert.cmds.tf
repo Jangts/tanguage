@@ -5,26 +5,18 @@
  * 
  * Date: 2015-09-04
  */
-;
-tang.init().block([], function(pandora, root, imports, undefined) {
-    var _ = pandora,
-
-        console = root.console,
-
-        regMethod = pandora.storage.get(new _.Identifier('EDITOR_REG_M').toString()),
-        regCommand = pandora.storage.get(new _.Identifier('EDITOR_REG_CMD').toString()),
-
+ns {
         commands = {
-            'insert': function(val) {
+            'insert'(val) {
                 this.selection.getRange().insert(val);
                 this.selection.saveRange();
                 this.onchange();
                 return this;
             },
-            // 'p': function(val) {
+            // 'p'(val) {
             //     this.selection.getRange().execCommand('formatblock', '<p>');
             // },
-            'blockquote': function(val) {
+            'blockquote'(val) {
                 this.selection.getRange().execCommand('formatblock', '<blockquote>');
                 this.selection.saveRange();
                 this.onchange();
@@ -32,11 +24,11 @@ tang.init().block([], function(pandora, root, imports, undefined) {
             }
         };
 
-    regMethod('insertHTM', function(val) {
+    regMethod('insertHTM', (val) {
         return this.execCommand('insert', val);
     });
 
-    _.each(commands, function(cmd, handler) {
+    _.each(commands, (cmd, handler) {
         regCommand(cmd, handler);
     });
-});
+}

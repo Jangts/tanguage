@@ -5,30 +5,13 @@
  * 
  * Date: 2015-09-04
  */
-;
-tang.init().block([
-    '$_/util/bool',
-    '$_/dom/',
-    '$_/form/SimpleEditor/commands/insert.cmds'
-], function(pandora, root, imports, undefined) {
-    var _ = pandora,
-        declare = pandora.declareClass,
+(() {
 
-        doc = root.document,
-        console = root.console,
-        query = _.dom.sizzle || _.dom.selector;
-
-    var parameters = pandora.storage.get(new _.Identifier('EDITOR_PARAMS').toString()),
-        regMethod = pandora.storage.get(new _.Identifier('EDITOR_REG_M').toString()),
-        regCommand = pandora.storage.get(new _.Identifier('EDITOR_REG_CMD').toString()),
-        regCreater = pandora.storage.get(new _.Identifier('EDITOR_REG_C').toString()),
-        regDialog = pandora.storage.get(new _.Identifier('EDITOR_REG_D').toString());
-
-    regMethod('insertFile', function(val, name) {
+    regMethod('insertFile', (val, name) {
         return this.execCommand('insertfile', [name, val]);
     });
 
-    regCommand('insertfile', function(file) {
+    regCommand('insertfile', (file) {
         var name = file[0],
             val = file[1];
         if (_.util.bool.isStr(val)) {
@@ -45,7 +28,7 @@ tang.init().block([
         return this;
     });
 
-    regCreater('insertfile', function() {
+    regCreater('insertfile', () {
         var html = '<dialog class="se-dialog">';
         // html += '<span class="se-title">Insert Files</span>';
         html += '<div class="se-aaa">';
@@ -63,7 +46,7 @@ tang.init().block([
         return html;
     });
 
-    regDialog('insertfile', function(btn) {
+    regDialog('insertfile', (btn) {
         var dialog = _.dom.closest(btn, 'dialog');
         var n_input = query('.se-aaa .se-input', dialog)[0],
             v_input = query('.se-url .se-input', dialog)[0];
@@ -73,11 +56,11 @@ tang.init().block([
         return null;
     });
 
-    regDialog('uploadfile', function(btn) {
+    regDialog('uploadfile', (btn) {
         var dialog = _.dom.closest(btn, 'dialog');
         var input = query('.se-files', dialog)[0];
         var that = this;
-        input.onchange = function() {
+        input.onchange = () {
             var file = this.files[0];
             if (that.attachment_type) {
                 var preg = new RegExp('\.(' + that.attachment_type.join('|') + ')$', i);
@@ -91,7 +74,7 @@ tang.init().block([
                 }
             }
             if (_.util.bool.isFn(that.transfer)) {
-                that.transfer([file], function(val, failed) {
+                that.transfer([file], (val, failed) {
                     if (failed) {
                         alert('attachment upload failed');
                     } else {
@@ -103,11 +86,11 @@ tang.init().block([
                         }
 
                     }
-                    _.each(that.loadmasks, function(i, loadmask) {
+                    _.each(that.loadmasks, (i, loadmask) {
                         _.dom.toggleClass(loadmask, 'on', false);
                     });
                 });
-                _.each(that.loadmasks, function(i, loadmask) {
+                _.each(that.loadmasks, (i, loadmask) {
                     _.dom.toggleClass(loadmask, 'on', true);
                 });
             } else {
@@ -116,4 +99,4 @@ tang.init().block([
         }
         input.click();
     });
-});
+}());

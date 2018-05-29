@@ -20,7 +20,8 @@
         "test-help": "node ./compiler/js/node-tang.js help",
         "test-clib": "node ./compiler/js/node-tang.js cdir ./lib/tang/ ./lib/dist/ -map -c",
         "test-addin": "node ./compiler/js/node-tang.js cdir ./addin/src/ ./addin/dest/ -map -c",
-        "test-dom": "node ./compiler/js/node-tang.js ./lib/tang/dom/dom.tang ./lib/dist/dom/dom.js -map -c"
+        "test-dom": "node ./compiler/js/node-tang.js ./lib/tang/dom/dom.tang ./lib/dist/dom/dom.js -map -c",
+        "test-form": "node ./compiler/js/node-tang.js cdir ./lib/tang/form/ ./lib/dist/form/ -map -c"
     },
     "repository": {
         "type": "git",

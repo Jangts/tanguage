@@ -107,7 +107,8 @@
         // 位置是在replace usings 和 strings 之后才tidy的，所以还存在后接空格
         use: /(@\d+L\d+P\d+:::)\s*use\s*(\$|@)?\s+([\~\$\w\.\/\\\?\=\&]+)(\s+as(\s+(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)|\s*(@\d+L\d+P\d+:::\s*)?\{(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)*)\})(@\d+L\d+P\d+:::\s*)?)?\s*[;\r\n]/g,
         include: /\s*@include\s+___boundary_[A-Z0-9_]{36}_(\d+)_as_string___[;\r\n]+/g,
-        extends: /(@\d+L\d+P\d+O*\d*:::)?(ns|namespace|extends)\s+((\.{0,3})[\$a-zA-Z_][\$\w\.]*)(\s+with)?\s*\{([^\{\}]*?)\}/g,
+        extends: /(@\d+L\d+P\d+O*\d*:::)?(void\s+ns|void\s+namespace|ns|namespace|extends)\s+((\.{0,3})[\$a-zA-Z_][\$\w\.]*)(\s+with)?\s*\{([^\{\}]*?)\}/g,
+        anonspace: /(@\d+L\d+P\d+O*\d*:::)?(void\s+ns|void\s+namespace|ns|namespace)\s*\{([^\{\}]*?)\}/g,
         class: /(@\d+L\d+P\d+O*\d*:::)?((class|expands)(\s+\.{0,3}[\$a-zA-Z_][\$\w\.]*)?(\s+extends\s+\.{0,3}[\$a-zA-Z_][\$\w\.]*|ignore)?\s*\{[^\{\}]*?\})/g,
         fnlike: /(@\d+L\d+P\d+O*\d*:::)?(^|(function|def|public)\s+)?(([\$a-zA-Z_][\$\w]*)?\s*\([^\(\)]*\))\s*\{([^\{\}]*?)\}/g,
         parentheses: /(@\d+L\d+P\d+O*\d*:::)?\(\s*([^\(\)]*?)\s*\)/g,
@@ -120,7 +121,7 @@
         if: /(@\d+L\d+P\d+O*\d*:::)?if\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*/g,
         object: /(@\d+L\d+P\d+O*\d*:::)?\{\s*(@\d+L\d+P\d+O*\d*:::(...)?[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+O*\d*:::(...)?[\$a-zA-Z_][\$\w]*)*)\s*\}(@\d+L\d+P\d+O*\d*:::)?/g,
         array: /(@\d+L\d+P\d+O*\d*:::)?\[\s*(@\d+L\d+P\d+O*\d*:::(...)?[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+O*\d*:::(...)?[\$a-zA-Z_][\$\w]*)*)\s*\]/g,
-        log: /(@\d+L\d+P\d+O*\d*:::)?log\s+(.+?)\s*([;\r\n]+|$)/g
+        log: /(@\d+L\d+P\d+O*\d*:::)log\s+(.+?)\s*([;\r\n]+|$)/g
     }, matchExpRegPattern = {
         string: /(\/|\#|`|"|')([\*\/\=])?/,
         strings: {
@@ -132,7 +133,7 @@
         },
         index: /(\d+)_as_([a-z]+)/,
         index3: /^_(\d+)_as_([a-z]+)___([\s\S]*)$/,
-        extends: /(ns|nsassign|global|globalassign|extends)\s+([\$a-zA-Z_][\$\w\.]*)\s*\{([^\{\}]*?)\}/,
+        extends: /(voidns|ns|nsassign|voidglobal|global|globalassign|extends|voidanonspace|anonspace)\s+([\$a-zA-Z_][\$\w\.]*)?\s*\{([^\{\}]*?)\}/,
         class: /(class|expands)\s*(\.{1,3})?([\$a-zA-Z_][\$\w\.]*)?(\s+extends\s+(\.{1,3})?([\$a-zA-Z_][\$\w\.]*)|ignore)?\s*\{([^\{\}]*?)\}/,
         fnlike: /(^|(function|def|public)\s+)?([\$a-zA-Z_][\$\w]*)?\s*\(([^\(\)]*)\)\s*\{([^\{\}]*?)\}/,
         call: /([\$a-zA-Z_\.][\$\w\.]*)\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___/,
@@ -757,6 +758,7 @@
             string = string.replace(replaceExpRegPattern.extends, function (match, posi, exp, name, node, assign, closure) {
                 matched = true;
                 name = name.replace(/^\.+/, '');
+                exp = exp.replace(/\s+/, '');
                 var body;
                 if (assign) {
                     if (exp === 'extends') {
@@ -787,12 +789,38 @@
                     }
                     else {
                         if (node && node.length === 2) {
-                            body = 'global ' + name + '{' + _this.replaceParentheses(closure) + '}';
+                            if (exp === 'voidns' || exp === 'voidnamespace') {
+                                body = 'voidglobal ' + name + '{' + _this.replaceParentheses(closure) + '}';
+                            }
+                            else {
+                                body = 'global ' + name + '{' + _this.replaceParentheses(closure) + '}';
+                            }
                         }
                         else {
-                            body = 'ns ' + name + '{' + _this.replaceParentheses(closure) + '}';
+                            if (exp === 'voidns' || exp === 'voidnamespace') {
+                                body = 'voidns ' + name + '{' + _this.replaceParentheses(closure) + '}';
+                            }
+                            else {
+                                body = 'ns ' + name + '{' + _this.replaceParentheses(closure) + '}';
+                            }
                         }
                     }
+                }
+                var index = _this.replacements.length;
+                _this.replacements.push([body, posi && posi.trim()]);
+                return '___boundary_' + _this.uid + '_' + index + '_as_extends___';
+            });
+            if (matched)
+                return string;
+            string = string.replace(replaceExpRegPattern.anonspace, function (match, posi, exp, closure) {
+                matched = true;
+                exp = exp.replace(/\s+/, '');
+                // console.log(exp);
+                if (exp === 'voidns' || exp === 'voidnamespace') {
+                    var body = 'voidanonspace {' + _this.replaceParentheses(closure) + '}';
+                }
+                else {
+                    var body = 'anonspace {' + _this.replaceParentheses(closure) + '}';
                 }
                 var index = _this.replacements.length;
                 _this.replacements.push([body, posi && posi.trim()]);
@@ -2250,9 +2278,12 @@
             var namespace;
             var body;
             // console.log(matches);
-            if ((matches[1] === 'ns') || (matches[1] === 'global')) {
+            if ((matches[1] === 'voidns') || (matches[1] === 'voidglobal') || (matches[1] === 'voidanonspace') || (matches[1] === 'ns') || (matches[1] === 'global') || (matches[1] === 'anonspace')) {
                 subtype = matches[1];
-                if (matches[1] === 'ns') {
+                if (subtype === 'voidanonspace' || subtype === 'anonspace') {
+                    namespace = '';
+                }
+                else if (subtype === 'ns') {
                     namespace = this.namespace + objname + '.';
                 }
                 else {
@@ -3430,22 +3461,33 @@
             if (element.subtype === 'global' || element.subtype === 'globalassign') {
                 namespace = '';
             }
-            if (element.subtype === 'ns' || element.subtype === 'global') {
+            if (element.subtype === 'voidanonspace' || element.subtype === 'voidns' || element.subtype === 'voidglobal' || element.subtype === 'anonspace' || element.subtype === 'ns' || element.subtype === 'global') {
                 this.fixVariables(element.vars);
-                codes.push(indent1 + posi + 'pandora.ns(\'' + namespace + element.oname.trim() + '\', function () {');
-                this.pushCodes(codes, element.vars, element.body, layer + 1, namespace + element.oname.trim() + '.');
+                if (element.subtype === 'voidanonspace' || element.subtype === 'anonspace') {
+                    codes.push(indent1 + posi + '(function () {');
+                    this.pushCodes(codes, element.vars, element.body, layer + 1, namespace + '.');
+                }
+                else {
+                    codes.push(indent1 + posi + 'pandora.ns(\'' + namespace + element.oname.trim() + '\', function () {');
+                    this.pushCodes(codes, element.vars, element.body, layer + 1, namespace + element.oname.trim() + '.');
+                }
                 // console.log(element.body);
-                var exports_1 = [];
-                // console.log(element.vars.root.public);
-                codes.push(indent2 + 'return {');
-                for (var name_2 in element.vars.root.public) {
-                    exports_1.push(name_2 + ': ' + element.vars.root.public[name_2]);
+                if (element.subtype === 'anonspace' || element.subtype === 'ns' || element.subtype === 'global') {
+                    var exports_1 = [];
+                    // console.log(element.vars.root.public);
+                    codes.push(indent2 + 'return {');
+                    for (var name_2 in element.vars.root.public) {
+                        exports_1.push(name_2 + ': ' + element.vars.root.public[name_2]);
+                    }
+                    if (exports_1.length) {
+                        codes.push(indent3 + exports_1.join(',' + indent3));
+                    }
+                    codes.push(indent2 + '}');
                 }
-                if (exports_1.length) {
-                    codes.push(indent3 + exports_1.join(',' + indent3));
-                }
-                codes.push(indent2 + '}');
                 codes.push(indent1 + '}');
+                if (element.subtype === 'anonspace') {
+                    codes.push('()');
+                }
             }
             else if (element.subtype === 'nsassign' || element.subtype === 'globalassign') {
                 codes.push(indent1 + posi + 'pandora.ns(\'' + namespace + element.oname.trim() + '\', ');
