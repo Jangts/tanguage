@@ -114,7 +114,7 @@
         replaceWords = /(^|@\d+L\d+P\d+O?\d*:::|\s)(continue|return|throw|break|case|else)\s*(\s|;|___boundary_[A-Z0-9_]{36}_(\d+)_as_([a-z]+)___)/g,
         replaceExpRegPattern = {
             module: /^((\s*@\d+L\d+P0:::)*\s*(@\d+L\d+P0*):::(\s*))?@module[;\s]*/,
-            namespace: /[\r\n]((@\d+L\d+P0):::)?(\s*)namespace\s+(\.{0,1}[\$a-zA-Z_][\$\w\.]*)\s*(;|\r|\n)/,
+            namespace: /(^|[\r\n])((@\d+L\d+P0):::)?(\s*)namespace\s+(\.{0,1}[\$a-zA-Z_][\$\w\.]*)\s*(;|\r|\n)/,
             // 位置是在replace usings 和 strings 之后才tidy的，所以还存在后接空格
             use: /(@\d+L\d+P\d+:::)\s*use\s*(\$|@)?\s+([\~\$\w\.\/\\\?\=\&]+)(\s+as(\s+(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)|\s*(@\d+L\d+P\d+:::\s*)?\{(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)*)\})(@\d+L\d+P\d+:::\s*)?)?\s*[;\r\n]/g,
             include: /\s*@include\s+___boundary_[A-Z0-9_]{36}_(\d+)_as_string___[;\r\n]+/g,
@@ -357,7 +357,7 @@
                     // console.log('This is not a main block.', this.maintag_posi);
                     return '';
                 })
-                .replace(replaceExpRegPattern.namespace, (match: string, posi, at, gap: string, namespace: string) => {
+                .replace(replaceExpRegPattern.namespace, (match: string, linestart, posi, at, gap: string, namespace: string) => {
                     if (this.namespace === '') {
                         this.namespace += namespace + '.';
                         this.namespace_posi = at;
@@ -2217,10 +2217,10 @@
                 if (subtype === 'voidanonspace'||subtype === 'anonspace'){
                     namespace = '';
                 }
-                else if (subtype === 'ns') {
-                    namespace = this.namespace + objname + '.';
-                } else {
+                else if ((subtype === 'voidglobal') || (subtype === 'global')) {
                     namespace = objname + '.';
+                } else {
+                    namespace = (vars.namespace || this.namespace) + objname + '.';
                 }
                 localvars = {
                     parent: vars,
@@ -3401,7 +3401,7 @@
                 }
                 
                 codes.push(indent1 + '}');
-                if (element.subtype === 'anonspace') {
+                if (element.subtype === 'voidanonspace' || element.subtype === 'anonspace') {
                     codes.push('()');
                 }
                

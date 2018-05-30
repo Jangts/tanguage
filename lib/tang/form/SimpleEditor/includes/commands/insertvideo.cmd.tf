@@ -5,9 +5,8 @@
  * 
  * Date: 2015-09-04
  */
-(() {
-
-    regMethod('insertVideo', (val) {
+void ns {
+    builders.regMethod('insertVideo', (val) {
         return this.execCommand('insertvideo', val);
     });
 
@@ -59,7 +58,7 @@
         }
     };
 
-    regCommand('insertvideo', (val) {
+    builders.regCommand('insertvideo', (val) {
         if (val) {
             if (val.code && val.code != '') {
                 this.execCommand('insert', val.code);
@@ -75,7 +74,7 @@
         return this;
     });
 
-    regCreater('insertvideo', () {
+    builders.regCreater('insertvideo', () {
         var html = '<dialog class="se-dialog">';
         // html += '<span class="se-title">Insert Video</span>';
         html += '<textarea class="se-code" placeholder="Embedded code"></textarea>';
@@ -99,7 +98,7 @@
         return html;
     });
 
-    regDialog('insertvideo', (btn) {
+    builders.regDialog('insertvideo', (btn) {
         var dialog = _.dom.closest(btn, 'dialog');
         var textarea = query('.se-code', dialog)[0];
         if (textarea && textarea.value != '') {
@@ -121,4 +120,4 @@
         }
         return null;
     });
-}());
+}

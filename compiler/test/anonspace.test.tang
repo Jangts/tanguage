@@ -1,24 +1,25 @@
 namespace foo;
-        ns {
-            var a = 0, b =1;
-            var y = a + -b;
-            log y;
-            class A {}
-        }
-        var o = ns {
-            public a = 0, b =1;
-            public z = a + -b;
-            class .A {}
-        }
-        var z = ns {
-            var a = 0, b =1;
-            class ..A {}
-            return a + -b;
-        }
-        var z = void ns {
-            var a = 0, b =1;
-            class ..B {}
-            return a + -b;
-        }   
-            
-        log o, z;
+
+ns {
+    var a = 0, b =1;
+    var y = a + -b;
+    log y;
+    class A {}
+}
+var o = ns {
+    public a = 0, b =1;
+    public z = a + -b;
+    class .A {}
+}
+var z = ns {
+    var a = 0, b =1;
+    class ..A {}
+    return a + -b;
+}
+var z = void ns {
+    var a = 0, b =1;
+    class ..B {}
+    return a + -b;
+}   
+    
+log o, z;

@@ -42,29 +42,29 @@ class .SimpleEditor {
                 if (_.util.bool.isEl(textareas)) {
                     this.textareas = [builders.textarea(textareas)];
                 } else if (_.util.bool.isEls(textareas)) {
-                    _.each(textareas, (i, textarea) {
+                    each(textareas as i, textarea) {
                         this.textareas.push(builders.textarea(textarea));
-                    }, this);
+                    }
                 } else if (_.util.bool.isArr(textareas)) {
-                    _.each(textareas, (i, textarea) {
-                        console.log(textarea);
+                    each(textareas as i, textarea) {
+                        // console.log(textarea);
                         if (_.util.bool.isEl(textarea)) {
                             this.textareas.push(builders.textarea(textarea));
                         }
-                    }, this);
+                    }
                 }
             } else {
-                _.each(query('textarea, input', this.cElement.Element), (i, el) {
+                each(query('textarea, input', this.cElement.Element) as i, el) {
                     this.textareas.push(builders.textarea(el));
-                }, this);
+                }
             }
 
             this.mainareas = [];
             if (this.textareas.length) {
-                _.each(this.textareas, (i, textarea) {
+                each(this.textareas as i, textarea) {
                     // console.log(textarea, textarea.getText());
                     this.mainareas.push(builders.mainarea.call(this, options, textarea.getText()));
-                }, this);
+                }
             } else {
                 var text = this.cElement.Element.innerHTML;
                 this.cElement.Element.innerHTML = '';
@@ -76,9 +76,9 @@ class .SimpleEditor {
             this.richareas = [];
             this.loadmasks = [];
             var isBuildStateBar = (this.mainareas.length === 1);
-            _.each(this.mainareas, (i, mainarea) {
+            each(this.mainareas as i, mainarea) {
                 builders.workspace.call(this, mainarea, options, isBuildStateBar);
-            }, this);
+            }
 
             this.selection = new _.form.SimpleEditor.Selection(this);
             SimpleEditors[this.uid] = this.listen();
@@ -107,15 +107,15 @@ class .SimpleEditor {
         return this.onchange();
     }
     resetValue() {
-        _.each(this.mainareas, (index, mainarea) {
+        each(this.mainareas as index, mainarea) {
             this.richareas[index].innerHTML = mainarea.resetText;
-        }, this);
+        }
     }
     getValue(index) {
         index = parseInt(index) || 0;
-        _.each(this.textareas, (i, textarea) {
+        each(this.textareas as i, textarea) {
             textarea.setText(this.richareas[i].innerHTML);
-        }, this);
+        }
 
         return this.richareas[index] ? this.richareas[index].innerHTML : '';
     }
@@ -137,9 +137,9 @@ class .SimpleEditor {
         return (formElement === this.cElement.Element) || _.dom.contain(formElement, this.cElement.Element);
     }
     hideExtTools() {
-        _.each(query('.se-tool.data-se-dialog, .se-tool.data-se-cmds', this.toolbar), (i, el) {
+        each(query('.se-tool.data-se-dialog, .se-tool.data-se-cmds', this.toolbar) as i, el) {
             _.dom.toggleClass(this, 'active', false);
-        });
+        }
         return this;
     }
     showDialog(dialog) {
@@ -170,26 +170,26 @@ class .SimpleEditor {
                 toolbar: new _.dom.Events(this.toolbar),
                 workspaces: new _.dom.Events(this.cElement.Element)
             };
-        _.each(listeners, (name, listener) {
-            _.each(events[name], (eventType, handler) {
+        each(listeners as name, listener) {
+            each(events[name] as eventType, handler) {
                 if (_.util.bool.isFn(handler)) {
                     listener.push(eventType, null, editor, handler);
                 } else if (_.util.bool.isObj(handler)) {
-                    _.each(handler, (selector, cb) {
+                    each(handler as selector, cb) {
                         listener.push(eventType, selector, editor, cb);
-                    });
+                    }
                 }
-            })
-        });
+            }
+        }
         return this;
     }
     collapse(toStart) {
         this.selection.getRange().collapse(toStart);
     }
     onchange() {
-        _.each(checks, (check, handler) {
+        each(checks as check, handler) {
             handler.call(this);
-        }, this);
+        }
         return this;
     }
 }

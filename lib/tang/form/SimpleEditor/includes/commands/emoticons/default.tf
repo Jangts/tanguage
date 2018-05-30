@@ -3,7 +3,8 @@
  * 
  * Date: 2015-09-04
  */
-(() {
+void ns {
+    // log regEmoticon;
     regEmoticon('default', {
         '微笑': 'wx.gif',
         '晕': 'y.gif',
@@ -26,4 +27,4 @@
         '泪': 'lei.gif',
         '酷': 'cool.gif'
     });
-}());
+}

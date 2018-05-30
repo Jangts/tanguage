@@ -5,13 +5,12 @@
  * 
  * Date: 2015-09-04
  */
-(() {
-
-    regMethod('insertFile', (val, name) {
+void ns {
+    builders.regMethod('insertFile', (val, name) {
         return this.execCommand('insertfile', [name, val]);
     });
 
-    regCommand('insertfile', (file) {
+    builders.regCommand('insertfile', (file) {
         var name = file[0],
             val = file[1];
         if (_.util.bool.isStr(val)) {
@@ -28,7 +27,7 @@
         return this;
     });
 
-    regCreater('insertfile', () {
+    builders.regCreater('insertfile', () {
         var html = '<dialog class="se-dialog">';
         // html += '<span class="se-title">Insert Files</span>';
         html += '<div class="se-aaa">';
@@ -46,7 +45,7 @@
         return html;
     });
 
-    regDialog('insertfile', (btn) {
+    builders.regDialog('insertfile', (btn) {
         var dialog = _.dom.closest(btn, 'dialog');
         var n_input = query('.se-aaa .se-input', dialog)[0],
             v_input = query('.se-url .se-input', dialog)[0];
@@ -56,15 +55,15 @@
         return null;
     });
 
-    regDialog('uploadfile', (btn) {
+    builders.regDialog('uploadfile', (btn) {
         var dialog = _.dom.closest(btn, 'dialog');
         var input = query('.se-files', dialog)[0];
         var that = this;
         input.onchange = () {
             var file = this.files[0];
             if (that.attachment_type) {
-                var preg = new RegExp('\.(' + that.attachment_type.join('|') + ')$', i);
-                if (!preg.test(file)) {
+                var reg = new RegExp('\.(' + that.attachment_type.join('|') + ')$', i);
+                if (!reg.test(file)) {
                     return alert('Unsupported File Format');
                 }
             }
@@ -86,17 +85,17 @@
                         }
 
                     }
-                    _.each(that.loadmasks, (i, loadmask) {
+                    each(that.loadmasks as i, loadmask) {
                         _.dom.toggleClass(loadmask, 'on', false);
-                    });
+                    }
                 });
-                _.each(that.loadmasks, (i, loadmask) {
+                each(that.loadmasks as i, loadmask) {
                     _.dom.toggleClass(loadmask, 'on', true);
-                });
+                }
             } else {
                 alert('No Upload Configuration');
             }
         }
         input.click();
     });
-}());
+}

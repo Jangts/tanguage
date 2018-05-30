@@ -5,12 +5,13 @@
  * 
  * Date: 2015-09-04
  */
-(() {
-    regMethod('insertImage', (val) {
+
+void ns {
+    builders.regMethod('insertImage', (val) {
         return this.execCommand('insertimage', val);
     });
 
-    regCommand('insertimage', (val) {
+    builders.regCommand('insertimage', (val) {
         if (_.util.bool.isStr(val)) {
             var html = '<img src="' + val + '" />';
             this.execCommand('insert', html);
@@ -28,7 +29,7 @@
         return this;
     });
 
-    regCreater('insertimage', () {
+    builders.regCreater('insertimage', () {
         var html = '<dialog class="se-dialog">';
         // html += '<span class="se-title">Insert Pictures</span>';
         html += '<div class="se-url">';
@@ -44,7 +45,7 @@
         return html;
     });
 
-    regDialog('insertimage', (btn) {
+    builders.regDialog('insertimage', (btn) {
         var dialog = _.dom.closest(btn, 'dialog');
         var input = query('.se-url .se-input', dialog)[0];
         if (input && input.value) {
@@ -53,7 +54,7 @@
         return null;
     });
 
-    regDialog('uploadimage', (btn) {
+    builders.regDialog('uploadimage', (btn) {
         var dialog = _.dom.closest(btn, 'dialog');
         var images = query('.se-show', dialog)[0];
         var files = images.files;
@@ -65,22 +66,22 @@
                         alert(failed + 'pictures upload failed');
                     }
                     that.execCommand('insertimage', val);
-                    _.each(that.loadmasks, (i, loadmask) {
+                    each(that.loadmasks as i, loadmask) {
                         _.dom.toggleClass(loadmask, 'on', false);
-                    });
+                    }
                 });
-                _.each(that.loadmasks, (i, loadmask) {
+                each(that.loadmasks as i, loadmask) {
                     _.dom.toggleClass(loadmask, 'on', true);
-                });
+                }
             } else {
                 var url;
-                _.each(files, (i, file) {
+                each(files as i, file) {
                     _.draw.canvas.fileToBase64(file, (url) {
                         that.execCommand('insertimage', url);
                     });
-                });
+                }
             }
             images.files = undefined;
         }
     });
-}());
+}

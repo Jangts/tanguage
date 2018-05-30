@@ -1,3 +1,5 @@
+@module;
+
 /*!
  * tanguage framework source code
  *
@@ -15,12 +17,12 @@ console = root.console;
 
 namespace form {
     var isGetSelection = window.getSelection ? true : false,
-    getRangeHtml = function(range) {
+    getRangeHtml = (range) {
         var div = doc.createElement('div')
         div.appendChild(range.cloneContents());
         return div.innerHTML;
     },
-    getSelectionRange = function(selection) {
+    getSelectionRange = (selection) {
         if (selection.rangeCount > 0) {
             this.originRange = selection.getRangeAt(0);
 
@@ -52,7 +54,7 @@ namespace form {
             this.collapsed = true;
         }
     },
-    docSelectionRange = function() {
+    docSelectionRange = () {
         this.originRange = doc.selection.createRange();
 
         this.commonNode = this.originRange.parentElement();

@@ -5,7 +5,7 @@
  * 
  * Date: 2015-09-04
  */
-var checks = ((){
+var checks = void ns {
     var rbgaToHexadecimal = (rgba) {
         var arr = rgba.split(/\D+/);
         var num = Number(arr[1]) * 65536 + Number(arr[2]) * 256 + Number(arr[3]);
@@ -28,23 +28,23 @@ var checks = ((){
     checkFontFormat = (style) {
         var range = this.selection.range;
         if (range && range.commonElem) {
-            _.each(query('.se-pick li', this.toolbar), (i, el) {
+            each(query('.se-pick li', this.toolbar) as i, el) {
                 _.dom.toggleClass(this, 'selected', false);
-            });
+            }
             selector = ", .fontsize .se-font[data-se-val=\"" + style.fontSize + "\"]";
             selector += ", .forecolor .se-color[data-se-val=\"" + rbgaToHexadecimal(style.color) + "\"]";
             selector += ", .backcolor .se-color[data-se-val=\"" + rbgaToHexadecimal(style.backgroundColor) + "\"]";
-            _.each(query(selector, this.toolbar), (i, el) {
+            each(query(selector, this.toolbar) as i, el) {
                 _.dom.toggleClass(this, 'selected', true);
-            });
+            }
         }
     },
     checkFormat = () {
         var range = this.selection.range;
         if (range && range.commonElem) {
-            _.each(query('.bold, .italic, .underline, .strikethrough, .justifyleft, .justifycenter, .justifyright, .justifyfull, .blockquote, .insertunorderedlist, .insertorderedlist', this.toolbar), (i, el) {
+            each(query('.bold, .italic, .underline, .strikethrough, .justifyleft, .justifycenter, .justifyright, .justifyfull, .blockquote, .insertunorderedlist, .insertorderedlist', this.toolbar) as i, el) {
                 _.dom.toggleClass(this, 'active', false);
-            });
+            }
             var style = _.dom.getStyle(range.commonElem);
             var selector = [];
             // console.log(range, range.commonElem, style.fontWeight, style.fontStyle);
@@ -87,9 +87,9 @@ var checks = ((){
                 selector.push('.blockquote');
             }
             if (selector.length > 0) {
-                _.each(query(selector.join(', '), this.toolbar), (i, el) {
+                each(query(selector.join(', '), this.toolbar) as i, el) {
                     _.dom.toggleClass(this, 'active', true);
-                });
+                }
             }
             checkFontFormat.call(this, style);
         }
@@ -128,9 +128,9 @@ var checks = ((){
                     query('.se-imagestatus .se-border-input', this.statebar)[0].value = this.selectedImage.border || 0;
                     var nodes = query('.se-imagestatus .se-imgfloat', this.statebar),
                         select = this.selectedImage.style.float ? this.selectedImage.style.float : 'none';
-                    _.each(nodes, (i, node) {
+                    each(nodes as i, node) {
                         _.dom.toggleClass(node, 'active', false);
-                    });
+                    }
                     // console.log(select, _.arr.has(['left', 'right', 'none'], select));
                     if (_.arr.has(['left', 'right', 'none'], select) === false) {
                         select = 'none';
@@ -149,4 +149,4 @@ var checks = ((){
         format: checkFormat,
         status: checkStatus
     };
-}());
+}

@@ -7,11 +7,8 @@
  */
 
 // dialogs = pandora.storage.get(new _.Identifier('EDITOR_DIALOGS').toString()),
-((){
-    var conmands = {},
-    metheds = {},
-    tooltypes = {},
-    toolbaritems = [
+var builders = void ns {
+    var oolbaritems = [
         ['bold', 'italic', 'underline', 'strikethrough'],
         ['fontsize', 'forecolor', 'backcolor'],
         ['createlink', 'unlink', 'inserttable', 'insertfile', 'insertvideo', 'insertimage', 'insertemoticon'],
@@ -44,7 +41,6 @@
             '<i class="se-imgfloat" data-float="right">Pull Right</i>'
         ]
     },
-    creators = {},
     builders = {
         tools: {
             optionalitem(tool) {
@@ -201,45 +197,35 @@
             toolbar.innerHTML = html;
             _.dom.setAttr(toolbar, 'class', 'tangram se-toolbar');
             return toolbar;
-        }
-    };
-
-    var regMethod = (object, rewrite) {
-        _.extend(_.form.SimpleEditor.prototype, rewrite, object);
-    },
-    regCommand = (cmd, handler) {
-        if (conmands[cmd] === undefined) {
-            conmands[cmd] = handler;
-            tooltypes[cmd] = 'defaultitem';
-        }
-    },
-    regCreater = (cmd, handler, optional) {
-        if (creators[cmd] === undefined) {
-            if (_.util.bool.isFn(handler)) {
-                creators[cmd] = handler;
-                if (optional) {
-                    tooltypes[cmd] = 'optionalitem';
+        },
+        regMethod(object, rewrite) {
+            _.extend(_.form.SimpleEditor.prototype, rewrite, object);
+        },
+        regCommand(cmd, handler) {
+            if (conmands[cmd] === undefined) {
+                conmands[cmd] = handler;
+                tooltypes[cmd] = 'defaultitem';
+            }
+        },
+        regCreater(cmd, handler, optional) {
+            if (creators[cmd] === undefined) {
+                if (_.util.bool.isFn(handler)) {
+                    creators[cmd] = handler;
+                    if (optional) {
+                        tooltypes[cmd] = 'optionalitem';
+                    }
+                } else if (_.util.bool.isStr(handler) && builders.tools[handler]) {
+                    tooltypes[cmd] = handler;
                 }
-            } else if (_.util.bool.isStr(handler) && builders.tools[handler]) {
-                tooltypes[cmd] = handler;
+            }
+        },
+        regDialog(cmd, handler) {
+            if (dialogs[cmd] === undefined) {
+                dialogs[cmd] = handler;
+                tooltypes[cmd] = 'dialogitem';
             }
         }
-    },
-    regDialog = (cmd, handler) {
-        if (dialogs[cmd] === undefined) {
-            dialogs[cmd] = handler;
-            tooltypes[cmd] = 'dialogitem';
-        }
     };
 
-    @include 'commands/base.cmds';
-    @include 'commands/font.cmds';
-    @include 'commands/header.cmds';
-    @include 'commands/createlink.cmd';
-    @include 'commands/inserttable.cmd';
-    @include 'commands/insertfile.cmd';
-    @include 'commands/insertimage.cmd';
-    @include 'commands/insertvideo.cmd';
-    @include 'commands/insertemoticon.cmd';
-    @include 'commands/insertfragments.cmd';
-}());
+    return builders;
+}

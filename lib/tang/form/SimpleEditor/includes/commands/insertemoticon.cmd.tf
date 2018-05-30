@@ -5,14 +5,14 @@
  * 
  * Date: 2015-09-04
  */
-(() {
+void ns {
     var emoticons = {};
 
-    regMethod('insertEmoticon', (val) {
+    builders.regMethod('insertEmoticon', (val) {
         return this.execCommand('insertemoticon', val);
     });
 
-    regCommand('insertemoticon', (val) {
+    builders.regCommand('insertemoticon', (val) {
         if (val && val.pack && val.name) {
             if (emoticons[val.pack] && emoticons[val.pack][val.name]) {
                 if (this.options.emoticonsType == 'code') {
@@ -31,7 +31,7 @@
         return this;
     });
 
-    regCreater('insertemoticon', () {
+    builders.regCreater('insertemoticon', () {
         var pack = this.options.emoticonsTable && emoticons[this.options.emoticonsTable] ? this.options.emoticonsTable : parameters.emoticonsTable;
         var emtb = emoticons[pack];
         var path = parameters.basePath + 'emoticons/' + pack + '/';
@@ -43,7 +43,7 @@
         return html;
     });
 
-    regDialog('insertemoticon', (val) {
+    builders.regDialog('insertemoticon', (val) {
         if (val) {
             var arr = val.split(/,\s*/);
             if (arr.length > 1) {
@@ -56,12 +56,14 @@
         return null;
     });
 
-    // regEmoticon:
-    var regEmoticon = (theme, images) {
+    // builders.regEmoticon:
+    function regEmoticon (theme, images) {
         if (emoticons[theme] === undefined) {
             emoticons[theme] = images;
         }
     };
 
+    // log regEmoticon;
+
     @include 'emoticons/default';
-}());
+}

@@ -5,13 +5,12 @@
  * 
  * Date: 2015-09-04
  */
-(() {
-
-    regMethod('insertTable', (val) {
+void ns {
+    builders.regMethod('insertTable', (val) {
         return this.execCommand('inserttable', val);
     });
 
-    regCommand('inserttable', (val) {
+    builders.regCommand('inserttable', (val) {
         if (val) {
             var rows = parseInt(val.rows) || 1;
             var columns = parseInt(val.columns) || 1;
@@ -38,7 +37,7 @@
         return this;
     });
 
-    regCreater('inserttable', () {
+    builders.regCreater('inserttable', () {
         var html = '<dialog class="se-dialog">';
         // html += '<span class="se-title">Insert Table</span>';
         html += '<div class="se-attr"><div class="se-attr-left">';
@@ -57,7 +56,7 @@
         return html;
     });
 
-    regDialog('inserttable', (btn) {
+    builders.regDialog('inserttable', (btn) {
         var dialog = _.dom.closest(btn, 'dialog');
         var rowsInput = query('.se-attr .se-table-rows', dialog)[0];
         var columnsInput = query('.se-attr .se-table-columns', dialog)[0];
@@ -73,4 +72,4 @@
         }
         return null;
     });
-}());
+}

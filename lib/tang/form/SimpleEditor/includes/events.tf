@@ -7,13 +7,13 @@
  */
 ;
 
-var events = ((){
+var events = void ns {
     var resetStateBar = (editor) {
-        _.each(editor.richareas, (i, richarea) {
-            _.each(query('img[_selected=_selected]', richarea), (i, elem) {
+        each(editor.richareas as i, richarea) {
+            each(query('img[_selected=_selected]', richarea) as i, elem) {
                 _.dom.removeAttr(elem, '_selected');
-            });
-        });
+            }
+        }
         if (editor.statebar) {
             query('.se-imagestatus', editor.statebar)[0].style.display = 'none';
         }
@@ -128,7 +128,7 @@ var events = ((){
                     if (event.target.tagName == 'I') {
                         var editor = event.data,
                             dialog = _.dom.getAttr(this, 'data-se-dialog');
-                        _.each(query('.se-tool.data-se-dialog input[type=text], .se-tool.data-se-dialog textarea, .se-tool.data-se-dialog input.se-files', editor.toolbar), (i, el) {
+                        each(query('.se-tool.data-se-dialog input[type=text], .se-tool.data-se-dialog textarea, .se-tool.data-se-dialog input.se-files', editor.toolbar) as i, el) {
                             if (_.dom.hasClass(this, 'createlink')) {
                                 // console.log(editor.selection, editor.selection.getRange());
                                 var elem = editor.selection.getRange().commonElem;
@@ -143,7 +143,7 @@ var events = ((){
                             } else {
                                 this.value = '';
                             }
-                        });
+                        }
 
                         query('.se-tool.data-se-dialog .se-show', editor.toolbar)[0].innerHTML = '<span>click to upload</span>';
                         editor.showDialog(dialog, this);
@@ -207,9 +207,9 @@ var events = ((){
                                 return alert('Cannot more than 18 images!');
                             }
                             var list = '<ul class="' + ul_class + '">';
-                            _.each(files, () {
+                            each(files as file) {
                                 list += '<li><img src="' + _.draw.canvas.fileToBlob(this) + '" /></li>';
-                            });
+                            }
                             list += '</ul>';
                             previewer.innerHTML = list;
                             previewer.files = files;
@@ -272,10 +272,10 @@ var events = ((){
                         row = editor.selectedTableRow,
                         cell = editor.selectedTableCell,
                         index = _.dom.index(cell, row.cells);
-                    _.each(table.rows, (i, row) {
+                    each(table.rows as i, row) {
                         cell = row.cells[index] || row.cells[row.length - 1];
                         _.dom.after(row.cells[index], '<td>&nbsp;</td>');
-                    });
+                    }
                     event.data.selection.restoreSelection();
                     event.data.onchange();
                 },
@@ -299,4 +299,4 @@ var events = ((){
             }
         }
     };
-}());
+}

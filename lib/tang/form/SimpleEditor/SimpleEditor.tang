@@ -1,3 +1,5 @@
+@module;
+
 /*!
  * tanguage framework source code
  *
@@ -6,13 +8,13 @@
  * Date: 2015-09-04
  */
 
-use $ see/fa.css;
-use ~style.css;
 use $ util/bool;
 use $ util/Color;
-use $ dom;
+use $ dom/;
 use $ dom/HTMLCloser;
-
+use $ see/fa.css;
+use ~style.css;
+use ~../Selection;;
 
 var _ = pandora,
 doc = root.document,
@@ -21,22 +23,37 @@ query = _.dom.sizzle || _.dom.selector;
 
 namespace form {
     var SimpleEditors = {};
-    // @include 'includes/commands';
-    // @include 'includes/metheds';
-    @include 'includes/builders';
-    @include 'includes/checks';
+    var conmands = {};
+    // var metheds = {};
+    var creators = {};
+    var tooltypes = {};
     var dialogs = {};
+    @include 'includes/builders';
+    // log builders;
+    @include 'includes/checks';
     @include 'includes/events';
 
     @include 'includes/declare';
+
+    @include 'includes/commands/base.cmds';
+    @include 'includes/commands/font.cmds';
+    @include 'includes/commands/header.cmds';
+    @include 'includes/commands/createlink.cmd';
+    @include 'includes/commands/inserttable.cmd';
+    @include 'includes/commands/insertfile.cmd';
+    @include 'includes/commands/insertimage.cmd';
+    @include 'includes/commands/insertvideo.cmd';
+    @include 'includes/commands/insertfragments.cmd';
+
+    @include 'includes/commands/insertemoticon.cmd';
     public careatEditor = (elem, options) {
         return new _.form.SimpleEditor(elem, options);
     },
     careatEditors = (selector, options) {
         var editors = [];
-        _.each(query(selector), (i, el) {
+        each(query(selector) as i, el) {
             editors.push(_.form.careatEditor(el, options));
-        });
+        }
         return editors;
     },
     getEditorById = (id) {
