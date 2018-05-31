@@ -6,8 +6,7 @@
  * Date: 2015-09-04
  */
 
-var _ = pandora,
-    basePath = _.core.url() + 'form/SimpleEditor/';
+var basePath = _.core.url() + 'form/SimpleEditor/';
 
 var parameters = {
     basePath: basePath,

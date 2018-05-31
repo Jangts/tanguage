@@ -8,7 +8,7 @@
 
 // dialogs = pandora.storage.get(new _.Identifier('EDITOR_DIALOGS').toString()),
 var builders = void ns {
-    var oolbaritems = [
+    var toolbaritems = [
         ['bold', 'italic', 'underline', 'strikethrough'],
         ['fontsize', 'forecolor', 'backcolor'],
         ['createlink', 'unlink', 'inserttable', 'insertfile', 'insertvideo', 'insertimage', 'insertemoticon'],

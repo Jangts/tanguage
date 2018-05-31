@@ -1992,7 +1992,7 @@
             let localvars: any = {
                 parent: vars,
                 root: {
-                    namespace: null,
+                    namespace: vars.namespace,
                     public: {},
                     const: {},
                     private: {},
@@ -2427,7 +2427,7 @@
             let localvars: any = {
                 parent: vars,
                 root: {
-                    namespace: null,
+                    namespace: vars.namespace,
                     public: {},
                     const: {},
                     private: {},

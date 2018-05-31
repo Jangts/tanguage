@@ -28,6 +28,7 @@ namespace form {
     var creators = {};
     var tooltypes = {};
     var dialogs = {};
+    @include 'includes/parameters';
     @include 'includes/builders';
     // log builders;
     @include 'includes/checks';
