@@ -133,7 +133,7 @@ var events = void ns {
                                 // console.log(editor.selection, editor.selection.getRange());
                                 var elem = editor.selection.getRange().commonElem;
                                 if (!elem.tagName === 'A') {
-                                    elem = _.dom.closest(elem, 'a');
+                                    elem = _.dom.getClosestParent(elem, 'a');
                                 }
                                 if (elem) {
                                     this.value = _.dom.getAttr(elem, 'href');
@@ -146,6 +146,7 @@ var events = void ns {
                         }
 
                         query('.se-tool.data-se-dialog .se-show', editor.toolbar)[0].innerHTML = '<span>click to upload</span>';
+                        // log 'foo';
                         editor.showDialog(dialog, this);
                         editor.selection.restoreSelection();
                     };
@@ -195,7 +196,7 @@ var events = void ns {
                     // console.log(event);
                     var editor = event.data;
                     var previewer = this.parentNode,
-                        dialog = _.dom.closest(this, 'dialog'),
+                        dialog = _.dom.getClosestParent(this, 'dialog'),
                         input = query('.se-files', dialog)[0];
                     input.onchange = () {
                         var doneCallback = (files) {
@@ -287,7 +288,6 @@ var events = void ns {
             'keyup': {
                 '.se-richarea': kuprich
             },
-
             'change': {
                 '.se-statebar input'(event) {
                     // console.log(event);

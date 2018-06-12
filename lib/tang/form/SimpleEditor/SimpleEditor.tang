@@ -26,7 +26,6 @@ namespace form {
     var conmands = {};
     // var metheds = {};
     var creators = {};
-    var tooltypes = {};
     var dialogs = {};
     @include 'includes/parameters';
     @include 'includes/builders';
@@ -40,6 +39,7 @@ namespace form {
     @include 'includes/commands/font.cmds';
     @include 'includes/commands/header.cmds';
     @include 'includes/commands/createlink.cmd';
+    @include 'includes/commands/insert.cmds';
     @include 'includes/commands/inserttable.cmd';
     @include 'includes/commands/insertfile.cmd';
     @include 'includes/commands/insertimage.cmd';

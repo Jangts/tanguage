@@ -77,13 +77,13 @@ var checks = void ns {
                     selector.push('.justifyfull');
                     break;
             }
-            if (_.dom.closest(range.commonElem, 'ul', true)) {
+            if (_.dom.getClosestParent(range.commonElem, 'ul', true)) {
                 selector.push('.insertunorderedlist');
             }
-            if (_.dom.closest(range.commonElem, 'ol', true)) {
+            if (_.dom.getClosestParent(range.commonElem, 'ol', true)) {
                 selector.push('.insertorderedlist');
             }
-            if (_.dom.closest(range.commonElem, 'blockquote', true)) {
+            if (_.dom.getClosestParent(range.commonElem, 'blockquote', true)) {
                 selector.push('.blockquote');
             }
             if (selector.length > 0) {
@@ -100,9 +100,9 @@ var checks = void ns {
             // console.log(range && range.commonElem);
             if (range && range.commonElem) {
                 var style = _.dom.getStyle(range.commonElem),
-                    node = _.dom.closest(range.commonElem, 'table'),
-                    row = _.dom.closest(range.commonElem, 'tr'),
-                    cell = _.dom.closest(range.commonElem, 'td', true);
+                    node = _.dom.getClosestParent(range.commonElem, 'table'),
+                    row = _.dom.getClosestParent(range.commonElem, 'tr'),
+                    cell = _.dom.getClosestParent(range.commonElem, 'td', true);
 
 
                 query('.se-fontstatus .se-color-input', this.statebar)[0].value = _.util.Color.rgbFormat(style.color, 'hex6');

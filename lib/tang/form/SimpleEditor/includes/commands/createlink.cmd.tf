@@ -50,7 +50,7 @@ void ns {
     });
 
     builders.regDialog('createlink', (btn) {
-        var dialog = _.dom.closest(btn, 'dialog');
+        var dialog = _.dom.getClosestParent(btn, 'dialog');
         var input = query('.se-url .se-input', dialog)[0];
         var checkbox = query('.se-check .se-checkbox', dialog)[0]
         if (input && input.value != '') {

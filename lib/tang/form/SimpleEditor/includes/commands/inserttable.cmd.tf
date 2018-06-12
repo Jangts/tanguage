@@ -57,7 +57,7 @@ void ns {
     });
 
     builders.regDialog('inserttable', (btn) {
-        var dialog = _.dom.closest(btn, 'dialog');
+        var dialog = _.dom.getClosestParent(btn, 'dialog');
         var rowsInput = query('.se-attr .se-table-rows', dialog)[0];
         var columnsInput = query('.se-attr .se-table-columns', dialog)[0];
         var widthInput = query('.se-attr .se-table-width', dialog)[0];

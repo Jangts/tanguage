@@ -80,7 +80,7 @@ class .SimpleEditor {
                 builders.workspace.call(this, mainarea, options, isBuildStateBar);
             }
 
-            this.selection = new _.form.SimpleEditor.Selection(this);
+            this.selection = new _.form.Selection(this);
             SimpleEditors[this.uid] = this.listen();
         } else {
             return _.error('@param "elem" must be an element!');
@@ -137,8 +137,10 @@ class .SimpleEditor {
         return (formElement === this.cElement.Element) || _.dom.contain(formElement, this.cElement.Element);
     }
     hideExtTools() {
+        // log 'foo', query('.se-tool.data-se-dialog, .se-tool.data-se-cmds', this.toolbar);
         each(query('.se-tool.data-se-dialog, .se-tool.data-se-cmds', this.toolbar) as i, el) {
-            _.dom.toggleClass(this, 'active', false);
+            // log el, this;
+            _.dom.toggleClass(el, 'active', false);
         }
         return this;
     }

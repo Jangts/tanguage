@@ -26,7 +26,7 @@ void ns {
 
     builders.regMethod('insertHTM', (val) {
         return this.execCommand('insert', val);
-    }
+    });
 
     each(commands as cmd, handler) {
         builders.regCommand(cmd, handler);

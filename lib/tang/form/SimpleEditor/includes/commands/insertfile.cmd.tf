@@ -46,7 +46,7 @@ void ns {
     });
 
     builders.regDialog('insertfile', (btn) {
-        var dialog = _.dom.closest(btn, 'dialog');
+        var dialog = _.dom.getClosestParent(btn, 'dialog');
         var n_input = query('.se-aaa .se-input', dialog)[0],
             v_input = query('.se-url .se-input', dialog)[0];
         if (v_input && v_input.value) {
@@ -56,7 +56,7 @@ void ns {
     });
 
     builders.regDialog('uploadfile', (btn) {
-        var dialog = _.dom.closest(btn, 'dialog');
+        var dialog = _.dom.getClosestParent(btn, 'dialog');
         var input = query('.se-files', dialog)[0];
         var that = this;
         input.onchange = () {

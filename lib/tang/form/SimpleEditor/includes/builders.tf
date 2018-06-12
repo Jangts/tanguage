@@ -8,6 +8,7 @@
 
 // dialogs = pandora.storage.get(new _.Identifier('EDITOR_DIALOGS').toString()),
 var builders = void ns {
+    var tooltypes = {};
     var toolbaritems = [
         ['bold', 'italic', 'underline', 'strikethrough'],
         ['fontsize', 'forecolor', 'backcolor'],
@@ -186,9 +187,12 @@ var builders = void ns {
             }
 
             var html = '';
+            // log builders, tooltypes;
             for (var i = 0; i < toolbaritems.length; i++) {
                 html += '<div class="se-toolgroup">';
+                // log toolbaritems[i];
                 for (var j = 0; j < toolbaritems[i].length; j++) {
+                    // log toolbaritems[i][j], tooltypes[toolbaritems[i][j]];
                     html += builders.tools[tooltypes[toolbaritems[i][j]]].call(this, toolbaritems[i][j]);
                 }
                 html += '</div>';
