@@ -79,7 +79,7 @@ ns async with {
         };
     },
     ajax(url, options) {
-        console.log(arguments);
+        // console.log(arguments);
         switch (arguments.length) {
             case 2:
                 if (!_.util.bool.isObj(options)) {

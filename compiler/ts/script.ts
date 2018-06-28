@@ -117,7 +117,7 @@
             namespace: /(^|[\r\n])((@\d+L\d+P0):::)?(\s*)namespace\s+(\.{0,1}[\$a-zA-Z_][\$\w\.]*)\s*(;|\r|\n)/,
             // 位置是在replace usings 和 strings 之后才tidy的，所以还存在后接空格
             use: /(@\d+L\d+P\d+:::)\s*use\s*(\$|@)?\s+([\~\$\w\.\/\\\?\=\&]+)(\s+as(\s+(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)|\s*(@\d+L\d+P\d+:::\s*)?\{(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)*)\})(@\d+L\d+P\d+:::\s*)?)?\s*[;\r\n]/g,
-            include: /\s*@include\s+___boundary_[A-Z0-9_]{36}_(\d+)_as_string___[;\r\n]+/g,
+            include: /\s*@(include|string|template)\s+___boundary_[A-Z0-9_]{36}_(\d+)_as_string___[;\r\n]+/g,
             extends: /(@\d+L\d+P\d+O*\d*:::)?(void\s+ns|void\s+namespace|ns|namespace|extends)\s+((\.{0,3})[\$a-zA-Z_][\$\w\.]*)(\s+with)?\s*\{([^\{\}]*?)\}/g,
             anonspace: /(@\d+L\d+P\d+O*\d*:::)?(void\s+ns|void\s+namespace|ns|namespace)\s*\{([^\{\}]*?)\}/g,
             class: /(@\d+L\d+P\d+O*\d*:::)?((class|expands)(\s+\.{0,3}[\$a-zA-Z_][\$\w\.]*)?(\s+extends\s+\.{0,3}[\$a-zA-Z_][\$\w\.]*|ignore)?\s*\{[^\{\}]*?\})/g,
@@ -635,27 +635,38 @@
             if (this.sources.length) {
                 let on = true;
                 let id = this.sources.length - 1;
+                let str;
                 while (on) {
                     on = false;
-                    string = string.replace(replaceExpRegPattern.include, (match: string, index) => {
+                    string = string.replace(replaceExpRegPattern.include, (match: string, type:string, index) => {
                         // console.log(match, this.replacements[index][0]);
                         // console.log(this.sources);
                         // console.log(id, this.sources[id].src);
                         on = true;
-                        let str = this.onReadFile(this.replacements[index][0].replace(/('|"|`)/g, '').trim(), this.sources[id].src.replace(/[^\/\\]+$/, ''));
-                        str = this.markPosition(str, this.sources.length - 1);
-                        // console.log(str);
-                        str = this.replaceStrings(str);
-                        // console.log(str);
-                        str = this.replaceIncludes(str);
-                        return str + "\r\n";//this.onReadFile(match);
+                        let src = this.replacements[index][0].replace(/('|"|`)/g, '').trim();
+                        let context = this.sources[id].src.replace(/[^\/\\]+$/, '');
+                        switch (type){
+                            case 'string':
+                                str = path.resolve(context + src + '.tf');
+                                this.replacements[index][1] = str;
+                            case 'template':
+
+                            case 'include':
+                                str = this.onReadFile(src, context);
+                                str = this.markPosition(str, this.sources.length - 1);
+                                // console.log(str);
+                                str = this.replaceStrings(str);
+                                // console.log(str);
+                                str = this.replaceIncludes(str);
+                                return str + "\r\n";//this.onReadFile(match);
+                        }
                     });
                 }
             } else {
                 let on = true;
                 while (on) {
                     on = false;
-                    string = string.replace(replaceExpRegPattern.include, (match: string, index) => {
+                    string = string.replace(replaceExpRegPattern.include, (match: string, type: string, index) => {
                         // console.log(match);
                         on = true;
                         return this.onReadFile(this.replacements[index][0].replace(/('|"|`)/g, '').trim());
@@ -664,9 +675,12 @@
             }
             return string
         }
-        onReadFile(match: string, source: any = void 0): string {
+        onReadFile(source: string, context: any = void 0): string {
             // console.log(match, source);
-            return "/* include '" + match + "' not be supported. */\r\n";
+            return "/* include '" + source + "' not be supported. */\r\n";
+        }
+        getFileContent(source: string, context: any = void 0): string {
+            return "";
         }
         replaceBrackets(string: string): string {
             let left = string.indexOf('[');

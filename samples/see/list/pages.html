@@ -145,7 +145,7 @@
 
     <script type="text/javascript">
         tang.init().block('$_/dom/Elements', function(pandora, root, imports, undefined) {
-            var $ = pandora.dom.select;
+            var $ = pandora.dom.$;
             $('.list-item').click(function() {
                 if (parseInt($(this).html())) {
                     $('.list-item', this.parentNode).removeClass('actived');

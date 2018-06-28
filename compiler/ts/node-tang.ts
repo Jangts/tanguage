@@ -51,9 +51,9 @@ const mapBuilder = (omappings: any[], filename: string, osources:any[], version:
     return JSON.stringify(mappings)
 }
 
-const onReadFile = function (match: string, parent): string {
-    // console.log(match, parent.source);
-    let source = path.resolve(parent + match + '.tf');
+const onReadFile = function (src: string, context): string {
+    // console.log(src, context.source);
+    let source = path.resolve(context + src + '.tf');
     if (this.sources[source]) {
         this.error('source ' + source + 'had already been loaded.');
     }
@@ -63,6 +63,9 @@ const onReadFile = function (match: string, parent): string {
     });
     this.sources[source] = true;
     // console.log('src: ' + source);
+    return this.getFileContent(source);
+},
+getFileContent = function (source): string {
     return fs.readFileSync(source, 'utf-8');
 }
 
@@ -94,6 +97,7 @@ let handlers = {
         var script = fs.readFileSync(i, 'utf-8');
         var sugar = tanguage_script(script, i);
         sugar.onReadFile = onReadFile;
+        sugar.getFileContent = getFileContent;
         sugar.compile();
         if (options.generateSourceMap){
             var output: string = sugar.output + "\r\n//# sourceMappingURL=" + path.basename(o) + '.map';
