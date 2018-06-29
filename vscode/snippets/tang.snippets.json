@@ -77,7 +77,23 @@
             "@include '$1';",
             "$0"
         ],
-        "description": "Require Standard Block AS"
+        "description": "Include Code Fragment"
+    },
+    "tpl '…'": {
+        "prefix": "tpl",
+        "body": [
+            "@template '$1';",
+            "$0"
+        ],
+        "description": "Create Template Object By TPL File"
+    },
+    "template '…'": {
+        "prefix": "template",
+        "body": [
+            "@template '$1';",
+            "$0"
+        ],
+        "description": "Create Template Object By TPL File"
     },
     "class …": {
         "prefix": "class",

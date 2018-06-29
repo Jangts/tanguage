@@ -128,7 +128,7 @@
             "name": "comment.line.sharp.tang"
         },
         {
-            "begin": "@(module|include|ownprop|return)",
+            "begin": "@(module|include|template|ownprop|return)",
             "beginCaptures": {
                 "0": {
                     "name": "punctuation.definition.comment.tang"

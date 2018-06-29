@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 ;
+// const mkdirp = require('mkdirp');
 var fs = require('fs');
 var glob = require("glob");
 var path = require('path');
+var getDirName = require('path').dirname;
 var tanguage_script = require('./script.js');
 var vlq = require('./vlq.js');
 var commands = ['compile', 'test', 'cdir', 'build', 'help', 'version'];
@@ -14,7 +16,7 @@ var mapBuilder = function (omappings, filename, osources, version) {
     var last = [0, 0, 0, 0, 0];
     for (var s = 0; s < osources.length; s++) {
         // console.log(filename, osources[s].src, path.relative(filename, osources[s].src));
-        sources.push(path.relative(path.dirname(filename), osources[s].src).replace(/\\/g, '/'));
+        sources.push(path.relative(getDirName(filename), osources[s].src).replace(/\\/g, '/'));
     }
     for (var index_1 = 0; index_1 < omappings.length; index_1++) {
         var points = [];
@@ -40,9 +42,9 @@ var mapBuilder = function (omappings, filename, osources, version) {
     };
     return JSON.stringify(mappings);
 };
-var onReadFile = function (match, parent) {
-    // console.log(match, parent.source);
-    var source = path.resolve(parent + match + '.tf');
+var onReadFile = function (src, context) {
+    // console.log(src, context.source);
+    var source = path.resolve(context + src + '.tf');
     if (this.sources[source]) {
         this.error('source ' + source + 'had already been loaded.');
     }
@@ -52,6 +54,10 @@ var onReadFile = function (match, parent) {
     });
     this.sources[source] = true;
     // console.log('src: ' + source);
+    return fs.readFileSync(source, 'utf-8');
+}, getTplContent = function (src, context) {
+    // console.log(src, context.source);
+    var source = path.resolve(context + src + '.tpl');
     return fs.readFileSync(source, 'utf-8');
 };
 var options = {
@@ -64,6 +70,7 @@ var options = {
     toES6: false,
     compileMin: false
 };
+var script, sugar;
 var handlers = {
     compile: function (i, o) {
         if (i === void 0) { i = null; }
@@ -82,10 +89,14 @@ var handlers = {
         i = path.resolve(i);
         o = path.resolve(o);
         console.log('compile tang file ' + i + '...');
-        var script = fs.readFileSync(i, 'utf-8');
-        var sugar = tanguage_script(script, i);
+        script = fs.readFileSync(i, 'utf-8');
+        sugar = tanguage_script(script, i);
         sugar.onReadFile = onReadFile;
+        sugar.getTplContent = getTplContent;
         sugar.compile();
+        if (!fs.existsSync(getDirName(o))) {
+            fs.mkdirSync(getDirName(o));
+        }
         if (options.generateSourceMap) {
             var output = sugar.output + "\r\n//# sourceMappingURL=" + path.basename(o) + '.map';
             var mappings = mapBuilder(sugar.mappings, o, sugar.sources);
@@ -94,6 +105,7 @@ var handlers = {
         else {
             var output = sugar.output;
         }
+        sugar = null;
         fs.writeFileSync(o, output);
         console.log('file ' + o + ' compiled completed!');
     },

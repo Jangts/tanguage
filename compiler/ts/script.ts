@@ -117,7 +117,7 @@
             namespace: /(^|[\r\n])((@\d+L\d+P0):::)?(\s*)namespace\s+(\.{0,1}[\$a-zA-Z_][\$\w\.]*)\s*(;|\r|\n)/,
             // 位置是在replace usings 和 strings 之后才tidy的，所以还存在后接空格
             use: /(@\d+L\d+P\d+:::)\s*use\s*(\$|@)?\s+([\~\$\w\.\/\\\?\=\&]+)(\s+as(\s+(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)|\s*(@\d+L\d+P\d+:::\s*)?\{(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)*)\})(@\d+L\d+P\d+:::\s*)?)?\s*[;\r\n]/g,
-            include: /\s*@(include|string|template)\s+___boundary_[A-Z0-9_]{36}_(\d+)_as_string___[;\r\n]+/g,
+            include: /\s*@(include|template)\s+___boundary_[A-Z0-9_]{36}_(\d+)_as_string___[;\r\n]+/g,
             extends: /(@\d+L\d+P\d+O*\d*:::)?(void\s+ns|void\s+namespace|ns|namespace|extends)\s+((\.{0,3})[\$a-zA-Z_][\$\w\.]*)(\s+with)?\s*\{([^\{\}]*?)\}/g,
             anonspace: /(@\d+L\d+P\d+O*\d*:::)?(void\s+ns|void\s+namespace|ns|namespace)\s*\{([^\{\}]*?)\}/g,
             class: /(@\d+L\d+P\d+O*\d*:::)?((class|expands)(\s+\.{0,3}[\$a-zA-Z_][\$\w\.]*)?(\s+extends\s+\.{0,3}[\$a-zA-Z_][\$\w\.]*|ignore)?\s*\{[^\{\}]*?\})/g,
@@ -643,13 +643,14 @@
                         // console.log(this.sources);
                         // console.log(id, this.sources[id].src);
                         on = true;
-                        let src = this.replacements[index][0].replace(/('|"|`)/g, '').trim();
                         let context = this.sources[id].src.replace(/[^\/\\]+$/, '');
+                        let src = this.replacements[index][0].replace(/('|"|`)/g, '').trim();
                         switch (type){
-                            case 'string':
-                                str = path.resolve(context + src + '.tf');
-                                this.replacements[index][1] = str;
                             case 'template':
+                                str = this.getTplContent(src, context);
+                                // console.log(str, this.replacements[index]);
+                                this.replacements[index][0] = "'" + escape(str) + "'";
+                                return 'new ..dom.Template(unescape(___boundary_' + this.uid + '_' + index + '_as_string___));';
 
                             case 'include':
                                 str = this.onReadFile(src, context);
@@ -663,15 +664,17 @@
                     });
                 }
             } else {
-                let on = true;
-                while (on) {
-                    on = false;
-                    string = string.replace(replaceExpRegPattern.include, (match: string, type: string, index) => {
-                        // console.log(match);
-                        on = true;
-                        return this.onReadFile(this.replacements[index][0].replace(/('|"|`)/g, '').trim());
-                    });
-                }
+                console.log('FOOOO');
+                // let on = true;
+                // while (on) {
+                //     on = false;
+                //     string = string.replace(replaceExpRegPattern.include, (match: string, type: string, index) => {
+                //         // console.log(match);
+                //         on = true;
+                //         let src = this.replacements[index][0].replace(/('|"|`)/g, '').trim();
+                //         return this.onReadFile(this.replacements[index][0].replace(/('|"|`)/g, '').trim());
+                //     });
+                // }
             }
             return string
         }
@@ -679,7 +682,7 @@
             // console.log(match, source);
             return "/* include '" + source + "' not be supported. */\r\n";
         }
-        getFileContent(source: string, context: any = void 0): string {
+        getTplContent(source: string, context: any = void 0): string {
             return "";
         }
         replaceBrackets(string: string): string {

@@ -9,9 +9,12 @@
  */
 ;
 
+
+// const mkdirp = require('mkdirp');
 const fs = require('fs');
 const glob = require("glob");
 const path = require('path');
+const getDirName = require('path').dirname;
 const tanguage_script = require('./script.js');
 const vlq = require('./vlq.js');
 const commands = ['compile', 'test', 'cdir', 'build', 'help', 'version'];
@@ -23,7 +26,7 @@ const mapBuilder = (omappings: any[], filename: string, osources:any[], version:
     let last = [0, 0, 0, 0, 0];
     for (let s = 0; s < osources.length; s++) {
         // console.log(filename, osources[s].src, path.relative(filename, osources[s].src));
-        sources.push(path.relative(path.dirname(filename), osources[s].src).replace(/\\/g, '/'));
+        sources.push(path.relative(getDirName(filename), osources[s].src).replace(/\\/g, '/'));
     }
     for (let index = 0; index < omappings.length; index++) {
         let points = [];
@@ -63,9 +66,11 @@ const onReadFile = function (src: string, context): string {
     });
     this.sources[source] = true;
     // console.log('src: ' + source);
-    return this.getFileContent(source);
+    return fs.readFileSync(source, 'utf-8');
 },
-getFileContent = function (source): string {
+getTplContent = function (src: string, context): string {
+    // console.log(src, context.source);
+    let source = path.resolve(context + src + '.tpl');
     return fs.readFileSync(source, 'utf-8');
 }
 
@@ -79,6 +84,8 @@ let options = {
     toES6: false,
     compileMin: false
 }
+
+let script, sugar;
 
 let handlers = {
     compile(i = null, o = null) {
@@ -94,18 +101,22 @@ let handlers = {
         i = path.resolve(i);
         o = path.resolve(o);
         console.log('compile tang file ' + i + '...');
-        var script = fs.readFileSync(i, 'utf-8');
-        var sugar = tanguage_script(script, i);
+        script = fs.readFileSync(i, 'utf-8');
+        sugar = tanguage_script(script, i);
         sugar.onReadFile = onReadFile;
-        sugar.getFileContent = getFileContent;
+        sugar.getTplContent = getTplContent;
         sugar.compile();
-        if (options.generateSourceMap){
+        if (!fs.existsSync(getDirName(o))) {
+            fs.mkdirSync(getDirName(o));
+        }
+        if (options.generateSourceMap) {
             var output: string = sugar.output + "\r\n//# sourceMappingURL=" + path.basename(o) + '.map';
             let mappings = mapBuilder(sugar.mappings, o, sugar.sources);
             fs.writeFileSync(o + '.map', mappings);
-        }else{
+        } else {
             var output: string = sugar.output;
         }
+        sugar = null;
         fs.writeFileSync(o, output);
         console.log('file ' + o + ' compiled completed!');
     },

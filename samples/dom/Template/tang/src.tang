@@ -1,0 +1,11 @@
+use $ dom/Template;
+
+
+let document = root.document,
+view = document.getElementById('view'),
+template = @template 'tpl';
+view.innerHTML = template.complie({
+    greeting: 'Hello',
+    name: 'tanguage',
+}).echo();
+console.log(template);
