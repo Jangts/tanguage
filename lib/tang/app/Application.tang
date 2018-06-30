@@ -1,0 +1,30 @@
+use $ util/bool;
+use ~Component;
+
+namespace app;
+
+let _ = pandora;
+let {is, a} = _.util.bool;
+
+class .Application {
+    components = {};
+    _init(options = {}) {
+        if(options.components){
+			each (options.components as name, item) {
+                if(is(item, app.Component)){
+                    this.components[name] = item;
+                }else{
+                    this.components[name] = new app.Component(item.el, item.tpl);
+                }
+            }
+		}
+        else if(options.el){
+            this.components = {
+                main:new app.Component(options.el, options.tpl)
+            }
+        }
+        else{
+            _.error();
+        }
+    }
+}

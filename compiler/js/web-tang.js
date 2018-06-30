@@ -18,6 +18,7 @@ this.tang.init().auto([
         // console.log(script.type);
         if (script.type === "text/tanguage") {
             if (script.src) {
+                console.log(script.src);
                 // console.log(script.src, _.async.ajax);
                 var src = script.src;
                 var i = 0;

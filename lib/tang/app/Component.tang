@@ -1,0 +1,29 @@
+use $ util/type;
+use $ dom/Template;
+
+namespace app;
+
+let _ = pandora;
+const errors = {
+    NoElem: 'Sorry, component must have an Document Element(instance of DOM).'
+}
+
+class .Component {
+    Element;
+    template;
+    _init(elem, template) {
+        elem = _.util.type.isElement(elem) ? elem : doc.getElementById(elem);
+        if(elem){
+            this.Element = elem;
+        }else{
+            _.error(errors.NoElem);
+        }
+    }
+    html(content){
+        if(this.Element){
+            this.Element.innerHTML = content;
+        }else{
+            _.error(errors.NoElem);
+        }
+    }
+}

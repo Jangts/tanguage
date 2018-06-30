@@ -32,17 +32,22 @@ class .async.Request extends _.async.Promise {
             domain = url.split('/')[0].indexOf(':') > 0 ? url.split('/')[0] : location.host;
         }
         this.PromiseStatus = 'pending';
-        if (domain == location.host) {
-            var method = options.method && _.util.bool.isHttpMethod(options.method) || 'GET',
-                async = options.async || true;
-            this.url = url;
-            this.xmlhttp = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
-            this.xmlhttp.open(method, url, async);
-            this.readyState = 1;
-        } else {
-            this.readyState = 0;
-            this.PromiseValue = 'tanguageXHR Unable to perform cross domain operation';
-        };
+        if(location.host){
+            if (domain === location.host) {
+                var method = options.method && _.util.bool.isHttpMethod(options.method) || 'GET',
+                    async = options.async || true;
+                this.url = url;
+                this.xmlhttp = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+                this.xmlhttp.open(method, url, async);
+                this.readyState = 1;
+            } else {
+                this.readyState = 0;
+                this.PromiseValue = 'tanguageXHR Unable to perform cross domain operation.';
+            }
+        }else{
+            _.error('tanguageXHR Unable to perform local file operation.');
+        }
+
         this.handlers = {
             always: [],
             done: [],

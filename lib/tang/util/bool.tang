@@ -20,8 +20,8 @@ ns bool with {
     truthy(value) {
         return !!value
     },
-    is(file, __class) {
-        return _.util.bool.isObj(file) && file instanceof __class;
+    is(obj, __class) {
+        return _.util.bool.isObj(obj) && file instanceof __class;
     },
     isScala(vari) {
         return typeof vari === 'boolean' || typeof vari === 'string' || typeof vari === 'number';

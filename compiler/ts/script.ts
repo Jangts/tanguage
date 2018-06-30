@@ -1500,11 +1500,12 @@
                 elements = this.replacements[match[1]][0].replace(/(\[|\])/g, '').split(',');
             }
             value = this.pushVariableValueToLine(lines, vars, type, symbol, _symbol, value, position, endmark);
-            // console.log(elements, value);
+            console.log(elements, value);
             for (let i = 0; i < elements.length; i++) {
                 let position = this.getPosition(elements[i]);
                 let element = elements[i].replace(position.match, '').trim();
                 // console.log(element, element.indexOf('.'));
+                // console.log(element, position.match);
                 if (element.indexOf('.') >= 0) {
                     this.pushSetsToVars(lines, vars, type, i, symbol, _symbol, element, value, position, endmark)
                     break;
@@ -1566,6 +1567,7 @@
             if (type === '...') {
                 _value = 'pandora.remove(' + value + ', \'' + variable + '\')';
             } else if (type === 'object') {
+                // console.log(value, variable, index, endmark);
                 _value = value + '.' + variable;
             } else {
                 _value = value + '[' + index + ']';
@@ -1579,8 +1581,10 @@
                 }
             } else {
                 position.head = true;
+                // console.log(_symbol, variable, _value);
                 __value = _symbol + ' ' + variable + ' = ' + _value;
             }
+            console.log(__value); 
             lines.push({
                 type: 'line',
                 subtype: 'variable',
@@ -1609,6 +1613,7 @@
                     __value = _symbol + ' ' + variable + ' = ' + _value;
                 }
             }
+            // console.log(__value);
             lines.push({
                 type: 'line',
                 subtype: 'variable',

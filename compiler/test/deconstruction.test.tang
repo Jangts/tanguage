@@ -1,99 +1,103 @@
-let object = {
-    foo:'foo',
-    bar:'bar',
-    bla:'blabla',
-    array: ['hello', ', ', 'tanguage', 'framework']
-},
-{foo, bar, bla} = object;
+@module;
 
-log foo, bar, bla;
+let {is} = _.util.bool;
+let {is, a} = _.util.bool;
+// let object = {
+//     foo:'foo',
+//     bar:'bar',
+//     bla:'blabla',
+//     array: ['hello', ', ', 'tanguage', 'framework']
+// },
+// {foo, bar, bla} = object;
 
-fn(){
-    return  {
-        foo1:'foo',
-        bar1:'bar',
-        bla1:'blabla'
-    }
-}
+// log foo, bar, bla;
 
-let {foo1, bar1, bla1} = fn();
+// fn(){
+//     return  {
+//         foo1:'foo',
+//         bar1:'bar',
+//         bla1:'blabla'
+//     }
+// }
 
-log foo1, bar1, bla1;
+// let {foo1, bar1, bla1} = fn();
 
-class Class {
-    foo2 = 'foo';
-    bar2 = 'bar';
-    bla2 = 'blabla';
-}
+// log foo1, bar1, bla1;
 
-let {foo2, bar2, bla2} = new Class;
+// class Class {
+//     foo2 = 'foo';
+//     bar2 = 'bar';
+//     bla2 = 'blabla';
+// }
 
-log foo2, bar2, bla2;
+// let {foo2, bar2, bla2} = new Class;
 
-let {foo3, bar3, bla3} = {
-    foo3:'foo',
-    bar3:'bar',
-    bla3:'blabla',
-    array: ['hello', ', ', 'tanguage', 'framework']
-};
+// log foo2, bar2, bla2;
 
-log foo3, bar3, bla3;
+// let {foo3, bar3, bla3} = {
+//     foo3:'foo',
+//     bar3:'bar',
+//     bla3:'blabla',
+//     array: ['hello', ', ', 'tanguage', 'framework']
+// };
 
-let array = ['hello', ', ', 'tanguage', 'framework'];
+// log foo3, bar3, bla3;
 
-let [hello, comma, tanguage, framework] = array;
+// let array = ['hello', ', ', 'tanguage', 'framework'];
 
-log hello, comma, tanguage, framework;
+// let [hello, comma, tanguage, framework] = array;
 
-let [hello1, comma1, tanguage1, framework1] = object.array;
+// log hello, comma, tanguage, framework;
 
-log hello1, comma1, tanguage1, framework1;
+// let [hello1, comma1, tanguage1, framework1] = object.array;
 
-let [hello2, comma2, tanguage2, framework2] = object['array'];
+// log hello1, comma1, tanguage1, framework1;
 
-log hello2, comma2, tanguage2, framework2;
+// let [hello2, comma2, tanguage2, framework2] = object['array'];
 
-let [hello3, comma3, tanguage3, framework3] = ['hello', ', ', 'tanguage', 'framework'];
+// log hello2, comma2, tanguage2, framework2;
 
-log hello3, comma3, tanguage3, framework3;
+// let [hello3, comma3, tanguage3, framework3] = ['hello', ', ', 'tanguage', 'framework'];
 
-let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
-console.log(x); // 1
-console.log(y); // 2
-console.log(z); // { a: 3, b: 4 }
+// log hello3, comma3, tanguage3, framework3;
 
-let [l, m, ...n] = [1,2,3,4,5];
-console.log(l); // 1
-console.log(m); // 2
-console.log(n); //[3,4,5]
+// let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+// console.log(x); // 1
+// console.log(y); // 2
+// console.log(z); // { a: 3, b: 4 }
 
-
-// # 补充展开运算符
-
-// # function myFunction(x, y, z) { }
-// # var args = [0, 1, 2];
-// # myFunction.apply(null, args);
-function myFunction(x, y, z, l, m, n) { log x, y, z, l, m, n; }
-var args = [0, 1, 2];
-myFunction(...args, ...args);
-
-let aa = {aa:'aa'}
-let bb = {bb:'bb'}
-let cc = {...aa,...bb}
-log cc;
-
-var arr1 = ['two', 'three'];
-var arr2 = ['one', ...arr1, 'four', 'five'];
-log arr2;
-
-var arr = [1,2,3];
-var arr2 = [...arr]; // 和arr.slice()差不多
-arr2.push(4)
-log arr1, arr2;
-
-log [...document.querySelectorAll('div')];
+// let [l, m, ...n] = [1,2,3,4,5];
+// console.log(l); // 1
+// console.log(m); // 2
+// console.log(n); //[3,4,5]
 
 
-let numbers = [9, 4, 7, 1];
-let min = Math.min(...numbers); // 1
-log min;
+// // # 补充展开运算符
+
+// // # function myFunction(x, y, z) { }
+// // # var args = [0, 1, 2];
+// // # myFunction.apply(null, args);
+// function myFunction(x, y, z, l, m, n) { log x, y, z, l, m, n; }
+// var args = [0, 1, 2];
+// myFunction(...args, ...args);
+
+// let aa = {aa:'aa'}
+// let bb = {bb:'bb'}
+// let cc = {...aa,...bb}
+// log cc;
+
+// var arr1 = ['two', 'three'];
+// var arr2 = ['one', ...arr1, 'four', 'five'];
+// log arr2;
+
+// var arr = [1,2,3];
+// var arr2 = [...arr]; // 和arr.slice()差不多
+// arr2.push(4)
+// log arr1, arr2;
+
+// log [...document.querySelectorAll('div')];
+
+
+// let numbers = [9, 4, 7, 1];
+// let min = Math.min(...numbers); // 1
+// log min;
