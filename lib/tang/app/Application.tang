@@ -4,7 +4,7 @@ use ~Component;
 namespace app;
 
 let _ = pandora;
-let {is, a} = _.util.bool;
+let {is} = _.util.bool;
 
 class .Application {
     components = {};

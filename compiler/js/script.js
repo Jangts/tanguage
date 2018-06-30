@@ -665,7 +665,7 @@
                 }
             }
             else {
-                console.log('FOOOO');
+                // console.log('FOOOO', this.sources,  string);
                 // let on = true;
                 // while (on) {
                 //     on = false;
@@ -1469,6 +1469,7 @@
                     else {
                         var value = array.pop();
                     }
+                    // console.log(value, array);
                     for (var index_4 = 0; index_4 < array.length; index_4++) {
                         var element = array[index_4].trim();
                         // if (position && display === 'block') position.head = true;
@@ -1486,7 +1487,7 @@
                             var match_2 = element.match(/^___boundary_[A-Z0-9_]{36}_(\d+)_as_(sets|list)___$/);
                             if (match_2) {
                                 // console.log(match);
-                                this.pushVariablesToLine(lines, vars, match_2, symbol, _symbol, value, position, endmark);
+                                return this.pushVariablesToLine(lines, vars, match_2, symbol, _symbol, value, position, endmark);
                             }
                             else if (element.match(/^[\$a-zA-Z_][\$\w]*$/)) {
                                 // console.log(element);                    
@@ -1511,6 +1512,7 @@
                                 }
                             }
                         }
+                        // console.log('foo');
                         if (index_4 === array.length - 1) {
                             lines.push({
                                 type: 'line',
@@ -1543,7 +1545,7 @@
                 elements = this.replacements[match[1]][0].replace(/(\[|\])/g, '').split(',');
             }
             value = this.pushVariableValueToLine(lines, vars, type, symbol, _symbol, value, position, endmark);
-            console.log(elements, value);
+            // console.log(elements, value);
             for (var i = 0; i < elements.length; i++) {
                 var position_1 = this.getPosition(elements[i]);
                 var element = elements[i].replace(position_1.match, '').trim();
@@ -1630,8 +1632,11 @@
                 position.head = true;
                 // console.log(_symbol, variable, _value);
                 __value = _symbol + ' ' + variable + ' = ' + _value;
+                if (length === 1) {
+                    __value += endmark;
+                }
             }
-            console.log(__value);
+            // console.log(__value);
             lines.push({
                 type: 'line',
                 subtype: 'variable',
