@@ -1257,7 +1257,7 @@
                 .replace(/([^,;\s])\s*(@\d+L\d+P(\d+O)?0:::[^\.\(\[)])/g, '$1;$2')
                 .replace(/(___boundary_[A-Z0-9_]{36}_\d+_as_(if)___)[;\s]*/g, "$1 ")
                 .replace(/[;\r\n]+(___boundary_[A-Z0-9_]{36}_\d+_as_(expression|if|class|function|extends|call|log|object|objlike|closure|parentheses)___)/g, ";$1")
-                .replace(/(___boundary_[A-Z0-9_]{36}_\d+_as_(log|closure)___)[;\r\n]+/g, "$1;\r\n")
+                .replace(/(___boundary_[A-Z0-9_]{36}_\d+_as_(log|closure|function)___)[;\r\n]+/g, "$1;\r\n")
                 .replace(/[;\r\n]+((@\d+L\d+P\d+O?\d*:::)?___boundary_[A-Z0-9_]{36}_\d+_as_(callschain)___)/g, "$1")
                 .trim();
             const sentences: string[] = string.split(/\s*;+\s*/);

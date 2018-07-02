@@ -135,4 +135,4 @@ namespace arr {
     }
 }
 
-this.module.exports = _.arr.diff;
+this.module.exports = ..arr.diff;

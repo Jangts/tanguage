@@ -1,0 +1,88 @@
+@module;
+
+/*!
+ * tanguage framework source code
+ *
+ * class dom.VElement
+ *
+ * Date 2017-04-06
+ */
+
+use $ util/bool;
+use $ arr/diff;
+use $ obj/;
+use $ dom/;
+use $ dom/VElement/patch;
+use $ dom/VElement/diff;
+
+namespace dom;
+
+
+let
+_ = pandora,
+doc = root.document,
+console = root.console;
+
+@include 'VElement/patch';
+@include 'VElement/diff';
+
+/**
+ * tanguage Virtual Document Object Model
+ * 一个轻量的虚拟DOM类
+ * 
+ * @param   {String}    tagName         要创建的元素的标签名
+ * @param   {Object}    props           元素的属性
+ * @param   {Array}     children        子元素（节点）
+ * 
+ */
+class .VElement {
+    _init (tagName, props, children) {
+        if (_.util.bool.isArr(props)) {
+            children = props;
+            props = {};
+        };
+        this.tagName = tagName;
+        this.props = props || {};
+        this.children = children || [];
+        this.key = props ? props.key : undefined;
+        var count = 0;
+        each(this.children as i, child) {
+            if (child instanceof _.dom.VElement) {
+                count += child.count;
+            } else {
+                children[i] = '' + child;
+            }
+            count++;
+        }
+        this.count = count;
+    }
+    render () {
+        var elem = doc.createElement(this.tagName);
+        var props = this.props;
+        for (var propName in props) {
+            var propValue = props[propName];
+            _.dom.set(elem, propName, propValue);
+        }
+        each(this.children as i, child) {
+            var childEl = (child instanceof _.dom.VElement) ?
+                child.render() :
+                doc.createTextNode(child);
+            elem.appendChild(childEl);
+        }
+        return elem;
+    }
+}
+
+_.extend(_.dom, true, {
+    createVElement (tagName, props, children) {
+        return new _.dom.VElement(tagName, props, children);
+    }
+});
+
+_.extend(_.dom.VElement, true, {
+    patch: patch,
+    diff: diff,
+    create (tagName, props, children) {
+        return new _.dom.VElement(tagName, props, children);
+    }
+});
