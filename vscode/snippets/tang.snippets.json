@@ -149,7 +149,7 @@
     "ns … with {}": {
         "prefix": "nswith",
         "body": [
-            "namespace ${1:spacename} {",
+            "namespace ${1:spacename} with {",
             "\t${0:# members...}",
             "}",
             ""

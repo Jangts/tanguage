@@ -23,8 +23,6 @@ _ = pandora,
 doc = root.document,
 console = root.console;
 
-@include 'VElement/patch';
-@include 'VElement/diff';
 
 /**
  * tanguage Virtual Document Object Model
