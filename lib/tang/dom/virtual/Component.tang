@@ -2,5 +2,16 @@
 
 use $ virtual/Element;
 
+namespace dom.virtual;
+
+
 @include 'patch';
 @include 'diff';
+
+class .Component {
+    Element;
+    vElement;
+    _init(options={}){
+
+    }
+}

@@ -225,5 +225,5 @@ extends ..dom.selector {
 extends pandora {
     byId: byId,
     byCn: byClass,
-    selector: ..dom.sizzle || query
+    selector: ..dom.sizzle || selector
 }
