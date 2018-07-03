@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 ;
-// const mkdirp = require('mkdirp');
 var fs = require('fs');
 var glob = require("glob");
 var path = require('path');

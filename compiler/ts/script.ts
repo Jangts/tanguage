@@ -101,12 +101,12 @@
         // ' = ', ' += ', ' -= ', ' *= ', ' /= ', ' %= ', ' <<= ', ' >>= ', ' >>>= ', ' &= ', ' ^= ', ' |= '
         operators: any = {
             // 因为打开所有括号后还有检查一次符号，所以运算量还是会带有括号
-            mixed: /([\$\w]\s*(@\d+L\d+P\d+O*\d*:::)?)(\=\=|\!\=|\=|\!|\+|\-|\*|\/|\%|<<|>>|>>>|\&|\^|\||<|>)=\s*((@\d+L\d+P\d+O*\d*:::)?(\+|\-)?[\$\w\.])/g,
+            mixed: /([\$\w]\s*(@\d+L\d+P\d+O*\d*:::)?)(\=\=|\!\=|\=|\!|\+|\-|\*|\/|\%|<<|>>|>>>|\&|\^|\||<|>)=\s*((@\d+L\d+P\d+O*\d*:::)?(\+|\-)?[\$\w\.]|@boundary_)/g,
             bool: /([\$\w]\s*(@\d+L\d+P\d+O*\d*:::)?)(\&\&|\|\||\<|\<\<|\>\>\>|\>\>|\>)\s*((@\d+L\d+P\d+O*\d*:::)?(\+|\-)?[\$\w\.])/g,
             op: /([\$\w]\s*(@\d+L\d+P\d+O*\d*:::)?)(\+|\-|\*\*|\*|\/|\%|\&)\s*((@\d+L\d+P\d+O*\d*:::)?(\s+(\+|\-))?[\$\w\.])/g,
             owords: /\s+(@\d+L\d+P\d+O*\d*:::)?(in|of)\s+(@\d+L\d+P\d+O*\d*:::)?/g,
             sign: /(^|\s*[^\+\-])(\+|\-)([\$\w\.])/g,
-            swords: /(^|[^\$\w])(typeof|instanceof|void|delete)\s+((@\d+L\d+P\d+O*\d*:::)?\+*\-*[\$\w\.])/g,
+            swords: /(^|[^\$\w])(typeof|instanceof|void|delete)\s+((@\d+L\d+P\d+O*\d*:::)?\+*\-*[\$\w\.]|@boundary_)/g,
             before: /(\+\+|\-\-|\!|\~)\s*([\$\w\.])/g,
             after: /([\$\w\.])[ \t]*(@\d+L\d+P\d+O*\d*:::)?(\+\+|\-\-)/g,
             error: /(.*)(\+\+|\-\-|\+|\-)(.*)/g
@@ -1283,7 +1283,7 @@
                             this.error('Unexpected `' + definition[1] + '` in `' + this.decode(sentence) + '`.');
                         } else {
                             // console.log(sentence);
-                            this.pushSentenceToLines(lines, sentence, 'block');
+                            this.pushSentenceToLines(lines, sentence, (inOrder && (s===sentences.length-1)) ? 'inline' : 'block');
                         }
                     } else if (array.length === 3) {
                         this.pushVariablesToLines(lines, vars, array[0], array[2], array[1], inOrder);
@@ -3920,8 +3920,13 @@
             string = string.replace(/\s*(@boundary_\d+_as_operator::)[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)/g, "\r\n$2   $3 $1 ");
             string = string.replace(/[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_midword::)\s*/g, "\r\n$1$2$3");
             // 格式化相应符号
-            string = string.replace(/\s*(\=|\?)\s*/g, " $1 ");
-            string = string.replace(/\s+(\:)[\s]*/g, " $1 ");
+            string = string.replace(/[;\s]*(\=|\?)[;\s]*/g, " $1 ");
+            
+            string = string.replace(/\s+(\:)[;\s]*/g, " $1 ");
+            string = string.replace(/[;\s]+(@boundary_\d+_as_comments::)(\:)[;\s]*/g, " $2 $1");
+            // console.log(string);
+            string = string.replace(/[^\:\S]+(\:)\s*(@boundary_\d+_as_comments::)/g, " $1 $2");
+            // console.log(string);
             // 删除多余空白与换行
             // string = string.replace(/[ ]+/g, " ");
             string = string.replace(/\s+[\r\n]([ \t])/g, "\r\n$1");
