@@ -39,6 +39,7 @@ this.tang.init().auto([
                 });
                 // ;
             } else {
+                // console.log(script.innerHTML);
                 tanguage_script(script.innerHTML).compile().run(function (content) {
                     console.log(this.ast);
                     console.log(content);

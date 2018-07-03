@@ -103,7 +103,7 @@ var diff = ns {
         return (node.props && node.props.hasOwnProperty('ignore'));
     }
 
-    public diff (oldTree, newTree) {
+    public diff = (oldTree, newTree) {
         var index = 0;
         var patches = {};
         dfsWalk(oldTree, newTree, index, patches);
