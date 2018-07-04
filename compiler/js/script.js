@@ -153,9 +153,8 @@
         return new Array(number + 1).join(string);
     };
     var Script = /** @class */ (function () {
-        function Script(input, source, toES6, run) {
+        function Script(input, source, run) {
             if (source === void 0) { source = ''; }
-            if (toES6 === void 0) { toES6 = false; }
             if (run === void 0) { run = false; }
             this.isMainBlock = true;
             this.namespace = '';
@@ -165,7 +164,6 @@
             this.using_as = {};
             this.ast = {};
             this.configinfo = '{}';
-            this.toES6 = false;
             this.posimap = [];
             this.sources = [];
             this.tess = {};
@@ -184,9 +182,6 @@
             this.xvars = [];
             this.replacements = [['{}'], ['/='], ['/'], [' +'], [' -'], [' === '], [' + '], ['\"'], ['"\\r\\n"'], ['[^\\/']];
             this.mappings = [];
-            if (toES6) {
-                this.toES6 = true;
-            }
             if (source) {
                 this.sources.push({
                     id: 0,
@@ -1273,7 +1268,7 @@
             if (inOrder === void 0) { inOrder = false; }
             // console.log(string);
             string = string
-                .replace(/:::(var|let|public)\s+(@\d+L\d+P(\d+O)?0:::)/g, ':::$1 ')
+                .replace(/:::(var|let|const|public)\s+(@\d+L\d+P(\d+O)?0:::)/g, ':::$1 ')
                 .replace(/([^,;\s])\s*(@\d+L\d+P(\d+O)?0:::[^\.\(\[)])/g, '$1;$2')
                 .replace(/(___boundary_[A-Z0-9_]{36}_\d+_as_(if)___)[;\s]*/g, "$1 ")
                 .replace(/[;\r\n]+(___boundary_[A-Z0-9_]{36}_\d+_as_(expression|if|class|function|extends|call|log|object|objlike|closure|parentheses)___)/g, ";$1")
@@ -1287,12 +1282,12 @@
                 var sentence = sentences[s].trim();
                 // console.log(sentence);
                 if (sentence) {
-                    var array = sentence.split(/:::(var|let|public|const)\s+/);
+                    var array = sentence.split(/:::(var|let|const|public)\s+/);
                     // console.log(array, sentence);
                     if (array.length === 1) {
-                        var definition = sentence.match(/(^|\s+)(var|let|public|const)(\s+|$)/);
+                        var definition = sentence.match(/(^|\s+)(var|let|const|public)(\s+|$)/);
                         if (definition) {
-                            var definitions = sentence.match(/(@boundary_\d+_as_midword::|(@boundary_\d+_as_midword::\s*)?___boundary_[A-Z0-9_]{36}_\d+_as_(if|closure)___)\s*(var|let|public)\s+([\s\S]+)/);
+                            var definitions = sentence.match(/(@boundary_\d+_as_midword::|(@boundary_\d+_as_midword::\s*)?___boundary_[A-Z0-9_]{36}_\d+_as_(if|closure)___)\s*(var|let|const|public)\s+([\s\S]+)/);
                             // console.log(definitions);
                             if (definitions) {
                                 this.pushSentenceToLines(lines, definitions[1], 'inline');
@@ -1422,12 +1417,7 @@
         Script.prototype.pushVariableToLines = function (lines, vars, posi, code, symbol, display) {
             if (display === void 0) { display = 'block'; }
             if (code) {
-                if (this.toES6 && symbol !== 'public') {
-                    var _symbol = symbol;
-                }
-                else {
-                    var _symbol = 'var';
-                }
+                var _symbol = 'var';
                 switch (display) {
                     case 'first':
                         return this.pushVariableToLine(lines, vars, code, symbol, posi, 'inline', _symbol, ',');
@@ -2887,7 +2877,7 @@
             this.pushCodes(body, this.ast.vars, this.ast.body, 1, this.namespace);
             this.pushFooter(foot, this.ast.vars);
             this.preoutput = head.join('') + this.trim(body.join('')) + foot.join('');
-            this.output = this.pickUpMap(this.restoreStrings(this.preoutput, true));
+            this.output = this.pickUpMap(this.restoreStrings(this.preoutput, true)).replace(/[\s;]+;/g, ';');
             // console.log(this.output);
             return this;
         };
@@ -3218,7 +3208,6 @@
             var elements = [];
             var static_elements = [];
             var cname = '';
-            var toES6 = false;
             if (element.subtype === 'stdClass') {
                 cname = 'pandora.' + element.cname.trim();
                 codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(\'' + element.cname.trim() + '\', ');
@@ -3227,13 +3216,7 @@
                 if (element.cname && element.cname.trim()) {
                     cname = element.cname.trim();
                     if (cname.match(/^[\$a-zA-Z_][\$\w]*$/)) {
-                        if (this.toES6) {
-                            codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'class ' + cname + ' ');
-                            toES6 = true;
-                        }
-                        else {
-                            codes.push(indent1 + 'var ' + this.pushPostionsToMap(element.posi) + cname + ' = ' + 'pandora.declareClass(');
-                        }
+                        codes.push(indent1 + 'var ' + this.pushPostionsToMap(element.posi) + cname + ' = ' + 'pandora.declareClass(');
                     }
                     else {
                         codes.push(indent1 + this.pushPostionsToMap(element.posi) + cname + ' = ' + 'pandora.declareClass(');
@@ -3241,144 +3224,63 @@
                 }
                 else {
                     this.pushPostionsToMap(element.posi, codes);
-                    if (this.toES6) {
-                        codes.push('class ');
-                        toES6 = true;
-                    }
-                    else {
-                        codes.push('pandora.declareClass(');
-                    }
+                    codes.push('pandora.declareClass(');
                 }
             }
             if (element.base) {
-                if (toES6) {
-                    codes.push('extends ' + element.base);
-                }
-                else {
-                    codes.push(element.base + ', ');
-                }
+                codes.push(element.base + ', ');
             }
             codes.push('{');
             // console.log(element);
-            if (toES6) {
-                for (var index_20 = 0; index_20 < element.body.length; index_20++) {
-                    var member = element.body[index_20];
-                    var elem = [];
-                    // console.log(member);
-                    switch (member.type) {
-                        case 'method':
-                            if (member.fname === '_init') {
-                                member.fname === 'constructor';
-                            }
-                            elem.push(indent2 + member.fname + ' ');
+            var overrides = {};
+            var setters = [];
+            var getters = [];
+            var indent3 = "\r\n" + stringRepeat("\t", layer + 2);
+            for (var index_20 = 0; index_20 < element.body.length; index_20++) {
+                var member = element.body[index_20];
+                var elem = [];
+                // console.log(member);
+                switch (member.type) {
+                    case 'method':
+                        elem.push(indent2 + member.fname + ': ');
+                        this.pushFunctionCodes(elem, member, layer + 1, namespace);
+                        elements.push(elem.join(''));
+                        break;
+                    case 'overrideMethod':
+                        overrides[member.fname] = overrides[member.fname] || {};
+                        var argslen = member.args.length;
+                        if (!overrides[member.fname][argslen]) {
+                            var fname = overrides[member.fname][argslen] = '___override_method_' + member.fname + '_' + argslen;
+                            elem.push(indent2 + fname + ': ');
                             this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                            // console.log(member.fname, elem);
-                            elements.push(elem.join('').replace(/\s*function\s*\(/, '('));
-                            break;
-                        case 'prop':
-                            elem.push(indent2 + member.pname + ' = ');
-                            this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
-                            static_elements.push(elem.join('') + ';');
-                            break;
-                        case 'setPropMethod':
-                            elem.push(indent2 + 'set ' + member.fname + ' ');
-                            this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                            elements.push(elem.join('').replace(/\s*function\s*\(/, '('));
-                            break;
-                        case 'getPropMethod':
-                            elem.push(indent2 + 'get ' + member.fname + ' ');
-                            this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                            elements.push(elem.join('').replace(/\s*function\s*\(/, '('));
-                            break;
-                        case 'staticMethod':
-                            elem.push(indent2 + 'static ' + member.fname + ' ');
-                            this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                            elements.push(elem.join('').replace(/\s*function\s*\(/, '('));
-                            break;
-                        case 'staticProp':
-                            elem.push(indent2 + 'static ' + member.fname + ' = ');
-                            this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
-                            static_elements.push(elem.join('') + ';');
-                            break;
-                    }
-                }
-            }
-            else {
-                var overrides = {};
-                var setters = [];
-                var getters = [];
-                var indent3 = "\r\n" + stringRepeat("\t", layer + 2);
-                for (var index_21 = 0; index_21 < element.body.length; index_21++) {
-                    var member = element.body[index_21];
-                    var elem = [];
-                    // console.log(member);
-                    switch (member.type) {
-                        case 'method':
-                            elem.push(indent2 + member.fname + ': ');
-                            this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                            if (this.toES6) {
-                                elements.push(elem.join('').replace(/\:\s+function\s*\(/, '('));
-                            }
-                            else {
-                                elements.push(elem.join(''));
-                            }
-                            break;
-                        case 'overrideMethod':
-                            overrides[member.fname] = overrides[member.fname] || {};
-                            var argslen = member.args.length;
-                            if (!overrides[member.fname][argslen]) {
-                                var fname = overrides[member.fname][argslen] = '___override_method_' + member.fname + '_' + argslen;
-                                elem.push(indent2 + fname + ': ');
-                                this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                                if (this.toES6) {
-                                    elements.push(elem.join('').replace(/\:\s+function\s*\(/, '('));
-                                }
-                                else {
-                                    elements.push(elem.join(''));
-                                }
-                            }
-                            break;
-                        case 'prop':
-                            elem.push(indent2 + member.pname + ': ');
-                            this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
                             elements.push(elem.join(''));
-                            break;
-                        case 'setPropMethod':
-                            elem.push(indent3 + member.fname + ': ');
-                            this.pushFunctionCodes(elem, member, layer + 2, namespace);
-                            if (this.toES6) {
-                                setters.push(elem.join('').replace(/\:\s+function\s*\(/, '('));
-                            }
-                            else {
-                                setters.push(elem.join(''));
-                            }
-                            break;
-                        case 'getPropMethod':
-                            elem.push(indent3 + member.fname + ': ');
-                            this.pushFunctionCodes(elem, member, layer + 2, namespace);
-                            if (this.toES6) {
-                                getters.push(elem.join('').replace(/\:\s+function\s*\(/, '('));
-                            }
-                            else {
-                                getters.push(elem.join(''));
-                            }
-                            break;
-                        case 'staticMethod':
-                            elem.push(indent2 + member.fname + ': ');
-                            this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                            if (this.toES6) {
-                                static_elements.push(elem.join('').replace(/\:\s+function\s*\(/, '('));
-                            }
-                            else {
-                                static_elements.push(elem.join(''));
-                            }
-                            break;
-                        case 'staticProp':
-                            elem.push(indent2 + member.pname + ': ');
-                            this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
-                            static_elements.push(elem.join(''));
-                            break;
-                    }
+                        }
+                        break;
+                    case 'prop':
+                        elem.push(indent2 + member.pname + ': ');
+                        this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
+                        elements.push(elem.join(''));
+                        break;
+                    case 'setPropMethod':
+                        elem.push(indent3 + member.fname + ': ');
+                        this.pushFunctionCodes(elem, member, layer + 2, namespace);
+                        setters.push(elem.join(''));
+                        break;
+                    case 'getPropMethod':
+                        elem.push(indent3 + member.fname + ': ');
+                        this.pushFunctionCodes(elem, member, layer + 2, namespace);
+                        getters.push(elem.join(''));
+                        break;
+                    case 'staticMethod':
+                        elem.push(indent2 + member.fname + ': ');
+                        this.pushFunctionCodes(elem, member, layer + 1, namespace);
+                        static_elements.push(elem.join(''));
+                        break;
+                    case 'staticProp':
+                        elem.push(indent2 + member.pname + ': ');
+                        this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
+                        static_elements.push(elem.join(''));
+                        break;
                 }
                 this.pushOverrideMethod(elements, overrides, indent2, indent3);
                 if (setters.length) {
@@ -3388,29 +3290,20 @@
                     elements.push(indent2 + '_getters: {' + getters.join(',') + '}');
                 }
             }
-            if (toES6) {
-                if (elements.length) {
-                    codes.push(elements.join(''));
-                }
-                codes.push(indent1 + '}');
-                codes.push(indent1);
+            if (elements.length) {
+                codes.push(elements.join(','));
             }
-            else {
-                if (elements.length) {
-                    codes.push(elements.join(','));
+            codes.push(indent1 + '})');
+            if (cname) {
+                if (static_elements.length) {
+                    codes.push(';' + indent1 + 'pandora.extend(' + cname + ', {');
+                    codes.push(static_elements.join(','));
+                    codes.push(indent1 + '});');
                 }
-                codes.push(indent1 + '})');
-                if (cname) {
-                    if (static_elements.length) {
-                        codes.push(';' + indent1 + 'pandora.extend(' + cname + ', {');
-                        codes.push(static_elements.join(','));
-                        codes.push(indent1 + '});');
-                    }
-                    else {
-                        codes.push(';');
-                    }
-                    codes.push(indent1);
+                else {
+                    codes.push(';');
                 }
+                codes.push(indent1);
             }
             return codes;
         };
@@ -3451,8 +3344,8 @@
             }
             if (element.args.length) {
                 var args = [];
-                for (var index_22 = 0; index_22 < element.args.length; index_22++) {
-                    args.push(this.pushPostionsToMap(element.args[index_22][1]) + element.args[index_22][0]);
+                for (var index_21 = 0; index_21 < element.args.length; index_21++) {
+                    args.push(this.pushPostionsToMap(element.args[index_21][1]) + element.args[index_21][0]);
                 }
                 codes.push(args.join(', '));
             }
@@ -3595,20 +3488,15 @@
             // console.log(element);
             var overrides = {};
             var indent3 = "\r\n" + stringRepeat("\t", layer + 2);
-            for (var index_23 = 0; index_23 < element.body.length; index_23++) {
-                var member = element.body[index_23];
+            for (var index_22 = 0; index_22 < element.body.length; index_22++) {
+                var member = element.body[index_22];
                 var elem = [];
                 // console.log(member);
                 switch (member.type) {
                     case 'method':
                         elem.push(indent2 + member.fname + ': ');
                         this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                        if (this.toES6) {
-                            elements.push(elem.join('').replace(/\:\s+function\s*\(/, '('));
-                        }
-                        else {
-                            elements.push(elem.join(''));
-                        }
+                        elements.push(elem.join(''));
                         break;
                     case 'overrideMethod':
                         overrides[member.fname] = overrides[member.fname] || {};
@@ -3617,12 +3505,7 @@
                             var fname = overrides[member.fname][argslen] = '___override_method_' + member.fname + '_' + argslen;
                             elem.push(indent2 + fname + ': ');
                             this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                            if (this.toES6) {
-                                elements.push(elem.join('').replace(/\:\s+function\s*\(/, '('));
-                            }
-                            else {
-                                elements.push(elem.join(''));
-                            }
+                            elements.push(elem.join(''));
                         }
                         break;
                     case 'prop':
@@ -3633,12 +3516,7 @@
                     case 'staticMethod':
                         elem.push(indent2 + member.fname + ': ');
                         this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                        if (this.toES6) {
-                            static_elements.push(elem.join('').replace(/\:\s+function\s*\(/, '('));
-                        }
-                        else {
-                            static_elements.push(elem.join(''));
-                        }
+                        static_elements.push(elem.join(''));
                         break;
                     case 'staticProp':
                         elem.push(indent2 + member.pname + ': ');
@@ -3671,12 +3549,7 @@
                     // console.log(overrides[fname]);
                     var elem = [];
                     elem.push(indent2 + fname + ': ');
-                    if (this.toES6) {
-                        elem.push('(){');
-                    }
-                    else {
-                        elem.push('function(){');
-                    }
+                    elem.push('function(){');
                     var element = overrides[fname];
                     for (var args in element) {
                         if (element.hasOwnProperty(args)) {
@@ -3729,20 +3602,15 @@
                     _break = true;
                 }
                 // console.log(_break, element);
-                for (var index_24 = 0; index_24 < element.body.length; index_24++) {
-                    var member = element.body[index_24];
+                for (var index_23 = 0; index_23 < element.body.length; index_23++) {
+                    var member = element.body[index_23];
                     var elem = [];
                     // console.log(member);
                     switch (member.type) {
                         case 'method':
                             elem.push(member.fname + ': ');
                             this.pushFunctionCodes(elem, member, _layer, namespace);
-                            if (this.toES6) {
-                                elements.push(elem.join('').replace(/\:\s+function\s*\(/, '('));
-                            }
-                            else {
-                                elements.push(elem.join(''));
-                            }
+                            elements.push(elem.join(''));
                             break;
                         case 'objProp':
                             elem.push(member.pname + ': ');
@@ -4056,10 +3924,10 @@
                 var mapping = [];
                 var match = void 0;
                 while (match = line.match(/\/\*\s@posi(\d+)\s\*\//)) {
-                    var index_25 = match.index;
+                    var index_24 = match.index;
                     var position = this.posimap[match[1]];
                     // console.log(position);
-                    mapping.push([index_25, position.o[0], position.o[1], position.o[2], 0]);
+                    mapping.push([index_24, position.o[0], position.o[1], position.o[2], 0]);
                     line = line.replace(match[0], '');
                 }
                 // while (match = line.match(/\/\*\s@posi(\d+)\s\*\//)) {

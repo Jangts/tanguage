@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELEMENT | Increasing Items</title>
+    <title>Virtual DOM Increasing Items</title>
     <script src="../../../lib/dist/runtime.js" data-tang-debug></script>
 </head>
 
@@ -14,17 +14,26 @@
 
 <script>
     tang.init().block([
-        '$_/dom/VElement/'
+        '$_/dom/virtual/'
     ], function(pandora, root, imports, undefined) {
-        var document = root.document;
-
-        var el = pandora.dom.VElement.create,
-            diff = pandora.dom.VElement.diff,
-            patch = pandora.dom.VElement.patch;
+        var doc = root.document,
+            vdom = pandora.dom.virtual,
+            el = pandora.dom.createVElement;
 
         var count = 0;
 
-        function renderTree() {
+        var app = vdom({
+            vNode: {
+                tagName:'div',
+                props: {
+                    'id': 'container'
+                }, 
+                childs: renderChilds()
+            },
+            context: true
+        });
+
+        function renderChilds() {
             count++;
 
             var items = []
@@ -36,28 +45,24 @@
                 items.push(el('li', ['Item #' + i]));
             }
 
-            return el('div', {
-                'id': 'container'
-            }, [
+            return [
                 el('h1', {
                     style: 'color: ' + color
                 }, ['simple virtal dom']),
                 el('p', ['the count is :' + count]),
                 el('ul', items)
-            ]);
-        };
-
-        var tree = renderTree();
-        var root = tree.render();
-        document.body.appendChild(root);
+            ];
+        }
 
         setInterval(function() {
-            var newTree = renderTree();
-            var patches = diff(tree, newTree);
+            var patches = app.patch({
+                tagName:'div',
+                props: {
+                    'id': 'container'
+                }, 
+                childs: renderChilds()
+            });
             console.log(patches);
-            patch(root, patches);
-
-            tree = newTree
         }, 1000);
     }, true);
 </script>

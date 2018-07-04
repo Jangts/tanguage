@@ -12,17 +12,13 @@ use $ util/bool;
 use $ arr/diff;
 use $ obj/;
 use $ dom/;
-use $ dom/VElement/patch;
-use $ dom/VElement/diff;
 
-namespace dom;
-
+namespace dom.virtual;
 
 let
 _ = pandora,
 doc = root.document,
 console = root.console;
-
 
 /**
  * tanguage Virtual Document Object Model
@@ -33,7 +29,7 @@ console = root.console;
  * @param   {Array}     children        子元素（节点）
  * 
  */
-class .VElement {
+class .Element {
     _init (tagName, props, children) {
         if (_.util.bool.isArr(props)) {
             children = props;
@@ -45,7 +41,7 @@ class .VElement {
         this.key = props ? props.key : undefined;
         var count = 0;
         each(this.children as i, child) {
-            if (child instanceof _.dom.VElement) {
+            if (child instanceof _.dom.virtual.Element) {
                 count += child.count;
             } else {
                 children[i] = '' + child;
@@ -62,7 +58,7 @@ class .VElement {
             _.dom.set(elem, propName, propValue);
         }
         each(this.children as i, child) {
-            var childEl = (child instanceof _.dom.VElement) ?
+            var childEl = (child instanceof _.dom.virtual.Element) ?
                 child.render() :
                 doc.createTextNode(child);
             elem.appendChild(childEl);
@@ -70,17 +66,3 @@ class .VElement {
         return elem;
     }
 }
-
-_.extend(_.dom, true, {
-    createVElement (tagName, props, children) {
-        return new _.dom.VElement(tagName, props, children);
-    }
-});
-
-_.extend(_.dom.VElement, true, {
-    patch: patch,
-    diff: diff,
-    create (tagName, props, children) {
-        return new _.dom.VElement(tagName, props, children);
-    }
-});

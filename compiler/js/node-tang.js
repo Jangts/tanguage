@@ -66,7 +66,6 @@ var options = {
     containSubDir: false,
     generateSourceMap: false,
     safemode: false,
-    toES6: false,
     compileMin: false
 };
 var script, sugar;
@@ -178,9 +177,6 @@ process.argv.slice(index).forEach(function (item) {
             break;
         case "-s":
             options.safemode = true;
-            break;
-        case "-es6":
-            options.toES6 = true;
             break;
         default:
             if (options.inputDir) {

@@ -7,26 +7,20 @@
  */
 ;
 
-var patch = void ns {
-    const
-    REPLACE = 0,
-    REORDER = 1,
-    PROPS = 2,
-    TEXT = 3;
-
+public patch = void ns {
     setProps (node, props) {
         for (var key in props) {
             if (props[key] === void 666) {
                 //void any === undefined
-                _.dom.removeAttr(key);
+                ..dom.removeAttr(node, key);
             } else {
                 var value = props[key]
-                _.dom.set(node, key, value);
+                ..dom.set(node, key, value);
             }
         }
     }
     reorderChildren (node, moves) {
-        var staticNodeList = _.obj.toArray(node.childNodes);
+        var staticNodeList = ..obj.toArray(node.childNodes);
         var maps = {};
 
         each(staticNodeList as i, node) {
@@ -59,6 +53,7 @@ var patch = void ns {
     }
     applyPatches (node, currentPatches) {
         each(currentPatches as i, currentPatch) {
+            // log currentPatch;
             switch (currentPatch.type) {
                 case REPLACE:
                     var newNode = (typeof currentPatch.node === 'String') ? doc.createTextNode(currentPatch.node) : currentPatch.node.render();
@@ -99,14 +94,8 @@ var patch = void ns {
         }
     }
 
-    return {
-        REPLACE: REPLACE,
-        REORDER: REORDER,
-        PROPS: PROPS,
-        TEXT: TEXT,
-        walk: (node, patches) {
-            var walker = { index: 0 };
-            dfsWalk(node, walker, patches)
-        }
+    return (node, patches, walker) {
+        // log walker;
+        dfsWalk(node, walker, patches)
     }
 }

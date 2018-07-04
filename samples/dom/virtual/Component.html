@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual DOM Component</title>
+    <script src="../../../lib/dist/runtime.js" data-tang-debug></script>
+</head>
+
+<body>
+    <script>
+        tang.init().block([
+            '$_/dom/virtual/'
+        ], function(pandora, root, imports, undefined) {
+            var
+            vdom = pandora.dom.virtual,
+            el = pandora.dom.createVElement;
+
+            var app = vdom({
+                vNode: {
+                    tagName:'div',
+                    props: {
+                        'id': 'container'
+                    },
+                    childs:[
+                        el('h1', {
+                            style: 'color:red'
+                        }, ['simple virtual dom']),
+                        el('p', ['hello world']),
+                        el('ul', [el('li', ['item #1']), el('li', ['item #2'])])
+                    ]
+                },
+                context: true
+            });
+
+            var patches = app.patch({
+                tagName:'div',
+                props: {
+                    'id': 'container'
+                },
+                childs:[
+                    el('h5', {
+                        style: 'color:red'
+                    }, ['simple virtual dom']),
+                    el('p', ['hello world']),
+                    el('ul', [el('li', ['item #1']), el('li', ['item #2']), el('li', ['item #3'])])
+                ]
+            });
+
+            console.log(JSON.stringify(patches), patches);
+        }, true);
+    </script>
+</body>
+
+</html>

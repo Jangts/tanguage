@@ -1,6 +1,13 @@
 @module;
 
-use $ virtual/Component;
+use $ dom/virtual/Component;
 
-public virtual = (){
+namespace dom;
+
+public virtual = (options={}){
+    return new virtual.Component(options);
 };
+
+public createVElement (tagName, props, children) {
+    return new virtual.Element(tagName, props, children);
+}

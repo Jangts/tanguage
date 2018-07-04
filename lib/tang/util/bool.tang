@@ -21,7 +21,8 @@ ns bool with {
         return !!value
     },
     is(obj, __class) {
-        return _.util.bool.isObj(obj) && file instanceof __class;
+        // log __class;
+        return _.util.bool.isObj(obj) && obj instanceof __class;
     },
     isScala(vari) {
         return typeof vari === 'boolean' || typeof vari === 'string' || typeof vari === 'number';

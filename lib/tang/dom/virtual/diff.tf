@@ -6,23 +6,23 @@
  * Date 2017-04-06
  */
 ;
-var diff = ns {
+public diff = void ns {
     dfsWalk(oldNode, newNode, index, patches) {
         var currentPatch = [];
         // Node is removed.
         if (newNode === null) {
             // Real DOM node will be removed when perform reordering, so has no needs to do anthings in here
             // TextNode content replacing
-        } else if (_.util.bool.isStr(oldNode) && _.util.bool.isStr(newNode)) {
+        } else if (isStr(oldNode) && isStr(newNode)) {
             if (newNode !== oldNode) {
-                currentPatch.push({ type: patch.TEXT, content: newNode });
+                currentPatch.push({ type: TEXT, content: newNode });
             }
             // Nodes are the same, diff old node's props and children
         } else if (oldNode.tagName === newNode.tagName && oldNode.key === newNode.key) {
             // Diff props
             var propsPatches = diffProps(oldNode, newNode);
             if (propsPatches) {
-                currentPatch.push({ type: patch.PROPS, props: propsPatches });
+                currentPatch.push({ type: PROPS, props: propsPatches });
             }
             // Diff children. If the node has a `ignore` property, do not diff children
             if (!isIgnoreChildren(newNode)) {
@@ -36,7 +36,7 @@ var diff = ns {
             }
             // Nodes are not the same, replace the old node with new node
         } else {
-            currentPatch.push({ type: patch.REPLACE, node: newNode });
+            currentPatch.push({ type: REPLACE, node: newNode });
         }
 
         if (currentPatch.length) {
@@ -45,11 +45,11 @@ var diff = ns {
     }
 
     diffChildren(oldChildren, newChildren, index, patches, currentPatch) {
-        var diffs = _.arr.diff(oldChildren, newChildren, 'key');
+        var diffs = ..arr.diff(oldChildren, newChildren, 'key');
         newChildren = diffs.children;
 
         if (diffs.moves.length) {
-            var reorderPatch = { type: patch.REORDER, moves: diffs.moves };
+            var reorderPatch = { type: REORDER, moves: diffs.moves };
             currentPatch.push(reorderPatch);
         }
 
@@ -103,7 +103,7 @@ var diff = ns {
         return (node.props && node.props.hasOwnProperty('ignore'));
     }
 
-    public diff = (oldTree, newTree) {
+    return (oldTree, newTree) {
         var index = 0;
         var patches = {};
         dfsWalk(oldTree, newTree, index, patches);

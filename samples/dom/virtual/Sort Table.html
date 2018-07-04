@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELEMENT | Sort Table</title>
+    <title>Virtual DOM Sort Table</title>
     <script src="../../../lib/dist/runtime.js" data-tang-debug></script>
     <style>
         thead {
@@ -28,19 +28,16 @@
 </body>
 <script>
     tang.init().block([
-        '$_/dom/VElement/'
+        '$_/dom/virtual/'
     ], function(pandora, root, imports, undefined) {
-        var document = root.document;
+        var doc = root.document,
+            vdom = pandora.dom.virtual,
+            el = pandora.dom.createVElement;
 
-        var el = pandora.dom.VElement.create,
-            diff = pandora.dom.VElement.diff,
-            patch = pandora.dom.VElement.patch;
-
-        var AGE = 'age';
-        var REPUTATION = 'reputation';
-
-        var sortKey = AGE;
-        var sortType = 1;
+        var AGE = 'age',
+            REPUTATION = 'reputation',
+            sortKey = AGE,
+            sortType = 1;
 
         var list = [{
             username: 'Jerry',
@@ -69,10 +66,22 @@
             uid: 'user5'
         }];
 
-        // render table
-        function renderTree() {
+        var app = vdom({
+            vNode: {
+                tagName:'div',
+                childs: renderChilds()
+            },
+            context: true
+        });
+
+        var sortTriggers = [
+            doc.getElementById('sort-head1'),
+            doc.getElementById('sort-head2')
+        ];
+
+        function renderChilds() {
             var rows = renderRows();
-            return el('div', [
+            return [
                 el('b', ['sortKey: ' + sortKey, ' | sortType: ' + (sortType ? 'up' : 'down')]),
                 el('table', [
                     el('thead', [
@@ -91,7 +100,7 @@
                     ]),
                     el('tbody', rows)
                 ])
-            ]);
+            ];
         };
 
         function renderRows() {
@@ -112,15 +121,6 @@
             return rows
         }
 
-        var tree = renderTree();
-        var dom = tree.render();
-        document.body.appendChild(dom);
-
-        var sortTriggers = [
-            document.getElementById('sort-head1'),
-            document.getElementById('sort-head2')
-        ];
-
         for (var i = 0, len = sortTriggers.length; i < len; i++) {
             var trigger = sortTriggers[i];
             (function(_trigger) {
@@ -133,10 +133,10 @@
                         sortType = 1;
                     }
                     sortData();
-                    var newTree = renderTree();
-                    var patches = diff(tree, newTree);
-                    patch(dom, patches);
-                    tree = newTree;
+                    app.patch({
+                        tagName:'div',
+                        childs: renderChilds()
+                    });
                 }
             })(trigger);
         }

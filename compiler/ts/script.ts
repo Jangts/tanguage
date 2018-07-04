@@ -1250,7 +1250,7 @@
         getLines(string: string, vars: any, inOrder: boolean = false): object[] {
             // console.log(string);
             string = string
-                .replace(/:::(var|let|public)\s+(@\d+L\d+P(\d+O)?0:::)/g, ':::$1 ')
+                .replace(/:::(var|let|const|public)\s+(@\d+L\d+P(\d+O)?0:::)/g, ':::$1 ')
                 .replace(/([^,;\s])\s*(@\d+L\d+P(\d+O)?0:::[^\.\(\[)])/g, '$1;$2')
                 .replace(/(___boundary_[A-Z0-9_]{36}_\d+_as_(if)___)[;\s]*/g, "$1 ")
                 .replace(/[;\r\n]+(___boundary_[A-Z0-9_]{36}_\d+_as_(expression|if|class|function|extends|call|log|object|objlike|closure|parentheses)___)/g, ";$1")
@@ -1264,12 +1264,12 @@
                 const sentence = sentences[s].trim();
                 // console.log(sentence);
                 if (sentence) {
-                    const array = sentence.split(/:::(var|let|public|const)\s+/);
+                    const array = sentence.split(/:::(var|let|const|public)\s+/);
                     // console.log(array, sentence);
                     if (array.length === 1) {
-                        let definition = sentence.match(/(^|\s+)(var|let|public|const)(\s+|$)/);
+                        let definition = sentence.match(/(^|\s+)(var|let|const|public)(\s+|$)/);
                         if (definition) {
-                            let definitions = sentence.match(/(@boundary_\d+_as_midword::|(@boundary_\d+_as_midword::\s*)?___boundary_[A-Z0-9_]{36}_\d+_as_(if|closure)___)\s*(var|let|public)\s+([\s\S]+)/);
+                            let definitions = sentence.match(/(@boundary_\d+_as_midword::|(@boundary_\d+_as_midword::\s*)?___boundary_[A-Z0-9_]{36}_\d+_as_(if|closure)___)\s*(var|let|const|public)\s+([\s\S]+)/);
                             // console.log(definitions);
                             if (definitions) {
                                 this.pushSentenceToLines(lines, definitions[1], 'inline');
@@ -2812,7 +2812,7 @@
             this.pushCodes(body, this.ast.vars, this.ast.body, 1, this.namespace);
             this.pushFooter(foot, this.ast.vars);
             this.preoutput = head.join('') + this.trim(body.join('')) + foot.join('');
-            this.output = this.pickUpMap(this.restoreStrings(this.preoutput, true));
+            this.output = this.pickUpMap(this.restoreStrings(this.preoutput, true)).replace(/[\s;]+;/g, ';');
             // console.log(this.output);
             return this;
         }
