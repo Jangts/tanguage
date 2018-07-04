@@ -1,3 +1,5 @@
+@module;
+
 use $ util/bool;
 use ~Component;
 

@@ -186,7 +186,7 @@ ns async with {
             success(txt) {
                 doneCallback(JSON.parse(txt));
             },
-            fail: failCallback
+            fail: failCallback,
         });
     }
 }

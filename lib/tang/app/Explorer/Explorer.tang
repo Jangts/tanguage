@@ -1,0 +1,12 @@
+@module;
+
+use $ app/;
+
+namespace app;
+
+class .Explorer {
+    _init(options = {}) {
+        this.prop = options.prop;
+        # code...
+    }
+}

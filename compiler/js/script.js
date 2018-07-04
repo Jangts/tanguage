@@ -2921,32 +2921,32 @@
                     imports.push(this.pushPostionsToMap(this.getPosition(this.imports[index_15 + 1])) + "'" + this.imports[index_15] + "'");
                 }
                 // console.log(this.imports, imports);
-                codes.push("\r\n\t" + imports.join(",\r\n\t") + "\r\n");
+                codes.push("\r\n    " + imports.join(",\r\n    ") + "\r\n");
             }
             if (this.isMainBlock) {
                 codes.push('], function (pandora, root, imports, undefined) {');
             }
             else {
                 codes.push('], function (pandora, root, imports, undefined) {');
-                codes.push("\r\n\tvar module = this.module;");
+                codes.push("\r\n    var module = this.module;");
             }
             if (this.namespace) {
                 var namespace = this.namespace.replace(/\.$/, "");
                 var name_1 = namespace.replace(/^(.*\.)?([\$a-zA-Z_][\$\w]*)$/, "$2");
-                codes.push("\r\n\tvar " + name_1 + " = pandora.ns('" + namespace + "', {});");
+                codes.push("\r\n    var " + name_1 + " = pandora.ns('" + namespace + "', {});");
             }
             return codes;
         };
         Script.prototype.pushAlias = function (codes, vars, alias) {
             for (var key in vars.locals) {
-                codes.push("\r\n\tvar " + vars.locals[key] + ' = ' + key + ';');
+                codes.push("\r\n    var " + vars.locals[key] + ' = ' + key + ';');
             }
             for (var key_1 in alias) {
                 // console.log(key);
                 // let position = this.getPosition(key);
                 // let _key = key.replace(position.match, '').trim();
                 var value = alias[key_1][0].toLowerCase();
-                codes.push("\r\n\t" + this.pushPostionsToMap(alias[key_1][2]) + "var " + this.patchVariables(key_1, vars));
+                codes.push("\r\n    " + this.pushPostionsToMap(alias[key_1][2]) + "var " + this.patchVariables(key_1, vars));
                 codes.push(" = imports['" + value);
                 if (alias[key_1][1] === '*') {
                     codes.push("'];");
@@ -2971,7 +2971,7 @@
         };
         Script.prototype.pushElement = function (codes, vars, element, layer, namespace) {
             if (namespace === void 0) { namespace = this.namespace; }
-            var indent = "\r\n" + stringRepeat("\t", layer);
+            var indent = "\r\n" + stringRepeat("    ", layer);
             switch (element.type) {
                 case 'arraylike':
                     this.pushArrayCodes(codes, element, layer, namespace);
@@ -3055,9 +3055,9 @@
                 var _break = false;
                 // console.log(element.body[0]);
                 if (element.body[0].posi && element.body[0].posi.head) {
-                    indent1 = "\r\n" + stringRepeat("\t", _layer);
+                    indent1 = "\r\n" + stringRepeat("    ", _layer);
                     _layer++;
-                    indent2 = "\r\n" + stringRepeat("\t", _layer);
+                    indent2 = "\r\n" + stringRepeat("    ", _layer);
                     codes.push(indent2);
                     _break = true;
                 }
@@ -3102,7 +3102,7 @@
                     element.posi.head = false;
                 }
                 if (element.posi.head) {
-                    var indent = "\r\n" + stringRepeat("\t", layer);
+                    var indent = "\r\n" + stringRepeat("    ", layer);
                     codes.push(indent);
                 }
                 this.pushPostionsToMap(element.posi, codes);
@@ -3126,7 +3126,7 @@
                 if ((element.args.length > 1) && element.args[0].posi && element.args[0].posi.head) {
                     // console.log(true);
                     _layer++;
-                    indent2 = "\r\n" + stringRepeat("\t", _layer);
+                    indent2 = "\r\n" + stringRepeat("    ", _layer);
                     // codes.push(indent2);
                     _break = true;
                 }
@@ -3177,13 +3177,13 @@
             var _break = false;
             // console.log(element);
             if (element.type === 'log') {
-                indent = "\r\n" + stringRepeat("\t", _layer);
+                indent = "\r\n" + stringRepeat("    ", _layer);
                 codes.push(indent + this.pushPostionsToMap(element.posi) + 'root.console');
             }
             else if (element.posi && element.posi.head) {
                 _layer++;
                 _break = true;
-                indent = "\r\n" + stringRepeat("\t", _layer);
+                indent = "\r\n" + stringRepeat("    ", _layer);
             }
             for (var index_19 = 0; index_19 < element.calls.length; index_19++) {
                 var method = element.calls[index_19];
@@ -3203,8 +3203,8 @@
             return codes;
         };
         Script.prototype.pushClassCodes = function (codes, element, layer, namespace) {
-            var indent1 = "\r\n" + stringRepeat("\t", layer);
-            var indent2 = "\r\n" + stringRepeat("\t", layer + 1);
+            var indent1 = "\r\n" + stringRepeat("    ", layer);
+            var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
             var elements = [];
             var static_elements = [];
             var cname = '';
@@ -3235,14 +3235,15 @@
             var overrides = {};
             var setters = [];
             var getters = [];
-            var indent3 = "\r\n" + stringRepeat("\t", layer + 2);
+            var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
             for (var index_20 = 0; index_20 < element.body.length; index_20++) {
                 var member = element.body[index_20];
                 var elem = [];
                 // console.log(member);
                 switch (member.type) {
                     case 'method':
-                        elem.push(indent2 + member.fname + ': ');
+                        // console.log(member);
+                        elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
                         this.pushFunctionCodes(elem, member, layer + 1, namespace);
                         elements.push(elem.join(''));
                         break;
@@ -3251,33 +3252,33 @@
                         var argslen = member.args.length;
                         if (!overrides[member.fname][argslen]) {
                             var fname = overrides[member.fname][argslen] = '___override_method_' + member.fname + '_' + argslen;
-                            elem.push(indent2 + fname + ': ');
+                            elem.push(indent2 + this.pushPostionsToMap(member.posi) + fname + ': ');
                             this.pushFunctionCodes(elem, member, layer + 1, namespace);
                             elements.push(elem.join(''));
                         }
                         break;
                     case 'prop':
-                        elem.push(indent2 + member.pname + ': ');
+                        elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.pname + ': ');
                         this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
                         elements.push(elem.join(''));
                         break;
                     case 'setPropMethod':
-                        elem.push(indent3 + member.fname + ': ');
+                        elem.push(indent3 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
                         this.pushFunctionCodes(elem, member, layer + 2, namespace);
                         setters.push(elem.join(''));
                         break;
                     case 'getPropMethod':
-                        elem.push(indent3 + member.fname + ': ');
+                        elem.push(indent3 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
                         this.pushFunctionCodes(elem, member, layer + 2, namespace);
                         getters.push(elem.join(''));
                         break;
                     case 'staticMethod':
-                        elem.push(indent2 + member.fname + ': ');
+                        elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
                         this.pushFunctionCodes(elem, member, layer + 1, namespace);
                         static_elements.push(elem.join(''));
                         break;
                     case 'staticProp':
-                        elem.push(indent2 + member.pname + ': ');
+                        elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.pname + ': ');
                         this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
                         static_elements.push(elem.join(''));
                         break;
@@ -3296,7 +3297,7 @@
             codes.push(indent1 + '})');
             if (cname) {
                 if (static_elements.length) {
-                    codes.push(';' + indent1 + 'pandora.extend(' + cname + ', {');
+                    codes.push(';' + indent1 + this.pushPostionsToMap(element.posi) + 'pandora.extend(' + cname + ', {');
                     codes.push(static_elements.join(','));
                     codes.push(indent1 + '});');
                 }
@@ -3308,7 +3309,7 @@
             return codes;
         };
         Script.prototype.pushFunctionCodes = function (codes, element, layer, namespace) {
-            var indent = "\r\n" + stringRepeat("\t", layer);
+            var indent = "\r\n" + stringRepeat("    ", layer);
             if (element.posi) {
                 var posi = this.pushPostionsToMap(element.posi);
             }
@@ -3355,7 +3356,7 @@
                 // console.log(element);
                 if (element.vars.type === 'root') {
                     for (var key in element.vars.locals) {
-                        codes.push(indent + "\tvar " + element.vars.locals[key] + ' = ' + key + ';');
+                        codes.push(indent + "    var " + element.vars.locals[key] + ' = ' + key + ';');
                     }
                 }
                 element.body.push(semicolon);
@@ -3369,9 +3370,9 @@
             return codes;
         };
         Script.prototype.pushExtendsCodes = function (codes, element, layer, namespace) {
-            var indent1 = "\r\n" + stringRepeat("\t", layer);
-            var indent2 = "\r\n" + stringRepeat("\t", layer + 1);
-            var indent3 = "\r\n" + stringRepeat("\t", layer + 2);
+            var indent1 = "\r\n" + stringRepeat("    ", layer);
+            var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
+            var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
             if (element.posi) {
                 var posi = this.pushPostionsToMap(element.posi);
             }
@@ -3422,8 +3423,8 @@
             return codes;
         };
         Script.prototype.pushExpressionCodes = function (codes, element, layer, namespace) {
-            var indent1 = "\r\n" + stringRepeat("\t", layer);
-            var indent2 = "\r\n" + stringRepeat("\t", layer);
+            var indent1 = "\r\n" + stringRepeat("    ", layer);
+            var indent2 = "\r\n" + stringRepeat("    ", layer);
             if (element.posi) {
                 var posi = this.pushPostionsToMap(element.posi);
             }
@@ -3458,8 +3459,8 @@
             return codes;
         };
         Script.prototype.pushExpandClassCodes = function (codes, element, layer, namespace) {
-            var indent1 = "\r\n" + stringRepeat("\t", layer);
-            var indent2 = "\r\n" + stringRepeat("\t", layer + 1);
+            var indent1 = "\r\n" + stringRepeat("    ", layer);
+            var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
             if (element.posi) {
                 var posi = this.pushPostionsToMap(element.posi);
             }
@@ -3487,7 +3488,7 @@
             codes.push('{');
             // console.log(element);
             var overrides = {};
-            var indent3 = "\r\n" + stringRepeat("\t", layer + 2);
+            var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
             for (var index_22 = 0; index_22 < element.body.length; index_22++) {
                 var member = element.body[index_22];
                 var elem = [];
@@ -3563,7 +3564,7 @@
             }
         };
         Script.prototype.pushTravelCodes = function (codes, element, layer, namespace) {
-            var index = codes.length, indent = "\r\n" + stringRepeat("\t", layer);
+            var index = codes.length, indent = "\r\n" + stringRepeat("    ", layer);
             // console.log(element);
             codes.push(indent + 'pandora.each(');
             this.pushElement(codes, element.vars, element.iterator, layer, namespace);
@@ -3582,8 +3583,8 @@
             return codes;
         };
         Script.prototype.pushObjCodes = function (codes, element, layer, namespace) {
-            var indent1 = "\r\n" + stringRepeat("\t", layer);
-            var indent2 = "\r\n" + stringRepeat("\t", layer + 1);
+            var indent1 = "\r\n" + stringRepeat("    ", layer);
+            var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
             // console.log(element);
             if (element.type === 'object' && element.display === 'block') {
                 codes.push(indent1 + this.pushPostionsToMap(element.posi) + '{');
@@ -3608,12 +3609,12 @@
                     // console.log(member);
                     switch (member.type) {
                         case 'method':
-                            elem.push(member.fname + ': ');
+                            elem.push(this.pushPostionsToMap(member.posi) + member.fname + ': ');
                             this.pushFunctionCodes(elem, member, _layer, namespace);
                             elements.push(elem.join(''));
                             break;
                         case 'objProp':
-                            elem.push(member.pname + ': ');
+                            elem.push(this.pushPostionsToMap(member.posi) + member.pname + ': ');
                             this.pushCodes(elem, member.vars, member.body, _layer, namespace);
                             elements.push(elem.join(''));
                             break;
@@ -3633,7 +3634,7 @@
         Script.prototype.pushFooter = function (codes, vars) {
             // console.log(vars.root.public);
             for (var name_3 in vars.root.public) {
-                codes.push("\r\n\tpandora('" + this.namespace + name_3 + "', " + vars.root.public[name_3] + ");");
+                codes.push("\r\n    pandora('" + this.namespace + name_3 + "', " + vars.root.public[name_3] + ");");
             }
             if (this.isMainBlock) {
                 codes.push("\r\n" + '}, true);');
@@ -3882,9 +3883,13 @@
                 return before + mark;
             });
             // console.log(string);
-            string = string.replace(/[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_operator::)\s*/g, "\r\n$1   $2$3");
+            string = string.replace(/[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_operator::)\s*/g, function (match, white, comments, midword) {
+                return "\r\n" + white.replace(/\t/g, '    ') + '   ' + comments + midword;
+            });
             string = string.replace(/\s*(@boundary_\d+_as_operator::)[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)/g, "\r\n$2   $3 $1 ");
-            string = string.replace(/[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_midword::)\s*/g, "\r\n$1$2$3");
+            string = string.replace(/[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_midword::)\s*/g, function (match, white, comments, midword) {
+                return "\r\n" + white.replace(/\t/g, '    ') + comments + midword;
+            });
             // 格式化相应符号
             string = string.replace(/[;\s]*(\=|\?)[;\s]*/g, " $1 ");
             string = string.replace(/\s+(\:)[;\s]*/g, " $1 ");
@@ -3894,7 +3899,9 @@
             // console.log(string);
             // 删除多余空白与换行
             // string = string.replace(/[ ]+/g, " ");
-            string = string.replace(/\s+[\r\n]([ \t])/g, "\r\n$1");
+            string = string.replace(/\s+[\r\n]([ \t])/g, function (match, white) {
+                return "\r\n" + white.replace(/\t/g, '    ');
+            });
             string = string.replace(/\{\s+\}/g, '{}');
             string = string.replace(/\[\s+\]/g, '[]');
             string = string.replace(/\(\s+\)/g, '()');
@@ -3925,23 +3932,26 @@
                 var match = void 0;
                 while (match = line.match(/\/\*\s@posi(\d+)\s\*\//)) {
                     var index_24 = match.index;
-                    var position = this.posimap[match[1]];
-                    // console.log(position);
-                    mapping.push([index_24, position.o[0], position.o[1], position.o[2], 0]);
+                    // console.log(line, match);
+                    if (match[1] < this.posimap.length - 1) {
+                        var position = this.posimap[parseInt(match[1]) + 1];
+                        // let position = this.posimap[match[1]];
+                        // console.log(position);
+                        // this.posimap[match[1]].o[1] = position.o[1];
+                        mapping.push([index_24, position.o[0], position.o[1], position.o[2], 0]);
+                    }
+                    else {
+                        // console.log(match);
+                    }
                     line = line.replace(match[0], '');
                 }
-                // while (match = line.match(/\/\*\s@posi(\d+)\s\*\//)) {
-                //     let index = match.index;
-                //     let position = this.posimap[match[1]];
-                //     // console.log(position);
-                //     mapping.push([index, position.o[0], position.o[1], position.o[2], 0]);
-                //     line = line.replace(match[0], '/* ' + position.o.join() +' */');
-                // }
                 _lines.push(line);
                 mappings.push(mapping);
             }
+            mappings[0][0] = [0, 0, 0, 0, 0];
             this.mappings = mappings;
-            // console.log(mappings)
+            console.log(mappings);
+            return string;
             return _lines.join("\r\n");
         };
         Script.prototype.run = function (precall, callback) {
