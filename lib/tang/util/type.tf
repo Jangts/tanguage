@@ -6,14 +6,10 @@
 *
 * Date 2017-04-06
 */
-namespace util;
 
-var _ = pandora,
-doc = root.document,
-console = root.console;
 
 //对象子类型判断
-typeofObj (object) {
+typeOfObj (object) {
     if (!object) {
         return 'Null';
     }
@@ -93,7 +89,7 @@ var isRegExp = (object) {
 };
 
 //字符串子类型判断
-var typeofStr = (string) {
+var typeOfStr = (string) {
     if (isIntStr(string)) {
         return 'StringInteger';
     }
@@ -129,7 +125,7 @@ var isInteger = (number) {
 _('util', (object, subtype) {
     switch (typeof object) {
         case 'object':
-            return subtype ? typeofObj(object) : (object == null ? 'Null' : ((typeofObj(object) === 'Array') ? 'Array' : 'Object'));
+            return subtype ? typeOfObj(object) : (object == null ? 'Null' : ((typeOfObj(object) === 'Array') ? 'Array' : 'Object'));
 
         case 'function':
         case 'boolean':
@@ -142,7 +138,7 @@ _('util', (object, subtype) {
             return subtype ? (isInteger(object) ? 'Integer' : 'Float') : 'Number';
 
         case 'string':
-            return subtype ? typeofStr(object) : 'String';
+            return subtype ? typeOfStr(object) : 'String';
     }
 });
 
@@ -151,8 +147,8 @@ _('util.fasttype', (obj) {
 });
 
 ns type with {
-    typeOfObj: typeofObj,
-    typeOfStr: typeofStr,
+    typeOfObj: typeOfObj,
+    typeOfStr: typeOfStr,
     isGlobal: isGlobal,
     isWin: isGlobal,
     isDoc: isDoc,

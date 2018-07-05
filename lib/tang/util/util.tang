@@ -6,17 +6,18 @@
  *
  * Date 2017-04-06
  */
-namespace util;
+// namespace util;
 
 use $ dom/;
 use $ obj/;
-use $ util/;
 
 var _ = pandora,
 doc = root.document,
 {console, File, FileList, FormData} = root;
 
-ns bool with {
+@include 'type';
+
+ns util with {
     truthy(value) {
         return !!value
     },
@@ -175,5 +176,5 @@ ns bool with {
     }
 }
 
-_.extend(root, _.util);
-this.module.exports = _.util;
+..extend(root, ..util);
+this.module.exports = ..util;
