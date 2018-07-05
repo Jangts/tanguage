@@ -7,7 +7,7 @@
  */
 ;
 tang.init().block([
-    '$_/util/bool'
+    '$_/util/'
 ], function(pandora, root, imports, undefined) {
     var _ = pandora,
         declare = pandora.declareClass,

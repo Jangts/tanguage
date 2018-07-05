@@ -7,7 +7,7 @@
  * Date 2017-04-06
  */
 
-use $ util/type;
+use $ util/;
 
 var _ = pandora;
 
@@ -55,14 +55,14 @@ ns arr with {
         return object;
     },
     each(array, handler) {
-        if (_.util.type.isArray(array)) {
+        if (_.util.isArray(array)) {
             for (var i = 0; i < array.length; i++) {
                 handler.call(array[i], i, array[i]);
             }
         }
     },
     eachReverse(array, handler) {
-        if (_.util.type.isArray(array)) {
+        if (_.util.isArray(array)) {
             for (var i = array.length - 1; i > -1; i--) {
                 handler.call(array[i], i, array[i]);
             }

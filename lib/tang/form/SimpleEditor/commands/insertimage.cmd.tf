@@ -12,13 +12,13 @@ void ns {
     });
 
     builders.regCommand('insertimage', (val) {
-        if (_.util.bool.isStr(val)) {
+        if (_.util.isStr(val)) {
             var html = '<img src="' + val + '" />';
             this.execCommand('insert', html);
             this.collapse();
             return this;
         }
-        if (_.util.bool.isArr(val)) {
+        if (_.util.isArr(val)) {
             var html = '';
             for (var i = 0; i < val.length; i++) {
                 html += '<img src="' + val[i] + '" />';
@@ -60,7 +60,7 @@ void ns {
         var files = images.files;
         if (files && files.length > 0) {
             var that = this;
-            if (_.util.bool.isFn(this.transfer)) {
+            if (_.util.isFn(this.transfer)) {
                 this.transfer(files, (val, failed) {
                     if (failed) {
                         alert(failed + 'pictures upload failed');

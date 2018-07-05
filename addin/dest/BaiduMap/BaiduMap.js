@@ -50,7 +50,7 @@ tang.init().block([
 		map: null,
 		_init: function (elem, options) {
 			if (options && options.coords) {
-				elem = _.util.type.isElement(elem) ? elem : doc.getElementById(elem);
+				elem = _.util.isElement(elem) ? elem : doc.getElementById(elem);
 				_.dom.addClass(elem, 'tang-addin-map');
 				var id = _.dom.getAttr(elem, 'id') || _.dom.setAttr(elem, 'id', (new _.Identifier()).toString());
 				var map = new BMap.Map(id);

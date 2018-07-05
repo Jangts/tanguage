@@ -8,7 +8,7 @@ querySelector = (selector, context) {
         case 'string':
             return query(selector, context);
         case 'object':
-            switch (_.util.type(selector)) {
+            switch (_.util(selector)) {
                 case 'HTMLDocument':
                 case 'Global':
                 case 'Element':
@@ -20,7 +20,7 @@ querySelector = (selector, context) {
                     return arguments[0];
                 case 'Array':
                     for (var i = 0; i < arguments[0].length; i++) {
-                        _.util.type(arguments[0][i]) == 'Element' && Elements.push(arguments[0][i]);
+                        _.util(arguments[0][i]) == 'Element' && Elements.push(arguments[0][i]);
                     }
                     return Elements;
             }

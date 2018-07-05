@@ -118,7 +118,7 @@ tang.init().block([
 				this.result = true;
 				$('.hgroup').show();
 				setTimeout(this.hide, 3000);
-				if (_.util.bool.isFn(this.success)) {
+				if (_.util.isFn(this.success)) {
 					this.success();
 				}
 			}
@@ -137,7 +137,7 @@ tang.init().block([
 			};
 		},
 		failure: function (xhr, status) {
-			if (_.util.bool.isFn(this.fail)) {
+			if (_.util.isFn(this.fail)) {
 				this.fail();
 			};
 		}
@@ -177,7 +177,7 @@ tang.init().block([
 		},
 		hide: function () {
 			$('#tang-dvcode-mask, #tang-dvcode').hide();
-			if (_.util.bool.isFn(this.cancel)) {
+			if (_.util.isFn(this.cancel)) {
 				this.cancel();
 			}
 			return this;

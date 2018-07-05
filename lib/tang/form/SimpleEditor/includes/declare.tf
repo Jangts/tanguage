@@ -17,7 +17,7 @@ class .SimpleEditor {
     upload_maxsize= 1024 * 1024 * 20;
     transfer= null;
     _init(elem, options, textareas) {
-        if (_.util.bool.isEl(elem)) {
+        if (_.util.isEl(elem)) {
             options = options || {};
             this.options = {};
             this.uid = new _.Identifier();
@@ -39,16 +39,16 @@ class .SimpleEditor {
 
             this.textareas = [];
             if (textareas) {
-                if (_.util.bool.isEl(textareas)) {
+                if (_.util.isEl(textareas)) {
                     this.textareas = [builders.textarea(textareas)];
-                } else if (_.util.bool.isEls(textareas)) {
+                } else if (_.util.isEls(textareas)) {
                     each(textareas as i, textarea) {
                         this.textareas.push(builders.textarea(textarea));
                     }
-                } else if (_.util.bool.isArr(textareas)) {
+                } else if (_.util.isArr(textareas)) {
                     each(textareas as i, textarea) {
                         // console.log(textarea);
-                        if (_.util.bool.isEl(textarea)) {
+                        if (_.util.isEl(textarea)) {
                             this.textareas.push(builders.textarea(textarea));
                         }
                     }
@@ -174,9 +174,9 @@ class .SimpleEditor {
             };
         each(listeners as name, listener) {
             each(events[name] as eventType, handler) {
-                if (_.util.bool.isFn(handler)) {
+                if (_.util.isFn(handler)) {
                     listener.push(eventType, null, editor, handler);
-                } else if (_.util.bool.isObj(handler)) {
+                } else if (_.util.isObj(handler)) {
                     each(handler as selector, cb) {
                         listener.push(eventType, selector, editor, cb);
                     }

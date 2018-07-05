@@ -11,8 +11,8 @@ namespace foo.bar;
  */
 
 use $ arr/
-use   $_/util/bool; use $ util/type as {type1};  use $ util/../util/type as types
-                   use $ util/../util/type as {type2, type3};
+use   $_/util/; use $ util/ as {type1};  use $ util/../util/ as types
+                   use $ util/../util/ as {type2, type3};
 
 
 @include './test.tf';
@@ -38,7 +38,7 @@ var
 // f= (d,e)=> (d + (e=>e+4)()),
    a = b, c = s=>s,
 c = a;
-use $ util/../util/type as type2, type3
+use $ util/../util/ as type2, type3
 var _ = pandora;
 console.log([
     _, 1, (){}]);

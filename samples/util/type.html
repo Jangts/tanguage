@@ -11,7 +11,7 @@
 
 <body>
     <script>
-        tang.init().block(['$_/util/type'], function(pandora, root, imports, undefined) {
+        tang.init().block(['$_/util/'], function(pandora, root, imports, undefined) {
             var document = root.document,
                 objs = [1, '2', 2.5, '3.0', 'four', {
                         length: 0
@@ -22,19 +22,19 @@
                     })(), true, false, root, document,
                     document.body, document.getElementsByTagName('script')
                 ],
-                type = pandora.util.type(objs) + ' ' + pandora.util.type(objs, true);
+                type = pandora.util(objs) + ' ' + pandora.util(objs, true);
             pandora.render({
                 margin: "auto",
                 fontSize: "18px"
             }, '-1 : ' + type);
             pandora.each(objs, function(index, obj) {
-                type = pandora.util.type(obj) + ' ' + pandora.util.type(obj, true);
+                type = pandora.util(obj) + ' ' + pandora.util(obj, true);
                 pandora.render({
                     margin: "auto",
                     fontSize: "18px"
                 }, index + ': ' + type);
             });
-            type = pandora.util.type();
+            type = pandora.util();
             pandora.render({
                 margin: "auto",
                 fontSize: "18px"

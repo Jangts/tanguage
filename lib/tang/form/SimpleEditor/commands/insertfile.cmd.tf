@@ -13,9 +13,9 @@ void ns {
     builders.regCommand('insertfile', (file) {
         var name = file[0],
             val = file[1];
-        if (_.util.bool.isStr(val)) {
+        if (_.util.isStr(val)) {
             name = name || this.options.aaa;
-            if (_.util.bool.isStr(name)) {
+            if (_.util.isStr(name)) {
                 var html = '<a href="' + val + '" target="_blank" title="click to download" class="se-attachment">' + name + '</a><br />';
             } else {
                 var html = 'Attachment : <a href="' + val + '" target="_blank" title="click to download" class="se-attachment">' + val + '</a><br />';
@@ -72,7 +72,7 @@ void ns {
                     return alert('Exceed Maximum Size Allowed Upload');
                 }
             }
-            if (_.util.bool.isFn(that.transfer)) {
+            if (_.util.isFn(that.transfer)) {
                 that.transfer([file], (val, failed) {
                     if (failed) {
                         alert('attachment upload failed');

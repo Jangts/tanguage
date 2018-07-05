@@ -1,5 +1,5 @@
 public remove = (elem, context) {
-    if (context && _.util.type(context) == 'Element' && elem.parentNode == context) {
+    if (context && _.util(context) == 'Element' && elem.parentNode == context) {
         $..events.remove(elem);
         context.removeChild(elem);
     } else if (elem && elem.parentNode && elem.parentNode.removeChild) {

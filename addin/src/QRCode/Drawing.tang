@@ -7,7 +7,7 @@
 * Date: 2017-04-06
 */
 
-use $ util/bool;
+use $ util/;
 use ~SVGDrawing;
 
 var _ = pandora,
@@ -19,7 +19,7 @@ var useSVG = doc.documentElement.tagName.toLowerCase() === "svg";
 if (useSVG) {
     _.QRCode.Drawing = _.QRCode.SVGDrawing;
 } else {
-    if (_.util.bool.isSupportCanvas()) {
+    if (_.util.isSupportCanvas()) {
         var _onMakeImage = function() {
             this.ElementImage.src = this.ElementCanvas.toDataURL("image/png");
             this.ElementImage.style.display = "block";
@@ -92,7 +92,7 @@ if (useSVG) {
         declare('QRCode.Drawing', {
             _init: function(elem, options) {
                 this.isPainted = false;
-                this.isAndroid = _.util.bool.isAndroid();
+                this.isAndroid = _.util.isAndroid();
 
                 this.options = options;
                 this.ElementCanvas = doc.createElement("canvas");

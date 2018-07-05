@@ -6,7 +6,7 @@
  *
  * Date 2017-04-06
  */
-use $ util/bool;
+use $ util/;
 use $ str/;
 use $ dom/;
 

@@ -73,7 +73,7 @@ tang.init().block(function(pandora, root, imports, undefined) {
         },
         type: function(object, isDetail) {
             if (isDetail) {
-                return _.util.type(object);
+                return _.util(object);
             } else {
                 return typeof object;
             }

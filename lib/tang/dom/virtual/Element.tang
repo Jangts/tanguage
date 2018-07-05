@@ -8,7 +8,7 @@
  * Date 2017-04-06
  */
 
-use $ util/bool;
+use $ util/;
 use $ arr/diff;
 use $ obj/;
 use $ dom/;
@@ -31,7 +31,7 @@ console = root.console;
  */
 class .Element {
     _init (tagName, props, children) {
-        if (_.util.bool.isArr(props)) {
+        if (_.util.isArr(props)) {
             children = props;
             props = {};
         };

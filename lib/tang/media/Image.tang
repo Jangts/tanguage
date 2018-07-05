@@ -7,17 +7,17 @@
  * Date: 2017-04-06
  */
 
-use $ util/bool;
+use $ util/;
 use $ async/Request;
 
 var _ = pandora,
 doc = root.document,
 {console, Image} = root;   
 
-var isStr = _.util.bool.isStr,
-    isObj = _.util.bool.isObj,
-    isFn = _.util.bool.isFn,
-    isEl = _.util.bool.isEl,
+var isStr = _.util.isStr,
+    isObj = _.util.isObj,
+    isFn = _.util.isFn,
+    isEl = _.util.isEl,
     load = function(img, src, doneCallback, failCallback) {
         img.src = src;
         img.onload = doneCallback;

@@ -2,7 +2,7 @@
 /*!
  * tanguage framework source code
  *
- * static util.bool
+ * static util
  *
  * Date 2017-04-06
  */
@@ -10,7 +10,7 @@ namespace util;
 
 use $ dom/;
 use $ obj/;
-use $ util/type;
+use $ util/;
 
 var _ = pandora,
 doc = root.document,
@@ -22,7 +22,7 @@ ns bool with {
     },
     is(obj, __class) {
         // log __class;
-        return _.util.bool.isObj(obj) && obj instanceof __class;
+        return _.util.isObj(obj) && obj instanceof __class;
     },
     isScala(vari) {
         return typeof vari === 'boolean' || typeof vari === 'string' || typeof vari === 'number';
@@ -34,17 +34,17 @@ ns bool with {
         return typeof obj === 'object' && obj;
     },
     hasProp: _.obj.hasProp,
-    isWin: _.util.type.isGlobal,
-    isDoc: _.util.type.isDoc,
-    isEl: _.util.type.isElement,
+    isWin: _.util.isGlobal,
+    isDoc: _.util.isDoc,
+    isEl: _.util.isElement,
     isVisi(elem) {
         return _.dom.getStyle(elem, 'display') != 'none';
     },
     isHide(elem) {
         return _.dom.getStyle(elem, 'display') === 'none';
     },
-    isEls: _.util.type.isElements,
-    isArr: _.util.type.isArray,
+    isEls: _.util.isElements,
+    isArr: _.util.isArray,
     inArr(elem, array, ignoreType) {
         if (ignoreType) {
             for (var i = 0; i < array.length; i++) {
@@ -57,23 +57,23 @@ ns bool with {
         return _.arr.has(array, elem);
     },
     in(elem, object) {
-        if (_.util.type.isArray(object)) {
+        if (_.util.isArray(object)) {
             return _.arr.has(object, elem);
         }
-        if (_.util.bool.isObj(object)) {
+        if (_.util.isObj(object)) {
             return _.obj.has(object, elem);
         }
         return false;
     },
-    isReg: _.util.type.isRegExp,
+    isReg: _.util.isRegExp,
     isFile(file) {
-        return _.util.bool.isObj(file) && file instanceof File;
+        return _.util.isObj(file) && file instanceof File;
     },
     isFiles(files) {
-        return _.util.bool.isObj(files) && files instanceof FileList;
+        return _.util.isObj(files) && files instanceof FileList;
     },
     isForm(data) {
-        return _.util.bool.isObj(data) && data instanceof FormData
+        return _.util.isObj(data) && data instanceof FormData
     },
     isFn(obj) {
         return typeof obj === 'function';
@@ -84,14 +84,14 @@ ns bool with {
     isOuterHTML(str) {
         return /^<(\w+)[\s\S]+<\/\1>$/.test(str) || /^<(\w+)[^>]*\/\s*>$/.test(str);
     },
-    isIntStr: _.util.type.isIntStr,
-    isFloatStr: _.util.type.isFloatStr,
+    isIntStr: _.util.isIntStr,
+    isFloatStr: _.util.isFloatStr,
     isPercent(str) {
         return (typeof str === 'string') && (/^[-\+]{0,1}(\d+(\.\d+){0,1}|\.\d+)\%$/.test(str));
     },
     hasStr: _.hasString,
     isInt(num) {
-        return _.util.type.isInteger(num) || _.util.type.isIntStr(num);
+        return _.util.isInteger(num) || _.util.isIntStr(num);
     },
     isNum(num) {
         return typeof num === 'number';
@@ -103,7 +103,7 @@ ns bool with {
         return isFinite(num);
     },
     isNumeric(num) {
-        return typeof num === 'number' || _.util.type.isIntStr(num) || _.util.type.isFloatStr(num);
+        return typeof num === 'number' || _.util.isIntStr(num) || _.util.isFloatStr(num);
     },
     isNul(obj) {
         if (obj) {
@@ -144,7 +144,7 @@ ns bool with {
             return false;
         }
         method = method.toUpperCase();
-        return _.util.bool.inArr(method, ['GET', 'CONNECT', 'COPY', 'DELETE', 'HEAD', 'LINK', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'TRACE', 'UNLINK', 'UPDATE', 'WRAPPED']) && method;
+        return _.util.inArr(method, ['GET', 'CONNECT', 'COPY', 'DELETE', 'HEAD', 'LINK', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'TRACE', 'UNLINK', 'UPDATE', 'WRAPPED']) && method;
     },
     isSupportCanvas() {
         return typeof CanvasRenderingContext2D != "undefined";
@@ -175,5 +175,5 @@ ns bool with {
     }
 }
 
-_.extend(root, _.util.bool);
-this.module.exports = _.util.bool;
+_.extend(root, _.util);
+this.module.exports = _.util;

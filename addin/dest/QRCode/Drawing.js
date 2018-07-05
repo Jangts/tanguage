@@ -6,7 +6,7 @@
 ;
 // tang.config({});
 tang.init().block([
-	'$_/util/bool',
+	'$_/util/',
 	'~SVGDrawing'
 ], function (pandora, root, imports, undefined) {
 	var module = this.module;
@@ -18,7 +18,7 @@ tang.init().block([
 		_.QRCode.Drawing = _.QRCode.SVGDrawing;
 	}
 	else {
-		if (_.util.bool.isSupportCanvas()) {
+		if (_.util.isSupportCanvas()) {
 			var _onMakeImage = function () {
 				this.ElementImage.src = this.ElementCanvas.toDataURL("image/png");
 				this.ElementImage.style.display = "block";
@@ -76,7 +76,7 @@ tang.init().block([
 			declare('QRCode.Drawing', {
 				_init: function (elem, options) {
 					this.isPainted = false;
-					this.isAndroid = _.util.bool.isAndroid();
+					this.isAndroid = _.util.isAndroid();
 					this.options = options;
 					this.ElementCanvas = doc.createElement("canvas");
 					this.ElementCanvas.width = options.width;

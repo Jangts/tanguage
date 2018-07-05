@@ -7,13 +7,13 @@
  */
 ;
 tang.init().block([
-    '$_/util/bool'
+    '$_/util/'
 ], function(pandora, root, imports, undefined) {
     var _ = pandora,
         declare = pandora.declareClass,
         console = root.console;
 
-    var isFn = _.util.bool.isFn,
+    var isFn = _.util.isFn,
 
         /**
          * 创建一个针对obj.Observer的实例对象的属性的监听对象
@@ -36,7 +36,7 @@ tang.init().block([
                 this.observer.listener = null;
             },
             onread: function() {
-                _.util.bool.isFn(this.readCallback) && this.readCallback.call(this.data, this.value, this.property);
+                _.util.isFn(this.readCallback) && this.readCallback.call(this.data, this.value, this.property);
             },
             onwrite: function(silently) {
                 this.observer.silently = true;

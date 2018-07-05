@@ -596,7 +596,7 @@ class .str.MD5Encoder {
 
                 fileReader.readAsBinaryString(blobSlice.call(file, start, end));
             },
-            callback = _.util.bool.isFn(callback) ? callback : () {
+            callback = _.util.isFn(callback) ? callback : () {
                 console.info("File Hash", spark.end());
             }
 

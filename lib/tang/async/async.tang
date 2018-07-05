@@ -8,7 +8,7 @@
  */
 
 use $ obj/;
-use $ util/bool;
+use $ util/;
 use $ dom/;
 use $ async/Request as Request;
 
@@ -31,14 +31,14 @@ ns async with {
 
         if (_.dom.getAttr(link, 'loaded') === 'loaded') {
             setTimeout(function() {
-                _.util.bool.isFn(callback) && callback();
+                _.util.isFn(callback) && callback();
             }, 0);
         } else {
             if (typeof(link.onreadystatechange) === 'object') {
                 link.attachEvent('onreadystatechange', function() {
                     if (link.readyState === 'loaded' || link.readyState === 'complete') {
                         _.dom.setAttr(link, 'loaded', 'loaded');
-                        _.util.bool.isFn(callback) && callback();
+                        _.util.isFn(callback) && callback();
                     } else {
                         console.log(link.readyState);
                     }
@@ -46,7 +46,7 @@ ns async with {
             } else if (typeof(link.onload) !== 'undefined') {
                 link.addEventListener('load', function() {
                     _.dom.setAttr(link, 'loaded', 'loaded');
-                    _.util.bool.isFn(callback) && callback();
+                    _.util.isFn(callback) && callback();
                 });
             };
         };
@@ -61,19 +61,19 @@ ns async with {
             script.src = src;
         }
         if (_.dom.getAttr(script, 'loaded')) {
-            _.util.bool.isFn(callback) && callback();
+            _.util.isFn(callback) && callback();
         } else {
             if (typeof(script.onreadystatechange) === 'object') {
                 script.attachEvent('onreadystatechange', function() {
                     if (script.readyState === 'loaded' || script.readyState === 'complete') {
                         _.dom.setAttr(script, 'loaded', 'loaded');
-                        _.util.bool.isFn(callback) && callback();
+                        _.util.isFn(callback) && callback();
                     };
                 });
             } else if (typeof(script.onload) === 'object') {
                 script.addEventListener('load', function() {
                     _.dom.setAttr(script, 'loaded', '');
-                    _.util.bool.isFn(callback) && callback();
+                    _.util.isFn(callback) && callback();
                 });
             };
         };
@@ -82,8 +82,8 @@ ns async with {
         // console.log(arguments);
         switch (arguments.length) {
             case 2:
-                if (!_.util.bool.isObj(options)) {
-                    if (_.util.bool.isFn(options)) {
+                if (!_.util.isObj(options)) {
+                    if (_.util.isFn(options)) {
                         options = {
                             success: options
                         }
@@ -92,14 +92,14 @@ ns async with {
                     }
                 }
 
-                if (_.util.bool.isStr(url)) {
+                if (_.util.isStr(url)) {
                     options.url = url;
                 }
                 break;
             case 1:
-                if (_.util.bool.isObj(url)) {
+                if (_.util.isObj(url)) {
                     options = url;
-                } else if (_.util.bool.isStr(url)) {
+                } else if (_.util.isStr(url)) {
                     options = {
                         url: url,
                         method: 'GET'
@@ -158,7 +158,7 @@ ns async with {
                 if (!options.mime) {
                     options.mime = 'multipart/form-data';
                 }
-                if (!_.util.bool.isForm(options.data)) {
+                if (!_.util.isForm(options.data)) {
                     if (options.mime === 'application/json') {
                         return Promise.setRequestHeader('Content-Type', 'application/json; charset=' + options.charset).send(JSON.stringify(options.data));
                     }

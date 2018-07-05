@@ -7,7 +7,7 @@
  *
  * Date: 2017-04-06
  */
-use $ util/bool;
+use $ util/;
 use $ dom/Elements;
 
 var _ = pandora,
@@ -17,8 +17,8 @@ location = root.location;
 
 class Menu {
     _init(elem) {
-        this.Element = _.util.bool.isStr(elem) ? _.dom.selector.byId(elem) : elem;
-        if (_.util.bool.isEl(this.Element)) {
+        this.Element = _.util.isStr(elem) ? _.dom.selector.byId(elem) : elem;
+        if (_.util.isEl(this.Element)) {
             this.render();
         }
     }
@@ -46,8 +46,8 @@ class Menu {
 
 class List {
     _init(elem) {
-        this.Element = _.util.bool.isStr(elem) ? _.dom.selector.byId(elem) : elem;
-        if (_.util.bool.isEl(this.Element)) {
+        this.Element = _.util.isStr(elem) ? _.dom.selector.byId(elem) : elem;
+        if (_.util.isEl(this.Element)) {
             this.render();
         }
     }
@@ -86,15 +86,15 @@ class PageList {
     }
     ajax(url, callback, prePageItemNumber) {
         var that = this;
-        if (_.util.bool.isStr(url)) {
+        if (_.util.isStr(url)) {
             new _.async.Request({
                 url: url
             }).done((data) {
-                if (_.util.bool.isNumeric(data)) {
+                if (_.util.isNumeric(data)) {
                     totalItemNumber = parseInt(data);
                 } else {
                     var array = eval(data);
-                    if (_.util.bool.isArr(array)) {
+                    if (_.util.isArr(array)) {
                         totalItemNumber = array.length;
                     } else {
                         totalItemNumber = 0;

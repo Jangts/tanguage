@@ -7,7 +7,7 @@
  * Date 2017-04-06
  */
 
-use $ util/bool;
+use $ util/;
 var _ = pandora,
 doc = root.document,
 {console, XMLHttpRequest, ActiveXObject, FormData} = root;;
@@ -38,7 +38,7 @@ var //Define Private Method 'toRegExp',  'fileTransfer'
                     status: uploader.status,
                     responseText: 'Transferring'
                 }
-                _.util.bool.isFn(onBeforeTransferring) && onBeforeTransferring.call(that, response);
+                _.util.isFn(onBeforeTransferring) && onBeforeTransferring.call(that, response);
             };
             var onSendProgress = (evt) {
                 response = {
@@ -49,7 +49,7 @@ var //Define Private Method 'toRegExp',  'fileTransfer'
                     status: uploader.status,
                     responseText: 'Transferring'
                 }
-                _.util.bool.isFn(onTransferring) && onTransferring.call(that, response);
+                _.util.isFn(onTransferring) && onTransferring.call(that, response);
             };
             var onSendComplete = (evt) {
                 response = {
@@ -57,7 +57,7 @@ var //Define Private Method 'toRegExp',  'fileTransfer'
                     status: uploader.status,
                     responseText: 'Transferred'
                 }
-                _.util.bool.isFn(onAfterTransferring) && onAfterTransferring.call(that, response);
+                _.util.isFn(onAfterTransferring) && onAfterTransferring.call(that, response);
             };
             var onFailed = (evt) {
                 response = {
@@ -65,7 +65,7 @@ var //Define Private Method 'toRegExp',  'fileTransfer'
                     status: uploader.status,
                     responseText: 'Transfailed'
                 }
-                _.util.bool.isFn(onUploadFailed) && onUploadFailed.call(that, response);
+                _.util.isFn(onUploadFailed) && onUploadFailed.call(that, response);
             };
             var onTimeout = (evt) {
                 response = {
@@ -73,7 +73,7 @@ var //Define Private Method 'toRegExp',  'fileTransfer'
                     status: uploader.status,
                     responseText: 'Timeout'
                 }
-                _.util.bool.isFn(onUploadFailed) && onUploadFailed.call(that, response);
+                _.util.isFn(onUploadFailed) && onUploadFailed.call(that, response);
             }
         };
         var onStateChange = () {
@@ -86,14 +86,14 @@ var //Define Private Method 'toRegExp',  'fileTransfer'
                     status: this.status,
                     responseText: 'Waiting'
                 }
-                _.util.bool.isFn(onBeforeTransferring) && onBeforeTransferring.call(that, response);
+                _.util.isFn(onBeforeTransferring) && onBeforeTransferring.call(that, response);
             } else if (this.readyState == 2 || this.readyState == 3) {
                 response = {
                     readyState: this.readyState,
                     status: this.status,
                     responseText: 'Processing'
                 }
-                _.util.bool.isFn(onAfterTransferring) && onAfterTransferring.call(that, response);
+                _.util.isFn(onAfterTransferring) && onAfterTransferring.call(that, response);
             } else if (this.readyState == 4) {
                 //console.log(url, data, handlers, this);
                 if (this.status == 200) {
@@ -102,14 +102,14 @@ var //Define Private Method 'toRegExp',  'fileTransfer'
                         status: this.status,
                         responseText: this.responseText
                     }
-                    _.util.bool.isFn(onUploadComplete) && onUploadComplete.call(that, response);
+                    _.util.isFn(onUploadComplete) && onUploadComplete.call(that, response);
                 } else {
                     response = {
                         readyState: this.readyState,
                         status: this.status,
                         responseText: this.responseText
                     }
-                    _.util.bool.isFn(onUploadFailed) && onUploadFailed.call(that, response);
+                    _.util.isFn(onUploadFailed) && onUploadFailed.call(that, response);
                 }
             }
         }
@@ -142,10 +142,10 @@ class .async.Uploader {
     isOnlyFilter = true;
     _init(files, types, suffixs, maxSize) {
         this.files = files;
-        if (_.util.bool.isArr(types)) {
+        if (_.util.isArr(types)) {
             this.fileTypeRegExp = toRegExp(types);
         }
-        if (_.util.bool.isArr(suffixs) && suffixs.length) {
+        if (_.util.isArr(suffixs) && suffixs.length) {
             this.fileNameRegExp = new RegExp(".(" + suffixs.join('|') + ")$");
         }
         this.fileMaxSize = typeof maxSize == 'number' ? maxSize : 1024 * 1024 * 200;
@@ -160,9 +160,9 @@ class .async.Uploader {
         }
         //console.log(result);
         if (result[0]) {
-            _.util.bool.isFn(doneCallback) && doneCallback.call(this, result[1], result[2]);
+            _.util.isFn(doneCallback) && doneCallback.call(this, result[1], result[2]);
         } else {
-            _.util.bool.isFn(failCallback) && failCallback.call(this, result[1], result[2]);
+            _.util.isFn(failCallback) && failCallback.call(this, result[1], result[2]);
         }
     }
 
@@ -219,7 +219,7 @@ class .async.Uploader {
     }
     
     static transfer (file, options, method) {
-        if (_.util.bool.isFile(file)) {
+        if (_.util.isFile(file)) {
             options = options || {};
             options.url = options.url || location.href;
             options.data = options.data || {};
@@ -233,7 +233,7 @@ class .async.Uploader {
                 form.append('myfile', file);
             }
             form.append('enctype', 'multipart/form-data');
-        } else if (_.util.bool.isFiles(file)) {
+        } else if (_.util.isFiles(file)) {
             options = options || {};
             options.data = options.data || {};
             var form = new FormData();
@@ -249,7 +249,7 @@ class .async.Uploader {
                 form.append(filefield, file[i]);
             }
             form.append('enctype', 'multipart/form-data');
-        } else if (_.util.bool.isForm(file)) {
+        } else if (_.util.isForm(file)) {
             options = options || {};
             var form = file;
             for (var i in options.data) {

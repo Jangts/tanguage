@@ -1,14 +1,14 @@
 @module;
 
 use $ util/;
-use ~Component;
+use $ app/Component;
 
-namespace app;
+namespace data;
 
 let _ = pandora;
 let {is} = _.util;
 
-class .Application {
+class .Panel {
     components = {};
     _init(options = {}) {
         if(options.components){

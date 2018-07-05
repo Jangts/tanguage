@@ -12,10 +12,10 @@
 }
 
 use $ arr/
-use $ util/bool;
-use $ util/type as type1;
-use $ util/../util/type as types[];
-use $ util/../util/type as type2, imports;
+use $ util/;
+use $ util/ as type1;
+use $ util/../util/ as types[];
+use $ util/../util/ as type2, imports;
 
 var _ = pandora,
 declare = pandora.declareClass,

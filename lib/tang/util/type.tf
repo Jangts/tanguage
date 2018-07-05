@@ -2,7 +2,7 @@
 /*!
 * tanguage framework source code
 *
-* static util.type
+* static util
 *
 * Date 2017-04-06
 */
@@ -126,7 +126,7 @@ var isInteger = (number) {
     }
 }
 
-_('util.type', (object, subtype) {
+_('util', (object, subtype) {
     switch (typeof object) {
         case 'object':
             return subtype ? typeofObj(object) : (object == null ? 'Null' : ((typeofObj(object) === 'Array') ? 'Array' : 'Object'));
@@ -151,8 +151,8 @@ _('util.fasttype', (obj) {
 });
 
 ns type with {
-    Obj: typeofObj,
-    Str: typeofStr,
+    typeOfObj: typeofObj,
+    typeOfStr: typeofStr,
     isGlobal: isGlobal,
     isWin: isGlobal,
     isDoc: isDoc,
@@ -170,4 +170,4 @@ namespace type.Obj {
     public native = nativeType;
 }
 
-this.module.exports = _.util.type;
+this.module.exports = _.util;

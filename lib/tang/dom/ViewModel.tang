@@ -6,9 +6,8 @@
  *
  * Date 2017-04-06
  */
-use $ util/bool;
+use $ util/;
 use $ obj/Observer/;
-use $ obj/Observer/Listener;
 
 namespace dom;
 
@@ -16,7 +15,7 @@ let _ = pandora,
 doc = root.document;
 
 let vdoms = {},
-isFn = _.util.bool.isFn,
+isFn = _.util.isFn,
 diff, patch,
 observe = _.obj.observe,
 updateByCustomRenderer = () {

@@ -1,6 +1,6 @@
 @module;
 
-use $ util/type;
+use $ util/;
 use $ dom/Template;
 
 namespace app;
@@ -14,7 +14,7 @@ class .Component {
     Element;
     template;
     _init(elem, template) {
-        elem = _.util.type.isElement(elem) ? elem : doc.getElementById(elem);
+        elem = _.util.isElement(elem) ? elem : doc.getElementById(elem);
         if(elem){
             this.Element = elem;
         }else{

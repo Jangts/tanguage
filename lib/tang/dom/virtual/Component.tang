@@ -11,7 +11,7 @@ PROPS = 2,
 TEXT = 3;
 
 let doc = root.document;
-let {is, isFn, isStr} = ..util.bool;
+let {is, isFn, isStr} = ..util;
 
 @include 'patch';
 @include 'diff';

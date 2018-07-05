@@ -118,7 +118,7 @@ tang.init().block([
 			if (this.options.useSVG) {
 				Drawing = svgDrawer;
 			}
-			this._android = _.util.bool.isAndroid();
+			this._android = _.util.isAndroid();
 			this.Element = el;
 			this.Code = null;
 			console.log(this.Element);

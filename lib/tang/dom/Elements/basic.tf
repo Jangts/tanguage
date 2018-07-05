@@ -200,7 +200,7 @@ expands .Elements {
         return insert.call(this, content, $..after);
     }
     index (list) {
-        if (..util.type.isElement(list)) {
+        if (..util.isElement(list)) {
             return $..index(list, this);
         }
         return $..index(this[0], list);

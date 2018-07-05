@@ -404,11 +404,6 @@
         "body": "pandora.util.$0",
         "description": "Call Member From Pandora"
     },
-    "pandora util.bool …": {
-        "prefix": ".bool",
-        "body": "pandora.util.bool$0",
-        "description": "Call Member From Pandora"
-    },
     ".view …": {
         "prefix": ".view",
         "body": "pandora.view.$0",

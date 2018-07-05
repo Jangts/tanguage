@@ -7,7 +7,7 @@
  * Date: 2017-04-06
  */
 ;
-use $ util/bool as bool
+use $ util/ as bool
 use $ arr/
 use $ math/easing
 use $ dom/Animation
@@ -41,7 +41,7 @@ class .Elements extends ..Iterator {
                         Elements = query(selector, this.context);
                         break;
                     case 'object':
-                        switch (..util.type(selector, true)) {
+                        switch (..util(selector, true)) {
                             case 'HTMLDocument':
                             case 'Global':
                             case 'Element':
@@ -56,7 +56,7 @@ class .Elements extends ..Iterator {
                             case 'Array':
                                 // console.log(arguments[0]);
                                 for (var i = 0; i < arguments[0].length; i++) {
-                                    ..util.type(arguments[0][i]) == 'Element' && Elements.push(arguments[0][i]);
+                                    ..util(arguments[0][i]) == 'Element' && Elements.push(arguments[0][i]);
                                 }
                                 break;
                         }

@@ -41,7 +41,7 @@ tang.init().block([
                         return;
                     }
                     val = value;
-                    _.util.bool.isObj(value) && observe(value);
+                    _.util.isObj(value) && observe(value);
                     if (observer.silently === false) {
                         subscriber.notify(true, false);
                     } else {
@@ -73,15 +73,15 @@ tang.init().block([
                 data._observer = this;
             },
             listen: function(property, writeCallback, readCallback) {
-                if (_.util.bool.isStr(property) && _.util.bool.hasProp(this.data, property)) {
+                if (_.util.isStr(property) && _.util.hasProp(this.data, property)) {
                     return new Listener(this, property, writeCallback, readCallback);
                 }
-                if (_.util.bool.isFn(property)) {
+                if (_.util.isFn(property)) {
                     readCallback = writeCallback;
                     writeCallback = property;
                 }
                 _.each(this.data, function(property) {
-                    if (property !== '_observer' && _.util.bool.hasProp(this.data, property)) {
+                    if (property !== '_observer' && _.util.hasProp(this.data, property)) {
                         new Listener(this, property, writeCallback, readCallback);
                     }
                 }, this);

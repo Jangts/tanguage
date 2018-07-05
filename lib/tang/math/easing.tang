@@ -7,7 +7,7 @@
  * Date: 2017-04-06
  */
 
-use $ util/bool;
+use $ util/;
 
 var _ = pandora,
 doc = root.document,
@@ -175,11 +175,11 @@ ns math.easing with {
 var easings = (() {
     var easings = {};
     each (_.math.easing as type, tween) {
-        if (_.util.bool.isFn(tween)) {
+        if (_.util.isFn(tween)) {
             easings[type] = tween;
         } else {
             each (tween as ease, fn) {
-                easings[ease + type] = _.util.bool.isFn(fn) ? fn : (t, b, c, d) {
+                easings[ease + type] = _.util.isFn(fn) ? fn : (t, b, c, d) {
                     return c * t / d + b;
                 };
             }

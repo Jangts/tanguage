@@ -11,7 +11,7 @@ void ns {
     });
 
     builders.regCommand('createlink', (val) {
-        if (val && _.util.bool.isUrl(val.url)) {
+        if (val && _.util.isUrl(val.url)) {
             var url = 'http://temp.';
             url += new _.Identifier();
             url += '.com';

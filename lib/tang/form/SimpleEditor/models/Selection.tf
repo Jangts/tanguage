@@ -123,7 +123,7 @@ class ..form.Selection {
 
         try {
             // 目前只支持 webkit 内核
-            if (_.util.bool.isWebkit()) {
+            if (_.util.isWebkit()) {
                 // 插入 &#8203
                 range.insertHTML('&#8203;');
                 // 修改 offset 位置

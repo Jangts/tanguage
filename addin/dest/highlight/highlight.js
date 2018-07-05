@@ -6,8 +6,7 @@
 ;
 // tang.config({});
 tang.init().block([
-	'$_/util/bool',
-	'$_/util/type',
+	'$_/util/',
 	'$_/dom/'
 ], function (pandora, root, imports, undefined) {
 	var module = this.module;
@@ -26,10 +25,10 @@ tang.init().block([
 		}
 	});
 	Token.stringify = function (o, language, parent) {
-		if (_.util.bool.isStr(o)) {
+		if (_.util.isStr(o)) {
 			return o;
 		}
-		if (_.util.type.Obj.native(o) === 'Array') {
+		if (_.util.typeOfObj.native(o) === 'Array') {
 			return o.map(function (element) {
 				return Token.stringify(element, language, o);
 			}).join('');
@@ -47,7 +46,7 @@ tang.init().block([
 			env.attributes['spellcheck'] = 'true';
 		}
 		if (o.alias) {
-			var aliases = _.util.type.Obj.native(o.alias) === 'Array' ? o.alias : [o.alias];
+			var aliases = _.util.typeOfObj.native(o.alias) === 'Array' ? o.alias : [o.alias];
 			Array.prototype.push.apply(env.classes, aliases);
 		}
 		_.highlight.hooks.run('wrap', env);
@@ -63,7 +62,7 @@ tang.init().block([
 				if (tokens instanceof Token) {
 					return new Token(tokens.type, _.highlight.util.encode(tokens.content), tokens.alias);
 				}
-				if (_.util.type.Obj.native(tokens) === 'Array') {
+				if (_.util.typeOfObj.native(tokens) === 'Array') {
 					return tokens.map(_.highlight.util.encode);
 				}
 				return tokens.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\u00a0/g, ' ');
@@ -122,11 +121,11 @@ tang.init().block([
 				for (var i in o) {
 					if (o.hasOwnProperty(i)) {
 						callback.call(o, i, o[i], type || i);
-						if (_.util.type.Obj.native(o[i]) === 'Object'&& !visited[_.highlight.objId(o[i])]) {
+						if (_.util.typeOfObj.native(o[i]) === 'Object'&& !visited[_.highlight.objId(o[i])]) {
 							visited[_.highlight.objId(o[i])] = true;
 							_.highlight.languages.DFS(o[i], callback, null, visited);
 						}
-						else if (_.util.type.Obj.native(o[i]) === 'Array'&& !visited[_.highlight.objId(o[i])]) {
+						else if (_.util.typeOfObj.native(o[i]) === 'Array'&& !visited[_.highlight.objId(o[i])]) {
 							visited[_.highlight.objId(o[i])] = true;
 							_.highlight.languages.DFS(o[i], callback, i, visited);
 						};
@@ -179,7 +178,7 @@ tang.init().block([
 			_.highlight.hooks.run('complete', env);
 		},
 		render: function (element, callback) {
-			if (_.util.type(element) === 'Element') {
+			if (_.util(element) === 'Element') {
 				_.highlight.renderElement(element, callback);
 			}
 			else {
@@ -206,7 +205,7 @@ tang.init().block([
 					continue;;
 				}
 				var patterns = grammar[token];
-				patterns = (_.util.type.Obj.native(patterns) === "Array") ? patterns : [patterns];
+				patterns = (_.util.typeOfObj.native(patterns) === "Array") ? patterns : [patterns];
 				for (var j = 0;j < patterns.length;++j) {
 					var pattern = patterns[j];
 					var inside = pattern.inside;

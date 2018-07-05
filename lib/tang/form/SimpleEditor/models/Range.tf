@@ -8,7 +8,7 @@
  * Date: 2017-04-06
  */
 
-use $ util/bool;
+use $ util/;
 use $ dom/;
 
 var _ = pandora,
@@ -103,7 +103,7 @@ namespace form {
                 }
                 docSelectionRange.call(this);
             }
-            this.commonElem = this.commonNode && (_.util.bool.isEl(this.commonNode) ? this.commonNode : this.commonNode.parentNode) || null;
+            this.commonElem = this.commonNode && (_.util.isEl(this.commonNode) ? this.commonNode : this.commonNode.parentNode) || null;
         }
         isBelongTo(textElem) {
             if (this.commonNode) {
@@ -243,7 +243,7 @@ namespace form {
 
             // 保证传入的参数是 html 代码
             var test = /^<.+>$/.test(html)
-            if (!test && !_.util.bool.isWebkit()) {
+            if (!test && !_.util.isWebkit()) {
                 // webkit 可以插入非 html 格式的文字
                 throw new Error('执行 insertHTML 命令时传入的参数必须是 html 格式')
             }

@@ -37,7 +37,7 @@
 }
  */
 
-use $ util/bool as bool;
+use $ util/ as bool;
 use $ dom/Elements;
 
 namespace view;

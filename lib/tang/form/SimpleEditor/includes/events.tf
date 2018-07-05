@@ -30,7 +30,7 @@ var events = void ns {
     outrich = (event) {
         // console.log(event);
         var editor = event.data;
-        if (editor.mousedown && (_.util.bool.inArr(event.target, editor.richareas) !== false)) {
+        if (editor.mousedown && (_.util.inArr(event.target, editor.richareas) !== false)) {
             editor.mouseout = true;
             resetStateBar(editor);
         }
@@ -292,7 +292,7 @@ var events = void ns {
                 '.se-statebar input'(event) {
                     // console.log(event);
                     var name = _.dom.getAttr(this, 'data-name');
-                    if (_.util.bool.isFn(inputs[name])) {
+                    if (_.util.isFn(inputs[name])) {
                         inputs[name](event.data, this);
                     }
                 }

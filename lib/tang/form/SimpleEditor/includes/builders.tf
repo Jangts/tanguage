@@ -164,7 +164,7 @@ var builders = void ns {
 
         },
         toolbar(options) {
-            if (options.toolarea && _.util.bool.isEl(options.toolarea)) {
+            if (options.toolarea && _.util.isEl(options.toolarea)) {
                 options.toolarea.innerHTML = '';
                 _.dom.addClass(options.toolarea, 'tang-simpleeditor');
                 _.dom.setStyle(options.toolarea, {
@@ -213,12 +213,12 @@ var builders = void ns {
         },
         regCreater(cmd, handler, optional) {
             if (creators[cmd] === undefined) {
-                if (_.util.bool.isFn(handler)) {
+                if (_.util.isFn(handler)) {
                     creators[cmd] = handler;
                     if (optional) {
                         tooltypes[cmd] = 'optionalitem';
                     }
-                } else if (_.util.bool.isStr(handler) && builders.tools[handler]) {
+                } else if (_.util.isStr(handler) && builders.tools[handler]) {
                     tooltypes[cmd] = handler;
                 }
             }

@@ -18,7 +18,7 @@ class .media.Player {
     protectTime = 100
     lastActionTime = Date.now()
     _init(elem, sheet) {
-        if (_.util.bool.isEl(elem) && _.uitl.bool.inArr(elem.tagName, ['AUDIO', 'VIDEO'])) {
+        if (_.util.isEl(elem) && _.uitl.bool.inArr(elem.tagName, ['AUDIO', 'VIDEO'])) {
             this.Element = elem;
             this.type = this.Element.tagName;
         } else {
@@ -89,13 +89,13 @@ class .media.Player {
         if (duration > this.protectTime) {
             this.Element.pause();
             this.lastActionTime = Date.now();
-            _.util.bool.isFn(onpause) && onpause.call(this);
+            _.util.isFn(onpause) && onpause.call(this);
         } else {
             this.timer && clearTimeout(this.timer);
             this.timer = setTimeout(function() {
                 that.Element.pause();
                 that.lastActionTime = Date.now();
-                _.util.bool.isFn(onpause) && onpause.call(this);
+                _.util.isFn(onpause) && onpause.call(this);
             }, this.protectTime - duration);
         }
         return this;
@@ -103,7 +103,7 @@ class .media.Player {
     stop(onstop) {
         this.pause(function() {
             this.Element.currentTime = 0;
-            _.util.bool.isFn(onstop) && onstop.call(this);
+            _.util.isFn(onstop) && onstop.call(this);
         });
         return this;
     }
