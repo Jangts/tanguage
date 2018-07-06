@@ -54,7 +54,7 @@ const mapBuilder = (omappings: any[], filename: string, osources:any[], version:
 
 const onReadFile = function (src: string, context): string {
     // console.log(src, context.source);
-    let source = path.resolve(context + src + '.tf');
+    let source = path.resolve(context + src + '.tang.inc');
     if (this.sources[source]) {
         this.error('source ' + source + 'had already been loaded.');
     }
@@ -68,7 +68,7 @@ const onReadFile = function (src: string, context): string {
 },
 getTplContent = function (src: string, context): string {
     // console.log(src, context.source);
-    let source = path.resolve(context + src + '.tpl');
+    let source = path.resolve(context + src + '.tang.tpl');
     return fs.readFileSync(source, 'utf-8');
 }
 

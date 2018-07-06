@@ -25,6 +25,7 @@
         "test-vdom": "node ./compiler/js/node-tang.js cdir ./lib/tang/dom/virtual/ ./lib/dist/dom/virtual/ -map -c",
         "test-dom": "node ./compiler/js/node-tang.js ./lib/tang/dom/dom.tang ./lib/dist/dom/dom.js -map",
         "test-tpl": " node ./compiler/js/node-tang.js ./samples/dom/Template/tang/src.tang ./samples/dom/Template/tang/cpl.js -map",
+        "test-bootstrap": " node ./compiler/js/node-tang.js ./test/script.tang ./test/script.js",
         "test-backstage-scripts": "node ./compiler/js/node-tang.js cdir ./samples/app/Backstage/scripts/tang/ ./samples/app/Backstage/scripts/ -map -c"
     },
     "repository": {

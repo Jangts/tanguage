@@ -15,8 +15,8 @@ use   $_/util/; use $ util/ as {type1};  use $ util/../util/ as types
                    use $ util/../util/ as {type2, type3};
 
 
-@include './test.tf';
-@include './test3.tf';
+@include './test.tang.inc';
+@include './test3.tang.inc';
 # return;
 # 静好格式的注释将被编译为js注释
 
