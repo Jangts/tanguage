@@ -80,7 +80,7 @@ class .SimpleEditor {
                 builders.workspace.call(this, mainarea, options, isBuildStateBar);
             }
 
-            this.selection = new _.form.Selection(this);
+            this.selection = new Selection(this);
             SimpleEditors[this.uid] = this.listen();
         } else {
             return _.error('@param "elem" must be an element!');

@@ -18,6 +18,14 @@ doc = root.document,
 @include 'type';
 
 ns util with {
+    IntExpr,
+    gettype,
+    nativetype,
+    fastype (obj) {
+        return Object.prototype.toString.call(obj).replace(/\[object\s|\]/g, '');
+    },
+    typeOfObj,
+    typeOfStr,
     truthy(value) {
         return !!value
     },
@@ -25,48 +33,24 @@ ns util with {
         // log __class;
         return _.util.isObj(obj) && obj instanceof __class;
     },
-    isScala(vari) {
-        return typeof vari === 'boolean' || typeof vari === 'string' || typeof vari === 'number';
-    },
-    isBool(vari) {
-        return typeof vari === 'boolean';
-    },
     isObj(obj) {
         return typeof obj === 'object' && obj;
     },
-    hasProp: _.obj.hasProp,
-    isWin: _.util.isGlobal,
-    isDoc: _.util.isDoc,
-    isEl: _.util.isElement,
+    isGlobal,
+    isWin: isGlobal,
+    isDoc,
+    isElement,
+    isEl: isElement,
     isVisi(elem) {
         return _.dom.getStyle(elem, 'display') != 'none';
     },
     isHide(elem) {
         return _.dom.getStyle(elem, 'display') === 'none';
     },
-    isEls: _.util.isElements,
-    isArr: _.util.isArray,
-    inArr(elem, array, ignoreType) {
-        if (ignoreType) {
-            for (var i = 0; i < array.length; i++) {
-                if (array[i] == elem) {
-                    return true;
-                };
-            };
-            return false;
-        }
-        return _.arr.has(array, elem);
-    },
-    in(elem, object) {
-        if (_.util.isArray(object)) {
-            return _.arr.has(object, elem);
-        }
-        if (_.util.isObj(object)) {
-            return _.obj.has(object, elem);
-        }
-        return false;
-    },
-    isReg: _.util.isRegExp,
+    isElements,
+    isEls: isElements,
+    isArray,
+    isArr: isArray,
     isFile(file) {
         return _.util.isObj(file) && file instanceof File;
     },
@@ -76,42 +60,23 @@ ns util with {
     isForm(data) {
         return _.util.isObj(data) && data instanceof FormData
     },
-    isFn(obj) {
-        return typeof obj === 'function';
-    },
-    isStr(str) {
-        return typeof str === 'string';
-    },
-    isOuterHTML(str) {
-        return /^<(\w+)[\s\S]+<\/\1>$/.test(str) || /^<(\w+)[^>]*\/\s*>$/.test(str);
-    },
-    isIntStr: _.util.isIntStr,
-    isFloatStr: _.util.isFloatStr,
-    isPercent(str) {
-        return (typeof str === 'string') && (/^[-\+]{0,1}(\d+(\.\d+){0,1}|\.\d+)\%$/.test(str));
-    },
-    hasStr: _.hasString,
-    isInt(num) {
-        return _.util.isInteger(num) || _.util.isIntStr(num);
-    },
-    isNum(num) {
-        return typeof num === 'number';
-    },
-    isNumber(num) {
-        return !isNaN(parseFloat(num)) && isFinite(num);
-    },
-    isFinite(num) {
-        return isFinite(num);
-    },
-    isNumeric(num) {
-        return typeof num === 'number' || _.util.isIntStr(num) || _.util.isFloatStr(num);
-    },
     isNul(obj) {
         if (obj) {
             return false;
         } else {
             return true;
         }
+    },
+    isStr(str) {
+        return typeof str === 'string';
+    },
+    isIntStr,
+    isFloatStr,
+    isOuterHTML(str) {
+        return /^<(\w+)[\s\S]+<\/\1>$/.test(str) || /^<(\w+)[^>]*\/\s*>$/.test(str);
+    },
+    isPercent(str) {
+        return (typeof str === 'string') && (/^[-\+]{0,1}(\d+(\.\d+){0,1}|\.\d+)\%$/.test(str));
     },
     isUrl(str) {
         var strRegex = "^((https|http|ftp|rtsp|mms|wss|ws)?://)"
@@ -147,6 +112,35 @@ ns util with {
         method = method.toUpperCase();
         return _.util.inArr(method, ['GET', 'CONNECT', 'COPY', 'DELETE', 'HEAD', 'LINK', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'TRACE', 'UNLINK', 'UPDATE', 'WRAPPED']) && method;
     },
+    isRegExp,
+    isReg: isRegExp,
+    isInt(num) {
+        return _.util.isInteger(num) || _.util.isIntStr(num);
+    },
+    isNum(num) {
+        return typeof num === 'number';
+    },
+    isNumber(num) {
+        return !isNaN(parseFloat(num)) && isFinite(num);
+    },
+    isFinite(num) {
+        return isFinite(num);
+    },
+    isNumeric(num) {
+        return typeof num === 'number' || _.util.isIntStr(num) || _.util.isFloatStr(num);
+    },
+    isInteger,
+    isScala(vari) {
+        return typeof vari === 'boolean' || typeof vari === 'string' || typeof vari === 'number';
+    },
+    isBool(vari) {
+        return typeof vari === 'boolean';
+    },
+    isFn(obj) {
+        return typeof obj === 'function';
+    },    
+    
+    // 是否支持Canvas
     isSupportCanvas() {
         return typeof CanvasRenderingContext2D != "undefined";
     },
@@ -155,7 +149,6 @@ ns util with {
         const reg = /webkit/i
         return reg.test(this._ua)
     },
-
     // 是否 IE
     isIE() {
         return 'ActiveXObject' in window
@@ -173,6 +166,28 @@ ns util with {
             }
         }
         return android;
+    },
+    hasProp: _.obj.hasProp,
+    hasStr: _.hasString,
+    in(elem, object) {
+        if (_.util.isArray(object)) {
+            return _.arr.has(object, elem);
+        }
+        if (_.util.isObj(object)) {
+            return _.obj.has(object, elem);
+        }
+        return false;
+    },
+    inArr(elem, array, ignoreType) {
+        if (ignoreType) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] == elem) {
+                    return true;
+                };
+            };
+            return false;
+        }
+        return _.arr.has(array, elem);
     }
 }
 

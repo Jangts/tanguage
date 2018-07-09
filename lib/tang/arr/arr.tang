@@ -155,4 +155,7 @@ ns arr with {
     slice: _.slice
 };
 
+@include 'diff';
+
+
 this.module.exports = ..arr;

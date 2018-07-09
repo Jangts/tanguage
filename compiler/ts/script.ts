@@ -122,16 +122,16 @@
             anonspace: /(@\d+L\d+P\d+O*\d*:::)?(void\s+ns|void\s+namespace|ns|namespace)\s*\{([^\{\}]*?)\}/g,
             class: /(@\d+L\d+P\d+O*\d*:::)?((class|expands)(\s+\.{0,3}[\$a-zA-Z_][\$\w\.]*)?(\s+extends\s+\.{0,3}[\$a-zA-Z_][\$\w\.]*|ignore)?\s*\{[^\{\}]*?\})/g,
             fnlike: /(@\d+L\d+P\d+O*\d*:::)?(^|(function|def|public)\s+)?(([\$a-zA-Z_][\$\w]*)?\s*\([^\(\)]*\))\s*\{([^\{\}]*?)\}/g,
-            parentheses: /(@\d+L\d+P\d+O*\d*:::)?\(\s*([^\(\)]*?)\s*\)/g,
-            arraylike: /(@\d+L\d+P\d+O*\d*:::)?\[(\s*[^\[\]]*?)\s*\]/g,
+            parentheses: /(@\d+L\d+P\d+O*\d*:::)?\(\s*([^\(\)]*)\s*\)/g,
+            arraylike: /(@\d+L\d+P\d+O*\d*:::)?\[(\s*[^\[\]]*)\s*\]/g,
             call: /(@\d+L\d+P\d+O*\d*:::)?((new)\s+([\$a-zA-Z_\.][\$\w\.]*)|(\.)?([\$a-zA-Z_][\$\w]*))\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*([^\$\w\s\{]|[\r\n].|\s*___boundary_[A-Z0-9_]{36}_\d+_as_array___|\s*@boundary_\d+_as_operator::|$)/g,
             callschain: /\s*(@\d+L\d+P\d+O*\d*:::)?\.\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_(call|callmethod)___(\s*(@\d+L\d+P\d+O*\d*:::)?\.\s*___boundary_[A-Z0-9_]{36}_\d+_as_(call|callmethod)___)*/g,
             arrowfn: /(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*(->|=>)\s*([^,;\r\n]+)\s*(,|;|\r|\n|$)/g,
             closure: /(@\d+L\d+P\d+O*\d*:::)?(@*[\$a-zA-Z_][\$\w]*|\)|\=|\(\s)?(@\d+L\d+P\d+O*\d*:::)?\s*\{(\s*[^\{\}]*?)\s*\}/g,
             expression: /(@\d+L\d+P\d+O*\d*:::)?(if|for|while|switch|with|catch|each)\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*;*\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_(closure|objlike)___)/g,
             if: /(@\d+L\d+P\d+O*\d*:::)?if\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*/g,
-            object: /(@\d+L\d+P\d+O*\d*:::)?\{\s*(@\d+L\d+P\d+O*\d*:::(...)?[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+O*\d*:::(...)?[\$a-zA-Z_][\$\w]*)*)\s*\}(@\d+L\d+P\d+O*\d*:::)?/g,
-            array: /(@\d+L\d+P\d+O*\d*:::)?\[\s*(@\d+L\d+P\d+O*\d*:::(...)?[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+O*\d*:::(...)?[\$a-zA-Z_][\$\w]*)*)\s*\]/g,
+            object: /(@\d+L\d+P\d+O*\d*:::)?\{\s*(@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*)*)\s*\}(@\d+L\d+P\d+O*\d*:::)?/g,
+            array: /(@\d+L\d+P\d+O*\d*:::)?\[\s*(@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*)*)\s*\]/g,
             log: /(@\d+L\d+P\d+O*\d*:::)log\s+(.+?)\s*([;\r\n]+|$)/g
         },
         matchExpRegPattern = {
@@ -156,11 +156,12 @@
         },
         boundaryMaker = (): string => {
             let radix = 36;
-            let uid = new Array(36);
-            for (let i = 0; i < 36; i++) {
+            let uid = new Array(radix);
+            for (let i = 0; i < radix; i++) {
                 uid[i] = zero2z[Math.floor(Math.random() * radix)];
             }
             uid[8] = uid[13] = uid[18] = uid[23] = '_';
+            radix = undefined;
             return uid.join('');
         },
         stringRepeat = (string: string, number: number): string => {
@@ -188,7 +189,6 @@
         configinfo_posi: string
         posimap: any[] = [];
         sources: any[] = [];
-        preoutput: string | undefined
         output: string | undefined
         tess = {}
         blockreserved:string[];
@@ -244,6 +244,7 @@
             // this.output = 'console.log("Hello, world!");';
             this.generate();
             // console.log(this.replacements);
+            newcontent = string = vars = undefined;
             return this;
         }
         error(str) {
@@ -274,8 +275,9 @@
             let newlines = positions.map((line) => {
                 return line.join("");
             })
-            this.positions.push(positions);
+            // this.positions.push(positions);
             // console.log(newlines.join("\r\n"));
+            lines = positions = undefined;
             return newlines.join("\r\n");
         }
         tidyPosition(string) {
@@ -396,6 +398,7 @@
                     this.xvars.push(...vars);
                     return '';
                 });
+            // console.log(string);
             // console.log(this.xvars, string);
             // console.log(this.replacements);
 
@@ -521,6 +524,7 @@
             }
             // console.log(string);
             // console.log(this.replacements);
+            matches = undefined;
             return string;
         }
         replaceTemplate(string){
@@ -626,6 +630,7 @@
             // console.log(string);
             // console.log(this.replacements);
             // a();
+            codes = undefined;
             return string;
         }
         replaceIncludes(string: string): string {
@@ -689,9 +694,10 @@
             while ((count < this.stringReplaceTimes) && (left >= 0)) {
                 count++;
                 // console.log(left, right);
+                // console.log(left, right, string);
                 if (left < right) {
                     string = string.replace(replaceExpRegPattern.array, (match: string, posi, elements) => {
-                        // console.log([match, closure]);
+                        // console.log(match, elements);
                         let index = this.replacements.length;
                         this.replacements.push(['[' + elements + ']', posi && posi.trim()]);
                         return '___boundary_' + this.uid + '_' + index + '_as_list___';
@@ -716,6 +722,7 @@
             }
             if (right >= 0) {
                 var index = right;
+                // console.log(left, right, string);
                 this.error('Unexpected `]` in `' + this.decode(string.substr(index)).substr(0, 256) + '`');
             }
             return string;
@@ -1167,9 +1174,9 @@
             });
         }
         replaceArrowFunctions(string: string): string {
-            let arrow = string.match(/(->|=>)/);
+            let arrowcodes = string.match(/(->|=>)/);
             // console.log(arrow);
-            if (arrow) {
+            if (arrowcodes) {
                 if (string.match(replaceExpRegPattern.arrowfn)) {
                     // console.log(string.match(matchExpRegPattern.arrowfn));
                     return string.replace(replaceExpRegPattern.arrowfn, (match: string, args: string, argsindex: string, arrow: string, body: string, end: string) => {
@@ -1205,9 +1212,10 @@
                     });
                 } else {
                     // console.log(string);
-                    this.error('Unexpected `' + arrow[0] + '` in `' + this.decode(string.substr(arrow.index, 256)) + '`');
+                    this.error('Unexpected `' + arrowcodes[0] + '` in `' + this.decode(string.substr(arrowcodes.index, 256)) + '`');
                 }
             }
+            arrowcodes = undefined;
             return string;
         }
         getPosition(string: string) {
@@ -1282,6 +1290,7 @@
                             // console.log(sentence);
                             this.pushSentenceToLines(lines, sentence, (inOrder && (s===sentences.length-1)) ? 'inline' : 'block');
                         }
+                        definition = undefined;
                     } else if (array.length === 3) {
                         this.pushVariablesToLines(lines, vars, array[0], array[2], array[1], inOrder);
                         // console.log(spilitarray, sentences);
@@ -1356,6 +1365,7 @@
                         });
                     }
                 }
+                match_as_statement = undefined;
             }
         }
         pushVariablesToLines(lines: any, vars: any, posi: string, code: string, symbol: string, inOrder: boolean = false) {
@@ -1384,6 +1394,7 @@
                 // console.log(display);
                 this.pushVariableToLines(lines, vars, clauses[c], clauses[c + 1], symbol, display);
             }
+            display = clauses = undefined;
         }
         pushVariableToLines(lines: any, vars: any, posi: string, code: string, symbol: string, display: string = 'block') {
             if (code) {
@@ -1401,6 +1412,7 @@
                     default:
                         return this.pushVariableToLine(lines, vars, code, symbol, posi, 'inline', '', ',');
                 }
+                _symbol = undefined;
             }
         }
         pushVariableToLine(lines: any, vars: any, code: string, symbol: string, posi: string = '', display: string = 'inline', _symbol: string = '', endmark: string = ',') {
@@ -1418,6 +1430,7 @@
                         value: symbol + ' ' + code
                     });
                     this.pushVariableToVars(vars, symbol, element, position);
+                    element = undefined;
                 } else {
                     let array = code.split(/\s*=\s*/);
                     // console.log(array);
@@ -1464,6 +1477,7 @@
                                     this.error('Unexpected Definition `' + symbol + '` at char ' + position.col + ' on line ' + position.line + '.');
                                 }
                             }
+                            match = undefined;
                         }
                         // console.log('foo');
                         if (index === array.length - 1) {
@@ -1476,8 +1490,9 @@
                             });
                         }
                     }
+                    array = value = undefined;
                 }
-
+                position = match = undefined;
             }
         }
         pushVariablesToLine(lines: any, vars: any, match, symbol, _symbol: string = '', value, position, endmark: string = ','){
@@ -1490,6 +1505,7 @@
                     type = 'object';
                 }
                 elements = closure.split(',');
+                closure = undefined;
             } else {
                 type = 'array';
                 elements = this.replacements[match[1]][0].replace(/(\[|\])/g, '').split(',');
@@ -1507,11 +1523,13 @@
                 } else {
                     this.pushSetToVars(lines, vars, type, i, elements.length, symbol, _symbol, element, value, position, endmark)
                 }
+                position = element = undefined;
             }
+            type = elements = undefined;
         }
         pushVariableValueToLine(lines, vars, type, symbol, _symbol, value, position, endmark){
             let anonvar;
-        if (value.match(/^[\$a-zA-Z_][\$\w]*(\s*\.\s*[\$a-zA-Z_][\$\w]*)*$/) && !value.match(/___boundary_[A-Z0-9_]{36}_(\d+)_as_[a-z]+___/)) {
+            if (value.match(/^[\$a-zA-Z_][\$\w]*(\s*\.\s*[\$a-zA-Z_][\$\w]*)*$/) && !value.match(/___boundary_[A-Z0-9_]{36}_(\d+)_as_[a-z]+___/)) {
                 if (type === '...') {
                     this.anonymous_variables++;
                     anonvar = '_ανώνυμος_variable_' + this.anonymous_variables;
@@ -1583,6 +1601,7 @@
                 }
             }
             // console.log(__value);
+            _value = undefined;
             lines.push({
                 type: 'line',
                 subtype: 'variable',
@@ -1612,6 +1631,7 @@
                 }
             }
             // console.log(__value);
+            _value = variable = undefined;
             lines.push({
                 type: 'line',
                 subtype: 'variable',
@@ -1711,6 +1731,7 @@
             this.using_as = using_as;
             // console.log(using_as);
             // console.log(imports, preast);
+            imports = using_as = undefined;
             return preast;
         }
         pushSentencesToPREAST(preast: object[] = [], vars: any, code: string, display: string = 'block', lineposi: any): object[] {
@@ -1739,17 +1760,20 @@
                                     type: match_as_statement[2]
                                 });
                             }
+                            array = undefined;
                         } else {
                             if ((statements.length === 1) && (display === 'block')) {
                                 this.pushRowsToAST(inline, vars, statements[0], true, lineposi);
                             } else {
                                 this.pushRowsToAST(inline, vars, statements[0], false, lineposi);
                             }
-                            
                         }
+                        match_as_statement = undefined;
                     }
+                    statement = undefined;
                 }
                 preast.push(inline);
+                inline = undefined;
                 return preast;
             }
         }
@@ -1785,8 +1809,10 @@
                     }
                     ast.body.push(codes);
                 }
+                block = undefined;
             }
             this.ast = ast;
+            ast = undefined;
             return this;
         }
         pushBodyToAST(body: object[] = [], vars: any, code: string, inOrder: boolean = false): object[] {
@@ -1821,6 +1847,7 @@
                 }
             }
             // console.log(body);
+            lines = undefined;
             return body;
         }
         pushSentencesToAST(body: object[] = [], vars: any, code: string, isblock: boolean = true, lineposi: any): object[] {
@@ -1848,6 +1875,7 @@
                         body: inline
                     });
                 }
+                inline = undefined;
             }
             return body;
         }
@@ -1870,9 +1898,11 @@
                             type: match_as_statement[2]
                         }, vars, true));
                     }
+                    array = undefined;
                 } else {
                     this.pushRowsToAST(body, vars, code, isblock, lineposi);
                 }
+                match_as_statement = undefined;
             }
             return body;
         }
@@ -1885,6 +1915,7 @@
                     this.pushCodeToAST(body, vars, row, isblock, (r === 0) && lineposi);
                 }
             }
+            rows = undefined;
             return body;
         }
         pushCodeToAST(body: object[], vars: any, code: string, isblock: boolean, lineposi: any): object[] {
@@ -1905,6 +1936,7 @@
                     value: element
                 });
             }
+            display = position = element = undefined;
             return body;
         }
         walk(element: any, vars: any = false, inOrder: boolean): object {
@@ -2106,6 +2138,7 @@
                 display = 'inline';
             }
             // console.log(this.replacements[index]);
+            matches = nameArr = paramArr = undefined;
             return {
                 type: type,
                 posi: position,
@@ -2133,6 +2166,7 @@
                 position.head = true;
             }
 
+            code = undefined;
             return {
                 type: type,
                 posi: position,
@@ -2187,7 +2221,8 @@
                     basename = false;
                 }
             }
-           
+
+            namespace = undefined;
             return {
                 type: type,
                 posi: position,
@@ -2214,6 +2249,7 @@
             let position = this.getPosition(this.replacements[index][1]);
             let body = this.pushBodyToAST([], localvars, array[2]);
             this.resetVarsRoot(localvars);
+            array = undefined;
             return {
                 type: 'closure',
                 posi: position,
@@ -2264,6 +2300,8 @@
                 }
                 body = this.checkObjMember(localvars, matches[3]);
             }
+
+            matches = namespace = undefined;
 
             return {
                 type: 'extends',
@@ -2460,6 +2498,7 @@
             };
             localvars.self = localvars.root.protected;
             let args: any = this.checkArgs(matches[4], localvars);
+            tem = undefined;
             return {
                 type: type,
                 vars: localvars,
@@ -2638,6 +2677,7 @@
                                     break;
                             }
                         }
+                        match_0 = undefined;
                     }
                     if (elArr[1] && elArr[1].trim()) {
                         let match_1: any = elArr[1].trim().match(matchExpRegPattern.index);
@@ -2645,8 +2685,11 @@
                             body.push(this.walkFnLike(parseInt(match_1[1]), 'inline', vars, type));
                         }
                     }
+                    elArr = undefined;
                 }
+                element = type = undefined;
             }
+            array = undefined;
             return body;
         }
         checkObjMember(vars: any, code: string): object[] {
@@ -2717,7 +2760,9 @@
                         }
                     }
                 }
+                element = elArr = undefined;
             }
+            that = bodyIndex = lastIndex = array = undefined;
             return body;
         }
         checkArgs(code: string, localvars): object {
@@ -2746,8 +2791,10 @@
                         localvars.self[varname] = 'var';
                         break;
                     }
+                    array = position = varname = undefined;
                 }
             }
+            args = undefined;
             return {
                 keys: keys,
                 keysArray: keysArray,
@@ -2784,6 +2831,7 @@
                             value: 'if (' + args.keys[index][0] + '@boundary_5_as_operator::void 0) { ' + args.keys[index][0] + ' = ' + valArr[0] + '; }'
                         });
                     }
+                    valArr = undefined;
                 }
             }
 
@@ -2803,16 +2851,25 @@
         generate(): Script {
             // console.log(this.replacements);
             // console.log(this.ast.body);
+            let ast = this.ast;
+            let imports = this.imports;
+            let alias = this.using_as;
+            this.ast = this.imports = this.using_as = undefined;
             let head: string[] = [];
             let body: string[] = [];
             let foot: string[] = [];
-            this.pushHeader(head, this.imports);
-            this.fixVariables(this.ast.vars);
-            this.pushAlias(body, this.ast.vars, this.using_as);
-            this.pushCodes(body, this.ast.vars, this.ast.body, 1, this.namespace);
-            this.pushFooter(foot, this.ast.vars);
-            this.preoutput = head.join('') + this.trim(body.join('')) + foot.join('');
-            this.output = this.pickUpMap(this.restoreStrings(this.preoutput, true)).replace(/[\s;]+;/g, ';');
+            this.pushHeader(head, imports);
+            imports = undefined;
+            this.fixVariables(ast.vars);
+            this.pushAlias(body, ast.vars, alias);
+            alias = undefined;
+            this.pushCodes(body, ast.vars, ast.body, 1, this.namespace);
+            this.pushFooter(foot, ast.vars);
+            ast = undefined;
+            let preoutput = head.join('') + this.trim(body.join('')) + foot.join('');
+            head = body = foot = undefined;
+            this.output = this.pickUpMap(this.restoreStrings(preoutput, true)).replace(/[\s;]+;/g, ';');
+            preoutput = undefined;
             // console.log(this.output);
             return this;
         }
@@ -2821,6 +2878,7 @@
                 let index = this.posimap.length;
                 this.posimap.push(position);
                 let replace = '/* @posi' + index + ' */';
+                index = undefined;
                 if (codes) {
                     codes.push(replace);
                 }
@@ -2828,7 +2886,7 @@
             }
             return '';
         }
-        pushHeader(codes: string[], array: any[]): string[] {
+        pushHeader(codes: string[], imports: any[]): string[] {
             codes.push('/*!');
             codes.push("\r\n" + ' * tanguage script compiled code');
             codes.push("\r\n" + ' *');
@@ -2848,13 +2906,14 @@
             } else {
                 codes.push("\r\n" + 'tang.init().block([');
             }
-            if (this.imports.length) {
+            if (imports.length) {
                 let imports: string[] = [];
-                for (let index = 0; index < this.imports.length; index += 2) {
+                for (let index = 0; index < imports.length; index += 2) {
                     imports.push(this.pushPostionsToMap(this.getPosition(this.imports[index + 1])) + "'" + this.imports[index] + "'");
                 }
                 // console.log(this.imports, imports);
                 codes.push("\r\n    " + imports.join(",\r\n    ") + "\r\n");
+                imports = undefined;
             }
             if (this.isMainBlock) {
                 codes.push('], function (pandora, root, imports, undefined) {');
@@ -2866,6 +2925,7 @@
                 let namespace = this.namespace.replace(/\.$/, "");
                 let name = namespace.replace(/^(.*\.)?([\$a-zA-Z_][\$\w]*)$/, "$2");
                 codes.push("\r\n    var " + name + " = pandora.ns('" + namespace + "', {});");
+                namespace = name = undefined;
             }
             return codes;
         }
@@ -2885,6 +2945,7 @@
                 } else {
                     codes.push("'] && imports['" + value + "']['" + key + "'];");
                 }
+                value = undefined;
             }
             return codes;
         }
@@ -2969,6 +3030,7 @@
                     this.pushTravelCodes(codes, element, layer, namespace);
                     break;
             }
+            indent = undefined;
             return codes;
         }
         pushArrayCodes(codes: string[], element: any, layer: number, namespace: string): string[] {
@@ -3001,8 +3063,10 @@
                         codes.push(elements.join(', '));
                     }
                 }
+                _layer = indent1 = indent2 = _break = undefined;
             }
             codes.push(']');
+            elements = undefined;
             return codes;
         }
         pushArrayElements(elements, body, vars, _layer, namespace){
@@ -3016,6 +3080,7 @@
                     if (elemCodes.length) {
                         elements.push(elemCodes.join('').trim());
                     }
+                    elemCodes = undefined;
                 }
             }
         }
@@ -3070,6 +3135,7 @@
                         codes.push(args.join(', '));
                     }
                 }
+                _layer = indent2 = _break = undefined;
             }
             // console.log(element.display);
             if (element.type === 'if'){
@@ -3080,6 +3146,7 @@
             } else {
                 codes.push(')');
             }
+            naming = name = undefined;
             return codes;
         }
         pushCallArgs(args, body, vars, _layer, namespace){
@@ -3092,6 +3159,7 @@
                     args.push(paramCodes.join('').trim());
                 }
                 // console.log(element.name[0].value, param, paramCodes);
+                paramCodes = undefined;
             }
         }
         pushCallsCodes(codes: string[], element: any, layer: number, namespace: string): string[] {
@@ -3124,6 +3192,7 @@
                     codes.push(';');
                 }
             }
+            elements = _layer = indent = _break = undefined;
             return codes;
         }
         pushClassCodes(codes: string[], element: any, layer: number, namespace: string): string[] {
@@ -3217,6 +3286,7 @@
                 if (getters.length) {
                     elements.push(indent2 + '_getters: {' + getters.join(',') + '}');
                 }
+                elem = undefined;
             }
 
             if (elements.length) {
@@ -3233,6 +3303,7 @@
                 }
                 codes.push(indent1);
             }
+            indent1 = indent2 = indent3 = elements = static_elements = cname = overrides = getters = setters = undefined;
             return codes;
         }
         pushFunctionCodes(codes: string[], element: any, layer: number, namespace: string): string[] {
@@ -3278,6 +3349,7 @@
 
             codes.push(') {');
             // console.log(element.body);
+            // console.log(element);
             if (element.body.length) {
                 // console.log(element);
                 if (element.vars.type === 'root') {
@@ -3292,6 +3364,7 @@
             }
             // console.log(element.display, element.subtype);
             codes.push(indent + '}');
+            indent = undefined;
             return codes;
         }
         pushExtendsCodes(codes: string[], element: any, layer: number, namespace: string): string[] {
@@ -3343,6 +3416,7 @@
             }
             codes.push(');');
             codes.push(indent1);
+            indent1 = indent2 = indent3 = posi = undefined;
             return codes;
         }
         pushExpressionCodes(codes: string[], element: any, layer: number, namespace: string): string[] {
@@ -3375,6 +3449,7 @@
             } else {
                 codes.push('}');
             }
+            indent1 = indent2 = undefined;
             return codes;
         }
         pushExpandClassCodes(codes: string[], element: any, layer: number, namespace: string): string[] {
@@ -3461,6 +3536,7 @@
             }
             codes.push(indent1);
             // console.log(elements, static_elements); 
+            indent1 = indent2 = elements = static_elements = cname = overrides = indent3 = undefined;
             return codes;
         }
         pushOverrideMethod(elements, overrides, indent2, indent3) {
@@ -3479,6 +3555,7 @@
                     elem.push(indent3 + 'return this.' + element[args] + '.apply(this, arguments);');
                     elem.push(indent2 + '}');
                     elements.push(elem.join(''));
+                    elem = undefined;
                 }
             }
         }
@@ -3499,6 +3576,7 @@
                 codes.push(', this);');
             }
             codes.push(indent);
+            index = indent = undefined;
             return codes;
         }
         pushObjCodes(codes: string[], element: any, layer: number, namespace: string) {
@@ -3539,6 +3617,7 @@
                             elements.push(elem.join(''));
                             break;
                     }
+                    elem = undefined;
                 }
                 if (_break) {
                     codes.push(elements.join(',' + indent2));
@@ -3546,8 +3625,10 @@
                 } else {
                     codes.push(elements.join(','));
                 }
+                elements = _layer = _break = undefined;
             }
             codes.push('}');
+            indent1 = indent2 = undefined;
             return codes;
         }
         pushFooter(codes: string[], vars: any): string[] {
@@ -3581,6 +3662,7 @@
                     }
                 }
             }
+            root = undefined;
         }
         fixVariables(vars: any) {
             vars.index = this.closurecount;
@@ -3775,6 +3857,7 @@
                 string = string.replace(matches[0], this.replacements[matches[1]][0]).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
                 matches = string.match(/@boundary_(\d+)_as_[a-z]+::/);
             }
+            matches = undefined;
             // console.log(string);
             return string.replace(/(@\d+L\d+P\d+O?\d*:::)/g, '');
         }
@@ -3830,6 +3913,7 @@
                 }
                 return operator;
             });
+            this.replacements = undefined;
             string = string.replace(/(@boundary_\d+_as_(preoperator)::)(\s*;+|(\s+([^;])))/g, (match, operator, word, right, afterwithgap, after) => {
                 if (after) {
                     return operator + after;
@@ -3844,6 +3928,7 @@
             let mappings = [];
             for (let l = 0; l < lines.length; l++) {
                 let line = lines[l];
+                lines[l] = undefined;
                 let mapping = [];
                 let match;
                 while (match = line.match(/\/\*\s@posi(\d+)\s\*\//)) {
@@ -3851,10 +3936,9 @@
                     // console.log(line, match);
                     
                     if (match[1] < this.posimap.length - 1 ){
-                        let position = this.posimap[parseInt(match[1]) + 1];
-                        // let position = this.posimap[match[1]];
-                        // console.log(position);
-                        // this.posimap[match[1]].o[1] = position.o[1];
+                        let i = parseInt(match[1]) + 1;
+                        let position = this.posimap[i];
+                        this.posimap[i] = undefined;
                         mapping.push([index, position.o[0], position.o[1], position.o[2], 0]);
                     }else{
                         // console.log(match);
@@ -3863,11 +3947,14 @@
                 }
                 _lines.push(line);
                 mappings.push(mapping);
+                line = mapping = undefined;
             }
+            this.posimap = undefined;
             mappings[0][0] = [0,0,0,0,0]
             this.mappings = mappings;
-            console.log(mappings)
-            return string;
+            mappings = undefined;
+            // console.log(mappings)
+            // return string;
             return _lines.join("\r\n");
         }
         run(precall = null, callback = (content) => { }) {

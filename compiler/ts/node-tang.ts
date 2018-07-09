@@ -103,6 +103,9 @@ let handlers = {
         sugar.onReadFile = onReadFile;
         sugar.getTplContent = getTplContent;
         sugar.compile();
+
+        sugar.positions = sugar.replacements = sugar.imports = sugar.using_as = sugar.ast = sugar.astconfiginfo = sugar.posimap = undefined;
+
         if (!fs.existsSync(getDirName(o))) {
             fs.mkdirSync(getDirName(o));
         }

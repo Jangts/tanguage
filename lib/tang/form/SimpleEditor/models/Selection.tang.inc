@@ -1,5 +1,3 @@
-@module;
-
 /*!
  * tanguage framework source code
  *
@@ -7,14 +5,9 @@
  *
  * Date: 2017-04-06
  */
+;
 
-use ~Range;
-
-var _ = pandora,
-doc = root.document,
-console = root.console;
-
-class ..form.Selection {
+class Selection {
     editor= null;
     range= null;
 
@@ -25,7 +18,7 @@ class ..form.Selection {
     // 恢复选区
     restoreSelection() {
         if (this.range) {
-            this.range = new _.form.Range(this.range);
+            this.range = new Range(this.range);
         } else {
             this.createEmptyRange();
         }
@@ -41,9 +34,9 @@ class ..form.Selection {
     saveRange(range) {
         if (!range) {
             // 获取当前的选区
-            range = new _.form.Range();
+            range = new Range();
         } else {
-            new _.form.Range(range);
+            new Range(range);
         }
         // 判断选区内容是否在编辑内容之内
         var i = 0,
@@ -110,7 +103,7 @@ class ..form.Selection {
     // 创建一个空白（即 &#8203 字符）选区
     createEmptyRange(index) {
         var editor = this.editor,
-            range = new _.form.Range(),
+            range = new Range(),
             elem;
         index = parseInt(index) || 0;
         range.selectInput(this.editor.richareas[index], false);

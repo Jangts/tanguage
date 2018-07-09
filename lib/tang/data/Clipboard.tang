@@ -1,0 +1,114 @@
+@module;
+/*!
+ * tanguage framework source code
+ *
+ * class form.Clipboard
+ *
+ * Date 2017-04-06
+ */
+;
+use $ util/;
+use $ dom/;
+
+// 注册_.data命名空间到pandora
+namespace data;
+
+var _ = pandora,
+doc = root.document,
+console = root.console;
+
+mouseUp() {
+    let options = this.data.options;
+    let clip = this.data.clip;
+    
+    if (_.util.isFn(options.copy) || _.util.isStr(options.copy)) {
+        if (_.util.isFn(options.copy)) {
+            var text = options.copy.call(this);
+        } else {
+            var text = options.copy
+        }
+        clip.setText(text).copy();
+        if (_.util.isFn(options.done)) {
+            options.done.call(this);
+        }
+    } else {
+        if (_.util.isFn(options.fail)) {
+            options.fail.call(this);
+        }
+    }
+}
+
+/**
+ * 一个基于html的剪切板类
+ * 
+ * @param   {String}    tagName         要创建的元素的标签名
+ * @param   {Object}    props           元素的属性
+ * @param   {Array}     children        子元素（节点）
+ * 
+ */
+
+class Clipboard {
+    Element = null
+    isValid = true
+    clipText = ''
+
+    _init(elem) {
+        // constructor for new simple upload client
+        if (_.util.isEl(elem) && (elem.tagName == 'INPUTS' || elem.tagName == 'TEXTAREA')) {
+            this.Element = elem;
+        } else {
+            this.Element = _.dom.create('textarea', doc.getElementsByTagName('body')[0], {
+                style: {
+                    position: 'fixed',
+                    top: -2000,
+                    left: -2000
+                }
+            });
+        }
+    }
+
+    disable(cancel) {
+        this.isValid = cancel ? true : false;
+        return this;
+    }
+
+    setText(newText) {
+        // set text to be copied to clipboard
+        this.clipText = newText;
+        this.Element.value = newText;
+        return this;
+    }
+
+    copy() {
+        if (_.util.isFn(this.Element.focus)) {
+            this.Element.focus();
+            if (window.getSelection) {
+                var selection = window.getSelection();
+                if (selection.rangeCount > 0) {
+                    doc.execCommand('selectall', false, false);
+                    doc.execCommand('copy', false, false);
+                } else {
+                    alert('Error');
+                }
+            } else if (doc.selection) {
+                var range = doc.selection.createRange();
+                range.execCommand('selectall', false, false);
+                range.execCommand('copy', false, false);
+            } else {
+                alert('Error');
+            }
+            this.Element.value = '';
+            this.Element.blur();
+        } else {
+            alert('Error');
+        }
+        return this;
+    }
+
+    static glue(selector, options, clip) {
+        if (!_.util.isObj(clip) || !(clip instanceof _.form.Clipboard)) {
+            clip = new _.form.Clipboard();
+        }
+        _.dom.events.add(document, 'mouseup', selector, {options, clip}, mouseUp);
+    }
+}

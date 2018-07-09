@@ -14,7 +14,6 @@ use $ dom/;
 use $ dom/HTMLCloser;
 use $ see/fa.css;
 use ~style.css;
-use ~../Selection;;
 
 var _ = pandora,
 doc = root.document,
@@ -22,6 +21,9 @@ console = root.console,
 query = _.dom.sizzle || _.dom.selector;
 
 namespace form {
+    @include 'models/Range';
+    @include 'models/Selection';
+
     var SimpleEditors = {};
     var conmands = {};
     // var metheds = {};
@@ -35,18 +37,18 @@ namespace form {
 
     @include 'includes/declare';
 
-    @include 'includes/commands/base.cmds';
-    @include 'includes/commands/font.cmds';
-    @include 'includes/commands/header.cmds';
-    @include 'includes/commands/createlink.cmd';
-    @include 'includes/commands/insert.cmds';
-    @include 'includes/commands/inserttable.cmd';
-    @include 'includes/commands/insertfile.cmd';
-    @include 'includes/commands/insertimage.cmd';
-    @include 'includes/commands/insertvideo.cmd';
-    @include 'includes/commands/insertfragments.cmd';
+    @include 'commands/base.cmds';
+    @include 'commands/font.cmds';
+    @include 'commands/header.cmds';
+    @include 'commands/createlink.cmd';
+    @include 'commands/insert.cmds';
+    @include 'commands/inserttable.cmd';
+    @include 'commands/insertfile.cmd';
+    @include 'commands/insertimage.cmd';
+    @include 'commands/insertvideo.cmd';
+    @include 'commands/insertfragments.cmd';
 
-    @include 'includes/commands/insertemoticon.cmd';
+    @include 'commands/insertemoticon.cmd';
     public careatEditor = (elem, options) {
         return new _.form.SimpleEditor(elem, options);
     },

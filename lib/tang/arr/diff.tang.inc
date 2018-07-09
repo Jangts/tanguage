@@ -134,5 +134,3 @@ namespace arr {
         };
     }
 }
-
-this.module.exports = ..arr.diff;

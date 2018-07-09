@@ -6,7 +6,7 @@
 *
 * Date 2017-04-06
 */
-
+const IntExpr = /^(\+|-)?\d+$/;
 
 //对象子类型判断
 typeOfObj (object) {
@@ -31,10 +31,10 @@ typeOfObj (object) {
     if (isRegExp(object)) {
         return 'RegExp';
     }
-    return nativeType(object);
+    return nativetype(object);
 }
 
-nativeType(object) {
+nativetype (object) {
     if (!object) {
         return 'Null';
     }
@@ -45,23 +45,23 @@ nativeType(object) {
     return 'Object';
 }
 
-var isGlobal = (object) {
+isGlobal (object) {
     return object === window;
-};
+}
 
-var isDoc = (object) {
+isDoc (object) {
     return object === document;
-};
+}
 
-var isElement = (object) {
+isElement (object) {
     return object && typeof object === 'object' && ((HTMLElement && (object instanceof HTMLElement)) || (object.nodeType === 1) || (DocumentFragment && (object instanceof DocumentFragment)) || (object.nodeType === 11));
-};
+}
 
-var isElFragment = (object) {
+isElFragment (object) {
     return object && typeof object === 'object' && ((DocumentFragment && (object instanceof DocumentFragment)) || (object.nodeType === 11));
-};
+}
 
-var isElements = (object) {
+isElements (object) {
     if (object && typeof object === 'object') {
         if (HTMLCollection && (object instanceof HTMLCollection)) {
             return true;
@@ -78,18 +78,18 @@ var isElements = (object) {
             return true;
         }
     }
-};
+}
 
-var isArray = (object) {
+isArray (object) {
     return Object.prototype.toString.call(object) === '[object Array]';
-};
+}
 
-var isRegExp = (object) {
+isRegExp (object) {
     return object instanceof RegExp;
-};
+}
 
 //字符串子类型判断
-var typeOfStr = (string) {
+typeOfStr (string) {
     if (isIntStr(string)) {
         return 'StringInteger';
     }
@@ -97,24 +97,22 @@ var typeOfStr = (string) {
         return 'StringFloat';
     }
     return 'String';
-};
+}
 
-var IntExpr = /^(\+|-)?\d+$/;
-
-var isIntStr = (string) {
+isIntStr (string) {
     return IntExpr.test(string)
-};
+}
 
-var isFloatStr = (string) {
+isFloatStr (string) {
     if (/^[-\+]{0,1}[\d\.]+$/.test(string)) {
         if (string.split('.').length === 2 && string.split('.')[1] != '') {
             return true;
         }
     }
     return false;
-};
+}
 
-var isInteger = (number) {
+isInteger (number) {
     if (typeof Number.isInteger === 'function') {
         return Number.isInteger(number);
     } else {
@@ -122,10 +120,10 @@ var isInteger = (number) {
     }
 }
 
-_('util', (object, subtype) {
+gettype (object, returnSubType) {
     switch (typeof object) {
         case 'object':
-            return subtype ? typeOfObj(object) : (object == null ? 'Null' : ((typeOfObj(object) === 'Array') ? 'Array' : 'Object'));
+            return returnSubType ? typeOfObj(object) : (object == null ? 'Null' : ((typeOfObj(object) === 'Array') ? 'Array' : 'Object'));
 
         case 'function':
         case 'boolean':
@@ -135,35 +133,9 @@ _('util', (object, subtype) {
             });
 
         case 'number':
-            return subtype ? (isInteger(object) ? 'Integer' : 'Float') : 'Number';
+            return returnSubType ? (isInteger(object) ? 'Integer' : 'Float') : 'Number';
 
         case 'string':
-            return subtype ? typeOfStr(object) : 'String';
+            return returnSubType ? typeOfStr(object) : 'String';
     }
-});
-
-_('util.fasttype', (obj) {
-    return Object.prototype.toString.call(obj).replace(/\[object\s|\]/g, '');
-});
-
-ns type with {
-    typeOfObj: typeOfObj,
-    typeOfStr: typeOfStr,
-    isGlobal: isGlobal,
-    isWin: isGlobal,
-    isDoc: isDoc,
-    isElement: isElement,
-    isElements: isElements,
-    isArray: isArray,
-    isRegExp: isRegExp,
-    IntExpr: IntExpr,
-    isIntStr: isIntStr,
-    isFloatStr: isFloatStr,
-    isInteger: isInteger
 }
-
-namespace type.Obj {
-    public native = nativeType;
-}
-
-this.module.exports = _.util;
