@@ -30,16 +30,27 @@
         root.tanguage_script = factory(root);
     }
 }(this, function (root) {
-    var _this = this;
     if (Array.prototype['includes'] == undefined) {
         Array.prototype['includes'] = function (searchElement, fromIndex) {
             fromIndex = parseInt(fromIndex) || 0;
-            for (fromIndex; fromIndex < _this.length; fromIndex++) {
-                if (_this[fromIndex] === searchElement) {
+            for (fromIndex; fromIndex < this.length; fromIndex++) {
+                if (this[fromIndex] === searchElement) {
                     return true;
                 }
             }
             return false;
+        };
+    }
+    var Buf;
+    if (typeof Buffer === 'function') {
+        Buf = Buffer;
+    }
+    else {
+        Buf = function (string) {
+            this.value = string;
+        };
+        Buf.prototype['toString'] = function () {
+            return this.value;
         };
     }
     var keywords = [
@@ -121,7 +132,7 @@
         if: /(@\d+L\d+P\d+O*\d*:::)?if\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*/g,
         object: /(@\d+L\d+P\d+O*\d*:::)?\{\s*(@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*)*)\s*\}(@\d+L\d+P\d+O*\d*:::)?/g,
         array: /(@\d+L\d+P\d+O*\d*:::)?\[\s*(@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*)*)\s*\]/g,
-        log: /(@\d+L\d+P\d+O*\d*:::)log\s+(.+?)\s*([;\r\n]+|$)/g
+        clog: /(@\d+L\d+P\d+O*\d*:::|\s+)clog\s+(.+?)\s*([;\r\n]+|$)/g
     }, matchExpRegPattern = {
         string: /(\/|\#|`|"|')([\*\/\=])?/,
         strings: {
@@ -313,6 +324,16 @@
             string = string.replace(/::::/g, '::: :');
             return string;
         };
+        Script.prototype.pushBuffer = function (replacement) {
+            // console.log(typeof Buffer, Buffer);
+            var buf = new Buf(replacement[0]);
+            replacement[0] = buf;
+            this.replacements.push(replacement);
+        };
+        Script.prototype.readBuffer = function (index) {
+            // console.log(this.replacements[index][0]);
+            return this.replacements[index][0].toString();
+        };
         Script.prototype.encode = function (string) {
             var _this = this;
             // console.log(string);
@@ -410,10 +431,10 @@
                 if (members) {
                     // console.log(members);
                     // url = url.replace(array, '[]');
-                    _this.replacements.push([url, members, posi]);
+                    _this.pushBuffer([url, members, posi]);
                     return '___boundary_' + _this.uid + '_' + index + '_as_usings___;';
                 }
-                _this.replacements.push([url, variables, posi]);
+                _this.pushBuffer([url, variables, posi]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_using___;';
             });
         };
@@ -422,19 +443,19 @@
             if (ignoreComments === void 0) { ignoreComments = false; }
             string = string.replace(/\\+(`|")/g, function (match) {
                 var index = _this.replacements.length;
-                _this.replacements.push([match]);
+                _this.pushBuffer([match]);
                 return '@boundary_' + index + '_as_mark::';
             })
                 .replace(/\\+(`|")/g, function (match) {
                 var index = _this.replacements.length;
-                _this.replacements.push([match]);
+                _this.pushBuffer([match]);
                 return '@boundary_' + index + '_as_mark::';
             })
                 .replace(/\[@\d+L\d+P\d+O?\d*:::\^\//g, '@boundary_9_as_mark::')
                 .replace(/(=|:)\s*\/=/g, '$1 /\\=')
                 .replace(/\\[^\r\n](@\d+L\d+P\d+O?\d*:::)*/g, function (match) {
                 var index = _this.replacements.length;
-                _this.replacements.push([match]);
+                _this.pushBuffer([match]);
                 return '@boundary_' + index + '_as_mark::';
             });
             // console.log(string);
@@ -456,7 +477,7 @@
                                 if (ignoreComments) {
                                     // console.log(true);
                                     string = string.replace(/\/\*{1,2}[\s\S]*?(\*\/|$)/, function (match) {
-                                        _this.replacements.push([match]);
+                                        _this.pushBuffer([match]);
                                         return '@boundary_' + index_1 + '_as_comments::';
                                     });
                                 }
@@ -484,10 +505,10 @@
                     }
                     else {
                         if (match[1]) {
-                            this_1.replacements.push([match[2].replace(/@\d+L\d+P\d+O?\d*:::/g, ''), match[1].trim(), match[4]]);
+                            this_1.pushBuffer([match[2].replace(/@\d+L\d+P\d+O?\d*:::/g, ''), match[1].trim(), match[4]]);
                         }
                         else {
-                            this_1.replacements.push([match[2].replace(/@\d+L\d+P\d+O?\d*:::/g, ''), void 0, match[4]]);
+                            this_1.pushBuffer([match[2].replace(/@\d+L\d+P\d+O?\d*:::/g, ''), void 0, match[4]]);
                         }
                         string = string.replace(match[0], '___boundary_' + this_1.uid + '_' + index_1 + stringas[matches[1]] + match[3]);
                     }
@@ -592,7 +613,7 @@
                             // code += ' + ';
                         }
                         if (inline[c].type === 'string') {
-                            // this.replacements.push(['"' + inline[c].value + '"']);
+                            // this.pushBuffer(['"' + inline[c].value + '"']);
                             code += '"' + inline[c].value + '"';
                         }
                         else {
@@ -641,12 +662,12 @@
                 while (on_1) {
                     on_1 = false;
                     string = string.replace(replaceExpRegPattern.include, function (match, type, index) {
-                        // console.log(match, this.replacements[index][0]);
+                        // console.log(match, this.readBuffer(index));
                         // console.log(this.sources);
                         // console.log(id, this.sources[id].src);
                         on_1 = true;
                         var context = _this.sources[id_1].src.replace(/[^\/\\]+$/, '');
-                        var src = _this.replacements[index][0].replace(/('|"|`)/g, '').trim();
+                        var src = _this.readBuffer(index).replace(/('|"|`)/g, '').trim();
                         switch (type) {
                             case 'template':
                                 str_1 = _this.getTplContent(src, context);
@@ -673,8 +694,8 @@
                 //     string = string.replace(replaceExpRegPattern.include, (match: string, type: string, index) => {
                 //         // console.log(match);
                 //         on = true;
-                //         let src = this.replacements[index][0].replace(/('|"|`)/g, '').trim();
-                //         return this.onReadFile(this.replacements[index][0].replace(/('|"|`)/g, '').trim());
+                //         let src = this.readBuffer(index).replace(/('|"|`)/g, '').trim();
+                //         return this.onReadFile(this.readBuffer(index).replace(/('|"|`)/g, '').trim());
                 //     });
                 // }
             }
@@ -702,14 +723,14 @@
                     string = string.replace(replaceExpRegPattern.array, function (match, posi, elements) {
                         // console.log(match, elements);
                         var index = _this.replacements.length;
-                        _this.replacements.push(['[' + elements + ']', posi && posi.trim()]);
+                        _this.pushBuffer(['[' + elements + ']', posi && posi.trim()]);
                         return '___boundary_' + _this.uid + '_' + index + '_as_list___';
                     }).replace(replaceExpRegPattern.arraylike, function (match, posi, elements) {
                         // console.log(match);
                         elements = _this.replaceBraces(elements);
                         elements = _this.replaceParentheses(elements);
                         var index = _this.replacements.length;
-                        _this.replacements.push(['[' + elements + ']', posi && posi.trim()]);
+                        _this.pushBuffer(['[' + elements + ']', posi && posi.trim()]);
                         return '___boundary_' + _this.uid + '_' + index + '_as_arraylike___';
                     });
                     left = string.indexOf('[');
@@ -770,7 +791,7 @@
                 matched = true;
                 body = _this.replaceParentheses(body);
                 var index = _this.replacements.length;
-                _this.replacements.push([body, posi && posi.trim()]);
+                _this.pushBuffer([body, posi && posi.trim()]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_class___';
             });
             if (matched)
@@ -827,7 +848,7 @@
                     }
                 }
                 var index = _this.replacements.length;
-                _this.replacements.push([body, posi && posi.trim()]);
+                _this.pushBuffer([body, posi && posi.trim()]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_extends___';
             });
             if (matched)
@@ -843,7 +864,7 @@
                     var body = 'anonspace {' + _this.replaceParentheses(closure) + '}';
                 }
                 var index = _this.replacements.length;
-                _this.replacements.push([body, posi && posi.trim()]);
+                _this.pushBuffer([body, posi && posi.trim()]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_extends___';
             });
             if (matched)
@@ -856,7 +877,7 @@
                 match = (definition || '') + call + ' {' + closure + '}';
                 var index = _this.replacements.length;
                 // console.log(match);
-                _this.replacements.push([match, posi && posi.trim()]);
+                _this.pushBuffer([match, posi && posi.trim()]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_function___';
             });
             if (matched)
@@ -865,7 +886,7 @@
                 matched = true;
                 // console.log([match, posi, closure]);
                 var index = _this.replacements.length;
-                _this.replacements.push([match, posi && posi.trim()]);
+                _this.pushBuffer([match, posi && posi.trim()]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_sets___';
             });
             if (matched)
@@ -887,19 +908,19 @@
                     case undefined:
                         if ((closure.indexOf(';') >= 0) ||
                             !closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|[\$a-zA-Z_][\$\w]*\s*(,|:|$))/)) {
-                            _this.replacements.push(['{' + closure + '}', posi3]);
+                            _this.pushBuffer(['{' + closure + '}', posi3]);
                             return posi1 + (word || '') + posi3 + ' ___boundary_' + _this.uid + '_' + index + '_as_closure___';
                         }
                         if (closure.match(/^\s*___boundary_[A-Z0-9_]{36}_\d+_as_function___\s*$/)) {
-                            _this.replacements.push(['{' + closure + '}', posi3]);
+                            _this.pushBuffer(['{' + closure + '}', posi3]);
                             return posi1 + (word || '') + posi3 + ' ___boundary_' + _this.uid + '_' + index + '_as_objlike___';
                         }
                         // console.log(closure);
                         // console.log(word, '|', posi2, '|', posi3);
-                        _this.replacements.push(['{' + closure + '}', posi3]);
+                        _this.pushBuffer(['{' + closure + '}', posi3]);
                         return '___boundary_' + _this.uid + '_' + index + '_as_object___';
                     case '=':
-                        _this.replacements.push(['{' + closure + '}']);
+                        _this.pushBuffer(['{' + closure + '}']);
                         return '= ___boundary_' + _this.uid + '_' + index + '_as_object___';
                     case '@config':
                         if (_this.configinfo === '{}') {
@@ -909,30 +930,30 @@
                         return '';
                     case 'return':
                     case 'typeof':
-                        _this.replacements.push([word + ' ', posi1]);
+                        _this.pushBuffer([word + ' ', posi1]);
                         index2 = _this.replacements.length;
-                        _this.replacements.push(['{' + closure + '}']);
+                        _this.pushBuffer(['{' + closure + '}']);
                         return '@boundary_' + index + '_as_preoperator::___boundary_' + _this.uid + '_' + index2 + '_as_object___';
                     case 'do':
                     case 'try':
-                        _this.replacements.push([word + ' ', posi1]);
+                        _this.pushBuffer([word + ' ', posi1]);
                         index2 = _this.replacements.length;
-                        _this.replacements.push(['{' + closure + '}', posi3]);
+                        _this.pushBuffer(['{' + closure + '}', posi3]);
                         return '; @boundary_' + index + '_as_keyword::___boundary_' + _this.uid + '_' + index2 + '_as_closure___;';
                     case 'else':
                     case 'finally':
-                        _this.replacements.push([word + ' ', posi1]);
+                        _this.pushBuffer([word + ' ', posi1]);
                         index2 = _this.replacements.length;
-                        _this.replacements.push(['{' + closure + '}', posi3]);
+                        _this.pushBuffer(['{' + closure + '}', posi3]);
                         return ";\r\n" + '@boundary_' + index + '_as_midword::___boundary_' + _this.uid + '_' + index2 + '_as_closure___';
                     default:
                         if (word.indexOf('(') === 0) {
                             // console.log(true, word);
-                            _this.replacements.push(['{' + closure + '}', posi3]);
+                            _this.pushBuffer(['{' + closure + '}', posi3]);
                             return word + '___boundary_' + _this.uid + '_' + index + '_as_object___';
                         }
                         // console.log(word, closure);
-                        _this.replacements.push(['{' + closure + '}', posi3]);
+                        _this.pushBuffer(['{' + closure + '}', posi3]);
                         return posi1 + word + ";\r\n" + posi3 + '___boundary_' + _this.uid + '_' + index + '_as_closure___;';
                 }
             });
@@ -952,7 +973,7 @@
                         argslike = _this.replaceCalls(argslike);
                         argslike = _this.replaceArrowFunctions(argslike);
                         var index = _this.replacements.length;
-                        _this.replacements.push(['(' + argslike + ')', posi && posi.trim()]);
+                        _this.pushBuffer(['(' + argslike + ')', posi && posi.trim()]);
                         return '___boundary_' + _this.uid + '_' + index + '_as_parentheses___';
                     });
                     // console.log(string);
@@ -987,14 +1008,14 @@
                 var index = _this.replacements.length;
                 // console.log(word, after);
                 if (word === 'else') {
-                    _this.replacements.push([word + ' ', posi && posi.trim()]);
+                    _this.pushBuffer([word + ' ', posi && posi.trim()]);
                     return ";\r\n" + '@boundary_' + index + '_as_midword::' + after;
                 }
                 if (after === ';' || word === 'continue' || word === 'break') {
-                    _this.replacements.push([word + ';', posi && posi.trim()]);
+                    _this.pushBuffer([word + ';', posi && posi.trim()]);
                     return ";\r\n" + '@boundary_' + index + '_as_keyword::;';
                 }
-                _this.replacements.push([word + ' ', posi && posi.trim()]);
+                _this.pushBuffer([word + ' ', posi && posi.trim()]);
                 return ";\r\n" + '@boundary_' + index + '_as_keyword::' + after;
             });
         };
@@ -1004,18 +1025,18 @@
                 // console.log(match, posi, expname, exp, expindex, closure, closureindex);
                 // console.log(expindex, closureindex);
                 // on = true;
-                var expressioncontent = _this.replacements[expindex][0];
-                var body = _this.replacements[closureindex][0];
+                var expressioncontent = _this.readBuffer(expindex);
+                var body = _this.readBuffer(closureindex);
                 var index = _this.replacements.length;
                 // console.log(index, match, expname + '(' + expressioncontent + ')' + body);
                 // console.log(expressioncontent, body);
-                _this.replacements.push([expname + expressioncontent + body, posi]);
+                _this.pushBuffer([expname + expressioncontent + body, posi]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_expression___';
             }).replace(replaceExpRegPattern.if, function (match, posi, parentheses) {
                 // on = true;
                 var index = _this.replacements.length;
-                _this.replacements.push(['if ' + parentheses, posi]);
-                return '___boundary_' + _this.uid + '_' + index + '_as_if___';
+                _this.pushBuffer(['if ' + parentheses, posi]);
+                return '___boundary_' + _this.uid + '_' + index + '_as_if___ ';
             });
             return string;
         };
@@ -1028,7 +1049,7 @@
                     // console.log(match);
                     on = true;
                     var index = _this.replacements.length;
-                    _this.replacements.push([' ' + word + ' ']);
+                    _this.pushBuffer([' ' + word + ' ']);
                     return '@boundary_' + index + '_as_operator::';
                 });
             }
@@ -1042,12 +1063,12 @@
                     var index = _this.replacements.length;
                     if (word === 'instanceof') {
                         // console.log(match, before, word)
-                        _this.replacements.push([' ' + word + ' ']);
+                        _this.pushBuffer([' ' + word + ' ']);
                         before = before.trim();
                         return before + '@boundary_' + index + '_as_operator::' + right;
                     }
                     else {
-                        _this.replacements.push([word + ' ']);
+                        _this.pushBuffer([word + ' ']);
                     }
                     return before + '@boundary_' + index + '_as_preoperator::' + right;
                 });
@@ -1065,7 +1086,7 @@
                         right = right.replace(sign, '@boundary_' + _index + '_as_preoperator::');
                     }
                     var index = _this.replacements.length;
-                    _this.replacements.push([' ' + op + '= ', posi]);
+                    _this.pushBuffer([' ' + op + '= ', posi]);
                     return left + '@boundary_' + index + '_as_operator::' + right;
                 });
             }
@@ -1080,7 +1101,7 @@
                         right = right.replace(sign, '@boundary_' + _index + '_as_preoperator::');
                     }
                     var index = _this.replacements.length;
-                    _this.replacements.push([' ' + op + ' ', posi]);
+                    _this.pushBuffer([' ' + op + ' ', posi]);
                     return left + '@boundary_' + index + '_as_operator::' + right;
                 });
             }
@@ -1096,7 +1117,7 @@
                         right = right.replace(sign, '@boundary_' + _index + '_as_preoperator::');
                     }
                     var index = _this.replacements.length;
-                    _this.replacements.push([' ' + op + ' ', posi]);
+                    _this.pushBuffer([' ' + op + ' ', posi]);
                     // console.log(left + '@boundary_' + index + '_as_operator::' + right);
                     return left + '@boundary_' + index + '_as_operator::' + right;
                 });
@@ -1107,7 +1128,7 @@
                 string = string.replace(operators.sign, function (match, before, sign, number) {
                     on = true;
                     // let index = this.replacements.length;
-                    // this.replacements.push(' ' + sign);
+                    // this.pushBuffer(' ' + sign);
                     var index = sign === '+' ? 3 : 4;
                     return before + '@boundary_' + index + '_as_preoperator::' + number;
                 });
@@ -1118,7 +1139,7 @@
                 string = string.replace(operators.before, function (match, op, number) {
                     on = true;
                     var index = _this.replacements.length;
-                    _this.replacements.push([op]);
+                    _this.pushBuffer([op]);
                     return '@boundary_' + index + '_as_preoperator::' + number;
                 });
             }
@@ -1128,7 +1149,7 @@
                 string = string.replace(operators.after, function (match, number, posi, op) {
                     on = true;
                     var index = _this.replacements.length;
-                    _this.replacements.push([op]);
+                    _this.pushBuffer([op]);
                     return number + (posi || '') + '@boundary_' + index + '_as_aftoperator::';
                 });
             }
@@ -1144,14 +1165,14 @@
         Script.prototype.replaceCalls = function (string) {
             var _this = this;
             // console.log(string);
-            string = string.replace(replaceExpRegPattern.log, function (match, posi, args) {
+            string = string.replace(replaceExpRegPattern.clog, function (match, posi, args) {
                 // console.log(match, args);
                 var index1 = _this.replacements.length;
-                _this.replacements.push(['(' + args + ')', undefined]);
+                _this.pushBuffer(['(' + args + ')', undefined]);
                 var index2 = _this.replacements.length;
-                _this.replacements.push(['log___boundary_' + _this.uid + '_' + index1 + '_as_parentheses___', undefined]);
+                _this.pushBuffer(['log___boundary_' + _this.uid + '_' + index1 + '_as_parentheses___', undefined]);
                 var index3 = _this.replacements.length;
-                _this.replacements.push(['.___boundary_' + _this.uid + '_' + index2 + '_as_callmethod___', posi]);
+                _this.pushBuffer(['.___boundary_' + _this.uid + '_' + index2 + '_as_callmethod___', posi]);
                 return '___boundary_' + _this.uid + '_' + index3 + '_as_log___;';
             });
             return this.replaceCallsChain(string.replace(replaceExpRegPattern.call, function (match, posi, fullname, constructor, methodname, dot, callname, args, argindex, after) {
@@ -1162,16 +1183,16 @@
                 var index = _this.replacements.length;
                 if (constructor) {
                     // console.log(fullname);
-                    _this.replacements.push([fullname + args, posi && posi.trim()]);
+                    _this.pushBuffer([fullname + args, posi && posi.trim()]);
                     return '___boundary_' + _this.uid + '_' + index + '_as_construct___' + after;
                 }
                 else {
-                    _this.replacements.push([callname + args, posi && posi.trim()]);
+                    _this.pushBuffer([callname + args, posi && posi.trim()]);
                     if (dot) {
                         return '.___boundary_' + _this.uid + '_' + index + '_as_callmethod___' + after;
                     }
                     else if (callname === 'if') {
-                        return '___boundary_' + _this.uid + '_' + index + '_as_if___' + after;
+                        return '___boundary_' + _this.uid + '_' + index + '_as_if___ ' + after;
                     }
                     return '___boundary_' + _this.uid + '_' + index + '_as_call___' + after;
                 }
@@ -1183,7 +1204,7 @@
             return string.replace(replaceExpRegPattern.callschain, function (match, posi, _index) {
                 var index = _this.replacements.length;
                 match = match.replace(/_as_call___/g, '_as_callmethod___');
-                _this.replacements.push([match, posi || _this.replacements[_index][1]]);
+                _this.pushBuffer([match, posi || _this.replacements[_index][1]]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_callschain___';
             });
         };
@@ -1203,12 +1224,12 @@
                         var matches = body.match(/^(@\d+L\d+P\d+O*\d*:::)?\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_(parentheses|object|closure)___\s*$/);
                         // console.log(matches);
                         if (matches) {
-                            var code = _this.replacements[matches[2]][0];
+                            var code = _this.replacements[matches[2]][0].toString();
                             var posi_1 = _this.replacements[matches[2]][1];
                             if (matches[3] === 'parentheses') {
                                 body = code.replace(/^\(\s*(.*?)\s*\)$/, function (match, code) {
                                     var index = _this.replacements.length;
-                                    _this.replacements.push(['return ', posi_1]);
+                                    _this.pushBuffer(['return ', posi_1]);
                                     return '@boundary_' + index + '_as_preoperator:: ' + code;
                                 });
                             }
@@ -1219,12 +1240,12 @@
                         }
                         else {
                             var index_3 = _this.replacements.length;
-                            _this.replacements.push(['return ', void 0]);
+                            _this.pushBuffer(['return ', void 0]);
                             body = '@boundary_' + index_3 + '_as_preoperator:: ' + body;
                             // console.log(body);
                         }
                         var index = _this.replacements.length;
-                        _this.replacements.push([args + arrow + body, posi]);
+                        _this.pushBuffer([args + arrow + body, posi]);
                         return '___boundary_' + _this.uid + '_' + index + '_as_arrowfn___' + end;
                     });
                 }
@@ -1452,7 +1473,7 @@
                 var position = this.getPosition(posi);
                 var match = code.match(/^([\$\a-zA-Z_][\$\w]*)@boundary_(\d+)_as_operator::/);
                 // console.log(code);
-                if (match && ['in', 'of']['includes'](this.replacements[match[2]][0].trim())) {
+                if (match && ['in', 'of']['includes'](this.replacements[match[2]][0].toString().trim())) {
                     var element = match[1];
                     lines.push({
                         type: 'line',
@@ -1538,7 +1559,7 @@
             if (endmark === void 0) { endmark = ','; }
             var type, elements = [];
             if (match[2] === 'sets') {
-                var closure = this.replacements[match[1]][0].replace(/(\{|\})/g, '');
+                var closure = this.replacements[match[1]][0].toString().replace(/(\{|\})/g, '');
                 if (/\.+/.test(closure)) {
                     type = '...';
                 }
@@ -1550,7 +1571,7 @@
             }
             else {
                 type = 'array';
-                elements = this.replacements[match[1]][0].replace(/(\[|\])/g, '').split(',');
+                elements = this.replacements[match[1]][0].toString().replace(/(\[|\])/g, '').split(',');
             }
             value = this.pushVariableValueToLine(lines, vars, type, symbol, _symbol, value, position, endmark);
             // console.log(elements, value);
@@ -1732,7 +1753,7 @@
                     case 'usings':
                         // console.log(lines[index]);.return
                         var posi = this.replacements[lines[index_5].index][2];
-                        var src = this.replacements[lines[index_5].index][0].trim();
+                        var src = this.replacements[lines[index_5].index][0].toString().trim();
                         // let alias = .trim();
                         if (!imports['includes'](src)) {
                             imports.push(src);
@@ -2054,8 +2075,8 @@
                         display: element.display || 'inline',
                         vars: vars,
                         value: '___boundary_' + this.uid + '_' + element.index + '_as_string___'
-                        // value: this.replacements[element.index][0].replace(this.markPattern, function () {
-                        //     return that.replacements[arguments[1]][0];
+                        // value: this.replacements[element.index][0].toString().replace(this.markPattern, function () {
+                        //     return that.replacements[arguments[1]][0].toString();
                         // })
                     };
                 default:
@@ -2069,7 +2090,7 @@
             }
         };
         Script.prototype.walkArray = function (index, display, vars) {
-            var body = [], position = this.getPosition(this.replacements[index][1]), clauses = this.replacements[index][0].replace(/([\[\s\]])/g, '').split(',');
+            var body = [], position = this.getPosition(this.replacements[index][1]), clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(',');
             // console.log(this.replacements[index], clauses);
             for (var c = 0; c < clauses.length; c++) {
                 if (c) {
@@ -2090,7 +2111,7 @@
             };
         };
         Script.prototype.walkArrowFn = function (index, display, vars) {
-            var matches = this.replacements[index][0].match(matchExpRegPattern.arrowfn);
+            var matches = this.readBuffer(index).match(matchExpRegPattern.arrowfn);
             // console.log(this.replacements[index], matches);
             var subtype = 'fn';
             var selfvas = {};
@@ -2121,7 +2142,7 @@
             };
             localvars.self = localvars.root.protected;
             localvars.fix_map = localvars.root.fix_map;
-            var args = this.checkArgs(this.replacements[matches[2]][0].replace(/(^\(|\)$)/g, ''), localvars);
+            var args = this.checkArgs(this.replacements[matches[2]][0].toString().replace(/(^\(|\)$)/g, ''), localvars);
             // console.log(matches);
             return {
                 type: 'def',
@@ -2136,8 +2157,8 @@
         };
         Script.prototype.walkCall = function (index, display, vars, type) {
             // console.log(this.replacements[index]);
-            var name = [], args = [], matches = this.replacements[index][0].match(matchExpRegPattern.call), position = this.getPosition(this.replacements[index][1]), nameArr = matches[1].split('___boundary_' + this.uid), paramArr = this.replacements[matches[2]][0].split(/([\(,\)])/);
-            // console.log(this.getLines(this.replacements[matches[2]][0], vars));
+            var name = [], args = [], matches = this.readBuffer(index).match(matchExpRegPattern.call), position = this.getPosition(this.replacements[index][1]), nameArr = matches[1].split('___boundary_' + this.uid), paramArr = this.replacements[matches[2]][0].toString().split(/([\(,\)])/);
+            // console.log(this.getLines(this.replacements[matches[2]][0].toString(), vars));
             // console.log(this.replacements[index], matches);
             for (var n = 0; n < nameArr.length; n++) {
                 var element = nameArr[n];
@@ -2213,7 +2234,7 @@
         };
         Script.prototype.walkCallsChain = function (index, display, vars, type) {
             var _this = this;
-            var code = this.replacements[index][0], position = this.getPosition(this.replacements[index][1]), calls = [];
+            var code = this.readBuffer(index), position = this.getPosition(this.replacements[index][1]), calls = [];
             code.replace(/(@\d+L\d+P\d+O*\d*:::)?\.___boundary_[A-Z0-9_]{36}_(\d+)_as_callmethod___/g, function (match, posi, _index) {
                 // console.log(match, posi, _index);
                 if (posi) {
@@ -2238,7 +2259,7 @@
         Script.prototype.walkClass = function (index, display, vars) {
             if (vars === void 0) { vars = true; }
             // console.log(this.replacements[index]);
-            var matches = this.replacements[index][0].match(matchExpRegPattern.class);
+            var matches = this.readBuffer(index).match(matchExpRegPattern.class);
             // console.log(matches);
             var type = matches[1];
             var namespace = vars.root.namespace || this.namespace;
@@ -2311,7 +2332,7 @@
                 fix_map: {},
                 type: 'local'
             };
-            var array = this.replacements[index][0].split(/\s*(\{|\})\s*/);
+            var array = this.readBuffer(index).split(/\s*(\{|\})\s*/);
             var position = this.getPosition(this.replacements[index][1]);
             var body = this.pushBodyToAST([], localvars, array[2]);
             this.resetVarsRoot(localvars);
@@ -2326,7 +2347,7 @@
         };
         Script.prototype.walkExtends = function (index, display, vars) {
             // console.log(this.replacements[index]);
-            var matches = this.replacements[index][0].match(matchExpRegPattern.extends);
+            var matches = this.readBuffer(index).match(matchExpRegPattern.extends);
             var position = this.getPosition(this.replacements[index][1]);
             var subtype = 'ext';
             var objname = matches[2];
@@ -2409,7 +2430,7 @@
             var tem = {
                 fnlike: /(^|(function|def|public|method)\s+)?([\$a-zA-Z_][\$\w]*)?\s*\(([^\(\)]*)\)\s*\{([^\{\}]*?)\}/
             };
-            var matches = this.replacements[index][0].match(matchExpRegPattern.fnlike);
+            var matches = this.readBuffer(index).match(matchExpRegPattern.fnlike);
             // console.log(matches);
             var subtype = matches[2] || 'function';
             var fname = matches[3] !== 'function' ? matches[3] : '';
@@ -2582,7 +2603,7 @@
             };
         };
         Script.prototype.walkParentheses = function (index, display, vars) {
-            var body = [], clauses = this.replacements[index][0].replace(/([\[\s\]])/g, '').split(/\s*(,)/), position = this.getPosition(this.replacements[index][1]);
+            var body = [], clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(/\s*(,)/), position = this.getPosition(this.replacements[index][1]);
             for (var c = 0; c < clauses.length; c++) {
                 if (c) {
                     var posi = this.getPosition(clauses[c]);
@@ -2610,7 +2631,7 @@
                 display: display || 'inline',
                 posi: this.getPosition(this.replacements[index][1]),
                 vars: vars,
-                body: this.checkObjMember(vars, this.replacements[index][0])
+                body: this.checkObjMember(vars, this.readBuffer(index))
             };
         };
         Script.prototype.checkProp = function (vars, posi, type, attr, array) {
@@ -2805,8 +2826,8 @@
                                         posi: void 0,
                                         display: 'inline',
                                         vars: vars,
-                                        value: ',' + this.replacements[parseInt(match_as_statement[1])][0].replace(this.markPattern, function () {
-                                            return that.replacements[arguments[1]][0];
+                                        value: ',' + this.replacements[parseInt(match_as_statement[1])][0].toString().replace(this.markPattern, function () {
+                                            return that.replacements[arguments[1]][0].toString();
                                         })
                                     });
                                     if (match_as_statement[3]) {
@@ -2921,7 +2942,8 @@
             var ast = this.ast;
             var imports = this.imports;
             var alias = this.using_as;
-            this.ast = this.imports = this.using_as = undefined;
+            this.ast = this.using_as = {};
+            this.imports = [];
             var head = [];
             var body = [];
             var foot = [];
@@ -2976,13 +2998,13 @@
                 codes.push("\r\n" + 'tang.init().block([');
             }
             if (imports.length) {
-                var imports_1 = [];
-                for (var index_15 = 0; index_15 < imports_1.length; index_15 += 2) {
-                    imports_1.push(this.pushPostionsToMap(this.getPosition(this.imports[index_15 + 1])) + "'" + this.imports[index_15] + "'");
+                var stropmi = [];
+                for (var index_15 = 0; index_15 < imports.length; index_15 += 2) {
+                    stropmi.push(this.pushPostionsToMap(this.getPosition(imports[index_15 + 1])) + "'" + imports[index_15] + "'");
                 }
-                // console.log(this.imports, imports);
-                codes.push("\r\n    " + imports_1.join(",\r\n    ") + "\r\n");
-                imports_1 = undefined;
+                // console.log(imports, stropmi);
+                codes.push("\r\n    " + stropmi.join(",\r\n    ") + "\r\n");
+                stropmi = undefined;
             }
             if (this.isMainBlock) {
                 codes.push('], function (pandora, root, imports, undefined) {');
@@ -3020,20 +3042,22 @@
             }
             return codes;
         };
-        Script.prototype.pushCodes = function (codes, vars, array, layer, namespace) {
+        Script.prototype.pushCodes = function (codes, vars, array, layer, namespace, lasttype) {
             if (namespace === void 0) { namespace = this.namespace; }
+            if (lasttype === void 0) { lasttype = ''; }
             // console.log(codes, array);
             // console.log(array);
             // console.log(layer, array);
             for (var index_16 = 0; index_16 < array.length; index_16++) {
                 var element = array[index_16];
                 // console.log(element);
-                this.pushElement(codes, vars, element, layer, namespace);
+                this.pushElement(codes, vars, element, layer, namespace, (index_16 - 1 >= 0) ? array[index_16 - 1].type : lasttype);
             }
             return codes;
         };
-        Script.prototype.pushElement = function (codes, vars, element, layer, namespace) {
+        Script.prototype.pushElement = function (codes, vars, element, layer, namespace, lasttype) {
             if (namespace === void 0) { namespace = this.namespace; }
+            if (lasttype === void 0) { lasttype = ''; }
             var indent = "\r\n" + stringRepeat("    ", layer);
             switch (element.type) {
                 case 'arraylike':
@@ -3048,7 +3072,7 @@
                     break;
                 case 'log':
                 case 'callschain':
-                    this.pushCallsCodes(codes, element, layer, namespace);
+                    this.pushCallsCodes(codes, element, layer, namespace, lasttype);
                     break;
                 case 'class':
                 case 'dec':
@@ -3065,7 +3089,8 @@
                             });
                         }
                         // console.log(code);
-                        if (element.display === 'block') {
+                        // console.log(code, element.display, element.posi, lasttype);
+                        if (element.display === 'block' || lasttype === 'exp') {
                             codes.push(indent + this.pushPostionsToMap(element.posi) + code);
                         }
                         else {
@@ -3081,7 +3106,7 @@
                     break;
                 case 'codes':
                     // console.log(element);
-                    this.pushCodes(codes, element.vars, element.body, layer + ((element.posi && element.posi.head) ? 1 : 0), namespace);
+                    this.pushCodes(codes, element.vars, element.body, layer + ((element.posi && element.posi.head) ? 1 : 0), namespace, lasttype);
                     break;
                 case 'def':
                     this.pushFunctionCodes(codes, element, layer, namespace);
@@ -3240,14 +3265,19 @@
                 paramCodes = undefined;
             }
         };
-        Script.prototype.pushCallsCodes = function (codes, element, layer, namespace) {
+        Script.prototype.pushCallsCodes = function (codes, element, layer, namespace, lasttype) {
             var elements = [];
             var _layer = layer;
             var indent;
             var _break = false;
             // console.log(element);
             if (element.type === 'log') {
-                indent = "\r\n" + stringRepeat("    ", _layer);
+                if (lasttype === 'if') {
+                    indent = "";
+                }
+                else {
+                    indent = "\r\n" + stringRepeat("    ", _layer);
+                }
                 codes.push(indent + this.pushPostionsToMap(element.posi) + 'root.console');
             }
             else if (element.posi && element.posi.head) {
@@ -3923,11 +3953,11 @@
             }
             return string.replace(pattern, function () {
                 if (arguments[5]) {
-                    return that.replacements[arguments[5]][0];
+                    return that.replacements[arguments[5]][0].toString();
                 }
-                return that.replacements[arguments[2] || arguments[4]][0];
+                return that.replacements[arguments[2] || arguments[4]][0].toString();
             }).replace(this.markPattern, function () {
-                return that.replacements[arguments[1]][0];
+                return that.replacements[arguments[1]][0].toString();
             }).replace(/(@\d+L\d+P\d+O?\d*:::)/g, '');
         };
         Script.prototype.decode = function (string) {
@@ -3935,13 +3965,13 @@
             var matches = string.match(/___boundary_([A-Z0-9_]{37})?(\d+)_as_[a-z]+___/);
             while (matches) {
                 // console.log(matches, this.replacements[matches[2]]);
-                string = string.replace(matches[0], this.replacements[matches[2]][0]).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
+                string = string.replace(matches[0], this.replacements[matches[2]][0].toString()).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
                 matches = string.match(/___boundary_([A-Z0-9_]{37})?(\d+)_as_[a-z]+___/);
             }
             matches = string.match(/@boundary_(\d+)_as_[a-z]+::/);
             while (matches) {
                 // console.log(matches, this.replacements[matches[2]]);
-                string = string.replace(matches[0], this.replacements[matches[1]][0]).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
+                string = string.replace(matches[0], this.replacements[matches[1]][0].toString()).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
                 matches = string.match(/@boundary_(\d+)_as_[a-z]+::/);
             }
             matches = undefined;
@@ -3971,10 +4001,14 @@
             string = string.replace(/[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_operator::)\s*/g, function (match, white, comments, midword) {
                 return "\r\n" + white.replace(/\t/g, '    ') + '   ' + comments + midword;
             });
+            // console.log(string);
             string = string.replace(/\s*(@boundary_\d+_as_operator::)[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)/g, "\r\n$2   $3 $1 ");
-            string = string.replace(/[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_midword::)\s*/g, function (match, white, comments, midword) {
-                return "\r\n" + white.replace(/\t/g, '    ') + comments + midword;
+            // console.log(string);
+            string = string.replace(/(}*[;\s]*)[\r\n]+([ \t]*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_midword::)\s*/g, function (match, pre, white, comments, midword) {
+                // console.log([match, pre, white, comments, midword]);
+                return pre.replace(/\s+/g, '').replace(/\};/g, '}') + "\r\n" + white.replace(/\t/g, '    ') + comments + midword;
             });
+            // console.log(string);
             // 格式化相应符号
             string = string.replace(/[;\s]*(\=|\?)[;\s]*/g, " $1 ");
             string = string.replace(/\s+(\:)[;\s]*/g, " $1 ");
@@ -3999,7 +4033,7 @@
                 }
                 return operator;
             });
-            this.replacements = undefined;
+            // this.replacements = undefined;
             string = string.replace(/(@boundary_\d+_as_(preoperator)::)(\s*;+|(\s+([^;])))/g, function (match, operator, word, right, afterwithgap, after) {
                 if (after) {
                     return operator + after;

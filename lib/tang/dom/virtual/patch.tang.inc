@@ -53,7 +53,7 @@ public patch = void ns {
     }
     applyPatches (node, currentPatches) {
         each(currentPatches as i, currentPatch) {
-            // log currentPatch;
+            // clog currentPatch;
             switch (currentPatch.type) {
                 case REPLACE:
                     var newNode = (typeof currentPatch.node === 'String') ? doc.createTextNode(currentPatch.node) : currentPatch.node.render();
@@ -95,7 +95,7 @@ public patch = void ns {
     }
 
     return (node, patches, walker) {
-        // log walker;
+        // clog walker;
         dfsWalk(node, walker, patches)
     }
 }

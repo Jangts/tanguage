@@ -42,7 +42,7 @@ public animator = (elem, options) {
 namespace animator with {
     play(elem, style, duration, easing, callback) {
         var Animation = animator(elem);
-        // log style;
+        // clog style;
         Animation.push({
             to: style,
             over: style,

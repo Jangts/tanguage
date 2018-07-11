@@ -63,7 +63,7 @@ void ns {
         }
     };
 
-    // log regEmoticon;
+    // clog regEmoticon;
 
     @include 'emoticons/default';
 }

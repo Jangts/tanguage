@@ -18,7 +18,7 @@ expands .Elements {
     }
     animate (styles, duration, easing, callback) {
         duration = duration || 1000;
-        // log styles;
+        // clog styles;
         this.each(() {
             $..animator.play(this, styles, duration, easing, callback);
         });

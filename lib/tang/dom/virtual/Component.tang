@@ -40,7 +40,7 @@ class .Component {
     _init(options={}){
         if(options.vNode){
             // 检查vNode是否dom.virtual.Element实例
-            // log virtual.Element;
+            // clog virtual.Element;
             if(is(options.vNode, virtual.Element)){
                 this.vNode = options.vNode;
             }else{

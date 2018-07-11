@@ -75,7 +75,7 @@ class .Slider {
 
     _init (elem, preset, options) {
         this.Element = bool.isStr(elem) ? ..dom.selector.byId(elem) : elem;
-        // log elem, this.Element, this.Element.nodeType, bool.isEl, bool.isEl(this.Element);
+        // clog elem, this.Element, this.Element.nodeType, bool.isEl, bool.isEl(this.Element);
         if (bool.isEl(this.Element)) {
             options = options || {};
             if (bool.isStr(preset) && $..Slider.presets[preset]) {

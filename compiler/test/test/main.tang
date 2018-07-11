@@ -1,6 +1,6 @@
 // use $ foo/bar as bar;
 
-log 'Hello, world!';
+clog 'Hello, world!';
 
 var main = 0;
 @include 'main-part1';

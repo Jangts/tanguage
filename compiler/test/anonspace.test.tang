@@ -3,7 +3,7 @@ namespace foo;
 ns {
     var a = 0, b =1;
     var y = a + -b;
-    log y;
+    clog y;
     class A {}
 }
 var o = ns {
@@ -22,4 +22,4 @@ var z = void ns {
     return a + -b;
 }   
     
-log o, z;
+clog o, z;

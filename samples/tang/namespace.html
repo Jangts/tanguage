@@ -48,17 +48,17 @@
         }
     }
 
-    public bar2 = (arg) -> log arg
+    public bar2 = (arg) -> clog arg
 
     namespace bar3 with {
         Bar1: class {_init(){}}
     }
 
-    log 'string1';
+    clog 'string1';
 
-    log 'string2', {};
+    clog 'string2', {};
 
-    log ('string2', 'string3');
+    clog ('string2', 'string3');
 
     # pandora.foo.bar2('Hello, world!');
 

@@ -31,7 +31,7 @@ computedStyle = (elem, property) {
                 });
             style[key] = currentStyle[key];
             style[prop] = currentStyle[key];
-            // log a;
+            // clog a;
         }
         style.styleFloat = style.cssFloat;
         return style;
@@ -74,7 +74,7 @@ _setStyle = (elem, property, value) {
                 elem.style[attr] = value;
                 break;
             default:
-            // log value;
+            // clog value;
                 value = (typeof value == 'number' || (typeof value == 'string' && /^[-\+]?[\d\.]+$/.test(value))) ? value + "px" : value;
                 elem.style[property] = value;
                 break;

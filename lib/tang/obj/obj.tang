@@ -54,7 +54,7 @@ namespace obj with {
                 if (typeof arguments[a] == 'object') {
                     each(arguments[a] as index, elememt) {
                         object[index] = elememt;
-                    });
+                    }
                 }
             }
         } else {

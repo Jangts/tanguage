@@ -30,7 +30,7 @@ ns util with {
         return !!value
     },
     is(obj, __class) {
-        // log __class;
+        // clog __class;
         return _.util.isObj(obj) && obj instanceof __class;
     },
     isObj(obj) {

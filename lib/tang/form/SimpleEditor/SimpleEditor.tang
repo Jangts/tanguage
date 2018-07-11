@@ -20,6 +20,8 @@ doc = root.document,
 console = root.console,
 query = _.dom.sizzle || _.dom.selector;
 
+// clog _.dom;
+
 namespace form {
     @include 'models/Range';
     @include 'models/Selection';
@@ -31,7 +33,7 @@ namespace form {
     var dialogs = {};
     @include 'includes/parameters';
     @include 'includes/builders';
-    // log builders;
+    // clog builders;
     @include 'includes/checks';
     @include 'includes/events';
 

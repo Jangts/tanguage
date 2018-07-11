@@ -4,7 +4,7 @@
  * Date: 2015-09-04
  */
 void ns {
-    // log regEmoticon;
+    // clog regEmoticon;
     regEmoticon('default', {
         '微笑': 'wx.gif',
         '晕': 'y.gif',

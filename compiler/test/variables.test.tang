@@ -37,7 +37,7 @@ let b = 0;
     let pandora_1 = b;
     var pandora_1_1;
     var root = pandora;
-    log a, b;
+    clog a, b;
 
     let z = 1;
     {
@@ -51,7 +51,7 @@ let b = 0;
     let z = 1;
 }
 
-log a, b, pandora_1_1, /* pandora_1 */;
+clog a, b, pandora_1_1, /* pandora_1 */;
 
 var c = 0
 var i = 0;
@@ -66,18 +66,18 @@ for (let i=0; i < 5; i++) {
     let g = 2;
     let z = 2;
     for (let i=0; i <6 ; i++) { 
-        # log i;
+        # clog i;
     }
     var j_5 = 5;
     for (let j=0; j <6 ; j++) { 
-        # log j;
+        # clog j;
     }
     for (var j=0; j <6 ; j++) { 
-        # log j;
+        # clog j;
     }
 }
 let z_0;
-log /* z */;
+clog /* z */;
 
 var d = [0,1,3,4,5]
 each (d as index, item) {
@@ -86,9 +86,9 @@ each (d as index, item) {
     var c = item;
     var f = 2;
     public p0 = 28;
-    log this, arguments;
+    clog this, arguments;
     var fn = ()=>{
-        log this, arguments;
+        clog this, arguments;
     }
 }
 
@@ -97,25 +97,25 @@ g (arg1){
     root.console.log(this);
 }
 g(1);
-# log _arguments;
+# clog _arguments;
 var g2 = (arg1, ...args)=> {
     var args2 = Array.prototype.slice.call(arguments, 2);
 
-    log arguments
+    clog arguments
     public p4 = 35;
     let _this = 1;
-    log this;
+    clog this;
     let _this_9 = 9;
-    # log _arguments;
+    # clog _arguments;
 }
 g2(1);
 
 var g3 = (arg1, ...args)-> {
     public p4 = 35;
     let _this = 1;
-    log this;
+    clog this;
     let _this_9 = 9;
-    # log _arguments;
+    # clog _arguments;
 }
 g3(1);
 
@@ -126,11 +126,11 @@ public f(a = 4, b, c, ...d){
         var c = item;
         var f = 2;
         public p0 = 28;
-        log this, arguments;
+        clog this, arguments;
     }
-    var pandora = (){ log true};
-    var f1 = ()->{ log this, arguments;};
-    var f2 = ()=>{ log this, arguments;};
+    var pandora = (){ clog true};
+    var f1 = ()->{ clog this, arguments;};
+    var f2 = ()=>{ clog this, arguments;};
     var pandora_0 = {};
     var root = pandora;
     # var let = void 0;
@@ -139,19 +139,19 @@ f(3,4,5,6,7,8,9)
 
 public p0 = 7;
 
-var pandora = (){ log true};
+var pandora = (){ clog true};
 var pandora_0 = {};
 var root = pandora;
 # var let = void 0;
 
 pandora();
-log a, b, c, d, e;
+clog a, b, c, d, e;
 
 public root;
 
 namespace bla {
     var pandora = (){
-        log true;
+        clog true;
         public  test = 3;
     };
     var pandora_0 = {};
@@ -165,7 +165,7 @@ namespace bla {
         public p1 = 14;
         public pandora = null;
         let root = pandora;
-        log a, b;
+        clog a, b;
 
         let z = 1;
         {
@@ -177,7 +177,7 @@ namespace bla {
     }
 
     public fnbla(){
-        log pandora;
+        clog pandora;
     }
     public root;
     

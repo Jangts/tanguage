@@ -18,12 +18,12 @@ let object = [0, 1, 2, 3, 4, 5];
     object['e'] = 5;
 
 each (object as item) {
-    log _index, item;
+    clog _index, item;
 }
 
 each (object as item) {
     @ownprop;
-    log _index, item;
+    clog _index, item;
 }
 
 each (variable as index, item) {

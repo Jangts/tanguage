@@ -1,4 +1,3 @@
-@module;
 /*!
 * tanguage framework source code
 *

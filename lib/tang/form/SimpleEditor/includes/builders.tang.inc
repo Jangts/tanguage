@@ -187,12 +187,12 @@ var builders = void ns {
             }
 
             var html = '';
-            // log builders, tooltypes;
+            // clog builders, tooltypes;
             for (var i = 0; i < toolbaritems.length; i++) {
                 html += '<div class="se-toolgroup">';
-                // log toolbaritems[i];
+                // clog toolbaritems[i];
                 for (var j = 0; j < toolbaritems[i].length; j++) {
-                    // log toolbaritems[i][j], tooltypes[toolbaritems[i][j]];
+                    // clog toolbaritems[i][j], tooltypes[toolbaritems[i][j]];
                     html += builders.tools[tooltypes[toolbaritems[i][j]]].call(this, toolbaritems[i][j]);
                 }
                 html += '</div>';

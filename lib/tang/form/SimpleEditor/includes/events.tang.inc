@@ -146,7 +146,7 @@ var events = void ns {
                         }
 
                         query('.se-tool.data-se-dialog .se-show', editor.toolbar)[0].innerHTML = '<span>click to upload</span>';
-                        // log 'foo';
+                        // clog 'foo';
                         editor.showDialog(dialog, this);
                         editor.selection.restoreSelection();
                     };

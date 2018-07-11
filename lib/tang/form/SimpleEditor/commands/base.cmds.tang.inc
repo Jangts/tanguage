@@ -13,7 +13,7 @@ void ns {
     ];
 
     each(presets as index, cmd) {
-        // log index, cmd;
+        // clog index, cmd;
         builders.regCommand(cmd, (val) {
             this.selection.getRange().execCommand(cmd, val);
             this.selection.saveRange();

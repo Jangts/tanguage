@@ -5,7 +5,6 @@
  * Written and Designed By Jang Ts
  * https://github.com/Jangts/tanguage/wiki
  */
-
 ;
 (function (root, factory) {
     // console.log(root.tang, typeof root.tang, typeof root.tang.init)
@@ -32,7 +31,7 @@
     }
 }(this, function (root) {
     if (Array.prototype['includes'] == undefined) {
-        Array.prototype['includes'] = (searchElement: any, fromIndex: any): boolean => {
+        Array.prototype['includes'] = function(searchElement: any, fromIndex: any): boolean {
             fromIndex = parseInt(fromIndex) || 0;
             for (fromIndex; fromIndex < this.length; fromIndex++) {
                 if (this[fromIndex] === searchElement) {
@@ -40,6 +39,18 @@
                 }
             }
             return false;
+        }
+    }
+
+    let Buf:any;
+    if(typeof Buffer === 'function'){
+        Buf = Buffer;
+    }else{
+        Buf = function (string: string) {
+            this.value = string;
+        }
+        Buf.prototype['toString'] = function (): string {
+            return this.value;
         }
     }
 
@@ -132,7 +143,7 @@
             if: /(@\d+L\d+P\d+O*\d*:::)?if\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*/g,
             object: /(@\d+L\d+P\d+O*\d*:::)?\{\s*(@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*)*)\s*\}(@\d+L\d+P\d+O*\d*:::)?/g,
             array: /(@\d+L\d+P\d+O*\d*:::)?\[\s*(@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*)*)\s*\]/g,
-            log: /(@\d+L\d+P\d+O*\d*:::)log\s+(.+?)\s*([;\r\n]+|$)/g
+            clog: /(@\d+L\d+P\d+O*\d*:::|\s+)clog\s+(.+?)\s*([;\r\n]+|$)/g
         },
         matchExpRegPattern = {
             string: /(\/|\#|`|"|')([\*\/\=])?/,
@@ -338,6 +349,16 @@
             string = string.replace(/::::/g, '::: :');
             return string;
         }
+        pushBuffer(replacement:any[]){
+            // console.log(typeof Buffer, Buffer);
+            let buf = new Buf(replacement[0]);
+            replacement[0] = buf;
+            this.replacements.push(replacement);
+        }
+        readBuffer(index) {
+            // console.log(this.replacements[index][0]);
+            return this.replacements[index][0].toString();
+        }
         encode(string: string): string {
             // console.log(string);
             string = string
@@ -431,29 +452,29 @@
                 if (members) {
                     // console.log(members);
                     // url = url.replace(array, '[]');
-                    this.replacements.push([url, members, posi]);
+                    this.pushBuffer([url, members, posi]);
                     return '___boundary_' + this.uid + '_' + index + '_as_usings___;';
                 }
-                this.replacements.push([url, variables, posi]);
+                this.pushBuffer([url, variables, posi]);
                 return '___boundary_' + this.uid + '_' + index + '_as_using___;';
             });
         }
         replaceStrings(string: string, ignoreComments: boolean = false): string {
             string = string.replace(/\\+(`|")/g, (match: string) => {
                 let index = this.replacements.length;
-                this.replacements.push([match]);
+                this.pushBuffer([match]);
                 return '@boundary_' + index + '_as_mark::';
             })
             .replace(/\\+(`|")/g, (match: string) => {
                 let index = this.replacements.length;
-                this.replacements.push([match]);
+                this.pushBuffer([match]);
                 return '@boundary_' + index + '_as_mark::';
             })
             .replace(/\[@\d+L\d+P\d+O?\d*:::\^\//g, '@boundary_9_as_mark::')
             .replace(/(=|:)\s*\/=/g, '$1 /\\=')
             .replace(/\\[^\r\n](@\d+L\d+P\d+O?\d*:::)*/g, (match: string) => {
                 let index = this.replacements.length;
-                this.replacements.push([match]);
+                this.pushBuffer([match]);
                 return '@boundary_' + index + '_as_mark::';
             });
             // console.log(string);
@@ -478,7 +499,7 @@
                                 if (ignoreComments) {
                                     // console.log(true);
                                     string = string.replace(/\/\*{1,2}[\s\S]*?(\*\/|$)/, (match) => {
-                                        this.replacements.push([match]);
+                                        this.pushBuffer([match]);
                                         return '@boundary_' + index + '_as_comments::';
                                     });
                                 } else {
@@ -504,9 +525,9 @@
                         string = string.replace(match[2], this.replaceTemplate(match[2]));
                     }else{
                         if (match[1]) {
-                            this.replacements.push([match[2].replace(/@\d+L\d+P\d+O?\d*:::/g, ''), match[1].trim(), match[4]]);
+                            this.pushBuffer([match[2].replace(/@\d+L\d+P\d+O?\d*:::/g, ''), match[1].trim(), match[4]]);
                         } else {
-                            this.replacements.push([match[2].replace(/@\d+L\d+P\d+O?\d*:::/g, ''), void 0, match[4]]);
+                            this.pushBuffer([match[2].replace(/@\d+L\d+P\d+O?\d*:::/g, ''), void 0, match[4]]);
                         }
                         string = string.replace(match[0], '___boundary_' + this.uid + '_' + index + stringas[matches[1]] + match[3]);
                     }
@@ -600,7 +621,7 @@
                             // code += ' + ';
                         }
                         if (inline[c].type === 'string') {
-                            // this.replacements.push(['"' + inline[c].value + '"']);
+                            // this.pushBuffer(['"' + inline[c].value + '"']);
                             code += '"' + inline[c].value + '"';
                         } else {
                             code += inline[c].value.replace(/@boundary_7_as_mark::/g, '"');
@@ -641,12 +662,12 @@
                 while (on) {
                     on = false;
                     string = string.replace(replaceExpRegPattern.include, (match: string, type:string, index) => {
-                        // console.log(match, this.replacements[index][0]);
+                        // console.log(match, this.readBuffer(index));
                         // console.log(this.sources);
                         // console.log(id, this.sources[id].src);
                         on = true;
                         let context = this.sources[id].src.replace(/[^\/\\]+$/, '');
-                        let src = this.replacements[index][0].replace(/('|"|`)/g, '').trim();
+                        let src = this.readBuffer(index).replace(/('|"|`)/g, '').trim();
                         switch (type){
                             case 'template':
                                 str = this.getTplContent(src, context);
@@ -673,8 +694,8 @@
                 //     string = string.replace(replaceExpRegPattern.include, (match: string, type: string, index) => {
                 //         // console.log(match);
                 //         on = true;
-                //         let src = this.replacements[index][0].replace(/('|"|`)/g, '').trim();
-                //         return this.onReadFile(this.replacements[index][0].replace(/('|"|`)/g, '').trim());
+                //         let src = this.readBuffer(index).replace(/('|"|`)/g, '').trim();
+                //         return this.onReadFile(this.readBuffer(index).replace(/('|"|`)/g, '').trim());
                 //     });
                 // }
             }
@@ -699,14 +720,14 @@
                     string = string.replace(replaceExpRegPattern.array, (match: string, posi, elements) => {
                         // console.log(match, elements);
                         let index = this.replacements.length;
-                        this.replacements.push(['[' + elements + ']', posi && posi.trim()]);
+                        this.pushBuffer(['[' + elements + ']', posi && posi.trim()]);
                         return '___boundary_' + this.uid + '_' + index + '_as_list___';
                     }).replace(replaceExpRegPattern.arraylike, (match: string, posi: string, elements: string) => {
                         // console.log(match);
                         elements = this.replaceBraces(elements);
                         elements = this.replaceParentheses(elements);
                         let index = this.replacements.length;
-                        this.replacements.push(['[' + elements + ']', posi && posi.trim()]);
+                        this.pushBuffer(['[' + elements + ']', posi && posi.trim()]);
                         return '___boundary_' + this.uid + '_' + index + '_as_arraylike___';
                     });
                     left = string.indexOf('[');
@@ -762,7 +783,7 @@
                 matched = true;
                 body = this.replaceParentheses(body);
                 let index = this.replacements.length;
-                this.replacements.push([body, posi && posi.trim()]);
+                this.pushBuffer([body, posi && posi.trim()]);
                 return '___boundary_' + this.uid + '_' + index + '_as_class___';
             });
             if (matched) return string;
@@ -812,7 +833,7 @@
                     }
                 }
                 let index = this.replacements.length;
-                this.replacements.push([body, posi && posi.trim()]);
+                this.pushBuffer([body, posi && posi.trim()]);
                 return '___boundary_' + this.uid + '_' + index + '_as_extends___';
             });
             if (matched) return string;
@@ -827,7 +848,7 @@
                     var body = 'anonspace {' + this.replaceParentheses(closure) + '}';
                 }
                 let index = this.replacements.length;
-                this.replacements.push([body, posi && posi.trim()]);
+                this.pushBuffer([body, posi && posi.trim()]);
                 return '___boundary_' + this.uid + '_' + index + '_as_extends___';
             });
             if (matched) return string;
@@ -840,7 +861,7 @@
                 match = (definition || '') + call + ' {' + closure + '}';
                 let index = this.replacements.length;
                 // console.log(match);
-                this.replacements.push([match, posi && posi.trim()]);
+                this.pushBuffer([match, posi && posi.trim()]);
                 return '___boundary_' + this.uid + '_' + index + '_as_function___';
             });
             if (matched) return string;
@@ -849,7 +870,7 @@
                 matched = true;
                 // console.log([match, posi, closure]);
                 let index = this.replacements.length;
-                this.replacements.push([match, posi && posi.trim()]);
+                this.pushBuffer([match, posi && posi.trim()]);
                 return '___boundary_' + this.uid + '_' + index + '_as_sets___';
             });
             if (matched) return string;
@@ -871,20 +892,20 @@
                     case undefined:
                         if ((closure.indexOf(';') >= 0) ||
                             !closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|[\$a-zA-Z_][\$\w]*\s*(,|:|$))/)) {
-                            this.replacements.push(['{' + closure + '}', posi3]);
+                            this.pushBuffer(['{' + closure + '}', posi3]);
                             return posi1 + (word || '') + posi3 + ' ___boundary_' + this.uid + '_' + index + '_as_closure___';
                         }
                         if (closure.match(/^\s*___boundary_[A-Z0-9_]{36}_\d+_as_function___\s*$/)) {
-                            this.replacements.push(['{' + closure + '}', posi3]);
+                            this.pushBuffer(['{' + closure + '}', posi3]);
                             return posi1 + (word || '') + posi3 + ' ___boundary_' + this.uid + '_' + index + '_as_objlike___';
                         }
                         // console.log(closure);
                         // console.log(word, '|', posi2, '|', posi3);
-                        this.replacements.push(['{' + closure + '}', posi3]);
+                        this.pushBuffer(['{' + closure + '}', posi3]);
                         return '___boundary_' + this.uid + '_' + index + '_as_object___';
 
                     case '=':
-                        this.replacements.push(['{' + closure + '}']);
+                        this.pushBuffer(['{' + closure + '}']);
                         return '= ___boundary_' + this.uid + '_' + index + '_as_object___';
 
                     case '@config':
@@ -896,33 +917,33 @@
 
                     case 'return':
                     case 'typeof':
-                        this.replacements.push([word + ' ', posi1]);
+                        this.pushBuffer([word + ' ', posi1]);
                         index2 = this.replacements.length;
-                        this.replacements.push(['{' + closure + '}']);
+                        this.pushBuffer(['{' + closure + '}']);
                         return '@boundary_' + index + '_as_preoperator::___boundary_' + this.uid + '_' + index2 + '_as_object___';
 
                     case 'do':
                     case 'try':
-                        this.replacements.push([word + ' ', posi1]);
+                        this.pushBuffer([word + ' ', posi1]);
                         index2 = this.replacements.length;
-                        this.replacements.push(['{' + closure + '}', posi3]);
+                        this.pushBuffer(['{' + closure + '}', posi3]);
                         return '; @boundary_' + index + '_as_keyword::___boundary_' + this.uid + '_' + index2 + '_as_closure___;';
 
                     case 'else':
                     case 'finally':
-                        this.replacements.push([word + ' ', posi1]);
+                        this.pushBuffer([word + ' ', posi1]);
                         index2 = this.replacements.length;
-                        this.replacements.push(['{' + closure + '}', posi3]);
+                        this.pushBuffer(['{' + closure + '}', posi3]);
                         return ";\r\n" + '@boundary_' + index + '_as_midword::___boundary_' + this.uid + '_' + index2 + '_as_closure___';
 
                     default:
                         if (word.indexOf('(') === 0) {
                             // console.log(true, word);
-                            this.replacements.push(['{' + closure + '}', posi3]);
+                            this.pushBuffer(['{' + closure + '}', posi3]);
                             return word + '___boundary_' + this.uid + '_' + index + '_as_object___';
                         }
                         // console.log(word, closure);
-                        this.replacements.push(['{' + closure + '}', posi3]);
+                        this.pushBuffer(['{' + closure + '}', posi3]);
                         return posi1 + word + ";\r\n" + posi3 + '___boundary_' + this.uid + '_' + index + '_as_closure___;';
                 }
             });
@@ -941,7 +962,7 @@
                         argslike = this.replaceCalls(argslike);
                         argslike = this.replaceArrowFunctions(argslike);
                         let index = this.replacements.length;
-                        this.replacements.push(['(' + argslike + ')', posi && posi.trim()]);
+                        this.pushBuffer(['(' + argslike + ')', posi && posi.trim()]);
                         return '___boundary_' + this.uid + '_' + index + '_as_parentheses___';
                     });
                     // console.log(string);
@@ -973,14 +994,14 @@
                 let index = this.replacements.length;
                 // console.log(word, after);
                 if (word === 'else') {
-                    this.replacements.push([word + ' ', posi && posi.trim()]);
+                    this.pushBuffer([word + ' ', posi && posi.trim()]);
                     return ";\r\n" + '@boundary_' + index + '_as_midword::' + after;
                 }
                 if (after === ';' || word === 'continue' || word === 'break') {
-                    this.replacements.push([word + ';', posi && posi.trim()]);
+                    this.pushBuffer([word + ';', posi && posi.trim()]);
                     return ";\r\n" + '@boundary_' + index + '_as_keyword::;';
                 }
-                this.replacements.push([word + ' ', posi && posi.trim()]);
+                this.pushBuffer([word + ' ', posi && posi.trim()]);
                 return ";\r\n" + '@boundary_' + index + '_as_keyword::' + after;
             })
         }
@@ -989,18 +1010,18 @@
                 // console.log(match, posi, expname, exp, expindex, closure, closureindex);
                 // console.log(expindex, closureindex);
                 // on = true;
-                let expressioncontent = this.replacements[expindex][0];
-                let body = this.replacements[closureindex][0];
+                let expressioncontent = this.readBuffer(expindex);
+                let body = this.readBuffer(closureindex);
                 let index = this.replacements.length;
                 // console.log(index, match, expname + '(' + expressioncontent + ')' + body);
                 // console.log(expressioncontent, body);
-                this.replacements.push([expname + expressioncontent + body, posi]);
+                this.pushBuffer([expname + expressioncontent + body, posi]);
                 return '___boundary_' + this.uid + '_' + index + '_as_expression___';
             }).replace(replaceExpRegPattern.if, (match: string, posi, parentheses: string) => {
                 // on = true;
                 let index = this.replacements.length;
-                this.replacements.push(['if ' + parentheses, posi]);
-                return '___boundary_' + this.uid + '_' + index + '_as_if___';
+                this.pushBuffer(['if ' + parentheses, posi]);
+                return '___boundary_' + this.uid + '_' + index + '_as_if___ ';
             });
             return string;
         }
@@ -1012,7 +1033,7 @@
                     // console.log(match);
                     on = true;
                     let index = this.replacements.length;
-                    this.replacements.push([' ' + word + ' ']);
+                    this.pushBuffer([' ' + word + ' ']);
                     return '@boundary_' + index + '_as_operator::';
                 });
             }
@@ -1027,11 +1048,11 @@
                     let index = this.replacements.length;
                     if (word === 'instanceof') {
                         // console.log(match, before, word)
-                        this.replacements.push([' ' + word + ' ']);
+                        this.pushBuffer([' ' + word + ' ']);
                         before = before.trim()
                         return before + '@boundary_' + index + '_as_operator::' + right;
                     } else {
-                        this.replacements.push([word + ' ']);
+                        this.pushBuffer([word + ' ']);
                     }
                     return before + '@boundary_' + index + '_as_preoperator::' + right;
                 });
@@ -1050,7 +1071,7 @@
                         right = right.replace(sign, '@boundary_' + _index + '_as_preoperator::');
                     }
                     let index = this.replacements.length;
-                    this.replacements.push([' ' + op + '= ', posi]);
+                    this.pushBuffer([' ' + op + '= ', posi]);
                     return left + '@boundary_' + index + '_as_operator::' + right;
                 });
             }
@@ -1066,7 +1087,7 @@
                         right = right.replace(sign, '@boundary_' + _index + '_as_preoperator::');
                     }
                     let index = this.replacements.length;
-                    this.replacements.push([' ' + op + ' ', posi]);
+                    this.pushBuffer([' ' + op + ' ', posi]);
                     return left + '@boundary_' + index + '_as_operator::' + right;
                 });
             }
@@ -1083,7 +1104,7 @@
                         right = right.replace(sign, '@boundary_' + _index + '_as_preoperator::');
                     }
                     let index = this.replacements.length;
-                    this.replacements.push([' ' + op + ' ', posi]);
+                    this.pushBuffer([' ' + op + ' ', posi]);
                     // console.log(left + '@boundary_' + index + '_as_operator::' + right);
                     return left + '@boundary_' + index + '_as_operator::' + right;
                 });
@@ -1095,7 +1116,7 @@
                 string = string.replace(operators.sign, (match: string, before: string, sign: string, number: string) => {
                     on = true;
                     // let index = this.replacements.length;
-                    // this.replacements.push(' ' + sign);
+                    // this.pushBuffer(' ' + sign);
                     let index = sign === '+' ? 3 : 4;
                     return before + '@boundary_' + index + '_as_preoperator::' + number;
                 });
@@ -1107,7 +1128,7 @@
                 string = string.replace(operators.before, (match: string, op: string, number: string) => {
                     on = true;
                     let index = this.replacements.length;
-                    this.replacements.push([op]);
+                    this.pushBuffer([op]);
                     return '@boundary_' + index + '_as_preoperator::' + number;
                 });
             }
@@ -1118,7 +1139,7 @@
                 string = string.replace(operators.after, (match: string, number: string, posi, op: string) => {
                     on = true;
                     let index = this.replacements.length;
-                    this.replacements.push([op]);
+                    this.pushBuffer([op]);
                     return number + (posi||'') + '@boundary_' + index + '_as_aftoperator::';
                 });
             }
@@ -1133,14 +1154,14 @@
         }
         replaceCalls(string: string): string {
             // console.log(string);
-            string = string.replace(replaceExpRegPattern.log, (match: string, posi, args) => {
+            string = string.replace(replaceExpRegPattern.clog, (match: string, posi, args) => {
                 // console.log(match, args);
                 let index1 = this.replacements.length;
-                this.replacements.push(['(' + args + ')', undefined]);
+                this.pushBuffer(['(' + args + ')', undefined]);
                 let index2 = this.replacements.length;
-                this.replacements.push(['log___boundary_' + this.uid + '_' + index1 + '_as_parentheses___', undefined]);
+                this.pushBuffer(['log___boundary_' + this.uid + '_' + index1 + '_as_parentheses___', undefined]);
                 let index3 = this.replacements.length;
-                this.replacements.push(['.___boundary_' + this.uid + '_' + index2 + '_as_callmethod___', posi]);
+                this.pushBuffer(['.___boundary_' + this.uid + '_' + index2 + '_as_callmethod___', posi]);
                 return '___boundary_' + this.uid + '_' + index3 + '_as_log___;';
             });
             return this.replaceCallsChain(string.replace(replaceExpRegPattern.call, (match: string, posi, fullname: string, constructor: string, methodname: string, dot, callname, args: string, argindex: string, after: string) => {
@@ -1151,14 +1172,14 @@
                 let index = this.replacements.length;
                 if (constructor) {
                     // console.log(fullname);
-                    this.replacements.push([fullname + args, posi && posi.trim()]);
+                    this.pushBuffer([fullname + args, posi && posi.trim()]);
                     return '___boundary_' + this.uid + '_' + index + '_as_construct___' + after;
                 } else {
-                    this.replacements.push([callname + args, posi && posi.trim()]);
+                    this.pushBuffer([callname + args, posi && posi.trim()]);
                     if (dot) {
                         return '.___boundary_' + this.uid + '_' + index + '_as_callmethod___' + after;
                     } else if (callname === 'if') {
-                        return '___boundary_' + this.uid + '_' + index + '_as_if___' + after;
+                        return '___boundary_' + this.uid + '_' + index + '_as_if___ ' + after;
                     }
                     return '___boundary_' + this.uid + '_' + index + '_as_call___' + after;
                 }
@@ -1169,7 +1190,7 @@
             return string.replace(replaceExpRegPattern.callschain, (match: string, posi: string, _index: string) => {
                 let index = this.replacements.length;
                 match = match.replace(/_as_call___/g, '_as_callmethod___');
-                this.replacements.push([match, posi || this.replacements[_index][1]]);
+                this.pushBuffer([match, posi || this.replacements[_index][1]]);
                 return '___boundary_' + this.uid + '_' + index + '_as_callschain___';
             });
         }
@@ -1188,12 +1209,12 @@
                         let matches = body.match(/^(@\d+L\d+P\d+O*\d*:::)?\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_(parentheses|object|closure)___\s*$/);
                         // console.log(matches);
                         if (matches) {
-                            let code = this.replacements[matches[2]][0];
+                            let code = this.replacements[matches[2]][0].toString();
                             let posi = this.replacements[matches[2]][1];
                             if (matches[3] === 'parentheses') {
                                 body = code.replace(/^\(\s*(.*?)\s*\)$/, (match: string, code: string) => {
                                     let index = this.replacements.length;
-                                    this.replacements.push(['return ', posi]);
+                                    this.pushBuffer(['return ', posi]);
                                     return '@boundary_' + index + '_as_preoperator:: ' + code;
                                 });
                             } else {
@@ -1202,12 +1223,12 @@
                             }
                         } else {
                             let index = this.replacements.length;
-                            this.replacements.push(['return ', void 0]);
+                            this.pushBuffer(['return ', void 0]);
                             body = '@boundary_' + index + '_as_preoperator:: ' + body;
                             // console.log(body);
                         }
                         let index = this.replacements.length;
-                        this.replacements.push([args + arrow + body, posi]);
+                        this.pushBuffer([args + arrow + body, posi]);
                         return '___boundary_' + this.uid + '_' + index + '_as_arrowfn___' + end;
                     });
                 } else {
@@ -1420,7 +1441,7 @@
                 let position = this.getPosition(posi);
                 let match = code.match(/^([\$\a-zA-Z_][\$\w]*)@boundary_(\d+)_as_operator::/);
                 // console.log(code);
-                if (match && ['in', 'of']['includes'](this.replacements[match[2]][0].trim())) {
+                if (match && ['in', 'of']['includes'](this.replacements[match[2]][0].toString().trim())) {
                     let element = match[1];
                     lines.push({
                         type: 'line',
@@ -1498,7 +1519,7 @@
         pushVariablesToLine(lines: any, vars: any, match, symbol, _symbol: string = '', value, position, endmark: string = ','){
             let type, elements = [];
             if (match[2] === 'sets') {
-                let closure = this.replacements[match[1]][0].replace(/(\{|\})/g, '');
+                let closure = this.replacements[match[1]][0].toString().replace(/(\{|\})/g, '');
                 if (/\.+/.test(closure)) {
                     type = '...';
                 } else {
@@ -1508,7 +1529,7 @@
                 closure = undefined;
             } else {
                 type = 'array';
-                elements = this.replacements[match[1]][0].replace(/(\[|\])/g, '').split(',');
+                elements = this.replacements[match[1]][0].toString().replace(/(\[|\])/g, '').split(',');
             }
             value = this.pushVariableValueToLine(lines, vars, type, symbol, _symbol, value, position, endmark);
             // console.log(elements, value);
@@ -1686,7 +1707,7 @@
                     case 'usings':
                         // console.log(lines[index]);.return
                         let posi = this.replacements[lines[index].index][2];
-                        let src = this.replacements[lines[index].index][0].trim();
+                        let src = this.replacements[lines[index].index][0].toString().trim();
                         // let alias = .trim();
 
                         if (!imports['includes'](src)) {
@@ -1990,8 +2011,8 @@
                         display: element.display || 'inline',
                         vars: vars,
                         value: '___boundary_' + this.uid + '_' + element.index + '_as_string___'
-                        // value: this.replacements[element.index][0].replace(this.markPattern, function () {
-                        //     return that.replacements[arguments[1]][0];
+                        // value: this.replacements[element.index][0].toString().replace(this.markPattern, function () {
+                        //     return that.replacements[arguments[1]][0].toString();
                         // })
                     }
                 default:
@@ -2007,7 +2028,7 @@
         walkArray(index: number, display: any, vars: any): object {
             let body = [],
                 position = this.getPosition(this.replacements[index][1]),
-                clauses = this.replacements[index][0].replace(/([\[\s\]])/g, '').split(',');
+                clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(',');
             // console.log(this.replacements[index], clauses);
             for (let c = 0; c < clauses.length; c++) {
                 if (c) {
@@ -2027,7 +2048,7 @@
             };
         }
         walkArrowFn(index: number, display: any, vars: any) {
-            let matches: any = this.replacements[index][0].match(matchExpRegPattern.arrowfn);
+            let matches: any = this.readBuffer(index).match(matchExpRegPattern.arrowfn);
             // console.log(this.replacements[index], matches);
             let subtype = 'fn';
             let selfvas = {};
@@ -2057,7 +2078,7 @@
             };
             localvars.self = localvars.root.protected;
             localvars.fix_map = localvars.root.fix_map;
-            let args: any = this.checkArgs(this.replacements[matches[2]][0].replace(/(^\(|\)$)/g, ''), localvars);
+            let args: any = this.checkArgs(this.replacements[matches[2]][0].toString().replace(/(^\(|\)$)/g, ''), localvars);
             // console.log(matches);
             return {
                 type: 'def',
@@ -2074,11 +2095,11 @@
             // console.log(this.replacements[index]);
             let name = [],
                 args = [],
-                matches: any = this.replacements[index][0].match(matchExpRegPattern.call),
+                matches: any = this.readBuffer(index).match(matchExpRegPattern.call),
                 position = this.getPosition(this.replacements[index][1]),
                 nameArr: string[] = matches[1].split('___boundary_' + this.uid),
-                paramArr = this.replacements[matches[2]][0].split(/([\(,\)])/);
-            // console.log(this.getLines(this.replacements[matches[2]][0], vars));
+                paramArr = this.replacements[matches[2]][0].toString().split(/([\(,\)])/);
+            // console.log(this.getLines(this.replacements[matches[2]][0].toString(), vars));
             // console.log(this.replacements[index], matches);
             for (let n = 0; n < nameArr.length; n++) {
                 const element = nameArr[n];
@@ -2149,7 +2170,7 @@
             };
         }
         walkCallsChain(index: number, display: any, vars: any, type: string): object {
-            let code = this.replacements[index][0],
+            let code = this.readBuffer(index),
                 position = this.getPosition(this.replacements[index][1]),
                 calls = [];
 
@@ -2177,7 +2198,7 @@
         }
         walkClass(index: number, display: any, vars: any = true) {
             // console.log(this.replacements[index]);
-            let matches: any = this.replacements[index][0].match(matchExpRegPattern.class);
+            let matches: any = this.readBuffer(index).match(matchExpRegPattern.class);
             // console.log(matches);
             let type = matches[1];
             let namespace = vars.root.namespace || this.namespace;
@@ -2245,7 +2266,7 @@
                 fix_map: {},
                 type: 'local'
             };
-            let array = this.replacements[index][0].split(/\s*(\{|\})\s*/);
+            let array = this.readBuffer(index).split(/\s*(\{|\})\s*/);
             let position = this.getPosition(this.replacements[index][1]);
             let body = this.pushBodyToAST([], localvars, array[2]);
             this.resetVarsRoot(localvars);
@@ -2260,7 +2281,7 @@
         }
         walkExtends(index: number, display: any, vars: any) {
             // console.log(this.replacements[index]);
-            let matches: any = this.replacements[index][0].match(matchExpRegPattern.extends);
+            let matches: any = this.readBuffer(index).match(matchExpRegPattern.extends);
             let position = this.getPosition(this.replacements[index][1]);
             let subtype: string = 'ext';
             let objname: string = matches[2];
@@ -2340,7 +2361,7 @@
             let tem = {
                 fnlike: /(^|(function|def|public|method)\s+)?([\$a-zA-Z_][\$\w]*)?\s*\(([^\(\)]*)\)\s*\{([^\{\}]*?)\}/
             }
-            let matches: any = this.replacements[index][0].match(matchExpRegPattern.fnlike);
+            let matches: any = this.readBuffer(index).match(matchExpRegPattern.fnlike);
             // console.log(matches);
             let subtype = matches[2] || 'function';
             let fname = matches[3] !== 'function' ? matches[3] : '';
@@ -2513,7 +2534,7 @@
         }
         walkParentheses(index: number, display: undefined, vars: any): object {
             let body = [],
-                clauses = this.replacements[index][0].replace(/([\[\s\]])/g, '').split(/\s*(,)/),
+                clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(/\s*(,)/),
                 position = this.getPosition(this.replacements[index][1]);
             for (let c = 0; c < clauses.length; c++) {
                 if (c) {
@@ -2540,7 +2561,7 @@
                 display: display || 'inline',
                 posi: this.getPosition(this.replacements[index][1]),
                 vars: vars,
-                body: this.checkObjMember(vars, this.replacements[index][0])
+                body: this.checkObjMember(vars, this.readBuffer(index))
             };
         }
         checkProp(vars: any, posi, type: string, attr: string[], array: string[]): object {
@@ -2735,8 +2756,8 @@
                                         posi: void 0,
                                         display: 'inline',
                                         vars: vars,
-                                        value: ',' + this.replacements[parseInt(match_as_statement[1])][0].replace(this.markPattern, function () {
-                                            return that.replacements[arguments[1]][0];
+                                        value: ',' + this.replacements[parseInt(match_as_statement[1])][0].toString().replace(this.markPattern, function () {
+                                            return that.replacements[arguments[1]][0].toString();
                                         })
                                     });
                                     if (match_as_statement[3]) {
@@ -2854,7 +2875,8 @@
             let ast = this.ast;
             let imports = this.imports;
             let alias = this.using_as;
-            this.ast = this.imports = this.using_as = undefined;
+            this.ast = this.using_as = {};
+            this.imports = [];
             let head: string[] = [];
             let body: string[] = [];
             let foot: string[] = [];
@@ -2907,13 +2929,13 @@
                 codes.push("\r\n" + 'tang.init().block([');
             }
             if (imports.length) {
-                let imports: string[] = [];
+                let stropmi: string[] = [];
                 for (let index = 0; index < imports.length; index += 2) {
-                    imports.push(this.pushPostionsToMap(this.getPosition(this.imports[index + 1])) + "'" + this.imports[index] + "'");
+                    stropmi.push(this.pushPostionsToMap(this.getPosition(imports[index + 1])) + "'" + imports[index] + "'");
                 }
-                // console.log(this.imports, imports);
-                codes.push("\r\n    " + imports.join(",\r\n    ") + "\r\n");
-                imports = undefined;
+                // console.log(imports, stropmi);
+                codes.push("\r\n    " + stropmi.join(",\r\n    ") + "\r\n");
+                stropmi = undefined;
             }
             if (this.isMainBlock) {
                 codes.push('], function (pandora, root, imports, undefined) {');
@@ -2949,18 +2971,18 @@
             }
             return codes;
         }
-        pushCodes(codes: string[], vars: any, array: any[], layer: number, namespace: string = this.namespace): string[] {
+        pushCodes(codes: string[], vars: any, array: any[], layer: number, namespace: string = this.namespace, lasttype: string = ''): string[] {
             // console.log(codes, array);
             // console.log(array);
             // console.log(layer, array);
             for (let index = 0; index < array.length; index++) {
                 const element = array[index];
                 // console.log(element);
-                this.pushElement(codes, vars, element, layer, namespace);
+                this.pushElement(codes, vars, element, layer, namespace, (index - 1 >= 0) ? array[index - 1].type : lasttype);
             }
             return codes;
         }
-        pushElement(codes: string[], vars: any, element: any, layer: number, namespace: string = this.namespace): string[] {
+        pushElement(codes: string[], vars: any, element: any, layer: number, namespace: string = this.namespace, lasttype:string = ''): string[] {
             let indent = "\r\n" + stringRepeat("    ", layer);
             switch (element.type) {
                 case 'arraylike':
@@ -2975,7 +2997,7 @@
                     break;
                 case 'log':
                 case 'callschain':
-                    this.pushCallsCodes(codes, element, layer, namespace);
+                    this.pushCallsCodes(codes, element, layer, namespace, lasttype);
                     break;
                 case 'class':
                 case 'dec':
@@ -2992,7 +3014,8 @@
                             });
                         }
                         // console.log(code);
-                        if (element.display === 'block') {
+                        // console.log(code, element.display, element.posi, lasttype);
+                        if (element.display === 'block'||lasttype==='exp') {
                             codes.push(indent + this.pushPostionsToMap(element.posi) + code);
                         } else {
                             if (element.posi) {
@@ -3007,7 +3030,7 @@
                     break;
                 case 'codes':
                     // console.log(element);
-                    this.pushCodes(codes, element.vars, element.body, layer + ((element.posi && element.posi.head) ? 1 : 0), namespace);
+                    this.pushCodes(codes, element.vars, element.body, layer + ((element.posi && element.posi.head) ? 1 : 0), namespace, lasttype);
                     break;
                 case 'def':
                     this.pushFunctionCodes(codes, element, layer, namespace);
@@ -3162,14 +3185,18 @@
                 paramCodes = undefined;
             }
         }
-        pushCallsCodes(codes: string[], element: any, layer: number, namespace: string): string[] {
+        pushCallsCodes(codes: string[], element: any, layer: number, namespace: string, lasttype: string): string[] {
             let elements: any[] = [];
             let _layer = layer;
             let indent;
             let _break = false;
             // console.log(element);
             if (element.type === 'log') {
-                indent = "\r\n" + stringRepeat("    ", _layer);
+                if(lasttype==='if'){
+                    indent = "";
+                }else{
+                    indent = "\r\n" + stringRepeat("    ", _layer);
+                }
                 codes.push(indent + this.pushPostionsToMap(element.posi) + 'root.console');
             }
             else if (element.posi && element.posi.head) {
@@ -3836,11 +3863,11 @@
             }
             return string.replace(pattern, function () {
                 if (arguments[5]) {
-                    return that.replacements[arguments[5]][0];
+                    return that.replacements[arguments[5]][0].toString();
                 }
-                return that.replacements[arguments[2] || arguments[4]][0];
+                return that.replacements[arguments[2] || arguments[4]][0].toString();
             }).replace(this.markPattern, function () {
-                return that.replacements[arguments[1]][0];
+                return that.replacements[arguments[1]][0].toString();
             }).replace(/(@\d+L\d+P\d+O?\d*:::)/g, '');
         }
         decode(string: string): string {
@@ -3848,13 +3875,13 @@
             let matches = string.match(/___boundary_([A-Z0-9_]{37})?(\d+)_as_[a-z]+___/);
             while (matches) {
                 // console.log(matches, this.replacements[matches[2]]);
-                string = string.replace(matches[0], this.replacements[matches[2]][0]).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
+                string = string.replace(matches[0], this.replacements[matches[2]][0].toString()).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
                 matches = string.match(/___boundary_([A-Z0-9_]{37})?(\d+)_as_[a-z]+___/);
             }
             matches = string.match(/@boundary_(\d+)_as_[a-z]+::/);
             while (matches) {
                 // console.log(matches, this.replacements[matches[2]]);
-                string = string.replace(matches[0], this.replacements[matches[1]][0]).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
+                string = string.replace(matches[0], this.replacements[matches[1]][0].toString()).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
                 matches = string.match(/@boundary_(\d+)_as_[a-z]+::/);
             }
             matches = undefined;
@@ -3884,13 +3911,17 @@
             string = string.replace(/[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_operator::)\s*/g, (match, white, comments, midword) => {
                 return "\r\n" + white.replace(/\t/g, '    ') + '   ' + comments + midword;
             });
+            // console.log(string);
             string = string.replace(/\s*(@boundary_\d+_as_operator::)[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)/g, "\r\n$2   $3 $1 ");
-            string = string.replace(/[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_midword::)\s*/g, (match, white, comments, midword) => {
-                return "\r\n" + white.replace(/\t/g, '    ') + comments + midword;
+            // console.log(string);
+            string = string.replace(/(}*[;\s]*)[\r\n]+([ \t]*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_midword::)\s*/g, (match, pre, white, comments, midword) => {
+                // console.log([match, pre, white, comments, midword]);
+                return pre.replace(/\s+/g, '').replace(/\};/g, '}') + "\r\n" + white.replace(/\t/g, '    ') + comments + midword;
             });
+            // console.log(string);
             // 格式化相应符号
             string = string.replace(/[;\s]*(\=|\?)[;\s]*/g, " $1 ");
-            
+
             string = string.replace(/\s+(\:)[;\s]*/g, " $1 ");
             string = string.replace(/[;\s]+(@boundary_\d+_as_comments::)(\:)[;\s]*/g, " $2 $1");
             // console.log(string);
@@ -3913,7 +3944,7 @@
                 }
                 return operator;
             });
-            this.replacements = undefined;
+            // this.replacements = undefined;
             string = string.replace(/(@boundary_\d+_as_(preoperator)::)(\s*;+|(\s+([^;])))/g, (match, operator, word, right, afterwithgap, after) => {
                 if (after) {
                     return operator + after;

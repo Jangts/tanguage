@@ -68,7 +68,7 @@ class .Animation extends ..Iterator {
         if (arr) {
             return arr;
         }
-        // log value;
+        // clog value;
         if (/^(\+|-)?\d+%$/.test(value)) {
             return value;
         }
@@ -181,8 +181,8 @@ class .Animation extends ..Iterator {
             from = this.mc[prop]['from'],
                 to = this.curFrame == this.frames ? this.mc[prop]['over'] : this.mc[prop]['to'],
                 tween = this.mc[prop].tween;
-            // log 'from:', from;
-            // log 'to:', to;
+            // clog 'from:', from;
+            // clog 'to:', to;
             if (typeof(from) == 'number' && typeof(to) == 'number') {
                 ds = tween(this.curFrame, from, to - from, this.frames).toFixed(5);
             }

@@ -300,7 +300,7 @@
             "name": "entity.name.type.object.tang"
         },
         {
-            "match": "((?<=console\\.)(debug|warn|info|log|error|time|timeEnd|assert))\\b",
+            "match": "((?<=console\\.)(debug|warn|info|log|error|time|timeEnd|assert)|clog)\\b",
             "name": "support.function.console.tang"
         },
         {

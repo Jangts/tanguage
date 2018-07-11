@@ -28,7 +28,7 @@
     }.foo);
 
 
-log true, {
+clog true, {
     foo(){}
 }.foo();
 
