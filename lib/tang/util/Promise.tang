@@ -2,7 +2,7 @@
 /*!
  * tanguage framework source code
  *
- * class .async.Promise
+ * class .util.Promise
  *
  * Date 2017-04-06
  */
@@ -11,7 +11,7 @@ var _ = pandora,
 doc = root.document,
 console = root.console;
 
-namespace async;
+namespace util;
 
 class .Promise {
     _init(resolver) {

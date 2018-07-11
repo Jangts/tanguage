@@ -192,7 +192,7 @@ byAttrsObject (Attrs, context) {
     if (Attrs.className) {
         if (typeof(Attrs.className) == 'string') {
             str += '.' + Attrs.className;
-        } else if (..util(Attrs.className) == 'Array') {
+        } else if (..util.gettype(Attrs.className) == 'Array') {
             for (var i in Attrs.className) {
                 str += '.' + Attrs.className[i];
             }

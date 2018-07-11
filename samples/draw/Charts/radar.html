@@ -22,9 +22,9 @@
     <div id="canvas2"> </div>
     <script>
         tang.init().block([
-            '$_/painter/Charts/modules/animation',
-            '$_/painter/Charts/modules/tooltip',
-            '$_/painter/Charts/types/Radar'
+            '$_/draw/Charts/modules/animation',
+            '$_/draw/Charts/modules/tooltip',
+            '$_/draw/Charts/types/Radar'
         ], function(pandora, root, imports, undefined) {
             var document = root.document;
             var option1 = {
@@ -64,7 +64,7 @@
                     data: [28, 48, 40, 19, 96, 27, 100]
                 }]
             };
-            var chart1 = new pandora.painter.Charts(document.getElementById("canvas1"));
+            var chart1 = new pandora.draw.Charts(document.getElementById("canvas1"));
             chart1.setOption(option1);
 
             setTimeout(function() {
@@ -122,7 +122,7 @@
                     data: [28, 48, 40, 19, 96, 27, 100]
                 }]
             };
-            var chart2 = new pandora.painter.Charts(document.getElementById("canvas2"));
+            var chart2 = new pandora.draw.Charts(document.getElementById("canvas2"));
             chart2.setOption(option2);
 
         }, true);

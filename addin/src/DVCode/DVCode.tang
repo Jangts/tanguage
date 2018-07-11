@@ -1,6 +1,6 @@
 @module;
 use $ data/;
-use $ async/;
+use $ data/;
 use $ dom/Elements;
 
 var $ = _.dom.$,
@@ -107,7 +107,7 @@ send = {
     result () {
         var that = this;
         this.result = false;
-        _.async.ajax(this.url + '?m=check&token=' + this.markOffset, {
+        _.data.ajax(this.url + '?m=check&token=' + this.markOffset, {
             method: 'GET',
             success (responseText) {
                 send.success.call(that, responseText);

@@ -29,22 +29,22 @@
     <script type="text/javascript">
         tang.init().block([
             '$_/data/',
-            '$_/async/'
+            '$_/data/'
         ], function(pandora, root, imports, undefined) {
             function getAll() {
-                pandora.async.json("jsonsql.test.json", function(json) {
+                pandora.data.json("jsonsql.test.json", function(json) {
                     console.log(json, pandora.data.queryJSON("select * from json.channel", json));
                 });
             }
 
             function getFiltered() {
-                pandora.async.json("jsonsql.test.json", function(json) {
+                pandora.data.json("jsonsql.test.json", function(json) {
                     console.log(json, pandora.data.queryJSON("select title,url,author,category from json.channel.items where (category=='javascript' || author=='trent') order by title,category asc limit 3", json));
                 });
             }
 
             function getLimit() {
-                pandora.async.json("jsonsql.test.json", function(json) {
+                pandora.data.json("jsonsql.test.json", function(json) {
                     console.log(pandora.data.queryJSON("select url from json.channel.items where (category=='javascript' && author=='trent') order by url asc limit 1,2", json));
                 });
             }

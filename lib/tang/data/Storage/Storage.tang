@@ -11,13 +11,15 @@
 use $ obj/;
 use $ str/hash;
 
+namespace data;
+
 var _ = pandora,
 doc = root.document,
 {console, location, localStorage} = root;
 
-var data = {};
+var database = {};
 
-class .data.Storage {
+class .Storage {
     _init(name) {
         if (name && (typeof name === 'string')) {
             this.id = _.str.hash.md5.pseudoIdentity(name);
@@ -25,10 +27,10 @@ class .data.Storage {
             this.id = new _.Identifier(name, 1).toString();
         }
         try {
-            data[this.id] = root.JSON.parse(localStorage[this.id]);
-            this.length = _.obj.length(data[this.id], true);
+            database[this.id] = root.JSON.parse(localStorage[this.id]);
+            this.length = _.obj.length(database[this.id], true);
         } catch (e) {
-            data[this.id] = {};
+            database[this.id] = {};
             localStorage[this.id] = '{}';
             this.length = 0;
         }
@@ -39,15 +41,15 @@ class .data.Storage {
     set(key, value) {
         if (key && typeof key === 'string') {
             if (value === undefined) {
-                if (data[this.id].hasOwnProperty(key)) {
-                    delete data[this.id][key];
-                    localStorage[this.id] = root.JSON.stringify(data[this.id]);
-                    this.length = _.obj.length(data[this.id], true);
+                if (database[this.id].hasOwnProperty(key)) {
+                    delete database[this.id][key];
+                    localStorage[this.id] = root.JSON.stringify(database[this.id]);
+                    this.length = _.obj.length(database[this.id], true);
                 }
             } else {
-                data[this.id][key] = value;
-                localStorage[this.id] = root.JSON.stringify(data[this.id]);
-                this.length = _.obj.length(data[this.id], true);
+                database[this.id][key] = value;
+                localStorage[this.id] = root.JSON.stringify(database[this.id]);
+                this.length = _.obj.length(database[this.id], true);
             }
         }
         return this;
@@ -55,11 +57,11 @@ class .data.Storage {
     
     get(key) {
         if (key === undefined) {
-            return data[this.id];
+            return database[this.id];
         }
         if (key && typeof key === 'string') {
-            if (data[this.id].hasOwnProperty(key)) {
-                return data[this.id][key];
+            if (database[this.id].hasOwnProperty(key)) {
+                return database[this.id][key];
             }
         }
         return undefined;
@@ -67,13 +69,14 @@ class .data.Storage {
     
     clear(del) {
         if (del) {
-            delete data[this.id];
+            delete database[this.id];
             delete localStorage[this.id];
         } else {
-            data[this.id] = {};
+            database[this.id] = {};
             localStorage[this.id] = '{}';
         }
         return null;
     }
 }
-this.module.exports = _.data.Storage;
+
+this.module.exports = data.Storage;

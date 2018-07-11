@@ -1,0 +1,115 @@
+@module;
+/*!
+ * tanguage framework source code
+ *
+ * class .data.Uploader
+ *
+ * Date 2017-04-06
+ */
+;
+use $ util/;
+
+namespace data;
+
+var _ = pandora,
+doc = root.document,
+{console, XMLHttpRequest, ActiveXObject, FormData} = root;;
+
+@include 'includes/Uploader';
+
+/**
+ * 一个数据树类型，提供4种排序方式
+ * 
+ * @param   {Array}     files           要上传的文件序列，一般有input获取
+ * @param   {Array}     types           支持的文件格式，用于检查
+ * @param   {Array}     suffixs         支持的文件后缀名，用于检查
+ * @param   {Number}    maxSize         最大可上传文件大小，用于检查
+ * 
+ */
+class .Uploader {
+    Element = null;
+    fileTypeRegExp = null;
+    fileNameRegExp = null;
+    isOnlyFilter = true;
+    _init(files, types, suffixs, maxSize) {
+        this.files = files;
+        if (_.util.isArr(types)) {
+            this.fileTypeRegExp = toRegExp(types);
+        }
+        if (_.util.isArr(suffixs) && suffixs.length) {
+            this.fileNameRegExp = new RegExp(".(" + suffixs.join('|') + ")$");
+        }
+        this.fileMaxSize = typeof maxSize == 'number' ? maxSize : 1024 * 1024 * 200;
+    }
+
+    checkType(doneCallback, failCallback) {
+        var result = this.filesChecker(this.files);
+        if (this.isOnlyFilter) {
+            var result = this.filesFilter();
+        } else {
+            var result = this.filesChecker();
+        }
+        //console.log(result);
+        if (result[0]) {
+            _.util.isFn(doneCallback) && doneCallback.call(this, result[1], result[2]);
+        } else {
+            _.util.isFn(failCallback) && failCallback.call(this, result[1], result[2]);
+        }
+    }
+
+    filesFilter() {
+        var array = [];
+        for (var i = 0; i < this.files.length; i++) {
+            if (this.checkSIZE(this.files[i])) {
+                if (this.checkTYPE(this.files[i]) || this.checkEXTN(this.files[i])) {
+                    array.push(this.files[i]);
+                }
+            }
+        }
+        if (array.length > 0) {
+            if (this.files.length > array.length) {
+                return [true, array, 0];
+            }
+            return [true, array, 1];
+        } else {
+            return [false, 0, 2];
+        }
+    }
+
+    filesChecker() {
+        for (var i = 0; i < this.files.length; i++) {
+            if (!(this.checkTYPE(this.files[i]) || this.checkEXTN(this.files[i]))) {
+                return [false, this.files[i], 0];
+            }
+            if (!this.checkSIZE(this.files[i])) {
+                return [false, this.files[i], 1];
+            }
+        }
+        return [true, this.files, 1];
+    }
+
+    checkTYPE(file) {
+        return this.fileTypeRegExp && this.fileTypeRegExp.test(file.type);
+    }
+
+    checkEXTN(file) {
+        return this.fileNameRegExp && this.fileNameRegExp.test(file.name);
+    }
+
+    checkSIZE(file) {
+        return file.size < this.fileMaxSize;
+    }
+
+    transfer(options, method) {
+        if (this.files.length && this.files.length === 1) {
+            _.data.Uploader.transfer.call(this, this.files[0], options, method);
+        } else {
+            _.data.Uploader.transfer.call(this, this.files, options, method);
+        }
+
+    }
+    
+    @include 'includes/transfer';
+}
+
+this.module.exports = data.Uploader;

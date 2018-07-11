@@ -1,4 +1,4 @@
-use $ async/ as async;
+use $ data/ as async;
 use $ app/Backstage/ as Backstage;
 
 const OPTIONS_SRC = 'options.json';
@@ -6,7 +6,7 @@ const OPTIONS_SRC = 'options.json';
 log imports, Backstage; log 1;
 
 main(){
-    async.json(
+    data.json(
         OPTIONS_SRC,
         (options){
             new Backstage(options);

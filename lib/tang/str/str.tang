@@ -145,4 +145,4 @@ namespace str with {
     }
 }
 
-this.module.exports = _.str;
+this.module.exports = ..str;

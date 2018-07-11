@@ -13,7 +13,7 @@ tang.init().block([
 	var _ = pandora;
 	var declare = pandora.declareClass;
 	var doc = global.document;
-	var QRCode = _.painter.QRCode;
+	var QRCode = _.draw.QRCode;
 	var QRErrorCorrectLevel = QRCode.Model.CorrectLevel;
 	var QRCodeLimitLength = [
 		[17, 14, 11, 7],
@@ -92,7 +92,7 @@ tang.init().block([
 		}
 		return nType;
 	}
-	declare('painter.QRCode', {
+	declare('draw.QRCode', {
 		_init: function (el, options) {
 			this.options = {
 				width: 256,
@@ -122,13 +122,13 @@ tang.init().block([
 			this.Element = el;
 			this.Code = null;
 			console.log(this.Element);
-			this._oDrawing = new _.painter.QRCode.Drawing(this.Element, this.options);
+			this._oDrawing = new _.draw.QRCode.Drawing(this.Element, this.options);
 			if (this.options.text) {
 				this.makeCode(this.options.text);
 			};
 		},
 		makeCode: function (sText) {
-			this.Code = new _.painter.QRCode.Model(_getTypeNumber(sText, this.options.correctLevel), this.options.correctLevel);
+			this.Code = new _.draw.QRCode.Model(_getTypeNumber(sText, this.options.correctLevel), this.options.correctLevel);
 			this.Code.addData(sText);
 			this.Code.make();
 			this.Element.title = sText;
@@ -144,6 +144,6 @@ tang.init().block([
 			this._oDrawing.clear();
 		}
 	});
-	_.extend(_.painter.QRCode, QRCode, {CorrectLevel: QRErrorCorrectLevel});
+	_.extend(_.draw.QRCode, QRCode, {CorrectLevel: QRErrorCorrectLevel});
 });
 //# sourceMappingURL=QRCode.js.map

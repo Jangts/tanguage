@@ -21,9 +21,9 @@
     <div id="canvas1"> </div>
     <script>
         tang.auto([
-            '$_/painter/Charts/modules/animation',
-            '$_/painter/Charts/modules/tooltip',
-            '$_/painter/Charts/types/Pie'
+            '$_/draw/Charts/modules/animation',
+            '$_/draw/Charts/modules/tooltip',
+            '$_/draw/Charts/types/Pie'
         ], function(pandora, root, imports, undefined) {
             document = root.document;
             var location = root.location;
@@ -55,7 +55,7 @@
                     }]
                 }]
             };
-            var chart1 = new pandora.painter.Charts(document.getElementById("canvas1"));
+            var chart1 = new pandora.draw.Charts(document.getElementById("canvas1"));
             chart1.setOption(option1);
         });
     </script>

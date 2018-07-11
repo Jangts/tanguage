@@ -22,19 +22,19 @@
                     })(), true, false, root, document,
                     document.body, document.getElementsByTagName('script')
                 ],
-                type = pandora.util(objs) + ' ' + pandora.util(objs, true);
+                type = pandora.util.gettype(objs) + ' ' + pandora.util.gettype(objs, true);
             pandora.render({
                 margin: "auto",
                 fontSize: "18px"
             }, '-1 : ' + type);
             pandora.each(objs, function(index, obj) {
-                type = pandora.util(obj) + ' ' + pandora.util(obj, true);
+                type = pandora.util.gettype(obj) + ' ' + pandora.util.gettype(obj, true);
                 pandora.render({
                     margin: "auto",
                     fontSize: "18px"
                 }, index + ': ' + type);
             });
-            type = pandora.util();
+            type = pandora.util.gettype();
             pandora.render({
                 margin: "auto",
                 fontSize: "18px"

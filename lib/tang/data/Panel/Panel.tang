@@ -30,3 +30,5 @@ class .Panel {
         }
     }
 }
+
+this.module.exports = data.Panel;

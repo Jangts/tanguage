@@ -88,19 +88,19 @@ createByString = (string, target) {
 },
 
 build = (str) {
-    if (_.util(str) === 'Element') {
+    if (_.util.gettype(str) === 'Element') {
         return [str];
     }
-    if (_.util(str) === 'String') {
+    if (_.util.gettype(str) === 'String') {
         return _.dom.createByString(str);
     }
     return [null];
 },
 
 append = (target, content) {
-    if (_.util(content) == 'Element') {
+    if (_.util.gettype(content) == 'Element') {
         target.appendChild(content);
-    } else if (_.util(content) == 'String') {
+    } else if (_.util.gettype(content) == 'String') {
         target.innerHTML = target.innerHTML + content;
     }
     return this;
@@ -110,7 +110,7 @@ before = (elem, content) {
     var parent = elem.parentNode;
     var newEls = _.dom.build(content);
     each(newEls as newElem ){
-        if (_.util(newElem, true) == 'Element') {
+        if (_.util.gettype(newElem, true) == 'Element') {
             parent.insertBefore(newElem, elem);
         }
     }
@@ -122,7 +122,7 @@ after = (elem, content) {
     newEls = _.dom.build(content);
     curEl = elem;
     each(newEls as newElem) {
-        if (_.util(newElem, true) === 'Element') {
+        if (_.util.gettype(newElem, true) === 'Element') {
             curEl = insertAfter(newElem, curEl);
         }
     }

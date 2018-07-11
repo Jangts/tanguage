@@ -2,12 +2,15 @@
 /*!
  * tanguage framework source code
  *
- * class .async.Request extends async.Promise
+ * class .data.Request extends util.Promise
  *
  * Date 2017-04-06
  */
+;
+use $ util/Promise as Promise;
 
-use $ async/Promise;
+namespace data;
+
 var _ = pandora,
 {console, location, XMLHttpRequest, ActiveXObject, FormData} = root;
 
@@ -17,7 +20,7 @@ var _ = pandora,
  * @param   {Object}    options         一些配置参数
  * 
  */
-class .async.Request extends _.async.Promise {
+class .Request extends Promise {
     readyState =  0;
     statusCode =  0;
     statusText = '';
@@ -153,4 +156,4 @@ class .async.Request extends _.async.Promise {
     }
 }
 
-this.module.exports = _.async.Request;
+this.module.exports = data.Request;

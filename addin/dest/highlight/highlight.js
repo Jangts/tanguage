@@ -178,7 +178,7 @@ tang.init().block([
 			_.highlight.hooks.run('complete', env);
 		},
 		render: function (element, callback) {
-			if (_.util(element) === 'Element') {
+			if (_.util.gettype(element) === 'Element') {
 				_.highlight.renderElement(element, callback);
 			}
 			else {

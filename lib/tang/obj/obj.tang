@@ -88,7 +88,7 @@ namespace obj with {
     },
     type(object, isDetail) {
         if (isDetail) {
-            return _.util(object);
+            return _.util.gettype(object);
         } else {
             return typeof object;
         }

@@ -87,7 +87,7 @@ class PageList {
     ajax(url, callback, prePageItemNumber) {
         var that = this;
         if (_.util.isStr(url)) {
-            new _.async.Request({
+            new _.data.Request({
                 url: url
             }).done((data) {
                 if (_.util.isNumeric(data)) {

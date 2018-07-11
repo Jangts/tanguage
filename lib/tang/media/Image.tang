@@ -8,7 +8,7 @@
  */
 
 use $ util/;
-use $ async/Request;
+use $ data/Request;
 
 var _ = pandora,
 doc = root.document,

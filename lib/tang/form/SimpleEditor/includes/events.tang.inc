@@ -228,7 +228,7 @@ var events = void ns {
                                     break;
                             };
                         };
-                        var uploader = new _.async.Uploader(this.files, ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png'], ['jpg', 'png', 'gif'], editor.upload_maxsize);
+                        var uploader = new _.data.Uploader(this.files, ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png'], ['jpg', 'png', 'gif'], editor.upload_maxsize);
                         uploader.isOnlyFilter = false;
                         uploader.checkType(doneCallback, failCallback);
                     }

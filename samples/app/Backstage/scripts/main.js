@@ -5,16 +5,16 @@
  */;
 // tang.config({});
 tang.init().block([
-    /* @posi0 */'$_/async/',
+    /* @posi0 */'$_/data/',
     /* @posi1 */'$_/app/Backstage/'
 ], function (pandora, root, imports, undefined) {
-    /* @posi2 */var async = imports['$_/async/'];
+    /* @posi2 */var async = imports['$_/data/'];
     /* @posi3 */var Backstage = imports['$_/app/backstage/'];
     /* @posi4 */var OPTIONS_SRC = 'options.json';
     /* @posi5 */root.console.log(imports, /* @posi7 */Backstage);
     /* @posi8 */root.console.log(1);
     /* @posi9 */function main () {
-        /* @posi10 */async.json(
+        /* @posi10 */data.json(
             /* @posi12 */OPTIONS_SRC,
             /* @posi14 */function (/* @posi15 */options) {
                 /* @posi16 */new Backstage(/* @posi18 */options);

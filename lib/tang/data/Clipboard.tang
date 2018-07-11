@@ -2,7 +2,7 @@
 /*!
  * tanguage framework source code
  *
- * class form.Clipboard
+ * class data.Clipboard
  *
  * Date 2017-04-06
  */
@@ -47,7 +47,7 @@ mouseUp() {
  * 
  */
 
-class Clipboard {
+class .Clipboard {
     Element = null
     isValid = true
     clipText = ''
@@ -106,9 +106,11 @@ class Clipboard {
     }
 
     static glue(selector, options, clip) {
-        if (!_.util.isObj(clip) || !(clip instanceof _.form.Clipboard)) {
-            clip = new _.form.Clipboard();
+        if (!_.util.isObj(clip) || !(clip instanceof data.Clipboard)) {
+            clip = new data.Clipboard();
         }
         _.dom.events.add(document, 'mouseup', selector, {options, clip}, mouseUp);
     }
 }
+
+this.module.exports = data.Clipboard;

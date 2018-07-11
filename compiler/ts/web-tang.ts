@@ -7,7 +7,7 @@
  */
 ;
 this.tang.init().auto([
-    '$_/async/',
+    '$_/data/',
     '$_/../../compiler/js/script as tanguage_script'
 ], function (_, root, imports) {
     var tanguage_script = imports.tanguage_script,
@@ -20,10 +20,10 @@ this.tang.init().auto([
         if (script.type === "text/tanguage") {
             if (script.src) {
                 console.log(script.src);
-                // console.log(script.src, _.async.ajax);
+                // console.log(script.src, _.data.ajax);
                 var src = script.src;
                 var i = 0;
-                _.async.ajax(src, function (data) {
+                _.data.ajax(src, function (data) {
                     // console.log(data);
                     let tang = tanguage_script(data).compile().run(function (content) {
                         console.log(this.ast);

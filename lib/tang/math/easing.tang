@@ -9,11 +9,13 @@
 
 use $ util/;
 
+namespace math;
+
 var _ = pandora,
 doc = root.document,
 console = root.console;
 
-ns math.easing with {
+ns easing with {
     linear(t, b, c, d) {
         return c * t / d + b;
     },
@@ -152,7 +154,7 @@ ns math.easing with {
     },
     Bounce: {
         easeIn(t, b, c, d) {
-            return c - _.math.easing.Bounce.easeOut(d - t, 0, c, d) + b;
+            return c - math.easing.Bounce.easeOut(d - t, 0, c, d) + b;
         },
         easeOut(t, b, c, d) {
             if ((t /= d) < (1 / 2.75)) {
@@ -166,15 +168,15 @@ ns math.easing with {
             }
         },
         easeInOut(t, b, c, d) {
-            if (t < d / 2) return _.math.easing.Bounce.easeIn(t * 2, 0, c, d) * .5 + b;
-            else return _.math.easing.Bounce.easeOut(t * 2 - d, 0, c, d) * .5 + c * .5 + b;
+            if (t < d / 2) return math.easing.Bounce.easeIn(t * 2, 0, c, d) * .5 + b;
+            else return math.easing.Bounce.easeOut(t * 2 - d, 0, c, d) * .5 + c * .5 + b;
         }
     }
 }
 
-var easings = (() {
+var easings = void ns {
     var easings = {};
-    each (_.math.easing as type, tween) {
+    each (math.easing as type, tween) {
         if (_.util.isFn(tween)) {
             easings[type] = tween;
         } else {
@@ -186,8 +188,8 @@ var easings = (() {
         }
     }
     return easings;
-})();
+}
 
-_.math.easing.all = easings;
+math.easing.all = easings;
 
-this.module.exports = _.math.easing;
+this.module.exports = math.easing;

@@ -24,9 +24,9 @@
     <div id="canvas3"> </div>
     <script>
         tang.init().block([
-            '$_/painter/Charts/modules/animation',
-            '$_/painter/Charts/modules/tooltip',
-            '$_/painter/Charts/types/Pie'
+            '$_/draw/Charts/modules/animation',
+            '$_/draw/Charts/modules/tooltip',
+            '$_/draw/Charts/types/Pie'
         ], function(pandora, root, imports, undefined) {
             document = root.document;
             var location = root.location;
@@ -215,9 +215,9 @@
                     }]
                 }]
             };
-            var chart1 = new pandora.painter.Charts(document.getElementById("canvas1"));
-            var chart2 = new pandora.painter.Charts(document.getElementById("canvas2"));
-            var chart3 = new pandora.painter.Charts(document.getElementById("canvas3"));
+            var chart1 = new pandora.draw.Charts(document.getElementById("canvas1"));
+            var chart2 = new pandora.draw.Charts(document.getElementById("canvas2"));
+            var chart3 = new pandora.draw.Charts(document.getElementById("canvas3"));
             chart1.setOption(option1);
             chart2.setOption(option2);
             chart3.setOption(option3);

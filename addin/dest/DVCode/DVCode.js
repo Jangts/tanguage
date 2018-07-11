@@ -7,7 +7,7 @@
 // tang.config({});
 tang.init().block([
 	'$_/data/',
-	'$_/async/',
+	'$_/data/',
 	'$_/dom/Elements'
 ], function (pandora, root, imports, undefined) {
 	var module = this.module;
@@ -101,7 +101,7 @@ tang.init().block([
 		result: function () {
 			var that = this;
 			this.result = false;
-			_.async.ajax(this.url + '?m=check&token=' + this.markOffset, {
+			_.data.ajax(this.url + '?m=check&token=' + this.markOffset, {
 				method: 'GET',
 				success: function (responseText) {
 					send.success.call(that, responseText);
