@@ -1,0 +1,248 @@
+@module;
+/*!
+ * tanguage framework source code
+ * Date: 2015-09-04
+ */
+;
+
+use $ arr/ as arr;
+use $ obj/ as obj;
+use $ util/ as util;
+use $ dom/ as dom;
+use $ math/;
+use $ math/easing;
+use $ draw/canvas;
+
+namespace draw;
+
+const defaults = @include 'defaults';
+const helpers = @include 'helpers';
+
+let
+_ = pandora,
+doc = root.document,
+console = root.console,
+
+instances = {},
+handler = void ns {
+    // Basic debounce of resize function so it doesn't hurt performance when resizing browser.
+    var timeout;
+    return () {
+        clearTimeout(timeout);
+        timeout = setTimeout(() {
+            each(instances as index, instance) {
+                // If the responsive flag is set in the chart instance config
+                // Cascade the resize event down to the chart.
+                if (instance.options.responsive) {
+                    instance.resize(instance.render, true);
+                }
+            }
+        }, 50);
+    };
+};
+
+@include 'Component';
+@include 'Type';
+
+class .Charts {
+    Element
+    ctx
+    canvas
+    width = 0
+    height = 0
+    ratio =1
+
+    _init(elem, theme, options) {
+        if (util.isElement(elem)) {
+            this.id = new _.Identifier().toString();
+            this.historyCharts = {};
+            instances[this.id] = this;
+            dom.setAttr(elem, 'data-chart-id', this.id);
+            dom.setStyle(elem, {
+                '-webkit-tap-highlight-color': 'transparent',
+                '-webkit-user-select': 'none',
+                'position': 'relative',
+                'background-color': 'transparent'
+            });
+            this.Element = elem;
+            var computeDimension = dom.getSize(elem, 'inner');
+            this.width = computeDimension.width;
+            this.height = computeDimension.height;
+            this.layers = {};
+            this.ratio = this.width / this.height;
+            if (theme && draw.Charts.theme[theme]) {
+                this.options = obj.deepMerge(defaults, draw.Charts.theme[theme]);
+            } else {
+                this.options = _.copy(defaults);
+            }
+
+            if (options) {
+                this.setOption(options);
+            }
+        } else {
+            _.error('No Element');
+        }
+    }
+
+    setOption(options) {
+        options = options || {};
+        if (options.radar) {
+            this.radarpolar = this.radarpolar || null;
+        } else {
+            this.grid = this.grid || null;
+        }
+        this.series = {};
+        this.options = obj.deepMerge(this.options || {}, options);
+        if (options.backgroundColor) {
+            dom.setStyle(this.Element, 'backgroundColor', options.backgroundColor);
+        }
+        helpers.bindHover(this);
+        if (options.series) {
+            each(options.series as i, chart) {
+                if (chart.type) {
+                    if (this[chart.type]) {
+                        this.series[chart.type] = this.series[chart.type] || [];
+                        this.series[chart.type].push(chart);
+                    } else {
+                        _.error('Loading chart type \'' + chart.type + '\' first.');
+                    }
+                } else {
+                    _.error('Unspecified type of one or more charts.');
+                }
+            }
+        }
+        this.build();
+    }
+
+    build(animaless) {
+        this.activedCharts = [];
+        this.activedNamesCount = {};
+        if (this.grid || this.grid === null) {
+            this.options.grid && this.options.grid.show && (typeof this.buildGrid === 'function') && this.buildGrid();
+        } 
+        if (this.radarpolar || this.radarpolar === null) {
+            this.options.radar && this.options.radar.show && (typeof this.buildRadar === 'function') && this.buildRadar();
+        }
+        var types = ['bar', 'polareare', 'line', 'scatter', 'radar', 'pie'];
+        each(types as i, type) {
+            this[type] && this[type]();
+        }
+
+        // console.log(this);
+        animaless ? this.draw() : this.render();
+    }
+
+    getChartName(pre) {
+        pre = typeof pre === 'string' ? pre : '';
+        this.activedNamesCount[pre] = this.activedNamesCount[pre] || 0;
+        return pre + this.activedNamesCount[pre]++;
+    }
+
+    getLayer(zIndex) {
+        zIndex = zIndex || 0;
+        if (!this.layers[zIndex]) {
+            var canvas = dom.create('canvas', this.Element, {
+                width: this.width,
+                height: this.height,
+                style: {
+                    'position': 'absolute',
+                    'left': '0px',
+                    'top': '0px',
+                    'width': this.width + 'px',
+                    'height': this.height + 'px',
+                    '-webkit-user-select': 'none',
+                    '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)'
+                }
+
+            });
+            canvas.width = this.width;
+            canvas.height = this.height;
+            this.layers[zIndex] = canvas;
+        }
+        return this.layers[zIndex];
+    }
+
+    retinaScale() {
+        if (window.devicePixelRatio) {
+            each(this.layers as zIndex, canvas) {
+                var ctx = canvas.getContext("2d"),
+                    width = ctx.canvas.width,
+                    height = ctx.canvas.height;
+                ctx.canvas.style.width = width + "px";
+                ctx.canvas.style.height = height + "px";
+                ctx.canvas.height = height * window.devicePixelRatio;
+                ctx.canvas.width = width * window.devicePixelRatio;
+                ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            }
+        }
+        return this;
+    }
+
+    clear() {
+        each(this.layers as zIndex, canvas) {
+            var ctx = canvas.getContext("2d"),
+                width = ctx.canvas.width,
+                height = ctx.canvas.height;
+            draw.canvas.clear(ctx, width, height);
+        }
+        return this;
+    }
+
+    stop() {
+        if (this.cancelAnimation) {
+            this.cancelAnimation();
+        }
+        return this;
+    }
+
+    render() {
+        this.clear();
+        if (this.addAnimation && this.options.animation) {
+            this.addAnimation();
+        } else {
+            (typeof this.options.onAnimationComplete === 'function') && this.options.onAnimationComplete();
+        }
+        return this;
+    }
+
+    draw(ease) {
+        var easingDecimal = ease || 1;
+        this.clear();
+        this.grid && this.grid.draw(easingDecimal);
+        this.radarpolar && this.radarpolar.draw(easingDecimal);
+        this.polar && this.polar.draw(easingDecimal);
+        each(this.activedCharts as i, chart) {
+            chart.draw(ease);
+        }
+        return this;
+    }
+
+    resize() {
+        this.stop();
+        this.clear();
+        var newWidth = helpers.getMaximumWidth(this.Element),
+            newHeight = this.options.maintainAspectRatio ? newWidth / this.ratio : draw.Charts.helpers.getMaximumHeight(this.Element);
+        this.width = newWidth;
+        this.height = newHeight;
+        each(this.layers as zIndex, canvas) {
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+        }
+        this.retinaScale();
+        return this.build(true);
+    }
+    
+    static defaults = defaults
+    static helpers = helpers
+    static theme = {}
+    static sharp = {}
+    static Type = Type
+    static type = {}
+    static Component = Component
+    static component = {}
+}
+
+// Attach global event to resize each chart instance when the browser resizes
+dom.events.add(window, "resize", null, null, handler);
+
+this.module.exports = draw.Charts;

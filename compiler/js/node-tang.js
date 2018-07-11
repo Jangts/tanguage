@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 ;
 var fs = require('fs');
 var glob = require("glob");
@@ -8,7 +9,7 @@ var tanguage_script = require('./script.js');
 var vlq = require('./vlq.js');
 var commands = ['compile', 'test', 'cdir', 'build', 'help', 'version'];
 // console.log(process.argv);
-var mapBuilder = function (omappings, filename, osources, version) {
+var mapBuilder = function(omappings, filename, osources, version) {
     if (version === void 0) { version = 3; }
     var lines = [];
     var sources = [];
@@ -41,24 +42,25 @@ var mapBuilder = function (omappings, filename, osources, version) {
     };
     return JSON.stringify(mappings);
 };
-var onReadFile = function (src, context) {
-    // console.log(src, context.source);
-    var source = path.resolve(context + src + '.tang.inc');
-    if (this.sources[source]) {
-        this.error('source ' + source + 'had already been loaded.');
-    }
-    this.sources.push({
-        id: this.sources.length,
-        src: source
-    });
-    this.sources[source] = true;
-    // console.log('src: ' + source);
-    return fs.readFileSync(source, 'utf-8');
-}, getTplContent = function (src, context) {
-    // console.log(src, context.source);
-    var source = path.resolve(context + src + '.tang.tpl');
-    return fs.readFileSync(source, 'utf-8');
-};
+var onReadFile = function(src, context) {
+        // console.log(src, context.source);
+        var source = path.resolve(context + src + '.tang.inc');
+        if (this.sources[source]) {
+            this.error('source ' + source + ' had already been loaded.');
+        }
+        this.sources.push({
+            id: this.sources.length,
+            src: source
+        });
+        this.sources[source] = true;
+        // console.log('src: ' + source);
+        return fs.readFileSync(source, 'utf-8');
+    },
+    getTplContent = function(src, context) {
+        // console.log(src, context.source);
+        var source = path.resolve(context + src + '.tang.tpl');
+        return fs.readFileSync(source, 'utf-8');
+    };
 var options = {
     command: 'compile',
     inputDir: '',
@@ -70,17 +72,15 @@ var options = {
 };
 var script, sugar;
 var handlers = {
-    compile: function (i, o) {
+    compile: function(i, o) {
         if (i === void 0) { i = null; }
         if (o === void 0) { o = null; }
         if (i) {
             o = o || i + '.js';
-        }
-        else if (options.inputDir) {
+        } else if (options.inputDir) {
             i = options.inputDir;
             o = options.outputDir;
-        }
-        else {
+        } else {
             console.log('must input a filename');
             return;
         }
@@ -100,19 +100,18 @@ var handlers = {
             var output = sugar.output + "\r\n//# sourceMappingURL=" + path.basename(o) + '.map';
             var mappings = mapBuilder(sugar.mappings, o, sugar.sources);
             fs.writeFileSync(o + '.map', mappings);
-        }
-        else {
+        } else {
             var output = sugar.output;
         }
         sugar = null;
         fs.writeFileSync(o, output);
         console.log('file ' + o + ' compiled completed!');
     },
-    test: function () {
+    test: function() {
         // console.log('Hello, world!');
         handlers.compile('./test/main.tang', './test/script.js');
     },
-    cdir: function () {
+    cdir: function() {
         // console.log(options.outputDir);
         var indir = path.resolve(options.inputDir);
         var outdir = options.outputDir ? path.resolve(options.outputDir) : indir;
@@ -120,11 +119,10 @@ var handlers = {
         // console.log(indir, outdir);
         if (options.containSubDir) {
             pattern = indir + '/**/*.tang';
-        }
-        else {
+        } else {
             pattern = indir + '/*.tang';
         }
-        glob(pattern, function (er, files) {
+        glob(pattern, function(er, files) {
             // files 是匹配到的文件的数组.
             // 如果 `nonull` 选项被设置为true, 而且没有找到任何文件,那么files就是glob规则本身,而不是空数组
             // er是当寻找的过程中遇的错误
@@ -137,32 +135,30 @@ var handlers = {
                 tang = path.resolve(tang);
                 if (options.safemode) {
                     var js = tang.replace(indir, outdir) + '.js';
-                }
-                else {
+                } else {
                     var js = tang.replace(indir, outdir).replace(/.tang$/, '.js');
                 }
                 handlers.compile(tang, js);
             }
         });
     },
-    build: function () {
+    build: function() {
         console.log('Hello, world!');
     },
-    help: function () {
+    help: function() {
         console.log('Hello, world!');
     },
-    version: function () {
+    version: function() {
         console.log('Hello, world!');
     }
 };
 if (commands['includes'](process.argv[2])) {
     options.command = process.argv[2];
     var index = 3;
-}
-else {
+} else {
     var index = 2;
 }
-process.argv.slice(index).forEach(function (item) {
+process.argv.slice(index).forEach(function(item) {
     switch (item) {
         case "-c":
             options.containSubDir = true;
@@ -184,8 +180,7 @@ process.argv.slice(index).forEach(function (item) {
                 if (!options.outputDir) {
                     options.outputDir = item;
                 }
-            }
-            else {
+            } else {
                 options.inputDir = item;
             }
             break;

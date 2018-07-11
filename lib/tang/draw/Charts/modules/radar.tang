@@ -1,0 +1,93 @@
+@module;
+/*!
+ * tanguage framework source code
+ *
+ * class draw/Charts
+ *
+ * Date: 2015-09-04
+ */
+;
+use $ arr/;
+use $ obj/;
+use $ draw/Charts/;
+
+namespace draw;
+
+let
+_ = pandora,
+doc = root.document,
+console = root.console,
+
+{defaults, helpers} = draw.Charts;
+
+@include 'models/Polar';
+
+extends defaults {
+    radar: @include 'defaults/radar';
+}
+
+expands .Charts {
+    buildRadar () {
+        var radar = _.obj.deepMerge(draw.Charts.defaults.radar, this.options.radar || {});
+
+        var style = helpers.calculateCircleStyle(radar, this.width, this.height);
+
+        var labels = []
+        ranges = [];
+        each(radar.indicator as i, indicator) {
+            if (typeof indicator.name === 'string') {
+                labels.push(indicator.name);
+                ranges.push({
+                    min: indicator.min || 0,
+                    max: indicator.max
+                });
+            };
+        }
+
+        var polarOptions = @include 'options/radar';
+
+        if (this.radarpolar === null) {
+            this.radarpolar = new Polar(polarOptions);
+            _.extend(this.radarpolar, true, {});
+
+            helpers.bindHover(this, (evt) {
+                var actives = [],
+                    restores = {
+                        'display': 'emphasisDisplay',
+                        'fillColor': 'emphasisFill',
+                        'radius': 'emphasisRadius',
+                        'strokeColor': 'emphasisStroke',
+                        'strokeWidth': 'emphasisStrokeWidth'
+                    };
+                for (var i = 0; this.radarpolar.charts.radarpolar && i < this.radarpolar.charts.radarpolar.length && actives.length === 0; i++) {
+                    var chart = this.radarpolar.charts.radarpolar[i];
+                    var activeSegments = chart.getSegmentsAtEvent(evt);
+                    each(chart.segments as index, segment) {
+                        segment.restore(_.obj.keysArray(restores));
+                    }
+                    if (activeSegments.length > 0) {
+                        each(activeSegments as index, activeSegment) {
+                            actives.push(activeSegment);
+                            each(restores as normal, emphasis) {
+                                activeSegment[normal] = activeSegment[emphasis];
+                            }
+                        }
+                        break;
+                    }
+                };
+                if (this.options.tooltip.show) {
+                    this.showTooltip(actives, false, true);
+                }
+                if (actives.length > 0) {
+                    this.actived = 1;
+                    _.dom.setStyle(this.Element, 'cursor', 'pointer');
+                } else {
+                    this.actived = 0;
+                    _.dom.setStyle(this.Element, 'cursor', 'default');
+                }
+            });
+        } else {
+            this.radarpolar.update(polarOptions);
+        }
+    };
+}

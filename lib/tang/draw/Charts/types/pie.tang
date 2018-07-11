@@ -1,0 +1,65 @@
+@module;
+/*!
+ * tanguage framework source code
+ *
+ * class draw/Charts
+ *
+ * Date: 2015-09-04
+ */
+;
+use $ draw/Charts/;
+use $ draw/Charts/sharps/Arc;
+
+namespace draw.Charts;
+
+let
+_ = pandora,
+doc = root.document,
+console = root.console,
+
+helpers = Charts.helpers;
+
+let defaultConfig = @include 'defaults/pie';
+@include 'models/Pie';
+
+Charts.prototype.pie = () {
+    var chart,
+        chartName,
+        id = 0;
+    each(this.series.pie as i, options) {
+        //options.index = id++;
+        chartName = this.getChartName(options.name);
+        if (this.historyCharts[chartName] && this.historyCharts[chartName].type == 'pie') {
+            chart = this.historyCharts[chartName];
+            chart.update(options.data, options.index);
+        } else {
+            chart = new Pie(options, this, options.zIndex);
+            chart.type = 'pie';
+            this.historyCharts[chartName] = chart;
+            helpers.bindHover(this, (evt) {
+                var activeSegments = [];
+                _.loop(this.activedCharts, (i, chart) {
+                    activeSegments = chart.getSegmentsAtEvent(evt);
+                    if (activeSegments.length) {
+                        _.loop.out();
+                    }
+                });
+                each(activeSegments as index, activeSegment) {
+                    activeSegment.fillColor = activeSegment.emphasisFill;
+                    activeSegment.oRadius = activeSegment.eRadius;
+                }
+                if (this.options.tooltip.show) {
+                    this.showTooltip(activeSegments);
+                }
+                if (activeSegments.length > 0) {
+                    this.actived = 1;
+                    _.dom.setStyle(this.Element, 'cursor', 'pointer');
+                } else {
+                    this.actived = 0;
+                    _.dom.setStyle(this.Element, 'cursor', 'default');
+                }
+            });
+        }
+        this.activedCharts.push(chart);
+    }
+}

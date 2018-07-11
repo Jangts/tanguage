@@ -1,0 +1,56 @@
+@module;
+/*!
+ * tanguage framework source code
+ *
+ * class draw/Charts
+ *
+ * Date: 2015-09-04
+ */
+;
+use $ draw/Charts/;
+use $ draw/Charts/modules/grid;
+use $ draw/Charts/sharps/Point;
+
+namespace draw.Charts;
+
+let
+_ = pandora,
+doc = root.document,
+console = root.console,
+
+helpers = Charts.helpers;
+
+let defaultConfig = @include 'defaults/scatter';
+@include 'models/Scatter';
+
+Charts.prototype.scatter = () {
+    var chart,
+        chartName,
+        id = 0,
+        grid = this.grid;
+    grid.charts.scatters = grid.charts.scatters || [];
+    if (grid) {
+        _.extend(grid, true, {
+            calculateRadius () {
+                var xWidth = this.calculateBaseWidth(valueSpacing),
+                    xAbsolute = this.calculateX(barIndex) - (xWidth / 2),
+                    barWidth = this.calculateBarWidth(datasetCount, datasetSpacing, valueSpacing);
+                return xAbsolute + (barWidth * datasetIndex) + (datasetIndex * datasetSpacing) + barWidth / 2;
+            }
+        })
+        each(this.series.scatter as i, options) {
+            options.index = id++;
+            chartName = this.getChartName(options.name);
+            if (this.historyCharts[chartName] && this.historyCharts[chartName].type == 'scatter') {
+                chart = this.historyCharts[chartName];
+                chart.update(options.data, options.index);
+            } else {
+                chart = new Scatter(options, this, options.zIndex);
+                chart.type = 'scatter';
+                this.historyCharts[chartName] = chart;
+            }
+            grid.charts.scatters.push(chart);
+            this.activedCharts.push(chart);
+        }
+    };
+}

@@ -1,0 +1,153 @@
+@module;
+/*!
+ * tanguage framework source code
+ *
+ * class draw/Charts/typeExtend
+ *
+ * Date: 2015-09-04
+ */
+;
+use $ arr/;
+use $ obj/;
+use $ draw/Charts/;
+
+namespace draw;
+
+let
+_ = pandora,
+doc = root.document,
+console = root.console,
+
+{defaults, helpers} = draw.Charts;
+
+@include 'models/Tooltip';
+@include 'models/MultiTooltip';
+
+extends defaults {
+    tooltip: @include 'defaults/tooltip';
+}
+
+expands .Charts {
+    showTooltip (segments, forceRedraw, showMulti) {
+        if (typeof this.activeElements === 'undefined') {
+            this.activeElements = [];
+        }
+
+        var isChanged = ((Elements) {
+            var changed = false;
+
+            if (Elements.length !== this.activeElements.length) {
+                changed = true;
+                return changed;
+            }
+
+            each(Elements as index, element) {
+                if (element !== this.activeElements[index]) {
+                    changed = true;
+                }
+            }
+            return changed;
+        }).call(this, segments);
+
+        if (!isChanged && !forceRedraw) {
+            return;
+        } else {
+            this.activeElements = segments;
+        }
+
+        var tooltip = this.options.tooltip;
+
+        var options = @include 'options/tooltip';
+
+        this.draw();
+        // If we have multiple datasets, show a MultiTooltip for all of the data points at that index
+        if (segments.length > 0) {
+            if (showMulti) {
+                var tooltipLabels = [],
+                    tooltipColors = [],
+                    medianPosition = (() {
+
+                        var Elements = [],
+                            dataCollection,
+                            xPositions = [],
+                            yPositions = [],
+                            xMax,
+                            yMax,
+                            xMin,
+                            yMin;
+
+                        each(segments as index, element) {
+                            xPositions.push(element.x);
+                            yPositions.push(element.y);
+
+                            //Include any colour information about the element
+                            tooltipLabels.push(helpers.template(options.multiTooltipTemplate, element));
+                            tooltipColors.push({
+                                fill: element._saved.fillColor || element.fillColor,
+                                stroke: element._saved.strokeColor || element.strokeColor
+                            });
+                        }
+
+                        yMin = _.math.minOfArr(yPositions);
+                        yMax = _.math.maxOfArr(yPositions);
+
+                        xMin = _.math.minOfArr(xPositions);
+                        xMax = _.math.maxOfArr(xPositions);
+
+                        return {
+                            x: (xMin + xMax) / 2, //(xMin > this.width / 2) ? xMin : xMax,
+                            y: (yMin + yMax) / 2
+                        };
+
+                    }).call(this);
+                    
+                new MultiTooltip({
+                    x: medianPosition.x,
+                    y: medianPosition.y,
+                    xPadding: options.tooltipXPadding,
+                    yPadding: options.tooltipYPadding,
+                    xOffset: options.tooltipXOffset,
+                    fillColor: options.tooltipFillColor,
+                    textColor: options.tooltipFontColor,
+                    fontFamily: options.tooltipFontFamily,
+                    fontStyle: options.tooltipFontStyle,
+                    fontSize: options.tooltipFontSize,
+                    titleTextColor: options.tooltipTitleFontColor,
+                    titleFontFamily: options.tooltipTitleFontFamily,
+                    titleFontStyle: options.tooltipTitleFontStyle,
+                    titleFontSize: options.tooltipTitleFontSize,
+                    cornerRadius: options.tooltipCornerRadius,
+                    labels: tooltipLabels,
+                    legendColors: tooltipColors,
+                    legendColorBackground: options.multiTooltipKeyBackground,
+                    title: helpers.template(options.tooltipTitleTemplate, segments[0]),
+                    chart: this,
+                    ctx: this.getLayer(options.zIndex).getContext("2d"),
+                    custom: options.customTooltips
+                }).draw();
+            } else {
+                var Element = segments[0],
+                    tooltipPosition = Element.tooltipPosition();
+
+                new Tooltip({
+                    x: Math.round(tooltipPosition.x),
+                    y: Math.round(tooltipPosition.y),
+                    xPadding: options.tooltipXPadding,
+                    yPadding: options.tooltipYPadding,
+                    fillColor: options.tooltipFillColor,
+                    textColor: options.tooltipFontColor,
+                    fontFamily: options.tooltipFontFamily,
+                    fontStyle: options.tooltipFontStyle,
+                    fontSize: options.tooltipFontSize,
+                    caretHeight: options.tooltipCaretSize,
+                    cornerRadius: options.tooltipCornerRadius,
+                    text: helpers.template(options.tooltipTemplate, Element),
+                    chart: this,
+                    ctx: this.getLayer(options.zIndex).getContext("2d"),
+                    custom: options.customTooltips
+                }).draw();
+            }
+        }
+        return this;
+    }
+}

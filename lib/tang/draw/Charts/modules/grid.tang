@@ -1,0 +1,138 @@
+@module;
+/*!
+ * tanguage framework source code
+ * Date: 2015-09-04
+ */
+;
+use $ arr/;
+use $ obj/ as {deepMerge, keysArray};
+use $ math/;
+use $ draw/Charts/;
+
+namespace draw;
+
+let
+_ = pandora,
+doc = root.document,
+console = root.console,
+
+{defaults, helpers} = draw.Charts;
+
+@include 'models/Grid';
+
+extends defaults {
+    grid: @include 'defaults/grid';
+}
+extends defaults {
+    xAxis: @include 'defaults/xAxis';
+}
+extends defaults {
+    yAxis: @include 'defaults/yAxis';
+}
+
+expands .Charts {
+    buildGrid () {
+        var grid = deepMerge(draw.Charts.defaults.grid, this.options.grid || {}),
+            xAxis = deepMerge(draw.Charts.defaults.xAxis, this.options.xAxis || {}),
+            yAxis = deepMerge(draw.Charts.defaults.yAxis, this.options.yAxis || {});
+
+        var style = helpers.calculateRectangleStyle(grid, this.width, this.height);
+
+        var gridOptions = @include 'options/grid';
+
+        gridOptions.status = (gridOptions.xLabels && gridOptions.yLabels) ? 5 : (gridOptions.xLabels ? 0 : (gridOptions.yLabels ? 1 : 4));
+
+        if (this.grid === null) {
+            this.grid = new Grid(gridOptions);
+            helpers.bindHover(this, (evt) {
+                var actives = [],
+                    types = ['lines', 'bars', 'scatters'],
+                    restores = {
+                        'lines': {
+                            'display': 'emphasisDisplay',
+                            'fillColor': 'emphasisFill',
+                            'radius': 'emphasisRadius',
+                            'strokeColor': 'emphasisStroke',
+                            'strokeWidth': 'emphasisStrokeWidth'
+                        },
+                        'scatters': {
+                            'radius': 'emphasisRadius'
+                        },
+                        'bars': {
+                            'fillColor': 'emphasisFill',
+                            'strokeColor': 'emphasisStroke',
+                            'strokeWidth': 'emphasisWidth'
+                        }
+                    },
+                    charts = _.arr.merge(this.grid.charts.lines, this.grid.charts.bars, this.grid.charts.scatters);
+                each(types as type) {
+                    for (var i = 0; this.grid.charts[type] && i < this.grid.charts[type].length && actives.length === 0; i++) {
+                        var chart = this.grid.charts[type][i];
+                        // console.log(chart);
+                        activeSegments = ((this.options.tooltip.type == 'axis') ? chart.getSegmentsAtEvent(evt, charts) : chart.getSegmentsAtEvent(evt));
+                        each(chart.segments as index, segment) {
+                            segment.restore(keysArray(restores[type]));
+                        }
+                        if (activeSegments.length > 0) {
+                            each(activeSegments as index, activeSegment) {
+                                actives.push(activeSegment);
+                                each(restores[type] as normal, emphasis) {
+                                    activeSegment[normal] = activeSegment[emphasis];
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                if (this.options.tooltip.show) {
+                    this.showTooltip(actives, false, (this.options.tooltip.type == 'axis'));
+                }
+                if ((this.options.tooltip.type == 'axis') && (actives.length > 0) && (this.grid.charts.lines) && (this.grid.charts.lines.length > 0)) {
+                    if (this.grid.status === 0) {
+                        // 横轴为项，纵轴为值
+                        var x = actives[0].x,
+                            y1 = this.grid.topPoint,
+                            y2 = this.grid.bottomPoint,
+                            ctx = this.grid.ctx;
+                        ctx.translate(0.5, 0);
+                        ctx.lineWidth = 1;
+                        ctx.strokeStyle = '#FF0000';
+                        ctx.beginPath();
+                        ctx.moveTo(x, y1);
+                        ctx.lineTo(x, y2);
+                        ctx.stroke();
+                        ctx.translate(-0.5, 0);
+                        ctx.closePath();
+                    }
+                    if (this.grid.status === 1) {
+                        // 横轴为值，纵轴为项
+                        var x1 = this.grid.leftPoint,
+                            x2 = this.grid.rightPoint,
+                            y = actives[0].y,
+                            ctx = this.grid.ctx;
+                        ctx.translate(0, 0.5);
+                        ctx.lineWidth = 1;
+                        ctx.strokeStyle = '#FF0000';
+                        ctx.beginPath();
+                        ctx.moveTo(x1, y);
+                        ctx.lineTo(x2, y);
+                        ctx.stroke();
+                        ctx.translate(0, -0.5);
+                        ctx.closePath();
+                    }
+                }
+                if (actives.length > 0) {
+                    this.actived = 1;
+                    _.dom.setStyle(this.Element, 'cursor', 'pointer');
+                } else {
+                    this.actived = 0;
+                    _.dom.setStyle(this.Element, 'cursor', 'default');
+                }
+            });
+        } else {
+            this.grid.update(gridOptions);
+
+        }
+    };
+}

@@ -1,0 +1,50 @@
+@module;
+/*!
+ * tanguage framework source code
+ *
+ * class draw/Charts
+ *
+ * Date: 2015-09-04
+ */
+;
+use $ arr/;
+use $ draw/Charts/;
+use $ draw/Charts/modules/radar;
+use $ draw/Charts/sharps/Line;
+use $ draw/Charts/sharps/Point;
+
+namespace draw.Charts;
+
+let
+_ = pandora,
+doc = root.document,
+console = root.console,
+
+helpers = Charts.helpers;
+
+let defaultConfig = @include 'defaults/radar';
+@include 'models/Radar';
+
+Charts.prototype.radar = () {
+    var chart,
+        chartName,
+        id = 0,
+        radar = this.radarpolar;
+    radar.charts.radarpolar = radar.charts.radarpolar || [];
+    if (radar) {
+        each(this.series.radar as i, options) {
+            options.index = id++;
+            chartName = this.getChartName(options.name);
+            if (this.historyCharts[chartName] && this.historyCharts[chartName].type == 'radar') {
+                chart = this.historyCharts[chartName];
+                chart.update(options.data, options.index);
+            } else {
+                chart = new Radar(options, this, options.zIndex);
+                chart.type = 'radar';
+                this.historyCharts[chartName] = chart;
+            }
+            radar.charts.radarpolar.push(chart);
+            this.activedCharts.push(chart);
+        }
+    };
+}

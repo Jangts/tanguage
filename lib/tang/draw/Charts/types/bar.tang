@@ -1,0 +1,80 @@
+@module;
+/*!
+ * tanguage framework source code
+ *
+ * class draw/Charts
+ *
+ * Date: 2015-09-04
+ */
+;
+use $ draw/Charts/;
+use $ draw/Charts/modules/grid;
+use $ draw/Charts/sharps/Rectangle;
+
+namespace draw.Charts;
+
+let
+_ = pandora,
+doc = root.document,
+console = root.console,
+
+helpers = Charts.helpers;
+
+let defaultConfig = @include 'defaults/bar';
+@include 'models/Bar';
+
+Charts.prototype.bar = (index) {
+    var chart,
+        chartName,
+        id = 0,
+        grid = this.grid;
+    grid.charts.bars = grid.charts.bars || [];
+    if (grid) {
+        _.extend(grid, {
+            calculateBarX (datasetCount, datasetIndex, barIndex, datasetSpacing, valueSpacing) {
+                var xWidth = this.calculateBaseWidth(valueSpacing),
+                    xAbsolute = this.calculateX(barIndex) - (xWidth / 2),
+                    barWidth = this.calculateBarWidth(datasetCount, datasetSpacing, valueSpacing);
+                return xAbsolute + (barWidth * datasetIndex) + (datasetIndex * datasetSpacing) + barWidth / 2;
+            },
+            calculateBaseWidth (valueSpacing) {
+                return (this.calculateX(1) - this.calculateX(0)) - (2 * valueSpacing);
+            },
+            calculateBarWidth (datasetCount, datasetSpacing, valueSpacing) {
+                //The padding between datasets is to the right of each bar, providing that there are more than 1 dataset
+                var baseWidth = this.calculateBaseWidth(valueSpacing) - ((datasetCount - 1) * datasetSpacing);
+                return (baseWidth / datasetCount);
+            },
+
+            calculateBarY (datasetCount, datasetIndex, barIndex, datasetSpacing, valueSpacing) {
+                var yHeight = this.calculateBaseHeight(valueSpacing),
+                    yAbsolute = this.calculateY(barIndex) + (yHeight / 2),
+                    barHeight = this.calculateBarHeight(datasetCount, datasetSpacing, valueSpacing);
+                return yAbsolute - (barHeight * datasetIndex) - (datasetIndex * datasetSpacing) - barHeight / 2;
+            },
+            calculateBaseHeight (valueSpacing) {
+                return (this.calculateY(0) - this.calculateY(1)) - (2 * valueSpacing);
+            },
+            calculateBarHeight (datasetCount, datasetSpacing, valueSpacing) {
+                //The padding between datasets is to the right of each bar, providing that there are more than 1 dataset
+                var baseHeight = this.calculateBaseHeight(valueSpacing) - ((datasetCount - 1) * datasetSpacing);
+                return (baseHeight / datasetCount);
+            }
+        });
+
+        each(this.series.bar as i, options) {
+            options.index = id++;
+            chartName = this.getChartName(options.name);
+            if (this.historyCharts[chartName] && this.historyCharts[chartName].type == 'bar') {
+                chart = this.historyCharts[chartName];
+                chart.update(options.data, options.index);
+            } else {
+                chart = new Bar(options, this, options.zIndex);
+                chart.type = 'bar';
+                this.historyCharts[chartName] = chart;
+            }
+            grid.charts.bars.push(chart);
+            this.activedCharts.push(chart);
+        }
+    }
+}

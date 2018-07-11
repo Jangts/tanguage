@@ -140,3 +140,5 @@ namespace obj with {
         return data;
     }
 }
+
+this.module.exports = ..obj;
