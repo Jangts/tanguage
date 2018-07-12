@@ -7,6 +7,22 @@
             "type": "npm",
             "script": "test-dom",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "test-charts",
+            "problemMatcher": [
+                "$tsc-watch"
+            ],
+            "isBackground": true
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "compiler/ts/tsconfig.json",
+            "option": "watch",
+            "problemMatcher": [
+                "$tsc-watch"
+            ]
         }
     ]
 }

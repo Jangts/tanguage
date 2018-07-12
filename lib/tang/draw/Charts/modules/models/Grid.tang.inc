@@ -96,10 +96,10 @@ class Grid extends draw.Charts.Component {
             }
             switch (this.status) {
                 case 0:
-                    this.yValues = _.arr.merge(this.yValues, data);
+                    this.yValues = arr.merge(this.yValues, data);
                     break;
                 case 1:
-                    this.xValues = _.arr.merge(this.xValues, data)
+                    this.xValues = arr.merge(this.xValues, data)
                     break;
             }
         }
@@ -115,10 +115,10 @@ class Grid extends draw.Charts.Component {
             }
             switch (this.status) {
                 case 0:
-                    this.yValues = _.arr.merge(this.yValues, data);
+                    this.yValues = arr.merge(this.yValues, data);
                     break;
                 case 1:
-                    this.xValues = _.arr.merge(this.xValues, data)
+                    this.xValues = arr.merge(this.xValues, data)
                     break;
             }
         }
@@ -133,14 +133,14 @@ class Grid extends draw.Charts.Component {
             }
             switch (this.status) {
                 case 0:
-                    this.yValues = _.arr.merge(this.yValues, yData);
+                    this.yValues = arr.merge(this.yValues, yData);
                     break;
                 case 1:
-                    this.xValues = _.arr.merge(this.xValues, xData);
+                    this.xValues = arr.merge(this.xValues, xData);
                     break;
                 case 4:
-                    this.xValues = _.arr.merge(this.xValues, xData);
-                    this.yValues = _.arr.merge(this.yValues, yData);
+                    this.xValues = arr.merge(this.xValues, xData);
+                    this.yValues = arr.merge(this.yValues, yData);
                     break;
             }
         }
@@ -161,10 +161,10 @@ class Grid extends draw.Charts.Component {
             if ((typeof(this.yAxisMax) === 'number') && (typeof(this.yAxisMin) === 'number')) {
                 var valuesArray = [this.yAxisMax, this.yAxisMin];
             } else if (typeof(this.yAxisMax) === 'number') {
-                var min = _.arr.min(this.yValues),
+                var min = arr.min(this.yValues),
                     valuesArray = [this.yAxisMax, min < this.yAxisMax ? min : this.yAxisMax - 1];
             } else if (typeof(this.yAxisMin) === 'number') {
-                var max = _.arr.max(this.yValues),
+                var max = arr.max(this.yValues),
                     valuesArray = [this.yAxisMin, max > this.yAxisMin ? max : this.yAxisMin + 1];
             } else {
                 var valuesArray = this.yValues;
@@ -183,7 +183,7 @@ class Grid extends draw.Charts.Component {
         if (this.status === 0 || this.status === 4) {
             // 纵轴为值
             this.yLabels = [];
-            var stepDecimalPlaces = _.math.getDecimalPlaces(this.yStepValue);
+            var stepDecimalPlaces = math.getDecimalPlaces(this.yStepValue);
             for (var i = 0; i <= this.ySteps; i++) {
                 this.yLabels.push(helpers.template(this.yTemplateString, {
                     value: (this.minY + (i * this.yStepValue)).toFixed(stepDecimalPlaces)
@@ -211,9 +211,9 @@ class Grid extends draw.Charts.Component {
             if ((typeof(this.xAxisMax) === 'number') && (typeof(this.xAxisMin) === 'number')) {
                 var valuesArray = [this.xAxisMax, this.xAxisMin];
             } else if (typeof(this.xAxisMax) === 'number') {
-                var valuesArray = [this.xAxisMax, _.arr.min(this.xValues)];
+                var valuesArray = [this.xAxisMax, arr.min(this.xValues)];
             } else if (typeof(this.yAxisMin) === 'number') {
-                var valuesArray = [this.xAxisMin, _.arr.max(this.xValues)];
+                var valuesArray = [this.xAxisMin, arr.max(this.xValues)];
             } else {
                 var valuesArray = this.xValues;
             }
@@ -233,7 +233,7 @@ class Grid extends draw.Charts.Component {
         if (this.status === 1 || this.status === 4) {
             // 横轴为值
             this.xLabels = [];
-            var stepDecimalPlaces = _.math.getDecimalPlaces(this.xStepValue);
+            var stepDecimalPlaces = math.getDecimalPlaces(this.xStepValue);
             for (var i = 0; i <= this.xSteps; i++) {
                 this.xLabels.push(helpers.template(this.xTemplateString, {
                     value: (this.minX + (i * this.xStepValue)).toFixed(stepDecimalPlaces)

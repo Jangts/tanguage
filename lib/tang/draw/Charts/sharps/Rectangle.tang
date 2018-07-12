@@ -118,7 +118,7 @@ class .sharps.Rectangle extends Charts.Component {
     }
 
     hasValue () {
-        return _.util.isNumber(this.value2);
+        return ..util.isNumber(this.value2);
     }
 
     inRange (X, Y) {

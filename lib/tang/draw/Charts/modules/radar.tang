@@ -7,8 +7,11 @@
  * Date: 2015-09-04
  */
 ;
-use $ arr/;
-use $ obj/;
+use $ arr/ as arr;
+use $ dom/ as dom;
+use $ obj/ as {deepMerge,keysArray};
+use $ math/ as math;
+use $ util/ as util;
 use $ draw/Charts/;
 
 namespace draw;
@@ -28,7 +31,7 @@ extends defaults {
 
 expands .Charts {
     buildRadar () {
-        var radar = _.obj.deepMerge(draw.Charts.defaults.radar, this.options.radar || {});
+        var radar = deepMerge(draw.Charts.defaults.radar, this.options.radar || {});
 
         var style = helpers.calculateCircleStyle(radar, this.width, this.height);
 
@@ -63,7 +66,7 @@ expands .Charts {
                     var chart = this.radarpolar.charts.radarpolar[i];
                     var activeSegments = chart.getSegmentsAtEvent(evt);
                     each(chart.segments as index, segment) {
-                        segment.restore(_.obj.keysArray(restores));
+                        segment.restore(keysArray(restores));
                     }
                     if (activeSegments.length > 0) {
                         each(activeSegments as index, activeSegment) {
@@ -80,10 +83,10 @@ expands .Charts {
                 }
                 if (actives.length > 0) {
                     this.actived = 1;
-                    _.dom.setStyle(this.Element, 'cursor', 'pointer');
+                    dom.setStyle(this.Element, 'cursor', 'pointer');
                 } else {
                     this.actived = 0;
-                    _.dom.setStyle(this.Element, 'cursor', 'default');
+                    dom.setStyle(this.Element, 'cursor', 'default');
                 }
             });
         } else {

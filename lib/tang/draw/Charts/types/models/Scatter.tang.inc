@@ -3,7 +3,7 @@ class Scatter extends Charts.Type {
 
     initialize (options) {
         var instance = this.instance,
-            options = _.obj.deepMerge(this.defaults, options);
+            options = deepMerge(this.defaults, options);
         this.options = {
             index: options.index,
             name: options.name,
@@ -77,7 +77,7 @@ class Scatter extends Charts.Type {
         segment.x = segment.X;
         segment.y = segment.Y;
         segment.emphasisRadius = segment.R * 1.2;
-        // clog segment;
+        // clog value, segment;
         segment.save();
     }
 
@@ -86,10 +86,11 @@ class Scatter extends Charts.Type {
             X: this.grid.calculateX(segment.value[0]),
             Y: this.grid.calculateY(segment.value[1]),
             R: ((symbolSize, value) {
+                // console.log(typeof symbolSize, symbolSize);
                 if (typeof symbolSize === 'number') {
                     return symbolSize / 2;
                 }
-                if (typeof symbolSize === '') {
+                if (typeof symbolSize === 'function') {
                     var val = symbolSize(value);
                     if (typeof val === 'number') {
                         return val / 2;

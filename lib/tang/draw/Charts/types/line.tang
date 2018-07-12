@@ -7,6 +7,7 @@
  * Date: 2015-09-04
  */
 ;
+use $ obj/ as {deepMerge};
 use $ draw/Charts/;
 use $ draw/Charts/modules/grid;
 use $ draw/Charts/sharps/Line;

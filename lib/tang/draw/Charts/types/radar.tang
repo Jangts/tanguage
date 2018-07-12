@@ -8,6 +8,7 @@
  */
 ;
 use $ arr/;
+use $ obj/ as {deepMerge};
 use $ draw/Charts/;
 use $ draw/Charts/modules/radar;
 use $ draw/Charts/sharps/Line;

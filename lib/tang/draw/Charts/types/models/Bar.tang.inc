@@ -2,7 +2,7 @@ class Bar extends Charts.Type {
     defaults = defaultConfig
     
     initialize (options) {
-        var options = _.obj.deepMerge(this.defaults, options),
+        var options = deepMerge(this.defaults, options),
             barStrokeWidth = parseInt(options.itemStyle.normal.barBorderWidth);
         this.options = {
             index: options.index,
@@ -32,6 +32,10 @@ class Bar extends Charts.Type {
             emphasisStroke = this.options.emphasisStroke
             strokeWidth = this.options.barStrokeWidth
             emphasisStrokeWidth = this.options.emphasisStrokeWidth
+
+            // initialize () {
+                
+            // }
         }
         this.buildSegments(options.data);
 
@@ -50,6 +54,7 @@ class Bar extends Charts.Type {
             segment.value2 = ((segment.type === 2) || (segment.type === 3)) ? data[index][1] : data[index];
             segment.restore(['fillColor', 'strokeColor', 'strokeWidth']);
             segment.save();
+            // clog segment
             this.calculate(index, segment);
         }
         for (var index = this.segments.length; index < data.length; index++) {

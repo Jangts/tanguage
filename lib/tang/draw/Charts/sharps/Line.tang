@@ -71,9 +71,9 @@ class .sharps.Line extends Charts.Component {
             }
             switch (this.lineType) {
                 case 'dashed':
-                    return _.draw.canvas.drawDashLine(ctx, this.previous.point.x, this.previous.point.y, this.point.x, this.point.y, ctx.lineWidth * 3);
+                    return ..draw.canvas.drawDashLine(ctx, this.previous.point.x, this.previous.point.y, this.point.x, this.point.y, ctx.lineWidth * 3);
                 case 'dotted':
-                    return _.draw.canvas.drawDashLine(ctx, this.previous.point.x, this.previous.point.y, this.point.x, this.point.y, ctx.lineWidth);
+                    return ..draw.canvas.drawDashLine(ctx, this.previous.point.x, this.previous.point.y, this.point.x, this.point.y, ctx.lineWidth);
             }
         }
 

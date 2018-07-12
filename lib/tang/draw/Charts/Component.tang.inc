@@ -13,18 +13,18 @@ class Component {
         this.save();
     }
     
-    initialize () {}
+    initialize () {
+        each(this as key, value) {
+                    this[key] = value;
+                }
+    }
     
     restore (props) {
         if (!props) {
             _.extend(this, true, this._saved);
         } else {
-            each(props as index, key) {
-                clog key, this._saved[key], this[key], this._saved[key] || this[key];
-                // /if(this._saved[key]!== undefined){
-                    this[key] = this._saved[key] || this[key];
-                // }
-                // clog this;
+            each(props as key) {
+                this[key] = this._saved[key]
             }
         }
         return this;

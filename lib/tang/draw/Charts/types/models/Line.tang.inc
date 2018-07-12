@@ -3,7 +3,7 @@ class Line extends Charts.Type {
 
     initialize (options) {
         var instance = this.instance,
-            options = _.obj.deepMerge(this.defaults, options);
+            options = deepMerge(this.defaults, options);
             // clog this.defaults, options;
         this.options = {
             index: options.index,

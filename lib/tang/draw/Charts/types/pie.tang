@@ -7,6 +7,9 @@
  * Date: 2015-09-04
  */
 ;
+use $ arr/ as {sum, max}
+use $ obj/ as {deepMerge};
+use $ util/ as {isArr,isPercent,isNumeric};
 use $ draw/Charts/;
 use $ draw/Charts/sharps/Arc;
 

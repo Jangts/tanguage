@@ -3,7 +3,7 @@ class Pie extends Charts.Type {
 
     initialize (options) {
         var instance = this.instance,
-            options = _.obj.deepMerge(this.defaults, options),
+            options = deepMerge(this.defaults, options),
             barStrokeWidth = parseInt(options.itemStyle.normal.barBorderWidth),
             emphasisRadius;
 
@@ -15,10 +15,10 @@ class Pie extends Charts.Type {
             x = style.x,
             y = style.y;
 
-        if (_.util.isArr(options.radius) && options.radius[2]) {
-            if (_.util.isPercent(options.radius[2])) {
+        if (isArr(options.radius) && options.radius[2]) {
+            if (isPercent(options.radius[2])) {
                 emphasisRadius = maxRadius * parseInt(options.radius[2]) / 100
-            } else if (_.util.isNumeric(options.radius[2])) {
+            } else if (isNumeric(options.radius[2])) {
                 emphasisRadius = parseFloat(options.radius[1]);
             } else {
                 emphasisRadius = outerRadius + 5;
@@ -91,7 +91,7 @@ class Pie extends Charts.Type {
 
     update (data) {
         this.calculateTotalAndMax(data);
-        var leng = _.arr.max([data.length, this.segments.length]);
+        var leng = max([data.length, this.segments.length]);
         each(this.segments as index, segment) {
             segment.value = data && data[index] && data[index].value || 0;
             segment.restore(['fillColor', 'oRadius']);
@@ -170,8 +170,8 @@ class Pie extends Charts.Type {
             }
         }
         this.length = data.length;
-        this.total = _.arr.sum(values);
-        this.max = _.arr.max(values);
+        this.total = sum(values);
+        this.max = max(values);
     }
 
     calculateCircumference (value) {

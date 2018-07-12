@@ -20,7 +20,7 @@ class MultiTooltip extends draw.Charts.Component {
         var titleWidth = this.ctx.measureText(this.title).width,
             //Label has a legend square as well so account for this.
             labelWidth = draw.canvas.longestText(this.ctx, this.font, this.labels) + this.fontSize + 3,
-            longestTextWidth = _.arr.max([labelWidth, titleWidth]);
+            longestTextWidth = arr.max([labelWidth, titleWidth]);
 
         this.width = longestTextWidth + (this.xPadding * 2);
 

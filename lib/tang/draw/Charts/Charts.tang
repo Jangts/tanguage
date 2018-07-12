@@ -6,11 +6,11 @@
 ;
 
 use $ arr/ as arr;
-use $ obj/ as obj;
-use $ util/ as util;
 use $ dom/ as dom;
 use $ math/;
 use $ math/easing;
+use $ obj/ as obj;
+use $ util/ as util;
 use $ draw/canvas;
 
 namespace draw;
@@ -33,6 +33,7 @@ handler = void ns {
             each(instances as index, instance) {
                 // If the responsive flag is set in the chart instance config
                 // Cascade the resize event down to the chart.
+                // console.log ('foo', instance.options.responsive, instance);
                 if (instance.options.responsive) {
                     instance.resize(instance.render, true);
                 }
@@ -197,6 +198,7 @@ class .Charts {
 
     render() {
         this.clear();
+        // console.log('foo');
         if (this.addAnimation && this.options.animation) {
             this.addAnimation();
         } else {
@@ -224,6 +226,7 @@ class .Charts {
             newHeight = this.options.maintainAspectRatio ? newWidth / this.ratio : draw.Charts.helpers.getMaximumHeight(this.Element);
         this.width = newWidth;
         this.height = newHeight;
+        // clog this.layers;
         each(this.layers as zIndex, canvas) {
             canvas.width = newWidth;
             canvas.height = newHeight;

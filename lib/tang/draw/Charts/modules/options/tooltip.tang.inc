@@ -29,8 +29,8 @@
     multiTooltipTemplate: tooltip.axisFormatter,
     tooltipTitleTemplate: tooltip.titleFormatter,
 
-    tooltipXPadding: _.util.isArr(tooltip.padding) ? tooltip.padding[0] : (_.util.isNumeric(tooltip.padding) ? parseFloat(tooltip.padding) : 5),
-    tooltipYPadding: _.util.isArr(tooltip.padding) ? tooltip.padding[1] : (_.util.isNumeric(tooltip.padding) ? parseFloat(tooltip.padding) : 5),
+    tooltipXPadding: util.isArr(tooltip.padding) ? tooltip.padding[0] : (util.isNumeric(tooltip.padding) ? parseFloat(tooltip.padding) : 5),
+    tooltipYPadding: util.isArr(tooltip.padding) ? tooltip.padding[1] : (util.isNumeric(tooltip.padding) ? parseFloat(tooltip.padding) : 5),
 
     tooltipCaretSize: tooltip.caretSize,
     tooltipCornerRadius: tooltip.cornerRadius,

@@ -46,23 +46,23 @@ class Polar extends draw.Charts.Component {
                 this.radiusValues.push([]);
             }
             each(this.instance.series.radar as i, chart) {
-                max.push(_.arr.max(chart.data));
-                min.push(_.arr.min(chart.data));
+                max.push(arr.max(chart.data));
+                min.push(arr.min(chart.data));
                 each(chart.data as j, v) {
                     if (typeof v === 'number') {
                         this.radiusValues[j] && this.radiusValues[j].push(v);
                     }
                 }
             }
-            this.radiusAxisMax = _.arr.max(max);
-            this.radiusAxisMin = _.arr.min(min);
+            this.radiusAxisMax = arr.max(max);
+            this.radiusAxisMin = arr.min(min);
         } else {
             each(this.instance.series.line as i, chart) {
                 var data = [];
                 each(chart.data as j, v) {
                     (typeof v === 'number') && data.push(v);
                 }
-                this.radiusValues = _.arr.merge(this.radiusValues, data);
+                this.radiusValues = merge(this.radiusValues, data);
             }
             each(this.instance.series.scatter as i, chart) {
                 var angleData = [],
@@ -75,18 +75,18 @@ class Polar extends draw.Charts.Component {
                 }
                 switch (this.status) {
                     case 0:
-                        this.radiusValues = _.arr.merge(this.radiusValues, radiusData);
+                        this.radiusValues = merge(this.radiusValues, radiusData);
                         break;
                     case 4:
-                        this.angleValues = _.arr.merge(this.angleValues, angleData);
-                        this.radiusValues = _.arr.merge(this.radiusValues, radiusData);
+                        this.angleValues = merge(this.angleValues, angleData);
+                        this.radiusValues = merge(this.radiusValues, radiusData);
                         break;
                 }
             }
-            //this.radiusAxisMax = _.arr.max(this.radiusValues);
-            //this.radiusAxisMin = _.arr.min(this.radiusValues);
-            this.radiusAxisMax = _.arr.max(this.radiusValues);
-            this.radiusAxisMin = _.arr.min(this.radiusValues);
+            //this.radiusAxisMax = arr.max(this.radiusValues);
+            //this.radiusAxisMin = arr.min(this.radiusValues);
+            this.radiusAxisMax = arr.max(this.radiusValues);
+            this.radiusAxisMin = arr.min(this.radiusValues);
             clog this.radiusAxisMax, this.radiusAxisMax, this.radiusValues;
         }
 
@@ -106,9 +106,9 @@ class Polar extends draw.Charts.Component {
             if ((typeof(this.angleAxisMax) === 'number') && (typeof(this.angleAxisMin) === 'number')) {
                 var valuesArray = [this.angleAxisMax, this.angleAxisMin];
             } else if (typeof(this.angleAxisMax) === 'number') {
-                var valuesArray = [this.angleAxisMax, _.arr.min(this.angleValues)];
+                var valuesArray = [this.angleAxisMax, arr.min(this.angleValues)];
             } else if (typeof(this.yAxisMin) === 'number') {
-                var valuesArray = [this.angleAxisMin, _.arr.max(this.angleValues)];
+                var valuesArray = [this.angleAxisMin, arr.max(this.angleValues)];
             } else {
                 var valuesArray = this.angleValues;
             }
@@ -137,10 +137,10 @@ class Polar extends draw.Charts.Component {
             if ((typeof(this.radiusAxisMax) === 'number') && (typeof(this.radiusAxisMin) === 'number')) {
                 var valuesArray = [this.radiusAxisMax, this.radiusAxisMin];
             } else if (typeof(this.radiusAxisMax) === 'number') {
-                var min = _.arr.min(this.radiusValues),
+                var min = arr.min(this.radiusValues),
                     valuesArray = [this.radiusAxisMax, min < this.radiusAxisMax ? min : this.radiusAxisMax - 1];
             } else if (typeof(this.radiusAxisMin) === 'number') {
-                var max = _.arr.max(this.radiusValues),
+                var max = arr.max(this.radiusValues),
                     valuesArray = [this.radiusAxisMin, max > this.radiusAxisMin ? max : this.radiusAxisMin + 1];
             } else {
                 var valuesArray = this.radiusValues;
@@ -167,7 +167,7 @@ class Polar extends draw.Charts.Component {
     buildAngleLabels () {
         if (this.status === 1 || this.status === 4) {
             this.angleLabels = [];
-            var stepDecimalPlaces = _.math.getDecimalPlaces(this.angleStepValue);
+            var stepDecimalPlaces = math.getDecimalPlaces(this.angleStepValue);
             for (var i = 0; i <= this.angleSteps; i++) {
                 this.radiusLabels.push(helpers.template(this.angleTemplateString, {
                     value: (this.minAngle + (i * this.angleStepValue)).toFixed(stepDecimalPlaces)
@@ -179,7 +179,7 @@ class Polar extends draw.Charts.Component {
     buildRadiusLabels () {
         if (this.status === 0 || this.status === 4 || this.status === 6) {
             this.radiusLabels = [];
-            var stepDecimalPlaces = _.math.getDecimalPlaces(this.radiusStepValue);
+            var stepDecimalPlaces = math.getDecimalPlaces(this.radiusStepValue);
             for (var i = 0; i <= this.radiusSteps; i++) {
                 this.radiusLabels.push(helpers.template(this.radiusTemplateString, {
                     value: (this.minRadius + (i * this.radiusStepValue)).toFixed(stepDecimalPlaces)
@@ -242,8 +242,8 @@ class Polar extends draw.Charts.Component {
         radiusReductionRight = xProtrusionRight / Math.sin(furthestRightAngle + Math.PI / 2);
         radiusReductionLeft = xProtrusionLeft / Math.sin(furthestLeftAngle + Math.PI / 2);
 
-        radiusReductionRight = (_.util.isNumber(radiusReductionRight)) ? radiusReductionRight : 0;
-        radiusReductionLeft = (_.util.isNumber(radiusReductionLeft)) ? radiusReductionLeft : 0;
+        radiusReductionRight = (util.isNumber(radiusReductionRight)) ? radiusReductionRight : 0;
+        radiusReductionLeft = (util.isNumber(radiusReductionLeft)) ? radiusReductionLeft : 0;
         this.drawingAreaR = largestPossibleRadius - (radiusReductionLeft + radiusReductionRight) / 2;
     }
     

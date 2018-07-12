@@ -4,7 +4,8 @@
  * Date: 2015-09-04
  */
 ;
-use $ draw/Charts/;
+use $ math/ as math;
+use $ draw/Charts/ as Charts;
 
 namespace draw;
 
@@ -30,7 +31,6 @@ findNextWhere (arrayToSearch, filterCallback, startIndex) {
     }
 }
 
-
 @include 'models/Animation';
 
 expands .Charts {
@@ -45,7 +45,7 @@ expands .Charts {
 
         // render (
         animationObject.render = (instance, animation) {
-            var easingFunction = _.math.easing.all[animation.easing];
+            var easingFunction = math.easing.all[animation.easing];
             var stepDecimal = animation.curFrame / animation.frames;
             var easeDecimal = easingFunction(stepDecimal, 0, 1, 1);
             instance.draw(easeDecimal, stepDecimal, animation.curFrame);

@@ -4,9 +4,10 @@
  * Date: 2015-09-04
  */
 ;
-use $ arr/;
+use $ arr/ as arr;
+use $ dom/ as dom;
 use $ obj/ as {deepMerge, keysArray};
-use $ math/;
+use $ math/ as math;
 use $ draw/Charts/;
 
 namespace draw;
@@ -64,7 +65,7 @@ expands .Charts {
                             'strokeWidth': 'emphasisWidth'
                         }
                     },
-                    charts = _.arr.merge(this.grid.charts.lines, this.grid.charts.bars, this.grid.charts.scatters);
+                    charts = arr.merge(this.grid.charts.lines, this.grid.charts.bars, this.grid.charts.scatters);
                 each(types as type) {
                     for (var i = 0; this.grid.charts[type] && i < this.grid.charts[type].length && actives.length === 0; i++) {
                         var chart = this.grid.charts[type][i];
@@ -124,10 +125,10 @@ expands .Charts {
                 }
                 if (actives.length > 0) {
                     this.actived = 1;
-                    _.dom.setStyle(this.Element, 'cursor', 'pointer');
+                    dom.setStyle(this.Element, 'cursor', 'pointer');
                 } else {
                     this.actived = 0;
-                    _.dom.setStyle(this.Element, 'cursor', 'default');
+                    dom.setStyle(this.Element, 'cursor', 'default');
                 }
             });
         } else {
