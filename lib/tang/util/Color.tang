@@ -299,12 +299,12 @@ convs = {
     name(arr) {
         var hex6 = '#' + hex(arr[0]) + hex(arr[1]) + hex(arr[2]),
             name;
-        _.loop(names, (n, v) {
+        each(names as n, v) {
             if (v === hex6) {
                 name = n;
-                _.loop.out();
+                @return;
             }
-        });
+        }
         return name;
     },
 },

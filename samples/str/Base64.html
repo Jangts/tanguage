@@ -41,12 +41,12 @@
 
             encode.onclick = function() {
                 var text = input.value;
-                view.innerHTML = pandora.str.base64Encode(text);
+                app.innerHTML = pandora.str.base64Encode(text);
             }
 
             decode.onclick = function() {
                 var text = input.value;
-                view.innerHTML = pandora.str.base64Decode(text);
+                app.innerHTML = pandora.str.base64Decode(text);
             }
         }, true);
     </script>

@@ -4,7 +4,7 @@ use $ dom/Template;
 let document = root.document,
 view = document.getElementById('view'),
 template = @template 'tpl';
-view.innerHTML = template.complie({
+app.innerHTML = template.complie({
     greeting: 'Hello',
     name: 'tanguage',
 }).echo();

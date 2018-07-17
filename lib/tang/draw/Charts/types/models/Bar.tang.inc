@@ -193,7 +193,7 @@ class Bar extends Charts.Type {
     getSegmentsAtEvent (e, charts) {
         var segmentsArray = [],
             eventPosition = helpers.getRelativePosition(e);
-        _.loop(this.segments, (index, segment) {
+        each(this.segments as index, segment) {
             if (segment.inRange(eventPosition.x, eventPosition.y)) {
                 if (charts && charts.length) {
                     each(charts as i, chart) {
@@ -202,9 +202,9 @@ class Bar extends Charts.Type {
                 } else {
                     segmentsArray.push(segment);
                 }
-                _.loop.out();
+                @return;
             }
-        }, this);
+        }
         return segmentsArray;
     }
 

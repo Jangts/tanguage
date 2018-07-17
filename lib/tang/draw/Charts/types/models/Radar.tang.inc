@@ -126,12 +126,12 @@ class Radar extends Charts.Type {
     getSegmentsAtEvent (e) {
         var segmentsArray = [],
             eventPosition = helpers.getRelativePosition(e);
-        _.loop(this.segments, (index, segment) {
+        each(this.segments as index, segment) {
             if (segment.inRange(eventPosition.x, eventPosition.y)) {
                 segmentsArray = this.segments;
-                _.loop.out();
+                @return;
             }
-        }, this);
+        }
         return segmentsArray;
     }
     

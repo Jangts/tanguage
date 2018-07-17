@@ -230,8 +230,8 @@ switch (options.command) {
 // node-tang cdir ./tang/ ./dist/ -map -c
 // node ./../compiler/js/node-tang.js cdir ./tang/ ./dist/ -map -c
 
-// node-tang cdir  ./tang/view/Slider/ ./dist/view/Slider/ -c -map
-// node ./../compiler/js/node-tang.js cdir ./tang/view/Slider/ ./dist/view/Slider/ -c -map
-// node ./../compiler/js/node-tang.js cdir ./tang/view/Slider/ ./dist/view/Slider/ -map
+// node-tang cdir  ./tang/app/Slider/ ./dist/app/Slider/ -c -map
+// node ./../compiler/js/node-tang.js cdir ./tang/app/Slider/ ./dist/app/Slider/ -c -map
+// node ./../compiler/js/node-tang.js cdir ./tang/app/Slider/ ./dist/app/Slider/ -map
 
 // node ./../compiler/js/node-tang.js cdir ./tang/dom/ ./dist/dom/ -c -map

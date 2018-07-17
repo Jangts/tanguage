@@ -88,26 +88,26 @@ escap = (str) {
     return str.replace(/\$/g, '\\\$').replace(/\{/g, '\\\{').replace(/\}/g, '\\\}');
 },
 compile = (source) {
-    _.each(filters, (filter, handler) {
+    each(filters as filter, handler) {
         var pattern = new RegExp(escap(delimiters[0]) + '\\\s*([\\\w\\\.\\\[\\\]\\\'\\\"]+)' + '\\\s*\\\|\\\s*' + filter.replace('.', '\\\.') + '\\\s*,' + '([\\\s\\\w\\\.\\\[\\\]\\\'\\\,\\\"]+?)' + escap(delimiters[1]), 'g'),
             matches = source.match(pattern);
         if (matches) {
-            _.each(matches, (i, match) {
+            each(matches as i, match) {
                 source = source.replace(pattern, "<%echo(filters." + filter + "(this.data.$1,$2))%>");
-            });
+            }
         }
 
-    });
-    _.each(order, (i, group) {
-        _.each(compilers[group], (j, type) {
+    }
+    each(order as i, group) {
+        each(compilers[group] as j, type) {
             var matches = source.match(type.pattern);
             if (matches) {
-                _.each(matches, (k, match) {
+                each(matches as k, match) {
                     source = source.replace(match, type.handler(match, type.pattern));
-                });
+                }
             }
-        });
-    });
+        }
+    }
     return source;
 },
 allcodes = {};

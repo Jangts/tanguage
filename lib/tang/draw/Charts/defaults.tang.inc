@@ -23,7 +23,7 @@
     animationDuration: 1000,
     animationEasing: 'easeOutQuart',
     responsive: false,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     onAnimationProgress: function() {},
     onAnimationComplete: function() {},
     responsive: true

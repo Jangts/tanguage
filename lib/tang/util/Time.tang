@@ -167,12 +167,12 @@ class .util.Time {
                         if (codes[time]) {
                             t = codes[time]();
                         }
-                        _.loop(patterns, function(i, type) {
+                        each(patterns as i, type) {
                             if (type[0].test(time)) {
                                 t = type[1](time);
-                                _.loop.out();
+                                @return;
                             }
-                        });
+                        }
                         t = time;
                         break;
                     case 'number':

@@ -133,7 +133,6 @@ expands .Charts {
             });
         } else {
             this.grid.update(gridOptions);
-
         }
     };
 }

@@ -414,10 +414,5 @@
         "prefix": ".util",
         "body": "pandora.util.$0",
         "description": "Call Member From Pandora"
-    },
-    ".view …": {
-        "prefix": ".view",
-        "body": "pandora.view.$0",
-        "description": "Call Member From Pandora"
     }
 }

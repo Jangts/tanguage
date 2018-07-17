@@ -1,0 +1,94 @@
+@module;
+/*!
+ * tanguage framework source code
+ *
+ * class app/Scrollbar
+ *
+ * Date: 2017-04-06
+ */
+;
+use $ util/ as {isStr};
+use $ dom/ as {Events, create, selector, setStyle, getStyle, getSize, addClass};
+use $ dom/Template;
+
+namespace app;
+
+let
+_ = pandora,
+doc = root.document,
+{console, location} = root;
+
+@include 'Abstract';
+
+class .Scrollbar extends Abstract {
+    Element = document;
+    template = @template 'template';
+
+    _init(elem, options) {
+        options = _.extend(options || {}, false, {
+            theme: 'default-dark',
+            uesVertical: true,
+            uesHorizontal: false
+        });
+        this.Element = isStr(elem) ? selector.byId(elem) : elem;
+        addClass(this.Element, 'tang')
+            .addClass(this.Element, 'scrollbar')
+            .addClass(this.Element, options.theme || 'light');
+        this.build(options.uesVertical, options.uesHorizontal);
+        this.resize();
+        this.bind();
+        // console.log(options);
+    }
+    
+    build(uesVertical, uesHorizontal) {
+        this.content = this.Element.innerHTML;
+        setStyle(this.Element, 'overflow', 'hidden');
+        if (..byCn('scroll-doc-container', this.Element)[0]) {
+            this.document = ..byCn('scroll-doc-container', this.Element)[0];
+        } else {
+            this.Element.innerHTML = '';
+            this.document = create('div', this.Element, {
+                className: 'scroll-doc-container',
+                innerHTML: this.content
+            });
+            setStyle(this.document, {
+                width: this.Element.scrollWidth,
+                height: this.Element.scrollHeight
+            });
+        }
+
+        if (uesVertical) {
+            if (..byCn('scroll-bar-vertical', this.Scrollbar)[0]) {
+                this.vertical = ..byCn('scroll-bar-vertical', this.Scrollbar)[0];
+            } else {
+                this.vertical = create('div', this.Element, {
+                    className: 'scroll-bar-vertical',
+                    innerHTML: this.template.complie({}).echo()
+                });
+            }
+        }
+
+        if (uesHorizontal) {
+            if (..byCn('scroll-bar-horizontal', this.Scrollbar)[0]) {
+                this.horizontal = ..byCn('scroll-bar-horizontal', this.Scrollbar)[0];
+            } else {
+                this.horizontal = create('div', this.Element, {
+                    className: 'scroll-bar-horizontal',
+                    innerHTML: this.template.complie({}).echo()
+                });
+            }
+        }
+        this.buttonUp = ..byCn('scroll-button-prev', this.Scrollbar)[0];
+        this.buttonRight = ..byCn('scroll-button-next', this.Scrollbar)[0];
+        this.buttonDown = ..byCn('scroll-button-next', this.Scrollbar)[0];
+        this.buttonLeft = ..byCn('scroll-button-prev', this.Scrollbar)[0];
+        this.horizontalRail = ..byCn('scroll-rail', this.horizontal)[0];
+        this.horizontalDragger = ..byCn('scroll-dragger', this.horizontal)[0];
+        this.verticalRail = ..byCn('scroll-rail', this.vertical)[0];
+        this.verticalDragger = ..byCn('scroll-dragger', this.vertical)[0];
+    }
+
+    static Abstract = Abstract;
+}
+
+this.module.exports = app.Scrollbar;

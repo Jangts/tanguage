@@ -10,7 +10,7 @@
 use ~/../;
 use ~/../languages/markup;
 
-var highlight = _.view.highlight;
+var highlight = _.app.highlight;
 highlight.languages.markdown = highlight.languages.extend('markup', {});
 highlight.languages.insertBefore('markdown', 'prolog', {
     'blockquote': {

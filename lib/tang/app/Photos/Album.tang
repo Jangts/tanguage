@@ -1,0 +1,195 @@
+@module;
+/*!
+ * tanguage framework source code
+ *
+ * class app.Photos.Album extends app.Photos
+ *
+ * Date: 2017-04-06
+ */
+;
+use $ dom/Events as Events;
+use $ util/;
+use $ app/Photos/ as Photos;
+
+namespace app;
+
+let
+_ = pandora,
+doc = root.document,
+{console, location} = root,
+query = _.dom.sizzle || _.dom.selector;
+
+class Photos.Album extends Photos {
+    state = false
+    cur = 0
+    AnimTrans
+    defaultImage
+    tipsOnLoading = 'Loading...'
+    tipsAlreadyFirst = 'Already First'
+    tipsAlreadyLast = 'Already Last'
+
+    _init(stage, options) {
+        this.Element = _.util.isStr(stage) ? _.dom.selector.byId(stage) : stage;
+        this.build(options);
+        if (options.url) {
+            this.redata(options.url);
+        } else if (options.data) {
+            this.redata(options.data);
+        } else if (options.imagePath) {
+            this.redata({
+                imagePath: options.imagePath,
+                totalImages: options.totalImages,
+                imageExtension: options.imageExtension
+            });
+        }
+    }
+
+    @include 'Album/build';
+    @include 'Album/fits';
+
+    on() {
+        this.state = true;
+        return this;
+    }
+
+    off() {
+        this.state = false;
+        return this;
+    }
+
+    redata(images) {
+        switch (typeof images) {
+            case 'string':
+                var that = this;
+                this.loadJson(images, (array) {
+                    that.images = [];
+                    that.thumbs = []
+                    that.length = 0;
+                    each(array as img) {
+                        var src = img[3];
+                        var sfix = /\.[^\.]+$/.exec(src);
+                        that.images.push(src + '_1100' + sfix);
+                        that.thumbs.push(src + '_275' + sfix);
+                        that.length++;
+                    }
+                    that.length > 0 && that.nav().play();
+                });
+                break;
+            case 'object':
+                if (_.util.isArr(images)) {
+                    this.loadArray(images);
+                } else {
+                    this.loadFolder(images);
+                }
+                this.length > 0 && this.nav().play();
+                break;
+        };
+        return this;
+    }
+
+    bind() {
+        var that = this;
+        new Events(this.Element)
+            .push('click', '.ib-photo-prev', null, () {
+                that.cur--;
+                that.play();
+            })
+            .push('click', '.ib-photo-next', null, () {
+                that.cur++;
+                that.play();
+            })
+            .push('click', '.ib-photo-thumb', null, () {
+                that.cur = _.dom.getData(this, 'photoNum');
+                that.play();
+            });
+        new Events(document).push('keydown', null, null, (e) {
+            if (that.status) {
+                switch (e.which) {
+                    case 27:
+                        that.offCallback();
+                        that.off();
+                        break;
+                    case 37:
+                        that.cur--;
+                        that.play();
+                        break;
+                    case 39:
+                        that.cur++;
+                        that.play();
+                        break;
+                }
+            }
+        });
+    }
+    
+    nav() {
+        if (this.Nav) {
+            this.thumbs = this.thumbs || this.images;
+            var nav = this.Nav;
+            var thumbWidth = _.dom.getWidth(query('.ib-photo-nav', this.Element)[0]) / this.thumbNum;
+            nav.style.position = 'absolute';
+            nav.style.width = thumbWidth * this.length + 'px';
+            nav.innerHTML = '';
+            each(this.thumbs as i, thumb) {
+                _.dom.create('li', nav, {
+                    className: 'ib-photo-thumb',
+                    dataPhotoNum: i,
+                    innerHTML: '<img src="' + thumb + '" />',
+                    style: {
+                        width: thumbWidth
+                    }
+                });
+            }
+        }
+        return this;
+    }
+
+    play(n) {
+        if (this.check()) {
+            var origin = new Image();
+            origin.src = this.images[n || this.cur];
+            var that = this;
+            that.Picture.src = origin.src;
+            that.tips(that.tipsOnLoading);
+            if (origin.complete) {
+                that.fit(origin);
+            } else {
+                origin.onload = function() {
+                    if (this.src == that.Picture.src) {
+                        that.fit(this);
+                    }
+                };
+                origin.onerror = function() {
+                    that.Picture.src = that.defaultImage;
+                }
+            };
+            this.fitNav();
+        }
+    }
+    
+    check() {
+        if (this.cur > this.length - 1) {
+            this.cur = this.length - 1;
+            this.tips(this.tipsAlreadyLast);
+            return false;
+        }
+        if (this.cur < 0) {
+            this.cur = 0;
+            this.tips(this.tipsAlreadyFirst);
+            return false;
+        }
+        return true;
+    }
+
+    tips(str, duration) {
+        duration = duration || 1500;
+        var that = this;
+        this.Notice.innerHTML = str;
+        this.Notice.style.display = 'block';
+        setTimeout(function() {
+            that.Notice.style.display = 'none';
+        }, duration)
+    }
+}
+
+this.module.exports = Photos.Album;

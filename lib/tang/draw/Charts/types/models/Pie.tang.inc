@@ -1,5 +1,6 @@
 class Pie extends Charts.Type {
     defaults = defaultConfig
+    polar
 
     initialize (options) {
         var instance = this.instance,
@@ -7,25 +8,8 @@ class Pie extends Charts.Type {
             barStrokeWidth = parseInt(options.itemStyle.normal.barBorderWidth),
             emphasisRadius;
 
-
-        var style = helpers.calculateDoughnutStyle(options, instance.width, instance.height),
-            maxRadius = style.maxRadius,
-            innerRadius = style.innerRadius,
-            outerRadius = style.outerRadius,
-            x = style.x,
-            y = style.y;
-
-        if (isArr(options.radius) && options.radius[2]) {
-            if (isPercent(options.radius[2])) {
-                emphasisRadius = maxRadius * parseInt(options.radius[2]) / 100
-            } else if (isNumeric(options.radius[2])) {
-                emphasisRadius = parseFloat(options.radius[1]);
-            } else {
-                emphasisRadius = outerRadius + 5;
-            }
-        } else {
-            emphasisRadius = outerRadius + 5;
-        }
+        var style = this.style = new PieStyle(helpers.calculateDoughnutStyle(options, instance.width, instance.height));
+        style.fit(options);
 
         this.options = {
             index: options.index,
@@ -33,12 +17,10 @@ class Pie extends Charts.Type {
             animateRotate: options.animateRotate,
             animateScale: options.animateScale,
 
-            innerRadius: innerRadius,
-            outerRadius: outerRadius,
-            emphasisRadius: emphasisRadius,
+            radius: options.radius,
             fillColor: options.itemStyle.normal.color,
             emphasisFill: options.itemStyle.emphasis.color,
-            center: [x, y],
+            center: options.center,
 
             segmentShowStroke: (barStrokeWidth > 0),
             segmentStrokeColor: options.itemStyle.normal.borderColor || '#FFFFFF',
@@ -67,13 +49,13 @@ class Pie extends Charts.Type {
             showStroke = this.options.segmentShowStroke
             strokeWidth = this.options.segmentStrokeWidth
             strokeColor = this.options.segmentStrokeColor
-            x = x
-            y = y
-            innerRadius = this.options.animateScale ? 0 : this.options.innerRadius
-            emphasisRadius = this.options.animateScale ? 0 : this.options.emphasisRadius
-            //oRadius = (this.options.outerRadius - this.options.innerRadius)
-            iRadius = this.options.innerRadius
-            eRadius = this.options.emphasisRadius
+            x = style.x
+            y = style.y
+            innerRadius = this.options.animateScale ? 0 : style.innerRadius
+            emphasisRadius = this.options.animateScale ? 0 : style.emphasisRadius
+            // oRadius = (style.outerRadius - style.innerRadius)
+            iRadius = style.innerRadius
+            eRadius = style.emphasisRadius
             startAngle = Math.PI * 1.5
         }
 
@@ -89,15 +71,23 @@ class Pie extends Charts.Type {
         }
     }
 
+    resetStyle (){
+         this.style.update(helpers.calculateDoughnutStyle(this.options, this.instance.width, this.instance.height)).fit(this.options);
+         return this;
+    }
+
     update (data) {
         this.calculateTotalAndMax(data);
         var leng = max([data.length, this.segments.length]);
         each(this.segments as index, segment) {
             segment.value = data && data[index] && data[index].value || 0;
             segment.restore(['fillColor', 'oRadius']);
-            segment.outerRadius = this.options.outerRadius;
-            segment.innerRadius = this.options.innerRadius;
-            segment.emphasisRadius = this.options.emphasisRadius;
+            segment.outerRadius = this.options.animateScale ? 0 : this.style.outerRadius;
+            segment.innerRadius = this.options.animateScale ? 0 : this.style.innerRadius;
+            segment.x = this.style.x;
+            segment.y = this.style.y;
+            segment.iRadius = this.style.innerRadius
+            segment.emphasisRadius = this.style.emphasisRadius;
             segment.save();
         }
         for (var index = this.segments.length; index < data.length; index++) {
@@ -194,12 +184,12 @@ class Pie extends Charts.Type {
         if (this.total > 0) {
             switch (this.options.type) {
                 case 'area':
-                    return (this.options.outerRadius - this.options.innerRadius) * (Math.sqrt(value) / this.max) + this.options.innerRadius;
+                    return (this.style.outerRadius - this.style.innerRadius) * (Math.sqrt(value) / this.max) + this.style.innerRadius;
                 case 'radius':
                 case 'angle':
-                    return (this.options.outerRadius - this.options.innerRadius) * (value / this.max) + this.options.innerRadius;
+                    return (this.style.outerRadius - this.style.innerRadius) * (value / this.max) + this.style.innerRadius;
                 case 'pie':
-                    return this.options.outerRadius;
+                    return this.style.outerRadius;
             }
         } else {
             return 0;
@@ -225,10 +215,13 @@ class Pie extends Charts.Type {
     draw (easeDecimal) {
         var animDecimal = (easeDecimal) ? easeDecimal : 1;
         each(this.segments as index, segment) {
+            // clog segment.x, segment.y, segment.iRadius;
             segment.transition({
                 circumference: this.calculateCircumference(segment.value),
                 outerRadius: this.calculateRadius(segment.value),
-                innerRadius: segment.iRadius
+                innerRadius: segment.iRadius,
+                x: segment.x,
+                y: segment.y,
             }, animDecimal);
             segment.endAngle = segment.startAngle + segment.circumference;
             if (index < this.segments.length - 1) {

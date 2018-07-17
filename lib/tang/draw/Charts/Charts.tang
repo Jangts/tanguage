@@ -224,6 +224,8 @@ class .Charts {
         this.clear();
         var newWidth = helpers.getMaximumWidth(this.Element),
             newHeight = this.options.maintainAspectRatio ? newWidth / this.ratio : draw.Charts.helpers.getMaximumHeight(this.Element);
+
+            // clog newWidth, newHeight, this.Element
         this.width = newWidth;
         this.height = newHeight;
         // clog this.layers;

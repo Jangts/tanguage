@@ -1,0 +1,14 @@
+@module;
+/*!
+ * tanguage framework source code
+ *
+ * class app.TDE alias class app.ThreeDimensionalEyes
+ * 
+ * Date: 2017-04-06
+ */
+;
+use $ app/Photos/ThreeDimensionalEyes;
+
+namespace app.Photos;
+
+this.module.exports = Photos.TDE = Photos.ThreeDimensionalEyes;

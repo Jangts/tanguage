@@ -23,6 +23,7 @@ console = root.console,
 helpers = Charts.helpers;
 
 let defaultConfig = @include 'defaults/pie';
+@include 'models/PieStyle';
 @include 'models/Pie';
 
 Charts.prototype.pie = () {
@@ -34,19 +35,19 @@ Charts.prototype.pie = () {
         chartName = this.getChartName(options.name);
         if (this.historyCharts[chartName] && this.historyCharts[chartName].type == 'pie') {
             chart = this.historyCharts[chartName];
-            chart.update(options.data, options.index);
+            chart.resetStyle().update(options.data, options.index);
         } else {
             chart = new Pie(options, this, options.zIndex);
             chart.type = 'pie';
             this.historyCharts[chartName] = chart;
             helpers.bindHover(this, (evt) {
                 var activeSegments = [];
-                _.loop(this.activedCharts, (i, chart) {
+                each (this.activedCharts as i, chart) {
                     activeSegments = chart.getSegmentsAtEvent(evt);
                     if (activeSegments.length) {
-                        _.loop.out();
+                        @return;
                     }
-                });
+                }
                 each(activeSegments as index, activeSegment) {
                     activeSegment.fillColor = activeSegment.emphasisFill;
                     activeSegment.oRadius = activeSegment.eRadius;

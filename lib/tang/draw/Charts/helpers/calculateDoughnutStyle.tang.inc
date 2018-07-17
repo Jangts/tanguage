@@ -7,6 +7,7 @@
  */
 ;
 public calculateDoughnutStyle = (options, width, height) {
+    // clog width, height;
     var maxRadius = arr.min([width, height]) / 2;
     innerRadius = 0,
         outerRadius = maxRadius * 0.75,
@@ -42,6 +43,7 @@ public calculateDoughnutStyle = (options, width, height) {
             y = parseFloat(options.center[1]);
         }
     }
+    // clog width, height, x, y;
     return {
         maxRadius: maxRadius,
         innerRadius: innerRadius,
