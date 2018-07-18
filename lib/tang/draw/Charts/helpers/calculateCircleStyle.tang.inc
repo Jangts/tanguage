@@ -32,10 +32,5 @@ public calculateCircleStyle = (options, width, height) {
             y = parseFloat(options.center[1]);
         }
     }
-    return {
-        maxRadius: maxRadius,
-        radius: radius,
-        x: x,
-        y: y
-    }
+    return {maxRadius, radius, x, y}
 };

@@ -82,8 +82,8 @@ class Pie extends Charts.Type {
         each(this.segments as index, segment) {
             segment.value = data && data[index] && data[index].value || 0;
             segment.restore(['fillColor', 'oRadius']);
-            segment.outerRadius = this.options.animateScale ? 0 : this.style.outerRadius;
-            segment.innerRadius = this.options.animateScale ? 0 : this.style.innerRadius;
+            segment.outerRadius = this.style.outerRadius;
+            segment.innerRadius = this.style.innerRadius;
             segment.x = this.style.x;
             segment.y = this.style.y;
             segment.iRadius = this.style.innerRadius

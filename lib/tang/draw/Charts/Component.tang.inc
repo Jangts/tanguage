@@ -45,7 +45,10 @@ class Component {
     }
     
     transition (props, ease) {
+        // clog props;
         each(props as key, value) {
+            // clog key, value;
+            // this[key] = Math.round (((value - this._saved[key]) * ease) + this._saved[key]);
             this[key] = ((value - this._saved[key]) * ease) + this._saved[key];
         }
         return this;

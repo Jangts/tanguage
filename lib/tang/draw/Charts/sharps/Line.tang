@@ -4,6 +4,7 @@
  * Date: 2015-09-04
  */
 ;
+use $ draw/canvas as canvas;
 namespace draw.Charts;
 
 let
@@ -71,15 +72,15 @@ class .sharps.Line extends Charts.Component {
             }
             switch (this.lineType) {
                 case 'dashed':
-                    return ..draw.canvas.drawDashLine(ctx, this.previous.point.x, this.previous.point.y, this.point.x, this.point.y, ctx.lineWidth * 3);
+                    return canvas.drawDashLine(ctx, this.previous.point.x, this.previous.point.y, this.point.x, this.point.y, ctx.lineWidth * 3);
                 case 'dotted':
-                    return ..draw.canvas.drawDashLine(ctx, this.previous.point.x, this.previous.point.y, this.point.x, this.point.y, ctx.lineWidth);
+                    return canvas.drawDashLine(ctx, this.previous.point.x, this.previous.point.y, this.point.x, this.point.y, ctx.lineWidth);
             }
         }
 
         if (this.index === 0) {
             ctx.beginPath();
-            ctx.moveTo(this.point.x, this.point.y);
+            canvas.to(ctx, this.point.x, this.point.y, 0);
         } else {
             if (this.bezierCurve) {
                 ctx.bezierCurveTo(
@@ -90,8 +91,7 @@ class .sharps.Line extends Charts.Component {
                     this.point.x,
                     this.point.y);
             } else {
-
-                ctx.lineTo(this.point.x, this.point.y);
+                canvas.to(ctx, this.point.x, this.point.y, 1);
             }
         }
 

@@ -318,11 +318,7 @@ class Polar extends draw.Charts.Component {
                         ctx.beginPath();
                         for (var i = 0; i < this.angleSteps; i++) {
                             pointPosition = this.getPointPosition(this.calculateAngle(i), this.calculateRadius(index, index * this.radiusStepValue));
-                            if (i === 0) {
-                                ctx.moveTo(pointPosition.x, pointPosition.y);
-                            } else {
-                                ctx.lineTo(pointPosition.x, pointPosition.y);
-                            }
+                            draw.canvas.to(ctx, pointPosition.x, pointPosition.y, i === 0 ? 0 : 1);
                         }
                         ctx.closePath();
                         ctx.stroke();
@@ -348,11 +344,7 @@ class Polar extends draw.Charts.Component {
                 }
                 if (this.radiusSplitLineWidth > 0) {
                     outerPosition = this.getPointPosition(this.calculateAngle(i), this.calculateRadius(i, this.maxRadius));
-                    ctx.beginPath();
-                    ctx.moveTo(this.xCenter, this.yCenter);
-                    ctx.lineTo(outerPosition.x, outerPosition.y);
-                    ctx.stroke();
-                    ctx.closePath();
+                    draw.canvas.line(ctx, this.xCenter, this.yCenter, outerPosition.x, outerPosition.y, true);
                 }
 
                 if (this.backgroundColors && this.backgroundColors.length == this.angleSteps) {
@@ -371,14 +363,12 @@ class Polar extends draw.Charts.Component {
                         y: (outerPosition.y + nextOuterPosition.y) / 2
                     };
 
-                    ctx.beginPath();
-                    ctx.moveTo(this.xCenter, this.yCenter);
-                    ctx.lineTo(previousOuterHalfway.x, previousOuterHalfway.y);
-                    ctx.lineTo(outerPosition.x, outerPosition.y);
-                    ctx.lineTo(nextOuterHalfway.x, nextOuterHalfway.y);
-                    ctx.fillStyle = this.backgroundColors[i];
-                    ctx.fill();
-                    ctx.closePath();
+                    draw.canvas.line(ctx, this.xCenter, this.yCenter, previousOuterHalfway.x, previousOuterHalfway.y, false, false, (to)=>{
+                        to(ctx, outerPosition.x, outerPosition.y, 1);
+                        to(ctx, nextOuterHalfway.x, nextOuterHalfway.y, 1);
+                        ctx.fillStyle = this.backgroundColors[i];
+                        ctx.fill();
+                    });
                 }
                 this.drawAngleLabels(ctx, i);
             }

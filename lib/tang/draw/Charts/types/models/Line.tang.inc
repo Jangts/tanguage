@@ -178,11 +178,11 @@ class Line extends Charts.Type {
 
         if (this.options.datasetFill && (points.length > 0) && ((this.grid.status === 0) || (this.grid.status === 1))) {
             if (this.grid.status === 0) {
-                ctx.lineTo(points[points.length - 1].x, this.grid.baseY);
-                ctx.lineTo(points[0].x, this.grid.baseY);
+                canvas.to(ctx, points[points.length - 1].x, this.grid.baseY, 1);
+                canvas.to(ctx, points[0].x, this.grid.baseY, 1);
             } else {
-                ctx.lineTo(this.grid.baseX, points[points.length - 1].y);
-                ctx.lineTo(this.grid.baseX, points[0].y);
+                canvas.to(ctx, this.grid.baseX, points[points.length - 1].y, 1);
+                canvas.to(ctx, this.grid.baseX, points[0].y, 1);
             }
             ctx.globalAlpha = 0.85;
             ctx.fillStyle = this.options.fillColor;

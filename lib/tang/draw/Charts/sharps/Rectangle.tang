@@ -4,6 +4,8 @@
  * Date: 2015-09-04
  */
 ;
+use $ draw/canvas as canvas;
+
 namespace draw.Charts;
 
 let
@@ -55,25 +57,23 @@ class .sharps.Rectangle extends Charts.Component {
 
         //console.log(this.x1, this.y1, this.x2, this.y2);
 
-        ctx.beginPath();
-
         ctx.fillStyle = this.fillColor;
         ctx.strokeStyle = this.strokeColor;
         ctx.lineWidth = this.strokeWidth;
 
         // It'd be nice to keep this class totally generic to any rectangle
         // and simply specify which border to miss out.
-        ctx.moveTo(leftX, startY);
-        ctx.lineTo(leftX, endY);
-        ctx.lineTo(rightX, endY);
-        ctx.lineTo(rightX, startY);
-        if (this.type === 2) {
-            ctx.lineTo(leftX, startY);
-        }
-        ctx.fill();
-        if (this.showStroke) {
-            ctx.stroke();
-        }
+        canvas.line(ctx, leftX, startY, leftX, endY, false, false, (to)=>{
+            to(ctx, rightX, endY, 1);
+            to(ctx, rightX, startY, 1);
+            if (this.type === 2) {
+                to(ctx, leftX, startY, 1);
+            }
+            ctx.fill();
+            if (this.showStroke) {
+                ctx.stroke();
+            }
+        });        
     }
 
     drawHorizontal () {
@@ -96,25 +96,23 @@ class .sharps.Rectangle extends Charts.Component {
             }
         }
 
-        ctx.beginPath();
-
         ctx.fillStyle = this.fillColor;
         ctx.strokeStyle = this.strokeColor;
         ctx.lineWidth = this.strokeWidth;
 
         // It'd be nice to keep this class totally generic to any rectangle
         // and simply specify which border to miss out.
-        ctx.moveTo(startX, topY);
-        ctx.lineTo(endX, topY);
-        ctx.lineTo(endX, bottomY);
-        ctx.lineTo(startX, bottomY);
-        if (this.type === 2) {
-            ctx.lineTo(startX, topY);
-        }
-        ctx.fill();
-        if (this.showStroke) {
-            ctx.stroke();
-        }
+        canvas.line(ctx, startX, topY, endX, topY, false, false, (to)=>{
+            to(ctx, endX, bottomY, 1);
+            to(ctx, startX, bottomY, 1);
+            if (this.type === 2) {
+                to(ctx, startX, topY, 1);
+            }
+            ctx.fill();
+            if (this.showStroke) {
+                ctx.stroke();
+            }
+        }); 
     }
 
     hasValue () {

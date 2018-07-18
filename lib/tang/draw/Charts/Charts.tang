@@ -28,8 +28,9 @@ handler = void ns {
     // Basic debounce of resize function so it doesn't hurt performance when resizing browser.
     var timeout;
     return () {
-        clearTimeout(timeout);
+        // clearTimeout(timeout);
         timeout = setTimeout(() {
+            // clog timeout;
             each(instances as index, instance) {
                 // If the responsive flag is set in the chart instance config
                 // Cascade the resize event down to the chart.
@@ -38,7 +39,7 @@ handler = void ns {
                     instance.resize(instance.render, true);
                 }
             }
-        }, 50);
+        }, 20);
     };
 };
 
@@ -54,10 +55,18 @@ class .Charts {
     ratio =1
 
     _init(elem, theme, options) {
+        // clog 'foo';
         if (util.isElement(elem)) {
             this.id = new _.Identifier().toString();
             this.historyCharts = {};
             instances[this.id] = this;
+
+            if (theme && draw.Charts.theme[theme]) {
+                this.options = obj.deepMerge(defaults, draw.Charts.theme[theme]);
+            } else {
+                this.options = _.copy(defaults);
+            }
+
             dom.setAttr(elem, 'data-chart-id', this.id);
             dom.setStyle(elem, {
                 '-webkit-tap-highlight-color': 'transparent',
@@ -65,17 +74,15 @@ class .Charts {
                 'position': 'relative',
                 'background-color': 'transparent'
             });
+            
             this.Element = elem;
             var computeDimension = dom.getSize(elem, 'inner');
-            this.width = computeDimension.width;
+            this.width = computeDimension.width > this.options.minWidth ? computeDimension.width : this.options.minWidth;
             this.height = computeDimension.height;
+            // clog this.width, this.height;
             this.layers = {};
             this.ratio = this.width / this.height;
-            if (theme && draw.Charts.theme[theme]) {
-                this.options = obj.deepMerge(defaults, draw.Charts.theme[theme]);
-            } else {
-                this.options = _.copy(defaults);
-            }
+            
 
             if (options) {
                 this.setOption(options);
@@ -223,11 +230,13 @@ class .Charts {
         this.stop();
         this.clear();
         var newWidth = helpers.getMaximumWidth(this.Element),
+            newWidth = newWidth > this.options.minWidth ? newWidth : this.options.minWidth,
             newHeight = this.options.maintainAspectRatio ? newWidth / this.ratio : draw.Charts.helpers.getMaximumHeight(this.Element);
 
             // clog newWidth, newHeight, this.Element
         this.width = newWidth;
         this.height = newHeight;
+        // clog this.width, this.height;
         // clog this.layers;
         each(this.layers as zIndex, canvas) {
             canvas.width = newWidth;

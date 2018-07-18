@@ -38,6 +38,7 @@ expands .Charts {
             yAxis = deepMerge(draw.Charts.defaults.yAxis, this.options.yAxis || {});
 
         var style = helpers.calculateRectangleStyle(grid, this.width, this.height);
+        // this.width = style.width + style.left + style.right;
 
         var gridOptions = @include 'options/grid';
 
@@ -99,12 +100,9 @@ expands .Charts {
                         ctx.translate(0.5, 0);
                         ctx.lineWidth = 1;
                         ctx.strokeStyle = '#FF0000';
-                        ctx.beginPath();
-                        ctx.moveTo(x, y1);
-                        ctx.lineTo(x, y2);
-                        ctx.stroke();
-                        ctx.translate(-0.5, 0);
-                        ctx.closePath();
+                        draw.canvas.line(ctx, x, y1, x, y2, true, false, ()=>{
+                            ctx.translate(-0.5, 0);
+                        });
                     }
                     if (this.grid.status === 1) {
                         // 横轴为值，纵轴为项
@@ -115,12 +113,9 @@ expands .Charts {
                         ctx.translate(0, 0.5);
                         ctx.lineWidth = 1;
                         ctx.strokeStyle = '#FF0000';
-                        ctx.beginPath();
-                        ctx.moveTo(x1, y);
-                        ctx.lineTo(x2, y);
-                        ctx.stroke();
-                        ctx.translate(0, -0.5);
-                        ctx.closePath();
+                        draw.canvas.line(ctx, x1, y, x2, y, true, false, ()=>{
+                            ctx.translate(0, -0.5);
+                        });
                     }
                 }
                 if (actives.length > 0) {

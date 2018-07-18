@@ -216,6 +216,7 @@ class Bar extends Charts.Type {
         var setGap = this.options.barDatasetSpacing;
         var valGap = this.options.barValueSpacing;
 
+        // clog 'foo';
         if (this.grid.status === 1) {
             each(this.segments as index, segment) {
                 if (segment.hasValue()) {

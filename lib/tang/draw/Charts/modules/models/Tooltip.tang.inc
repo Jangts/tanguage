@@ -47,21 +47,18 @@ class Tooltip extends draw.Charts.Component {
             switch (this.yAlign) {
                 case "above":
                     //Draw a caret above the x/y
-                    ctx.beginPath();
-                    ctx.moveTo(this.x, this.y - caretPadding);
-                    ctx.lineTo(this.x + this.caretHeight, this.y - (caretPadding + this.caretHeight));
-                    ctx.lineTo(this.x - this.caretHeight, this.y - (caretPadding + this.caretHeight));
-                    ctx.closePath();
+                    draw.canvas.line(ctx, this.x, this.y - caretPadding, this.x + this.caretHeight, this.y - (caretPadding + this.caretHeight), false, false, ()=>{
+                        draw.canvas.to(ctx, this.x - this.caretHeight, this.y - (caretPadding + this.caretHeight), 1);
+                    });
                     ctx.fill();
                     break;
                 case "below":
                     tooltipY = this.y + caretPadding + this.caretHeight;
                     //Draw a caret below the x/y
-                    ctx.beginPath();
-                    ctx.moveTo(this.x, this.y + caretPadding);
-                    ctx.lineTo(this.x + this.caretHeight, this.y + caretPadding + this.caretHeight);
-                    ctx.lineTo(this.x - this.caretHeight, this.y + caretPadding + this.caretHeight);
-                    ctx.closePath();
+                    ctx.fill();
+                    draw.canvas.line(ctx, this.x, this.y + caretPadding, this.x + this.caretHeight, this.y + caretPadding + this.caretHeight, false, false, ()=>{
+                        draw.canvas.to(ctx, this.x - this.caretHeight, this.y + caretPadding + this.caretHeight, 1);
+                    });
                     ctx.fill();
                     break;
             }

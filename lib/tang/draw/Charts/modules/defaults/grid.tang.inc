@@ -12,5 +12,6 @@
     bottom: 60,
     width: 'auto',
     height: 'auto',
+    minWidth: 120,
     padding: 10,
 }

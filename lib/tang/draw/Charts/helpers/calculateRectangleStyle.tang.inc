@@ -43,6 +43,7 @@ public calculateRectangleStyle = (options, width, height) {
             }
             width = width - right - left;
         }
+        
         if (util.isNumeric(options.height)) {
             height = parseFloat(options.height);
         } else if (util.isPercent(options.height)) {
@@ -57,10 +58,7 @@ public calculateRectangleStyle = (options, width, height) {
             }
             height = height - top - bottom;
         }
-        return {
-            width: width,
-            height: height,
-            top: top,
-            left: left
-        }
+        width = width > options.minWidth ? width : options.minWidth;
+        // clog width, height, top, left;
+        return {width, height, top, left}
     };

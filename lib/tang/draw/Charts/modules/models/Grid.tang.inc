@@ -312,6 +312,7 @@ class Grid extends draw.Charts.Component {
     }
 
     draw () {
+        // return this;
         var xLabelGap = this.drawingAreaX / ((this.xOffsetSplitLines || (this.status !== 0 && this.status !== 5)) ? this.xSteps : this.xSteps - 1),
             yLabelGap = this.drawingAreaY / ((this.yOffsetSplitLines || (this.status !== 1 && this.status !== 5)) ? this.ySteps : this.ySteps - 1);
         if (this.display) {
@@ -335,21 +336,13 @@ class Grid extends draw.Charts.Component {
                     ctx.lineWidth = this.yAxisLineWidth;
                     ctx.strokeStyle = this.yAxisLineColor;
                     linePositionY += helpers.aliasPixel(ctx.lineWidth);
-                    ctx.beginPath();
-                    ctx.moveTo(this.leftPoint - 5, linePositionY);
-                    ctx.lineTo(this.rightPoint, linePositionY);
-                    ctx.stroke();
-                    ctx.closePath();
+                    draw.canvas.line(ctx, this.leftPoint - 5, linePositionY, this.rightPoint, linePositionY, true);
                 } else {
                     if (this.ySplitLineShow) {
                         ctx.lineWidth = this.xSplitLineWidth;
                         ctx.strokeStyle = this.xSplitLineColor;
                         linePositionY += helpers.aliasPixel(ctx.lineWidth);
-                        ctx.beginPath();
-                        ctx.moveTo(this.leftPoint - 5, linePositionY);
-                        ctx.lineTo(this.rightPoint, linePositionY);
-                        ctx.stroke();
-                        ctx.closePath();
+                        draw.canvas.line(ctx, this.leftPoint - 5, linePositionY, this.rightPoint, linePositionY, true);
                     }
                 }
                 if (this.yLabelsShow && (index % this.yLabelStep == Math.floor(this.yLabelStep / 2))) {
@@ -376,20 +369,12 @@ class Grid extends draw.Charts.Component {
                 if (((this.xOnZero && label == '0') || (!this.xOnZero && index === 0)) && this.xAxisLineShow) {
                     ctx.lineWidth = this.xAxisLineWidth;
                     ctx.strokeStyle = this.xAxisLineColor;
-                    ctx.beginPath();
-                    ctx.moveTo(linePositionX, this.bottomPoint + 5);
-                    ctx.lineTo(linePositionX, this.topPoint - 3);
-                    ctx.stroke();
-                    ctx.closePath();
+                    draw.canvas.line(ctx, linePositionX, this.bottomPoint + 5, linePositionX, this.topPoint - 3, true);
                 } else {
                     if (this.xSplitLineShow) {
                         ctx.lineWidth = this.ySplitLineWidth;
                         ctx.strokeStyle = this.ySplitLineColor;
-                        ctx.beginPath();
-                        ctx.moveTo(linePositionX, this.bottomPoint + 5);
-                        ctx.lineTo(linePositionX, this.topPoint - 3);
-                        ctx.stroke();
-                        ctx.closePath();
+                        draw.canvas.line(ctx, linePositionX, this.bottomPoint + 5, linePositionX, this.topPoint - 3, true);
                     }
                 }
                 if (this.xLabelsShow && (index % this.xLabelStep == Math.floor(this.xLabelStep / 2))) {

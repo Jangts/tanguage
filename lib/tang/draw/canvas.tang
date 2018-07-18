@@ -16,7 +16,66 @@ getBeveling (x, y) {
     return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 }
 
+checkX (ctx, x){
+    if(x < 0){
+        return 0;
+    }
+    else if(x > ctx.canvas.width){
+        return ctx.canvas.width;
+    }
+    return x;
+}
+checkY (ctx, y){
+    if(y < 0){
+        return 0;
+    }
+    else if(y > ctx.canvas.height){
+        return ctx.canvas.height;
+    }
+    return y;
+}
+
 namespace canvas with {
+    to (ctx, x, y, method = 'move'){
+        // clog ctx;
+        x = checkX(ctx, x);
+        y = checkY(ctx, y);
+
+        switch (method) {
+            case 1:
+            case '1':
+            case 'line':
+                ctx.lineTo(x, y);
+                break;
+
+            case 2:
+            case '2':
+            case 'stroke':
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                break;
+            
+            default:
+                ctx.moveTo(x, y);
+                break;
+        }
+    },
+    line (ctx, x1, y1, x2, y2, stroke, smooth, beforeClose){
+        ctx.beginPath();
+        if(smooth){
+            x = checkX(ctx, x1);
+            y = checkY(ctx, y1);
+            x = checkX(ctx, x2);
+            y = checkY(ctx, y2);
+            ctx.quadraticCurveTo(x1, y1, x2, y2);
+            stroke && ctx.stroke();
+        }else{
+            draw.canvas.to(ctx, x1, y1, 0);
+            draw.canvas.to(ctx,x2, y2, (stroke ? 2 : 1));
+        }
+        beforeClose && beforeClose(draw.canvas.to, draw.canvas.line);
+        ctx.closePath();
+    },
     clear (ctx, width, height) {
         ctx.clearRect(0, 0, width, height);
     },

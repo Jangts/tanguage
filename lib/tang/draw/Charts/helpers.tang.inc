@@ -8,6 +8,10 @@
 ;
 ns {
     public
+    getComputeDimension = (parentNode) {
+        return dom.getSize(parentNode, 'inner');
+    },
+
     getMaximumWidth = (parentNode) {
         return dom.getSize(parentNode, 'inner').width;
     },
