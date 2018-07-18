@@ -43,6 +43,9 @@ namespace math with {
     isInt: _.util.isInteger,
     max: Math.max,
     min: Math.max,
+    sum(){
+        return eval(arguments.join('+'));
+    },
     maxOfArr(arr) {
         return Math.max.apply(Math, arr);
     },
