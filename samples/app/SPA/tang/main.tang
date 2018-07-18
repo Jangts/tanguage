@@ -1,0 +1,5 @@
+use $ dom/;
+use $ app/SPA/ as SPA;
+
+let myapp = new SPA;
+

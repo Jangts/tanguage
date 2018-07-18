@@ -2,17 +2,22 @@
 
 use $ util/ as {isStr,isEl};
 use $ dom/Elements as $;
-use app/Component as Component;
-use app/Router/ as Component;
+use $ app/Component as Component;
+use $ app/Router/ as Component;
 
 namespace app;
 
 let _ = pandora;
 let doc = root.document;
 
+@include 'Layer';
+
+
 class .SPA extends Component {
+    Element;
     layers = [];
     _init(elem){
+        this.layers = [];
         if(isEl(elem)){
             this.Element = elem;
         }
@@ -25,4 +30,9 @@ class .SPA extends Component {
             });
         }
     }
+    addLayer(){
+        this.layers.push(new Layer());
+    }
 }
+
+module.exports = app.SPA;
