@@ -36,18 +36,20 @@ class .Router {
     reg = listen;
 
     refresh (reload = false) {
-        let newURL = location.hash.slice(1) || '/index';
+        let newURL = formatPath(location.hash.slice(1) || '/index');
         if(newURL===this.currentURL){
             if(reload){
-                this.routes[this.currentURL]();
+                this.call(this.currentURL, true);
             }
         }else{
             this.currentURL = newURL;
-            this.routes[this.currentURL]();
+            this.call(this.currentURL, true);
         }
     }
 
-    call (path) {
+    call (path, ignoreFormat) {
+        if(!ignoreFormat) path = formatPath(path);
+
         if(this.routes.path[path]){
             this.routes.path[path].call(path);
         }

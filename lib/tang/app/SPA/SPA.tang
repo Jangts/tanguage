@@ -1,14 +1,17 @@
 @module;
 
 use $ util/ as {isStr,isEl};
+use $ dom/ as dom;
 use $ dom/Elements as $;
 use $ app/Component as Component;
 use $ app/Router/ as Component;
 
 namespace app;
 
-let _ = pandora;
-let doc = root.document;
+let
+_ = pandora,
+doc = root.document,
+body = doc.body;
 
 @include 'VirtualPage';
 @include 'Layer';
@@ -16,19 +19,38 @@ let doc = root.document;
 class .SPA extends Component {
     Element;
     layers = [];
+    defaultLayer;
+    popupLayer;
     
-    _init(elem){
+    _init(elem, options = {}){
         this.layers = [];
         if(isEl(elem)){
             this.Element = elem;
+            scanLayer (this, options);
         }
-        else if (isStr(elem)){
+        else if (isStr(elem)&&$(elem).length){
             this.Element = $(elem).get(0);
+            scanLayer (this, options);
         }
         else{
-            this.Element = ..dom.create('div', doc, {
+            // clog doc;
+            this.Element = ..dom.create('div', body, {
                 className: 'tanguage-spa'
             });
+            if(options.defaultLayerName){
+                this.defaultLayer = createLayer (this, options.defaultLayerName, options.layers && options.layers[options.defaultLayerName] || defaultLayerOptions);
+            }else{
+                this.defaultLayer = createLayer (this, 'default', options.layers && options.layers['default'] || defaultLayerOptions)
+            }
+        }
+        if(options.defaultLayerName){
+            if(options.defaultLayerName!==this.defaultLayer.uid){
+                this.defaultLayer = createLayer (this, options.defaultLayerName, options.layers && options.layers[options.defaultLayerName] || defaultLayerOptions);
+            }
+        }
+        if(options.popupLayerName){
+            this.popupLayer = this.layers[options.popupLayerName] || createLayer (this, options.popupLayerName, options.layers && options.layers[options.popupLayerName] || popupLayerOptions);
+            }
         }
     }
 

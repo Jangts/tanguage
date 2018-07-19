@@ -1,4 +1,4 @@
-class VirtualPage extends Component {
+class VirtualPage extends Element {
     Element;
     scrollTop = 0;
 
@@ -12,6 +12,14 @@ class VirtualPage extends Component {
 
     }
 
+    hide () {
+
+    }
+
+    show (direcion) {
+
+    }
+
     remove () {
 
     }
@@ -19,4 +27,8 @@ class VirtualPage extends Component {
     delete () {
         
     }
+}
+
+defaultPageOptions = {
+    tagName: 'div'
 }

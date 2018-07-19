@@ -6,9 +6,16 @@ matchQS = replaceQS = /\=:[$_A-Za-z][\w_]*(&|$)/g,
 matchAsterisk = /[^\*:]+\/\*$/,
 replaceAsterisk = /\/\*$/;
 
+let configurations = {};
 
+formatPath (path) {
+    return path.replace(replaceSlashes, '/').replace(/\/$/, '');
+}
 getConfiguration (path) {
-    path = path.replace(replaceSlashes, '/');
+    path = formatPath(path);
+
+    if(configurations[path];) return configurations[path];
+
     let match;
     if(match = path.match(matchREST)){
         let
@@ -18,7 +25,7 @@ getConfiguration (path) {
         each (match as element) {
             params.push(element.replace(/(\/|:)/g, ''));
         }
-        return {
+        configurations[path] = {
             uid: path,
             type: 'pattern',
             params: params,
@@ -33,7 +40,7 @@ getConfiguration (path) {
         each (match as element) {
             params.push(element.replace(/(\/|:)/g, ''));
         }
-        return {
+        configurations[path] = {
             uid: path,
             type: 'pattern',
             params: params,
@@ -43,7 +50,7 @@ getConfiguration (path) {
     else if(path.match(matchAsterisk)){
         let pattern = new RegExp('^' + path.replace('*', '.*$').replace('/', '\/'));
 
-        return {
+        configurations[path] =  {
             uid: path,
             type: 'pattern',
             params: ['$path'],
@@ -51,9 +58,11 @@ getConfiguration (path) {
         }
     }
     else{
-        return {
+        configurations[path] = {
             uid: path,
             type: 'path'
         }
     }
+
+    return configurations[path];
 }

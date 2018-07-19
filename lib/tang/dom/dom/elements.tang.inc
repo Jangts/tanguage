@@ -143,4 +143,19 @@ index = (elem, list) {
         return _.arr.index(query(elem.tagName, elem.parentNode), elem);
     }
     return (elem && elem.parentNode && elem.parentNode.childNodes) ? _.arr.index(elem.parentNode.childNodes, elem) : -1;
+},
+
+remove = (elem, context) {
+    if(isEl(elem)){
+        if(!context){
+            context = elem.parentNode;
+        }
+        if(context && context.remove){
+            content.remove(elem);
+        }else{
+            return false;
+        }
+        return true;
+    }
+    return false;
 };
