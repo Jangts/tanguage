@@ -1,12 +1,63 @@
 @module;
 
 use $ app/;
+use $ util/ as {isFn};
 
 namespace app;
 
-class .Router{
-    _init(options = {}) {
-        this.prop = options.prop;
-        # code...
+@include 'getConfiguration';
+@include 'Route';
+@include 'PatternRoute';
+
+listen (path, callback) {
+    let route, config = getConfiguration(path);
+    if(config.type==='pattern'){
+        route = this.routes.pattern[config.uid] || new PatternRoute(config);
+    }else {
+        route = this.routes.path[config.uid] || new Route(config);
+    }
+    route.oncall(callback);
+    return this;
+}
+
+class .Router {
+    currentURL;
+    routes = {};
+
+    _init (routes) {
+        this.routes = {
+            path: {},
+            pattern: {}
+        }
+    }
+
+    listen = listen;
+
+    reg = listen;
+
+    refresh (reload = false) {
+        let newURL = location.hash.slice(1) || '/index';
+        if(newURL===this.currentURL){
+            if(reload){
+                this.routes[this.currentURL]();
+            }
+        }else{
+            this.currentURL = newURL;
+            this.routes[this.currentURL]();
+        }
+    }
+
+    call (path) {
+        if(this.routes.path[path]){
+            this.routes.path[path].call(path);
+        }
+        each (this.routes.pattern as id, route) {
+            route.call(path);
+        }
+    }
+
+    bindEvents () {
+        root.addEventListener('load',this.refresh.bind(this),false);
+        root.addEventListener('hashchange',this.refresh.bind(this),false);
     }
 }

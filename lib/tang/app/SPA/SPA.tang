@@ -10,12 +10,13 @@ namespace app;
 let _ = pandora;
 let doc = root.document;
 
+@include 'VirtualPage';
 @include 'Layer';
-
 
 class .SPA extends Component {
     Element;
     layers = [];
+    
     _init(elem){
         this.layers = [];
         if(isEl(elem)){
@@ -30,6 +31,7 @@ class .SPA extends Component {
             });
         }
     }
+
     addLayer(){
         this.layers.push(new Layer());
     }

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../../../lib/dist/runtime.js"></script>
+</head>
+<body>
+    <script>
+    function getConfiguration (path) {
+        path = path.replace(/[\\\/]+/g, '/');
+        let match;
+        if(match = path.match(/\/:[$_A-Za-z][\w_]*\//g)){
+            let pattern = new RegExp('^' + path.replace(/\/:[$_A-Za-z][\w_]*\//g, '/([^/]+)/').replace(/(\/|\.)/g, "\\$1").replace(/\/\*$/, '\/.*') + '$');
+           
+            let params = ['$path'];
+            for (let index = 0; index < match.length; index++) {
+                const element = match[index];
+                params.push(element.replace(/(\/|:)/g, ''));
+            }
+            console.log(path, match, params, pattern);
+            return {
+                uid: path,
+                params: params,
+                pattern: pattern
+            }
+        }
+        else if(match = path.match(/\=:[$_A-Za-z][\w_]*(&|$)/g)){
+            let pattern = new RegExp('^' + path.replace(/\=:[$_A-Za-z][\w_]*(&|$)/g, '/([^&]+)/').replace(/(\/|\.|\?)/g, "\\$1") + '$');
+
+            let params = ['$path'];
+            for (let index = 0; index < match.length; index++) {
+                const element = match[index];
+                params.push(element.replace(/(\/|:)/g, ''));
+            }
+            console.log(path, match, params, pattern);
+            return {
+                uid: path,
+                params: params,
+                pattern: pattern
+            }
+        }
+        else if(path.match(/[^\*:]+\/\*$/)){
+            let pattern = new RegExp('^' + path.replace('*', '.*$').replace('/', '\/'));
+            console.log(path, pattern);
+            return {
+                uid: path,
+                params: ['$path'],
+                pattern: pattern
+            }
+        }
+        else{
+            console.log(path);
+            return {
+                uid: path
+            }
+        }
+    }
+
+    getConfiguration('/about/');
+
+    getConfiguration('/about/*');
+
+    getConfiguration('/about/*/index.asp');
+
+    getConfiguration('/news/:newsid/');
+
+    getConfiguration('?news=:newsid');
+
+    getConfiguration('?news=:newsid&comments=:commentid');
+
+    let config = getConfiguration('/news/:newsid/comments/:commentid/*');
+    let match = '/news/fjdhakslfka/comments/23/replies'.match(config.pattern);
+    let args = {};
+    for (let i=0; i < match.length; i++) {
+        args[config.params[i]] = match[i]
+    }
+    console.log(config.params, match, args);
+    </script>
+</body>
+</html>

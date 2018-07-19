@@ -1,0 +1,3 @@
+class Bar {
+    position: 'bottom';
+}

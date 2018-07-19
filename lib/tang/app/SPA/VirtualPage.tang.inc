@@ -1,6 +1,22 @@
 class VirtualPage extends Component {
     Element;
-    _init() {
+    scrollTop = 0;
+
+    _init() {}
+
+    load () {
+
+    }
+
+    html () {
+
+    }
+
+    remove () {
+
+    }
+
+    delete () {
         
     }
 }
