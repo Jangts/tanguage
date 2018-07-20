@@ -27,7 +27,7 @@
         "test-runtime": " node ./compiler/js/node-tang.js ./lib/tang/runtime.tang ./lib/dist/runtime.js -map",
         "test-dom": "node ./compiler/js/node-tang.js ./lib/tang/dom/dom.tang ./lib/dist/dom/dom.js -map",
         "test-tpl": " node ./compiler/js/node-tang.js ./samples/dom/Template/tang/src.tang ./samples/dom/Template/tang/cpl.js -map",
-        "test-bootstrap": " node ./compiler/js/node-tang.js ./test/script.tang ./test/script.js",
+        "test-bootstrap": " node ./compiler/js/node-tang.js ./compiler/tang/tanguage_script.tang ./compiler/tang/tanguage_script.js",
         "test-spa-sample": "node ./compiler/js/node-tang.js cdir ./samples/app/SPA/tang/ ./samples/app/SPA/images/ -map -c",
         "scss-spa-sample": "node-sass ./samples/app/SPA/scss/main.scss ./samples/app/SPA/images/main.css",
         "test-backstage-scripts": "node ./compiler/js/node-tang.js cdir ./samples/app/Backstage/scripts/tang/ ./samples/app/Backstage/scripts/ -map -c"

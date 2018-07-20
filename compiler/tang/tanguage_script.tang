@@ -1,0 +1,131 @@
+@native;
+/*!
+ * tanguage script compiler
+ * Core Code
+ *
+ * Written and Designed By Jang Ts
+ * https://github.com/Jangts/tanguage/wiki
+ */
+;
+@include 'expands';
+@include 'const1';
+@include 'const2';
+
+class Script {
+    uid;
+    input;
+    isMainBlock = true;
+    maintag_posi;
+    namespace = '';
+    namespace_posi;
+    markPattern;
+    trimPattern;
+    lastPattern;
+    stringReplaceTimes = 65536;
+    positions = [];
+    replacements;
+    imports = [];
+    using_as = {};
+    ast = {};
+    mappings;
+    configinfo = '{}';
+    configinfo_posi;
+    posimap = [];
+    sources = [];
+    output;
+    tess = {};
+    blockreserved[];
+    xvars[];
+    total_opens = 0;
+    last_opens = [0];
+    last_closed = true;
+    anonymous_variables = 0;
+    closurecount = 0;
+    isNativeCode = false;
+    useDeclare = false;
+    useAnonSpace = true;
+    useExtends = false;
+    useEach = false;
+    useLoop = false;
+    _init(input, source = '', run = false) {
+        this.uid = boundaryMaker();
+        this.markPattern = new RegExp('@boundary_(\\\d+)_as_(mark)::', 'g');
+        this.trimPattern = new RegExp('(___boundary_' + this.uid + '_(\\\d+)_as_(string|pattern|template)___|___boundary_(\\\d+)_as_propname___)', 'g');
+        this.lastPattern = new RegExp('(___boundary_' + this.uid + '_(\\\d+)_as_(string|pattern|template)___|___boundary_(\\\d+)_as_propname___|@boundary_(\\\d+)_as_(keyword|midword|preoperator|operator|aftoperator|comments)::)', 'g');
+        this.input = input;
+        this.output = undefined;
+        this.blockreserved = ['pandora', 'root'];
+        this.xvars = [];
+        this.replacements = [['{}'], ['/='], ['/'], [' +'], [' -'], [' === '], [' + '], ['\"'], ['"\\r\\n"'], ['[^\\/']];
+        this.mappings = [];
+        
+        if (source) {
+            this.sources.push({
+                id: 0,
+                src: source
+            });
+            this.sources[source] = true;
+        }
+        if (run) {
+            this.run();
+        }
+    }
+    compile() {
+        // console.log(this.input);
+        let newcontent = this.markPosition(this.input, 0);
+        let string = this.encode(newcontent);
+        let vars = {
+            parent: null,
+            root: {
+                namespace: this.namespace,
+                public: {},
+                const: {},
+                private: {},
+                protected: {},
+                fixed: [],
+                fix_map: {}
+            },
+            locals: {},
+            type: 'root'
+        };
+        vars.self = vars.root.protected;
+        this.buildAST(this.pickReplacePosis(this.getLines(string, vars), vars), vars);
+        // this.output = 'console.log("Hello, world!");';
+        this.generate();
+        // console.log(this.replacements);
+        newcontent = string = vars = undefined;
+        return this;
+    }
+    error(str) {
+        throw 'tanguage script Error: ' + str;
+    }
+    pushBuffer(replacement){
+        // console.log(typeof Buffer, Buffer);
+        let buf = new Buf(replacement[0]);
+        replacement[0] = buf;
+        this.replacements.push(replacement);
+    }
+    readBuffer(index) {
+        // console.log(this.replacements[index][0]);
+        return this.replacements[index][0].toString();
+    }
+    @include 'position';
+    @include 'encode';
+    @include 'analyzer';
+    @include 'walk';
+    @include 'generate';
+    run(precall = null, callback = (content) => { }) {
+        if (!this.output) {
+            this.compile();
+        }
+        precall && precall.call(this, this.output);
+        eval(this.output);
+        callback.call(this);
+    }
+}
+
+root.tanguage_script = function (input, run) {
+    return new Script(input, run);
+};
+
+return root.tanguage_script;

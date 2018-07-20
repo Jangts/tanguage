@@ -56,7 +56,7 @@ const onReadFile = function (src: string, context): string {
     // console.log(src, context.source);
     let source = path.resolve(context + src + '.tang.inc');
     if (this.sources[source]) {
-        this.error('source ' + source + 'had already been loaded.');
+        this.error('source ' + source + ' had already been loaded.');
     }
     this.sources.push({
         id: this.sources.length,

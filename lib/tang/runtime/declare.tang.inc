@@ -53,10 +53,11 @@ produceClass (classname, superclass, members) {
         namespace(classname, constructor);
         namespace(classname, old);
     } else {
-        constructor () {
+        constructor = () {
             if (this instanceof constructor) {
                 this._private = {};
-                return this._init.apply(this, arguments);
+                this._init.apply(this, arguments);
+                return this;
             } else {
                 var instance = new constructor();
                 instance._private = {};

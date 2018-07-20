@@ -3038,12 +3038,12 @@
             codes.push('\r\n        }');
             codes.push('\r\n        function produceClass (superclass, members) {');
             codes.push('\r\n            var Class = function () {};');
-            codes.push('\r\n            var constructor = void 0;');
             codes.push('\r\n            Class.prototype = superclass;');
-            codes.push('\r\n            function constructor () {');
+            codes.push('\r\n            var constructor = function () {');
             codes.push('\r\n                if (this instanceof constructor) {');
             codes.push('\r\n                    this._private = {};');
-            codes.push('\r\n                    return this._init.apply(this, arguments);');
+            codes.push('\r\n                    this._init.apply(this, arguments);');
+            codes.push('\r\n                    return this;');
             codes.push('\r\n                }');
             codes.push('\r\n                else {');
             codes.push('\r\n                    var instance = new constructor();');
@@ -3054,7 +3054,7 @@
             codes.push('\r\n            }');
             codes.push('\r\n            constructor.prototype = new Class();');
             codes.push('\r\n            members._parent = superclass;');
-            codes.push('\r\n            extend(constructor.prototype, true, members);');
+            codes.push('\r\n            pandora.extend(constructor.prototype, true, members);');
             codes.push('\r\n            return constructor;');
             codes.push('\r\n        }');
             codes.push('\r\n        function declareClass () {');
@@ -3068,6 +3068,7 @@
             codes.push('\r\n                    superclass = blockClass;');
             codes.push('\r\n                    members = prepareClassMembers(members, arguments, 0);');
             codes.push('\r\n                }');
+            codes.push('\r\n            }');
             codes.push('\r\n            else {');
             codes.push('\r\n                superclass = blockClass;');
             codes.push('\r\n                members = {};');
@@ -4048,7 +4049,7 @@
                     }
                     return match;
                 }).replace(/(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)(\s+|\s*[^\$\w]|\s*$)/g, (match, before, definition, varname, after) => {
-                    // console.log(match, "\r\n", before, '[', varname, '](', type, ')', after);
+                    console.log(match);
                     // console.log(type);
                     return before + (definition || '') + this.patchVariable(varname, vars) + after || '';
                 }).replace(/(^|[\?\:\=]\s*)(ns\.|\$\.|\.)(\.[\$a-zA-Z_][\$\w]*|$)/g, (match, before, node, member) => {
