@@ -187,7 +187,7 @@
             this.anonymous_variables = 0;
             this.closurecount = 0;
             this.isNativeCode = false;
-            this.useClass = false;
+            this.useDeclare = false;
             this.useAnonSpace = true;
             this.useExtends = false;
             this.useEach = false;
@@ -2323,7 +2323,7 @@
             var basename = matches[6];
             var position = this.getPosition(this.replacements[index][1]);
             if (type === 'class') {
-                this.useClass = true;
+                this.useDeclare = true;
                 if ((subtype === 'anonClass') && cname && cname.match(namingExpr)) {
                     this.pushVariableToVars(vars, 'var', cname, position);
                 }
@@ -3000,6 +3000,20 @@
             this.pushCodes(body, ast.vars, ast.body, 1, this.namespace);
             if (this.isNativeCode) {
                 this.pushNativeHeader(head);
+                this.useDeclare && this.pushDeclare(neck);
+                if (this.useDeclare) {
+                    this.pushEach(neck);
+                    this.pushExtends(neck);
+                    this.pushDeclare(neck);
+                }
+                else if (this.useExtends) {
+                    this.pushEach(neck);
+                    this.pushExtends(neck);
+                }
+                else if (this.useEach) {
+                    this.pushEach(neck);
+                }
+                this.useLoop && this.pushLoop(neck);
             }
             else {
                 var imports = this.imports;
@@ -3063,6 +3077,157 @@
             codes.push('\r\n        factory(root)');
             codes.push('\r\n    }');
             codes.push('\r\n}(typeof window === \'undefined\' ? global : window, function(root, undefined) {');
+            codes.push('\r\n    var pandora = {};');
+            return codes;
+        };
+        Script.prototype.pushDeclare = function (codes) {
+            codes.push('\r\n    pandora.declareClass = (function () {');
+            codes.push('\r\n        var blockClass = {');
+            codes.push('\r\n            _public: {},');
+            codes.push('\r\n            _init: function () {}');
+            codes.push('\r\n        };');
+            codes.push('\r\n        function prepareClassMembers (target, data, start) {');
+            codes.push('\r\n            for (start;start < data.length;start++) {');
+            codes.push('\r\n                if (data[start]&& typeof data[start] === \'object\') {');
+            codes.push('\r\n                    pandora.extend(target, true, data[start]);');
+            codes.push('\r\n                }');
+            codes.push('\r\n                else {');
+            codes.push('\r\n                    break;');
+            codes.push('\r\n                }');
+            codes.push('\r\n            }');
+            codes.push('\r\n            return target;');
+            codes.push('\r\n        }');
+            codes.push('\r\n        function produceClass (superclass, members) {');
+            codes.push('\r\n            var Class = function () {};');
+            codes.push('\r\n            var constructor = void 0;');
+            codes.push('\r\n            Class.prototype = superclass;');
+            codes.push('\r\n            function constructor () {');
+            codes.push('\r\n                if (this instanceof constructor) {');
+            codes.push('\r\n                    this._private = {};');
+            codes.push('\r\n                    return this._init.apply(this, arguments);');
+            codes.push('\r\n                }');
+            codes.push('\r\n                else {');
+            codes.push('\r\n                    var instance = new constructor();');
+            codes.push('\r\n                    instance._private = {};');
+            codes.push('\r\n                    instance._init.apply(instance, arguments);');
+            codes.push('\r\n                    return instance;');
+            codes.push('\r\n                };');
+            codes.push('\r\n            }');
+            codes.push('\r\n            constructor.prototype = new Class();');
+            codes.push('\r\n            members._parent = superclass;');
+            codes.push('\r\n            extend(constructor.prototype, true, members);');
+            codes.push('\r\n            return constructor;');
+            codes.push('\r\n        }');
+            codes.push('\r\n        function declareClass () {');
+            codes.push('\r\n            var superclass = void 0;var members = {};');
+            codes.push('\r\n            if (arguments.length > 0) {');
+            codes.push('\r\n                if (typeof arguments[0] === \'function\') {');
+            codes.push('\r\n                    superclass = arguments[0].prototype || blockClass;');
+            codes.push('\r\n                    members = prepareClassMembers(members, arguments, 1);');
+            codes.push('\r\n                }');
+            codes.push('\r\n                else {');
+            codes.push('\r\n                    superclass = blockClass;');
+            codes.push('\r\n                    members = prepareClassMembers(members, arguments, 0);');
+            codes.push('\r\n                }');
+            codes.push('\r\n            else {');
+            codes.push('\r\n                superclass = blockClass;');
+            codes.push('\r\n                members = {};');
+            codes.push('\r\n            }');
+            codes.push('\r\n            return produceClass(superclass, members);');
+            codes.push('\r\n        }');
+            codes.push('\r\n        return declareClass;');
+            codes.push('\r\n    }());');
+            return codes;
+        };
+        Script.prototype.pushEach = function (codes) {
+            codes.push('\r\n    pandora.slice = function (arrayLike, startIndex, endIndex) {');
+            codes.push('\r\n        startIndex = parseInt(startIndex) || 0;');
+            codes.push('\r\n        return Array.prototype.slice.call(arrayLike, startIndex, endIndex);');
+            codes.push('\r\n    }');
+            codes.push('\r\n    pandora.each = function (obj, handler, that, hasOwnProperty) {');
+            codes.push('\r\n        if (typeof(obj) == \'object\' && obj) {');
+            codes.push('\r\n            var addArgs = pandora.slice(arguments, 3);');
+            codes.push('\r\n            if (hasOwnProperty) {');
+            codes.push('\r\n                for (var i in obj) {');
+            codes.push('\r\n                    if (obj.hasOwnProperty(i)) {');
+            codes.push('\r\n                        handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));');
+            codes.push('\r\n                    }');
+            codes.push('\r\n                }');
+            codes.push('\r\n            }');
+            codes.push('\r\n            else if ((obj instanceof Array) || (Object.prototype.toString.call(obj) === \'[object Array]\') || ((typeof(obj.length) === \'number\') && ((typeof(obj.item) === \'function\') || (typeof(obj.splice) != \'undefined\')))) {');
+            codes.push('\r\n                for (var i = 0;i < obj.length;i++) {');
+            codes.push('\r\n                    handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));');
+            codes.push('\r\n                }');
+            codes.push('\r\n            }');
+            codes.push('\r\n            else {');
+            codes.push('\r\n                for (var i in obj) {');
+            codes.push('\r\n                    handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));');
+            codes.push('\r\n                }');
+            codes.push('\r\n            }');
+            codes.push('\r\n        };');
+            codes.push('\r\n    }');
+            return codes;
+        };
+        Script.prototype.pushExtends = function (codes) {
+            codes.push('\r\n    pandora.extend = function (base) {');
+            codes.push('\r\n        base = (base && (typeof(base) === \'object\' || typeof(base) === \'function\')) ? base : root;');
+            codes.push('\r\n        var rewrite = (arguments[1] === 1 || arguments[1] === true) ? true : false;');
+            codes.push('\r\n        pandora.each(pandora.slice(arguments, 1), function (index, source) {');
+            codes.push('\r\n            pandora.each(source, function (key, value) {');
+            codes.push('\r\n                if (source.hasOwnProperty(key)) {');
+            codes.push('\r\n                    if (typeof base[key] === \'undefined\' || rewrite) {');
+            codes.push('\r\n                        base[key] = value;');
+            codes.push('\r\n                    }');
+            codes.push('\r\n                };');
+            codes.push('\r\n            });');
+            codes.push('\r\n        });');
+            codes.push('\r\n        return base;');
+            codes.push('\r\n    };');
+            return codes;
+        };
+        Script.prototype.pushLoop = function (codes) {
+            codes.push('\r\n    pandora.loop = (function () {');
+            codes.push('\r\n        var BREAK = false;');
+            codes.push('\r\n        loop.out = function () {');
+            codes.push('\r\n            BREAK = true;');
+            codes.push('\r\n        }');
+            codes.push('\r\n        function loop (obj, handler, that, hasOwnProperty) {');
+            codes.push('\r\n            if (typeof(obj) == \'object\' && obj) {');
+            codes.push('\r\n                var addArgs = pandora.slice(arguments, 3);');
+            codes.push('\r\n                BREAK = false;');
+            codes.push('\r\n                if (hasOwnProperty) {');
+            codes.push('\r\n                    for (var i in obj) {');
+            codes.push('\r\n                        if (BREAK) {');
+            codes.push('\r\n                            BREAK = false;');
+            codes.push('\r\n                            break;');
+            codes.push('\r\n                        }');
+            codes.push('\r\n                        if (obj.hasOwnProperty(i)) {');
+            codes.push('\r\n                            handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));');
+            codes.push('\r\n                        }');
+            codes.push('\r\n                    }');
+            codes.push('\r\n                }');
+            codes.push('\r\n                else if ((obj instanceof Array) || (Object.prototype.toString.call(obj) === \'[object Array]\') || ((typeof(obj.length) === \'number\') && ((typeof(obj.item) === \'function\') || (typeof(obj.splice) != \'undefined\')))) {');
+            codes.push('\r\n                    for (var i = 0;i < obj.length;i++) {');
+            codes.push('\r\n                        if (BREAK) {');
+            codes.push('\r\n                            BREAK = false;');
+            codes.push('\r\n                            break;');
+            codes.push('\r\n                        }');
+            codes.push('\r\n                        handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));');
+            codes.push('\r\n                    }');
+            codes.push('\r\n                }');
+            codes.push('\r\n                else {');
+            codes.push('\r\n                    for (var i in obj) {');
+            codes.push('\r\n                        if (BREAK) {');
+            codes.push('\r\n                            BREAK = false;');
+            codes.push('\r\n                            break;');
+            codes.push('\r\n                        }');
+            codes.push('\r\n                        handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));');
+            codes.push('\r\n                    }');
+            codes.push('\r\n                }');
+            codes.push('\r\n            };');
+            codes.push('\r\n        }');
+            codes.push('\r\n        return loop;');
+            codes.push('\r\n    }());');
             return codes;
         };
         Script.prototype.pushBlockHeader = function (codes, imports) {
