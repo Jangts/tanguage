@@ -1,0 +1,87 @@
+@native;
+/*!
+ * tanguage framework source code
+ * 
+ * A Web Front-end Development Framework
+ * Mainly Use For DOM Operation, Data Operation, Graphic Processing, Front-end UI, And Some Basic Calculations.
+ *
+ * Written and Designed By Jang Ts
+ * https://github.com/Jangts/tanguage/wiki
+ *
+ * Date 2017-04-06
+ */
+
+/**
+ * ------------------------------------------------------------------
+ * Runtime Environment Initialization
+ * 运行环境初始化
+ * ------------------------------------------------------------------
+ */
+@include 'runtime/attributes';
+
+/**
+ * ------------------------------------------------------------------
+ * Core Function Definition
+ * 定义核心函数
+ * ------------------------------------------------------------------
+ */
+@include 'runtime/functions';
+ 
+/**
+ * ------------------------------------------------------------------
+ * Define Generic Data Cache Container
+ * 定义通用数据缓存容器，及缓存区的操作方法
+ * ------------------------------------------------------------------
+ */
+@include 'runtime/storage';
+
+/**
+ * ------------------------------------------------------------------
+ * Identifier, Iterator and LoadURL
+ * 加载器与唯一标识符、迭代器
+ * ------------------------------------------------------------------
+ */
+@include 'runtime/loadURL';
+/**
+ * Bind Prototypes To Identifier And Iterator
+ * 绑定标识符构造器与迭代器的原型
+ */
+@include 'runtime/Identifier';
+@include 'runtime/Iterator';
+
+/**
+ * ------------------------------------------------------------------
+ * Definition of Pandora Box and Class Factory
+ * 初始化潘多拉盒子与类工厂
+ * ------------------------------------------------------------------
+ */
+
+/** 命名正则 */
+let namingExpr = /^[A-Z_\$][\w\$]*(\.[A-Z_\$][\w\$]*)*$/i;
+@include 'runtime/pandora';
+@include 'runtime/declare';
+
+/**
+ * ------------------------------------------------------------------
+ * Inter Codeblocks Definition
+ * 定义互联代码块
+ * ------------------------------------------------------------------
+ */
+/**
+ * Inter Codeblocks
+ * 互联代码块
+ */
+/** 定义并操作代码块 */
+@include 'runtime/block';
+/** 接口开放到全局 */
+@include 'runtime/tanguage';
+
+/**
+ * ------------------------------------------------------------------
+ * Final Preparations
+ * 最后的准备工作
+ * ------------------------------------------------------------------
+ */
+@include 'runtime/preparations';
+
+return root.tang = tanguage;

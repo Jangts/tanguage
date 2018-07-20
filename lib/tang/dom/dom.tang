@@ -10,7 +10,7 @@
 use $ arr/
 use $ dom/selector
 use $ dom/Events
-use $ util as {isEl};
+use $ util/ as {isEl};
 
 // var module = this.module;
 

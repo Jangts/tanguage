@@ -9,7 +9,16 @@ namespace app;
 @include 'Route';
 @include 'PatternRoute';
 
-listen (path, callback) {
+listen (path, data, callback) {
+    if(!isFn(callback)){
+        if(isFn(data)){
+            callback = data;
+            data = null;
+        }else{
+            return this;
+        }
+    }
+    
     let route, config = getConfiguration(path);
     // clog config;
     if(config.type==='pattern'){
@@ -18,7 +27,7 @@ listen (path, callback) {
         route = this.routes.path[config.uid] = this.routes.path[config.uid] || new Route(config);
     }
     // clog config, route, this.routes.path[config.uid], this;
-    route.oncall(callback);
+    route.oncall(callback, null);
     return this;
 }
 
@@ -29,7 +38,7 @@ routers = [];
 fireEvents () {
     clog 'bar';
     each (routers as router) {
-        router.refresh();
+        router.checkHash();
     }
 }
 bindEvents () {

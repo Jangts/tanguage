@@ -1,26 +1,26 @@
 class Route {
     uid;
     type = 'path';
-    callbacks = [];
+    events = [];
 
     _init (configuration) {
         ..extend(this, true, configuration);
-        this.callbacks = [];
+        this.events = [];
     }
 
-    oncall (callback) {
+    oncall (callback, data) {
         if(isFn(callback)){
-            this.callbacks.push();
+            this.events.push({callback, data});
         }
         return this;
     }
 
     call (path) {
         if(path===this.uid){
-            each (this.callbacks as index, callback) {
-                callback({
+            each (this.events as index, event) {
+                event.callback({
                     $path: path
-                });
+                }, event.data);
             }
         }
     }

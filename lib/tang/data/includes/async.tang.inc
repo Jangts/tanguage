@@ -129,14 +129,15 @@ ajax(url, options) {
         options.data = undefined;
     }
 
-    var Promise = new Request(options);
-    Promise.success = Promise.done;
-    Promise.error = Promise.fail;
-    Promise.complete = Promise.always;
+    var promise = new Request(options);
+    promise.success = promise.done;
+    promise.error = promise.fail;
+    promise.complete = promise.always;
     if (options.beforeSend && typeof options.beforeSend == 'function') {
-        options.beforeSend(Promise.xmlhttp);
+        options.beforeSend(promise.xmlhttp);
     };
-    Promise.progress(options.progress).success(options.success).error(options.fail).complete(options.complete)
+    // clog Promise, Request, promise;
+    promise.progress(options.progress).success(options.success).error(options.fail).complete(options.complete)
     if (!options.charset) {
         options.charset = 'UTF-8';
     }
@@ -148,7 +149,7 @@ ajax(url, options) {
             }
             if (!_.util.isForm(options.data)) {
                 if (options.mime === 'application/json') {
-                    return Promise.setRequestHeader('Content-Type', 'application/json; charset=' + options.charset).send(JSON.stringify(options.data));
+                    return promise.setRequestHeader('Content-Type', 'application/json; charset=' + options.charset).send(JSON.stringify(options.data));
                 }
                 var formData = new FormData();
                 for (var i in options.data) {
@@ -156,16 +157,16 @@ ajax(url, options) {
                 }
                 options.data = formData;
             }
-            return Promise.send(options.data);
+            return promise.send(options.data);
         }
         if (typeof options.data == 'string') {
             if (!options.mime) {
                 options.mime = 'application/x-www-form-urlencoded';
             }
-            return Promise.setRequestHeader('Content-Type', options.mime + '; charset=' + options.charset).send(options.data);
+            return promise.setRequestHeader('Content-Type', options.mime + '; charset=' + options.charset).send(options.data);
         }
     } else {
-        Promise.setRequestHeader('Content-Type', 'text/html; charset=' + options.charset).send();
+        promise.setRequestHeader('Content-Type', 'text/html; charset=' + options.charset).send();
     }
 },
 json(url, doneCallback, failCallback) {

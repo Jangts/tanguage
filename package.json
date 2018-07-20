@@ -24,6 +24,7 @@
         "test-form": "node ./compiler/js/node-tang.js cdir ./lib/tang/form/ ./lib/dist/form/ -map -c",
         "test-charts": "node ./compiler/js/node-tang.js cdir ./lib/tang/draw/Charts/ ./lib/dist/draw/Charts/ -c",
         "test-vdom": "node ./compiler/js/node-tang.js cdir ./lib/tang/dom/virtual/ ./lib/dist/dom/virtual/ -map -c",
+        "test-runtime": " node ./compiler/js/node-tang.js ./lib/tang/runtime.tang ./lib/dist/runtime.js -map",
         "test-dom": "node ./compiler/js/node-tang.js ./lib/tang/dom/dom.tang ./lib/dist/dom/dom.js -map",
         "test-tpl": " node ./compiler/js/node-tang.js ./samples/dom/Template/tang/src.tang ./samples/dom/Template/tang/cpl.js -map",
         "test-bootstrap": " node ./compiler/js/node-tang.js ./test/script.tang ./test/script.js",

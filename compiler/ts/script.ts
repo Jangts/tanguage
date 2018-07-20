@@ -55,6 +55,9 @@
     }
 
     const
+        hasProp = (obj, prop) => {
+            return Object.prototype.hasOwnProperty.call(obj, prop);
+        },
         keywords = [
             'break',
             'case', 'catch', 'const', 'continue',
@@ -124,7 +127,7 @@
         },
         replaceWords = /(^|@\d+L\d+P\d+O?\d*:::|\s)(continue|return|throw|break|case|else)\s*(\s|;|___boundary_[A-Z0-9_]{36}_(\d+)_as_([a-z]+)___)/g,
         replaceExpRegPattern = {
-            module: /^((\s*@\d+L\d+P0:::)*\s*(@\d+L\d+P0*):::(\s*))?@module[;\s]*/,
+            typetag: /^((\s*@\d+L\d+P0:::)*\s*(@\d+L\d+P0*):::(\s*))?@(module|native)[;\s]*/,
             namespace: /(^|[\r\n])((@\d+L\d+P0):::)?(\s*)namespace\s+(\.{0,1}[\$a-zA-Z_][\$\w\.]*)\s*(;|\r|\n)/,
             // 位置是在replace usings 和 strings 之后才tidy的，所以还存在后接空格
             use: /(@\d+L\d+P\d+:::)\s*use\s*(\$|@)?\s+([\~\$\w\.\/\\\?\=\&]+)(\s+as(\s+(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)|\s*(@\d+L\d+P\d+:::\s*)?\{(@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+:::\s*[\$a-zA-Z_][\$\w]*)*)\})(@\d+L\d+P\d+:::\s*)?)?\s*[;\r\n]/g,
@@ -209,6 +212,12 @@
         last_closed = true;
         anonymous_variables = 0;
         closurecount: number = 0;
+        isNativeCode = false;
+        useClass = false;
+        useAnonSpace = true;
+        useExtends = false;
+        useEach = false;
+        useLoop = false;
         constructor(input: string, source: string = '', run: boolean = false) {
             this.uid = boundaryMaker();
             this.markPattern = new RegExp('@boundary_(\\\d+)_as_(mark)::', 'g');
@@ -362,7 +371,7 @@
         encode(string: string): string {
             // console.log(string);
             string = string
-                .replace(replaceExpRegPattern.module, (match: string, gaps, preline, posi, gap) => {
+                .replace(replaceExpRegPattern.typetag, (match: string, gaps, preline, posi, gap, tag) => {
                     this.isMainBlock = false;
                     if (gaps) {
                         this.maintag_posi = posi;
@@ -372,7 +381,13 @@
                     } else {
                         this.maintag_posi = '@0L0P0';
                     }
-                    this.blockreserved.push('module');
+                    if (tag === 'module') {
+                        this.blockreserved.push('module');
+                    }
+                    else if (tag === 'native') {
+                        this.isNativeCode = true;
+                    }
+                    
                     // console.log(gaps, preline, posi, !!gap, gap.length);
                     // console.log('This is not a main block.', this.maintag_posi);
                     return '';
@@ -439,6 +454,9 @@
         }
         replaceUsing(string: string): string {
             return string.replace(replaceExpRegPattern.use, (match: string, posi, $, url, as, alias, variables, posimembers, members) => {
+                if (this.isNativeCode) {
+                    this.error('Native Code Not Support Use Expression');
+                }
                 // console.log(arguments);
                 // console.log(match, ':', posi, url, as, alias);
                 let index = this.replacements.length;
@@ -670,6 +688,9 @@
                         let src = this.readBuffer(index).replace(/('|"|`)/g, '').trim();
                         switch (type){
                             case 'template':
+                                if (this.isNativeCode) {
+                                    this.error('Native Code Not Support TPL File');
+                                }
                                 str = this.getTplContent(src, context);
                                 // console.log(str, this.replacements[index]);
                                 this.replacements[index][0] = "'" + escape(str) + "'";
@@ -1554,7 +1575,7 @@
                 if (type === '...') {
                     this.anonymous_variables++;
                     anonvar = '_ανώνυμος_variable_' + this.anonymous_variables;
-                    while (vars.self.hasOwnProperty(anonvar)) {
+                    while (hasProp(vars.self, anonvar)) {
                         this.anonymous_variables++;
                         anonvar = '_ανώνυμος_variable_' + this.anonymous_variables;
                     }
@@ -1572,7 +1593,7 @@
                 // console.log(value);
                 this.anonymous_variables++;
                 anonvar = '_ανώνυμος_variable_' + this.anonymous_variables;
-                while (vars.self.hasOwnProperty(anonvar)) {
+                while (hasProp(vars.self, anonvar)) {
                     this.anonymous_variables++;
                     anonvar = '_ανώνυμος_variable_' + this.anonymous_variables;
                 }
@@ -1664,10 +1685,16 @@
         pushVariableToVars(vars, symbol, variable, position){
             if (vars.self[variable] !== void 0) {
                 if (vars.self[variable] === 'let' || symbol === 'let') {
-                    this.error(' Variable `' + variable + '` has already been declared at char ' + position.col + ' on line ' + position.line + '.');
+                    if (position){
+                        this.error(' Variable `' + variable + '` has already been declared at char ' + position.col + ' on line ' + position.line + '.');
+                    }
+                    this.error(' Variable `' + variable + '` has already been declared.');
                 }
                 if (vars.self[variable] === 'const' || symbol === 'const') {
-                    this.error(' Const `' + variable + '` has already been declared at char ' + position.col + ' on line ' + position.line + '.');
+                    if (position) {
+                        this.error(' Const `' + variable + '` has already been declared at char ' + position.col + ' on line ' + position.line + '.');
+                    }
+                    this.error(' Const `' + variable + '` has already been declared.');
                 }
             }else{
                 vars.self[variable] = symbol;
@@ -1734,7 +1761,10 @@
                             if (vars.self[alias] === void 0) {
                                 vars.self[alias] = 'var';
                             } else if (vars.self[alias] === 'let') {
-                                this.error(' Variable `' + alias + '` has already been declared at char ' + position.col + ' on line ' + position.line + '.');
+                                if (position){
+                                    this.error(' Variable `' + alias + '` has already been declared at char ' + position.col + ' on line ' + position.line + '.');
+                                }
+                                this.error(' Variable `' + alias + '` has already been declared.');
                             }
                         }
                         break;
@@ -2211,11 +2241,17 @@
             } else {
                 if (type === 'dec') {
                     if (cname) {
+                        if (this.isNativeCode) {
+                            this.error('Native Code Not Support Standard Class Expression');
+                        }
                         cname = namespace + cname;
                     } else if (namespace) {
+                        if (this.isNativeCode) {
+                            this.error('Native Code Not Support Standard Class Expression');
+                        }
                         cname = namespace.replace(/\.$/, '');
                     } else {
-                        subtype = 'anonClass';
+                        subtype = 'anonClass'; 
                     }
                 }
                 else {
@@ -2225,6 +2261,7 @@
             let basename = matches[6];
             let position = this.getPosition(this.replacements[index][1]);
             if (type === 'class') {
+                this.useClass = true;
                 if ((subtype === 'anonClass') && cname && cname.match(namingExpr)){
                     this.pushVariableToVars(vars, 'var', cname, position);
                 }
@@ -2236,6 +2273,7 @@
                     }
                 }
             }else{
+                this.useExtends = true;
                 if (matches[4] ==='ignore') {
                     basename = true;
                 }else{
@@ -2291,6 +2329,14 @@
             // console.log(matches);
             if ((matches[1] === 'voidns') || (matches[1] === 'voidglobal') || (matches[1] === 'voidanonspace') || (matches[1] === 'ns') || (matches[1] === 'global') || (matches[1] === 'anonspace')) {
                 subtype = matches[1];
+                if (subtype === 'voidanonspace' || subtype === 'anonspace') {
+                    this.useAnonSpace = true;
+                } else {
+                    if (this.isNativeCode) {
+                        this.error('Native Code Not Support Namespace Expression');
+                    }
+                }
+                
                 if (subtype === 'voidanonspace'||subtype === 'anonspace'){
                     namespace = '';
                 }
@@ -2317,7 +2363,12 @@
                 body = this.pushBodyToAST([], localvars, matches[3]);
             } else {
                 if ((matches[1] === 'nsassign') || (matches[1] === 'globalassign')) {
+                    if (this.isNativeCode) {
+                        this.error('Native Code Not Support Assign Expression');
+                    }
                     subtype = matches[1];
+                } else {
+                    this.useExtends = true;
                 }
                 body = this.checkObjMember(localvars, matches[3]);
             }
@@ -2434,6 +2485,8 @@
                                 this.error('itemname cannot same to the default indexname');
                             }
                         }
+
+                        this.useEach = true;
 
                         let localvars: any = {
                             parent: vars,
@@ -2873,23 +2926,36 @@
             // console.log(this.replacements);
             // console.log(this.ast.body);
             let ast = this.ast;
-            let imports = this.imports;
-            let alias = this.using_as;
-            this.ast = this.using_as = {};
-            this.imports = [];
+            this.ast = {};
+
             let head: string[] = [];
+            let neck: string[] = [];
             let body: string[] = [];
             let foot: string[] = [];
-            this.pushHeader(head, imports);
-            imports = undefined;
+
+            
+
             this.fixVariables(ast.vars);
-            this.pushAlias(body, ast.vars, alias);
-            alias = undefined;
             this.pushCodes(body, ast.vars, ast.body, 1, this.namespace);
+
+            if (this.isNativeCode) {
+                this.pushNativeHeader(head);
+            } else {
+                let imports = this.imports;
+                let alias = this.using_as;
+                this.imports = [];
+                this.using_as = {};
+                this.pushBlockHeader(head, imports);
+                this.pushAlias(neck, ast.vars, alias);
+                imports = undefined;
+                alias = undefined;
+            }
+            
             this.pushFooter(foot, ast.vars);
             ast = undefined;
-            let preoutput = head.join('') + this.trim(body.join('')) + foot.join('');
-            head = body = foot = undefined;
+
+            let preoutput = head.join('') + neck.join('') + this.trim(body.join('')) + foot.join('');
+            head = neck = body = foot = undefined;
             this.output = this.pickUpMap(this.restoreStrings(preoutput, true)).replace(/[\s;]+;/g, ';');
             preoutput = undefined;
             // console.log(this.output);
@@ -2908,7 +2974,39 @@
             }
             return '';
         }
-        pushHeader(codes: string[], imports: any[]): string[] {
+        pushNativeHeader(codes: string[]): string[] {
+            codes.push('/*!');
+            codes.push("\r\n" + ' * tanguage script compiled code');
+            codes.push("\r\n" + ' *');
+            codes.push("\r\n" + ' * Datetime: ' + (new Date()).toUTCString());
+            codes.push("\r\n" + ' */');
+            codes.push("\r\n" + ';');
+            codes.push("\r\nvoid\r\n");
+
+            codes.push('\r\nfunction(root, factory) {');
+            codes.push('\r\n    if (typeof exports === \'object\') {');
+            codes.push('\r\n        root.console = console;');
+            codes.push('\r\n        exports = factory(root);');
+            codes.push('\r\n        if (typeof module === \'object\') {');
+            codes.push('\r\n            module.exports = exports;');
+            codes.push('\r\n        }');
+            codes.push('\r\n    }');
+            codes.push('\r\n    else if (typeof root.define === \'function\' && root.define.amd) {');
+            codes.push('\r\n        root.define(function () {');
+            codes.push('\r\n            return factory(root);');
+            codes.push('\r\n        });');
+            codes.push('\r\n    }');
+            codes.push('\r\n    else if (typeof root.tang === \'object\' && typeof root.tang.init === \'function\') {');
+            codes.push('\r\n        root.tang.init();');
+            codes.push('\r\n        root.tang.module.exports = factory(root);');
+            codes.push('\r\n    }');
+            codes.push('\r\n    else {');
+            codes.push('\r\n        factory(root)');
+            codes.push('\r\n    }');
+            codes.push('\r\n}(typeof window === \'undefined\' ? global : window, function(root, undefined) {');
+            return codes;
+        }
+        pushBlockHeader(codes: string[], imports: any[]): string[] {
             codes.push('/*!');
             codes.push("\r\n" + ' * tanguage script compiled code');
             codes.push("\r\n" + ' *');
@@ -3010,6 +3108,7 @@
                         if (vars.root.break !== undefined) {
                             code = code.replace(/@return;*/g, () => {
                                 vars.root.break = true;
+                                this.useLoop = true;
                                 return 'pandora.loop.out();' + indent + 'return;';
                             });
                         }
@@ -3568,14 +3667,14 @@
         }
         pushOverrideMethod(elements, overrides, indent2, indent3) {
             for (const fname in overrides) {
-                if (overrides.hasOwnProperty(fname)) {
+                if (hasProp(overrides, fname)) {
                     // console.log(overrides[fname]);
                     let elem = [];
                     elem.push(indent2 + fname + ': ');
                     elem.push('function(){');
                     const element = overrides[fname];
                     for (var args in element) {
-                        if (element.hasOwnProperty(args)) {
+                        if (hasProp(element, args)) {
                             elem.push(indent3 + 'if (arguments.length@boundary_5_as_operator::' + args + ') { return this.' + element[args] + '.apply(this, arguments); }');
                         }
                     }
@@ -3673,14 +3772,15 @@
         resetVarsRoot(vars: any) {
             let root = vars.root;
             for (const varname in vars.self) {
-                if (vars.self.hasOwnProperty(varname)) {
+                if (hasProp(vars.self, varname)) {
                     if (vars.self[varname] === 'const' || vars.self[varname] === 'let') {
                         // console.log(vars);
-                        if (!root.protected.hasOwnProperty(varname) && (!root.private.hasOwnProperty(varname) || (root.private[varname].parent === vars))) {
+                        if (hasProp(root.protected, varname) && (!hasProp(root.private, varname) || (root.private[varname].parent === vars))) {
                             root.private[varname] = vars;
                         }
                     } else {
-                        if (!root.protected.hasOwnProperty(varname)) {
+                        // console.log(root.protected, root.protected.hasOwnProperty, root);
+                        if (hasProp(root.protected, varname)) {
                             root.protected[varname] = 'var';
                             // delete vars.self[varname];
                         } else if (root.protected[varname] === 'let') {
@@ -3709,7 +3809,7 @@
                     for (const element in vars.self) {
                         let varname = element;
                         if (keywords['includes'](element) || reserved['includes'](element)) {
-                            console.log(vars);
+                            // console.log(vars);
                             this.error('keywords `' + element + '` cannot be a variable name.');
                         }
                         if (this.blockreserved['includes'](element)) {
@@ -3721,7 +3821,7 @@
                         if (varname !== element) {
                             // console.log(varname);
                             vars.root.fix_map[element] = varname;
-                            if (vars.root.public.hasOwnProperty(element)) {
+                            if (hasProp(vars.root.public, element)) {
                                 vars.root.public[element] = varname;
                             }
                         }
@@ -3729,7 +3829,7 @@
                     }
                     if (vars.type === 'root') {
                         for (const key in vars.locals) {
-                            if (vars.locals.hasOwnProperty(key)) {
+                            if (hasProp(vars.locals, key)) {
                                 let varname = '_' + key;
                                 while (vars.self[varname]) {
                                     varname = varname + '_' + vars.index;
@@ -3780,7 +3880,7 @@
                 // console.log(code);
                 return code.replace(/(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)\s*=\s*/g, (match, before, definition, varname) => {
                     // console.log(match, "\r\n", before, '[', varname, '](', type, ')', after);
-                    if (!definition && vars.root.const.hasOwnProperty(varname)) {
+                    if (!definition && hasProp(vars.root.const, varname)) {
                         this.error('Cannot re-assign constant `' + varname + '`');
                     }
                     return match;
@@ -3800,21 +3900,21 @@
             // if (varname === 'document')
             //     console.log(!vars.root.fixed['includes'](varname) || (vars.root.private[varname] !== vars), vars.root.fixed, vars.root.private);
             // console.log('before:', varname, vars);
-            if (vars.fix_map && vars.fix_map.hasOwnProperty(varname)) {
+            if (vars.fix_map && hasProp(vars.fix_map, varname)) {
                 // console.log(varname, vars.fix_map[varname]);
                 return vars.fix_map[varname];
             }
-            if (vars.root.fix_map.hasOwnProperty(varname)) {
+            if (hasProp(vars.root.fix_map, varname)) {
                 // console.log(varname, vars.root.fix_map[varname]);
                 return vars.root.fix_map[varname];
             }
             else if (!keywords['includes'](varname) && !this.xvars['includes'](varname) && (!vars.root.fixed['includes'](varname) || (vars.root.private[varname]!==vars))) {
                 // console.log(varname);
-                if (vars.root.private.hasOwnProperty(varname)) {
+                if (hasProp(vars.root.private, varname)) {
                     // console.log(varname, vars.root.private);
                     let _varname = varname;
                     // console.log(vars);
-                    while (vars.root.private.hasOwnProperty(varname)) {
+                    while (hasProp(vars.root.private, varname)) {
                         varname = varname + '_' + vars.index;
                     }
                     while (vars.root.fixed['includes'](varname)) {
@@ -3823,7 +3923,7 @@
                     // vars.root.fix_map[_varname] = varname;
                 } else {
                     for (const key in vars.locals) {
-                        if (vars.locals.hasOwnProperty(key)) {
+                        if (hasProp(vars.locals, key)) {
                             const _key = vars.locals[key];
                             // console.log(_key);
                             if (varname === _key) {
