@@ -14,11 +14,12 @@ formatPath (path) {
 getConfiguration (path) {
     path = formatPath(path);
 
-    if(configurations[path];) return configurations[path];
+    if(configurations[path])
+    return configurations[path];
 
     let match;
     if(match = path.match(matchREST)){
-        let
+        var
         params = ['$path'],
         pattern = new RegExp('^' + path.replace(replaceREST, '/([^/]+)/').replace(replaceSpecialSymbols, "\\$1").replace(replaceAsterisk, '\/.*') + '$');
 
@@ -33,7 +34,7 @@ getConfiguration (path) {
         }
     }
     else if(match = path.match(matchQS)){
-        let
+        var
         params = ['$path'],
         pattern = new RegExp('^' + path.replace(replaceQS, '/([^&]+)/').replace(replaceSpecialSymbols, "\\$1") + '$');
 
@@ -48,7 +49,7 @@ getConfiguration (path) {
         }
     }
     else if(path.match(matchAsterisk)){
-        let pattern = new RegExp('^' + path.replace('*', '.*$').replace('/', '\/'));
+        var pattern = new RegExp('^' + path.replace('*', '.*$').replace('/', '\/'));
 
         configurations[path] =  {
             uid: path,

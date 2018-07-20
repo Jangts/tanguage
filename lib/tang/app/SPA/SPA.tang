@@ -13,14 +13,32 @@ _ = pandora,
 doc = root.document,
 body = doc.body;
 
-@include 'VirtualPage';
-@include 'Layer';
+@include 'abstracts/View';
+@include 'views/AJAXView';
+@include 'views/COMView';
+@include 'views/FrameView';
+@include 'views/NodeView';
+
+@include 'abstracts/Bar';
+@include 'views/Buttons';
+@include 'views/Title';
+
+@include 'containers/Alert';
+@include 'containers/Picker';
+@include 'containers/TabNav';
+@include 'containers/VirtualPage';
+@include 'containers/Widget';
+
+@include 'layers/Layer';
+@include 'layers/PopupLayer';
+@include 'layers/WidgetsLayer';
 
 class .SPA extends Component {
     Element;
     layers = [];
     defaultLayer;
     popupLayer;
+    widgetsLayer;
     
     _init(elem, options = {}){
         this.layers = [];
@@ -48,14 +66,38 @@ class .SPA extends Component {
                 this.defaultLayer = createLayer (this, options.defaultLayerName, options.layers && options.layers[options.defaultLayerName] || defaultLayerOptions);
             }
         }
-        if(options.popupLayerName){
-            this.popupLayer = this.layers[options.popupLayerName] || createLayer (this, options.popupLayerName, options.layers && options.layers[options.popupLayerName] || popupLayerOptions);
-            }
+        if(options.popupLayer){
+            this.popupLayer = createPopupLayer (this, options.popupLayer || popupLayerOptions);
+        }
+        if(options.widgetsLayer){
+            this.widgetsLayer = createWidgetLayer (this, options.widgetsLayer || widgetsLayerOptions);
         }
     }
 
-    addLayer(){
+    addLayer () {
         this.layers.push(new Layer());
+    }
+
+    addWidgets() {
+        if(!this.widgetsLayer){
+            this.widgetsLayer = createWidgetLayer (this, widgetsLayerOptions);
+        }
+    }
+
+    addPickComponnet () {
+        if(!this.popupLayer){
+            this.popupLayer = createWidgetLayer (this, popupLayerOptions);
+        }
+    }
+
+    pick () {
+        
+    }
+
+    alert () {
+        if(!this.popupLayer){
+            this.popupLayer = createWidgetLayer (this, popupLayerOptions);
+        }
     }
 }
 

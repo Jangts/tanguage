@@ -1,14 +1,12 @@
-class VirtualPage extends Element {
-    Element;
-    scrollTop = 0;
+class VirtualPage extends Component {
+    layer;
+    titleComponent;
+    viewComponent;
+    buttonsComponent;
 
     _init() {}
 
     load () {
-
-    }
-
-    html () {
 
     }
 

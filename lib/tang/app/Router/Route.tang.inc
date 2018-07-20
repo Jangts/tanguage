@@ -4,7 +4,7 @@ class Route {
     callbacks = [];
 
     _init (configuration) {
-        _.extend(this, true, configuration);
+        ..extend(this, true, configuration);
         this.callbacks = [];
     }
 

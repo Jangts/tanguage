@@ -11,13 +11,31 @@ namespace app;
 
 listen (path, callback) {
     let route, config = getConfiguration(path);
+    // clog config;
     if(config.type==='pattern'){
-        route = this.routes.pattern[config.uid] || new PatternRoute(config);
+        route = this.routes.pattern[config.uid] = this.routes.pattern[config.uid] || new PatternRoute(config);
     }else {
-        route = this.routes.path[config.uid] || new Route(config);
+        route = this.routes.path[config.uid] = this.routes.path[config.uid] || new Route(config);
     }
+    // clog config, route, this.routes.path[config.uid], this;
     route.oncall(callback);
     return this;
+}
+
+let
+listend = false;
+routers = [];
+
+fireEvents () {
+    clog 'bar';
+    each (routers as router) {
+        router.refresh();
+    }
+}
+bindEvents () {
+    clog 'foo';
+    root.addEventListener('load', fireEvents, false);
+    root.addEventListener('hashchange', fireEvents, false);
 }
 
 class .Router {
@@ -25,9 +43,20 @@ class .Router {
     routes = {};
 
     _init (routes) {
+        routers.push(this);
         this.routes = {
             path: {},
             pattern: {}
+        }
+        if(routes){
+            each (routes as path, callback) {
+                // clog path, callback;
+                this.listen(path, callback);
+            }
+        }
+        if(!listend){
+            listend = true;
+            bindEvents ();
         }
     }
 
@@ -35,7 +64,7 @@ class .Router {
 
     reg = listen;
 
-    refresh (reload = false) {
+    checkHash (reload = false) {
         let newURL = formatPath(location.hash.slice(1) || '/index');
         if(newURL===this.currentURL){
             if(reload){
@@ -45,6 +74,14 @@ class .Router {
             this.currentURL = newURL;
             this.call(this.currentURL, true);
         }
+    }
+
+    pushHash() {
+
+    }
+
+    changeHash() {
+
     }
 
     call (path, ignoreFormat) {
@@ -57,9 +94,6 @@ class .Router {
             route.call(path);
         }
     }
-
-    bindEvents () {
-        root.addEventListener('load',this.refresh.bind(this),false);
-        root.addEventListener('hashchange',this.refresh.bind(this),false);
-    }
 }
+
+module.exports = app.Router;

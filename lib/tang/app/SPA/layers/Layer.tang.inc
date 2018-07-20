@@ -1,7 +1,4 @@
-
-
 class Layer extends Component {
-    Element;
     pages = {};
 
     _init() {}
@@ -53,9 +50,9 @@ defaultLayerOptions = {
         defaultPage : defaultPageOptions
     }
 },
-popupayerOptions = {
+emptyLayerOptions = {
     tagName: 'div',
-    className: 'popup-layer',
+    className: '',
     pages: {}
 };
 

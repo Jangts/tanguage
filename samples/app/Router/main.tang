@@ -1,0 +1,17 @@
+use $ app/Router/ as Router;
+
+// clog Router;
+callback(route){
+    clog this, route;
+}
+
+let router = new Router({
+    '/about/': callback,
+    '/about/*': callback,
+    '/about/*/index.asp': callback,
+    '/news/:newsid/': callback,
+    '?news=:newsid': callback,
+    '?news=:newsid&comments=:commentid': callback
+});
+
+clog router;
