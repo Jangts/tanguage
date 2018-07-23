@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUNTIME</title>
+    <script src="../../lib/dist/runtime.js" data-tang-debug></script>
+</head>
+
+<body>
+    <script>
+    let a = b = c = 1;
+    let var1 = 'bar'
+    if(a){
+        let var1 = 'foo'
+    }else{
+        let var1 = 'bar'
+        function fn () {
+            let elem = var1;
+        }
+    }
+    </script>
+    <script  src="../../compiler/test/scope.test.tang" type="text/tanguage"></script>
+    <script src="../../compiler/js/web-tang.js"></script>
+</body>
+
+</html>

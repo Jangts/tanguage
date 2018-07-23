@@ -4048,6 +4048,7 @@
                     vars.root.fixed.push(vars.locals['this']);
                 case 'travel':
                     if (vars.type === 'travel') {
+                        console.log(vars);
                         vars.root.fixed.push('this');
                     }
                     vars.root.fix_map['arguments'] = vars.locals['arguments'];
@@ -4082,6 +4083,17 @@
                                     varname = varname + '_' + vars.index;
                                 }
                                 vars.locals[key] = varname;
+                            }
+                        }
+                        if (vars.parent) {
+                            for (var key in vars.parent.locals) {
+                                if (hasProp(vars.parent.locals, key)) {
+                                    var varname = '_' + key;
+                                    while (vars.self[varname]) {
+                                        varname = varname + '_' + vars.index;
+                                    }
+                                    vars.locals[key] = varname;
+                                }
                             }
                         }
                     }
@@ -4131,7 +4143,7 @@
                     }
                     return match;
                 }).replace(/(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)(\s+|\s*[^\$\w]|\s*$)/g, function (match, before, definition, varname, after) {
-                    console.log(match);
+                    // console.log(match);
                     // console.log(type);
                     return before + (definition || '') + _this.patchVariable(varname, vars) + after || '';
                 }).replace(/(^|[\?\:\=]\s*)(ns\.|\$\.|\.)(\.[\$a-zA-Z_][\$\w]*|$)/g, function (match, before, node, member) {
@@ -4154,7 +4166,7 @@
                 // console.log(varname, vars.root.fix_map[varname]);
                 return vars.root.fix_map[varname];
             }
-            else if (!keywords['includes'](varname) && !this.xvars['includes'](varname) && (!vars.root.fixed['includes'](varname) || (vars.root.private[varname] !== vars))) {
+            if (!keywords['includes'](varname) && !this.xvars['includes'](varname) && (!vars.root.fixed['includes'](varname) || (vars.root.private[varname] !== vars))) {
                 // console.log(varname);
                 if (hasProp(vars.root.private, varname)) {
                     // console.log(varname, vars.root.private);
@@ -4185,6 +4197,9 @@
                                 vars.fix_map[_key] = varname;
                             }
                         }
+                    }
+                    if (vars.parent) {
+                        varname = this.patchVariable(varname, vars.parent);
                     }
                 }
             }

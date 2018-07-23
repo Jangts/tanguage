@@ -1,0 +1,16 @@
+let var1 = 'bar'
+if(1){
+    let var1 = 'foo'
+    each ([1,2,3] as index, item) {
+        let var1 = 'var1';
+        let var1_1 = 'var1';
+    }
+// }else{
+//     let var1 = 'bar'
+//     let fn2 = () => {
+//         let var1 = var1;
+//     }
+//     fn () {
+//         let elem = var1;
+//     }
+}
