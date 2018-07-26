@@ -74,17 +74,28 @@
         posi: undefined,
         display: 'inline',
         vars: {
+            // 父级作用域
             parent: null,
-            root: {
+            // ES5实际作用域
+            scope: {
+                // 局域命名空间
                 namespace: this.namespace,
+                // 局域变量
                 public: {},
+                // 局域常量
                 const: {},
+                // 局域私有变量
                 private: {},
+                // 子域受保护变量
                 protected: {},
+                // 局域变量校正
                 fixed: [],
+                // 局域变量校正量映射
                 fix_map: {}
             },
+            // 子域变量
             locals: {},
+            // 类型：分号
             type: 'semicolon'
         },
         value: ';'
@@ -170,12 +181,17 @@
         function Script(input, source, run) {
             if (source === void 0) { source = ''; }
             if (run === void 0) { run = false; }
+            // 是否主代码块
             this.isMainBlock = true;
+            // 全域命名空间
             this.namespace = '';
             this.stringReplaceTimes = 65536;
             this.positions = [];
+            // 引入代码块组
             this.imports = [];
+            // 引入代码块别名
             this.using_as = {};
+            // 语法树
             this.ast = {};
             this.configinfo = '{}';
             this.posimap = [];
@@ -218,18 +234,29 @@
             var newcontent = this.markPosition(this.input, 0);
             var string = this.encode(newcontent);
             var vars = {
+                // 父级作用域
                 parent: null,
-                root: {
+                // ES5实际作用域
+                scope: {
+                    // 局域命名空间
                     namespace: this.namespace,
+                    // 局域变量
                     public: {},
+                    // 局域常量
                     const: {},
+                    // 局域私有变量
                     private: {},
+                    // 子域受保护变量
                     protected: {},
+                    // 局域变量校正
                     fixed: [],
+                    // 局域变量校正量映射
                     fix_map: {}
                 },
+                // 子域变量
                 locals: {},
-                type: 'root'
+                // 类型：类全域代码块
+                type: 'blocklike'
             };
             vars.self = vars.root.protected;
             this.buildAST(this.pickReplacePosis(this.getLines(string, vars), vars), vars);
@@ -349,13 +376,13 @@
                 .replace(replaceExpRegPattern.typetag, function (match, gaps, preline, posi, gap, tag) {
                 _this.isMainBlock = false;
                 if (gaps) {
-                    _this.maintag_posi = posi;
+                    _this.first_availabe_posi = posi;
                     if (!!gap) {
-                        _this.maintag_posi += 'O' + gap.length;
+                        _this.first_availabe_posi += 'O' + gap.length;
                     }
                 }
                 else {
-                    _this.maintag_posi = '@0L0P0';
+                    _this.first_availabe_posi = '@0L0P0';
                 }
                 if (tag === 'module') {
                     _this.blockreserved.push('module');
@@ -364,7 +391,7 @@
                     _this.isNativeCode = true;
                 }
                 // console.log(gaps, preline, posi, !!gap, gap.length);
-                // console.log('This is not a main block.', this.maintag_posi);
+                // console.log('This is not a main block.', this.first_availabe_posi);
                 return '';
             })
                 .replace(replaceExpRegPattern.namespace, function (match, linestart, posi, at, gap, namespace) {
@@ -2152,20 +2179,31 @@
             }
             else {
                 var locals = {};
-                var varstype = 'root';
+                var varstype = 'scope';
             }
             var localvars = {
+                // 父级作用域
                 parent: vars,
-                root: {
+                // ES5实际作用域
+                scope: {
+                    // 局域命名空间
                     namespace: vars.namespace,
+                    // 局域变量
                     public: {},
+                    // 局域常量
                     const: {},
+                    // 局域私有变量
                     private: {},
+                    // 子域受保护变量
                     protected: {},
+                    // 局域变量校正
                     fixed: [],
+                    // 局域变量校正量映射
                     fix_map: {}
                 },
+                // 子域变量
                 locals: locals,
+                // 类型：ES5标准函数作用域/箭头函数作用域
                 type: varstype
             };
             localvars.self = localvars.root.protected;
@@ -2411,18 +2449,29 @@
                     namespace = (vars.namespace || this.namespace) + objname + '.';
                 }
                 localvars = {
+                    // 父级作用域
                     parent: vars,
-                    root: {
+                    // ES5实际作用域
+                    scope: {
+                        // 局域命名空间
                         namespace: namespace,
+                        // 局域变量
                         public: {},
+                        // 局域常量
                         const: {},
+                        // 局域私有变量
                         private: {},
+                        // 子域受保护变量
                         protected: {},
+                        // 局域变量校正
                         fixed: [],
+                        // 局域变量校正量映射
                         fix_map: {}
                     },
+                    // 子域变量
                     locals: {},
-                    type: 'root'
+                    // 类型：ES5标准函数作用域
+                    type: 'scope'
                 };
                 localvars.self = localvars.root.protected;
                 body = this.pushBodyToAST([], localvars, matches[3]);
@@ -2559,18 +2608,30 @@
                         }
                         this.useEach = true;
                         var localvars_2 = {
+                            // 父级作用域
                             parent: vars,
-                            root: {
+                            // ES5实际作用域
+                            scope: {
+                                // 局域命名空间
                                 namespace: null,
+                                // 局域变量
                                 public: {},
+                                // 局域常量
                                 const: {},
+                                // 局域私有变量
                                 private: {},
+                                // 子域受保护变量
                                 protected: {},
+                                // 局域变量校正
                                 fixed: [],
+                                // 局域变量校正量映射
                                 fix_map: {},
+                                // 遍历是否可跳出
                                 break: false
                             },
+                            // 子域变量
                             locals: vars.locals,
+                            // 类型：遍历
                             type: 'travel'
                         };
                         localvars_2.self = localvars_2.root.protected;
@@ -2625,18 +2686,29 @@
                 }
             }
             var localvars = {
+                // 父级作用域
                 parent: vars,
-                root: {
+                // ES5实际作用域
+                scope: {
+                    // 局域命名空间
                     namespace: vars.namespace,
+                    // 局域变量
                     public: {},
+                    // 局域常量
                     const: {},
+                    // 局域私有变量
                     private: {},
+                    // 子域受保护变量
                     protected: {},
+                    // 局域变量校正
                     fixed: [],
+                    // 局域变量校正量映射
                     fix_map: {}
                 },
+                // 子域变量
                 locals: {},
-                type: 'root'
+                // 类型：ES5标准函数作用域
+                type: 'scope'
             };
             localvars.self = localvars.root.protected;
             var args = this.checkArgs(matches[4], localvars);
@@ -4054,27 +4126,27 @@
                     vars.root.fix_map['arguments'] = vars.locals['arguments'];
                     vars.root.fixed.push(vars.locals['arguments']);
                 case 'root':
-                    for (var element in vars.self) {
-                        var varname = element;
-                        if (keywords['includes'](element) || reserved['includes'](element)) {
-                            // console.log(vars);
-                            this.error('keywords `' + element + '` cannot be a variable name.');
-                        }
-                        if (this.blockreserved['includes'](element)) {
-                            varname = element + '_' + vars.index;
-                            while (vars.self[varname]) {
-                                varname = varname + '_' + vars.index;
-                            }
-                        }
-                        if (varname !== element) {
-                            // console.log(varname);
-                            vars.root.fix_map[element] = varname;
-                            if (hasProp(vars.root.public, element)) {
-                                vars.root.public[element] = varname;
-                            }
-                        }
-                        vars.root.fixed.push(varname);
-                    }
+                    // for (const element in vars.self) {
+                    //     let varname = element;
+                    //     if (keywords['includes'](element) || reserved['includes'](element)) {
+                    //         // console.log(vars);
+                    //         this.error('keywords `' + element + '` cannot be a variable name.');
+                    //     }
+                    //     if (this.blockreserved['includes'](element)) {
+                    //         varname = element + '_' + vars.index;
+                    //         while (vars.self[varname]) {
+                    //             varname = varname + '_' + vars.index;
+                    //         }
+                    //     }
+                    //     if (varname !== element) {
+                    //         // console.log(varname);
+                    //         vars.root.fix_map[element] = varname;
+                    //         if (hasProp(vars.root.public, element)) {
+                    //             vars.root.public[element] = varname;
+                    //         }
+                    //     }
+                    //     vars.root.fixed.push(varname);
+                    // }
                     if (vars.type === 'root') {
                         for (var key in vars.locals) {
                             if (hasProp(vars.locals, key)) {
@@ -4085,20 +4157,20 @@
                                 vars.locals[key] = varname;
                             }
                         }
-                        if (vars.parent) {
-                            for (var key in vars.parent.locals) {
-                                if (hasProp(vars.parent.locals, key)) {
-                                    var varname = '_' + key;
-                                    while (vars.self[varname]) {
-                                        varname = varname + '_' + vars.index;
-                                    }
-                                    vars.locals[key] = varname;
-                                }
-                            }
-                        }
+                        // if (vars.parent){
+                        //     for (const key in vars.parent.locals) {
+                        //         if (hasProp(vars.parent.locals, key)) {
+                        //             let varname = '_' + key;
+                        //             while (vars.self[varname]) {
+                        //                 varname = varname + '_' + vars.index;
+                        //             }
+                        //             vars.locals[key] = varname;
+                        //         }
+                        //     }
+                        // }
                     }
-                    // console.log(vars);
-                    break;
+                // console.log(vars);
+                // break;
                 case 'local':
                     for (var element in vars.self) {
                         if (vars.self[element] === 'const' || vars.self[element] === 'let') {
