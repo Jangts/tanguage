@@ -292,7 +292,7 @@
                 // 类型：类全域代码块
                 type: 'blocklike'
             };
-            vars.self = vars.root.protected;
+            vars.self = vars.scope.protected;
             this.buildAST(this.pickReplacePosis(this.getLines(string, vars), vars), vars);
             // this.output = 'console.log("Hello, world!");';
             this.generate();
@@ -1733,10 +1733,10 @@
                 vars.self[variable] = symbol;
             }
             if (symbol === 'const') {
-                vars.root.const[variable] = variable;
+                vars.scope.const[variable] = variable;
             }
-            else if (symbol === 'public' && (vars.root.namespace !== null)) {
-                vars.root.public[variable] = variable;
+            else if (symbol === 'public' && (vars.scope.namespace !== null)) {
+                vars.scope.public[variable] = variable;
             }
         }
         pickReplacePosis(lines: any[], vars: any): object[] {
@@ -2150,8 +2150,8 @@
                 // 类型：ES5标准函数作用域/箭头函数作用域
                 type: varstype
             };
-            localvars.self = localvars.root.protected;
-            localvars.fix_map = localvars.root.fix_map;
+            localvars.self = localvars.scope.protected;
+            localvars.fix_map = localvars.scope.fix_map;
             let args: any = this.checkArgs(this.replacements[matches[2]][0].toString().replace(/(^\(|\)$)/g, ''), localvars);
             // console.log(matches);
             return {
@@ -2275,7 +2275,7 @@
             let matches: any = this.readBuffer(index).match(matchExpRegPattern.class);
             // console.log(matches);
             let type = matches[1];
-            let namespace = vars.root.namespace || this.namespace;
+            let namespace = vars.scope.namespace || this.namespace;
             let cname = matches[3];
             let subtype = 'stdClass';
             if (matches[2]) {
@@ -2341,7 +2341,7 @@
             // console.log(this.replacements[index]);
             let localvars = {
                 parent: vars,
-                root: vars.root,
+                scope: vars.scope,
                 self: {},
                 locals: vars.locals,
                 fixed: [],
@@ -2414,7 +2414,7 @@
                     // 类型：ES5标准函数作用域
                     type: 'scope'
                 };
-                localvars.self = localvars.root.protected;
+                localvars.self = localvars.scope.protected;
                 body = this.pushBodyToAST([], localvars, matches[3]);
             } else {
                 if ((matches[1] === 'nsassign') || (matches[1] === 'globalassign')) {
@@ -2476,7 +2476,7 @@
                     const headline = matches[4];
                     let localvars = {
                         parent: vars,
-                        root: vars.root,
+                        scope: vars.scope,
                         self: {},
                         locals: vars.locals,
                         fixed: [],
@@ -2570,7 +2570,7 @@
                             // 类型：遍历
                             type: 'travel'
                         };
-                        localvars.self = localvars.root.protected;
+                        localvars.self = localvars.scope.protected;
                         localvars.locals['arguments'] = null;
                         let iterator = this.pushSentencesToAST([], localvars, condition[1], false, this.getPosition(condition[2]))[0] || (() => {
                             this.error(' Must have statements in head of each expreesion.');
@@ -2648,7 +2648,7 @@
                 // 类型：ES5标准函数作用域
                 type: 'scope'
             };
-            localvars.self = localvars.root.protected;
+            localvars.self = localvars.scope.protected;
             let args: any = this.checkArgs(matches[4], localvars);
             tem = undefined;
             return {
@@ -3347,9 +3347,9 @@
                     if (element.value) {
                         // console.log(element.posi&&element.posi.head, element.display, element.value);
                         var code: string = this.patchVariables(element.value, vars);
-                        if (vars.root.break !== undefined) {
+                        if (vars.scope.break !== undefined) {
                             code = code.replace(/@return;*/g, () => {
-                                vars.root.break = true;
+                                vars.scope.break = true;
                                 this.useLoop = true;
                                 return 'pandora.loop.out();' + indent + 'return;';
                             });
@@ -3720,7 +3720,7 @@
             // console.log(element);
             if (element.body.length) {
                 // console.log(element);
-                if (element.vars.type === 'root') {
+                if (element.vars.type === 'blocklike') {
                     for (var key in element.vars.locals) {
                         codes.push(indent + "    var " + element.vars.locals[key] + ' = ' + key + ';');
                     }
@@ -3759,10 +3759,10 @@
                 // console.log(element.body);
                 if (element.subtype === 'anonspace' || element.subtype === 'ns' || element.subtype === 'global'){
                     let exports = [];
-                    // console.log(element.vars.root.public);
+                    // console.log(element.vars.scope.public);
                     codes.push(indent2 + 'return {');
-                    for (const name in element.vars.root.public) {
-                        exports.push(name + ': ' + element.vars.root.public[name]);
+                    for (const name in element.vars.scope.public) {
+                        exports.push(name + ': ' + element.vars.scope.public[name]);
                     }
                     if (exports.length) {
                         codes.push(indent3 + exports.join(',' + indent3));
@@ -3935,7 +3935,7 @@
             this.pushElement(codes, element.vars, element.iterator, layer, namespace);
             codes.push(', ');
             this.pushFunctionCodes(codes, element.callback, layer, namespace);
-            if (element.vars.root.break === true) {
+            if (element.vars.scope.break === true) {
                 codes[index] = indent + 'pandora.loop(';
             }
             if (element.subtype === 'ownprop') {
@@ -4000,9 +4000,9 @@
             return codes;
         }
         pushFooter(codes: string[], vars: any): string[] {
-            // console.log(vars.root.public);
-            for (const name in vars.root.public) {
-                codes.push("\r\n    pandora('" + this.namespace + name + "', " + vars.root.public[name] + ");");
+            // console.log(vars.scope.public);
+            for (const name in vars.scope.public) {
+                codes.push("\r\n    pandora('" + this.namespace + name + "', " + vars.scope.public[name] + ");");
             }
             if (this.isMainBlock) {
                 codes.push("\r\n" + '}, true);');
@@ -4012,26 +4012,26 @@
             return codes;
         }
         resetVarsRoot(vars: any) {
-            let root = vars.root;
+            let scope = vars.scope;
             for (const varname in vars.self) {
                 if (hasProp(vars.self, varname)) {
                     if (vars.self[varname] === 'const' || vars.self[varname] === 'let') {
                         // console.log(vars);
-                        if (hasProp(root.protected, varname) && (!hasProp(root.private, varname) || (root.private[varname].parent === vars))) {
-                            root.private[varname] = vars;
+                        if (hasProp(scope.protected, varname) && (!hasProp(scope.private, varname) || (scope.private[varname].parent === vars))) {
+                            scope.private[varname] = vars;
                         }
                     } else {
-                        // console.log(root.protected, root.protected.hasOwnProperty, root);
-                        if (hasProp(root.protected, varname)) {
-                            root.protected[varname] = 'var';
+                        // console.log(scope.protected, scope.protected.hasOwnProperty, scope);
+                        if (hasProp(scope.protected, varname)) {
+                            scope.protected[varname] = 'var';
                             // delete vars.self[varname];
-                        } else if (root.protected[varname] === 'let') {
+                        } else if (scope.protected[varname] === 'let') {
                             this.error(' Variable `' + varname + '` has already been declared.');
                         }
                     }
                 }
             }
-            root = undefined;
+            scope = undefined;
         }
         fixVariables(vars: any) {
             vars.index = this.closurecount;
@@ -4039,38 +4039,38 @@
             // console.log(vars.type, vars);
             switch (vars.type) {
                 case 'arrowfn':
-                    vars.root.fix_map['this'] = vars.locals['this'];
-                    vars.root.fixed.push(vars.locals['this']);
+                    vars.scope.fix_map['this'] = vars.locals['this'];
+                    vars.scope.fixed.push(vars.locals['this']);
                 case 'travel':
                     if (vars.type === 'travel') {
                         console.log(vars);
-                        vars.root.fixed.push('this');
+                        vars.scope.fixed.push('this');
                     }
-                    vars.root.fix_map['arguments'] = vars.locals['arguments'];
-                    vars.root.fixed.push(vars.locals['arguments']);
-                case 'root':
-                    // for (const element in vars.self) {
-                    //     let varname = element;
-                    //     if (keywords['includes'](element) || reserved['includes'](element)) {
-                    //         // console.log(vars);
-                    //         this.error('keywords `' + element + '` cannot be a variable name.');
-                    //     }
-                    //     if (this.blockreserved['includes'](element)) {
-                    //         varname = element + '_' + vars.index;
-                    //         while (vars.self[varname]) {
-                    //             varname = varname + '_' + vars.index;
-                    //         }
-                    //     }
-                    //     if (varname !== element) {
-                    //         // console.log(varname);
-                    //         vars.root.fix_map[element] = varname;
-                    //         if (hasProp(vars.root.public, element)) {
-                    //             vars.root.public[element] = varname;
-                    //         }
-                    //     }
-                    //     vars.root.fixed.push(varname);
-                    // }
-                    if (vars.type === 'root') {
+                    vars.scope.fix_map['arguments'] = vars.locals['arguments'];
+                    vars.scope.fixed.push(vars.locals['arguments']);
+                case 'blocklike':
+                    for (const element in vars.self) {
+                        let varname = element;
+                        if (keywords['includes'](element) || reserved['includes'](element)) {
+                            // console.log(vars);
+                            this.error('keywords `' + element + '` cannot be a variable name.');
+                        }
+                        if (this.blockreserved['includes'](element)) {
+                            varname = element + '_' + vars.index;
+                            while (vars.self[varname]) {
+                                varname = varname + '_' + vars.index;
+                            }
+                        }
+                        if (varname !== element) {
+                            // console.log(varname);
+                            vars.scope.fix_map[element] = varname;
+                            if (hasProp(vars.scope.public, element)) {
+                                vars.scope.public[element] = varname;
+                            }
+                        }
+                        vars.scope.fixed.push(varname);
+                    }
+                    if (vars.type === 'blocklike') {
                         for (const key in vars.locals) {
                             if (hasProp(vars.locals, key)) {
                                 let varname = '_' + key;
@@ -4093,7 +4093,7 @@
                         // }
                     }
                     // console.log(vars);
-                    // break;
+                    break;
                 case 'local':
                     for (const element in vars.self) {
                         if (vars.self[element] === 'const' || vars.self[element] === 'let') {
@@ -4110,7 +4110,7 @@
                                 }
                                 // console.log(varname);
                             }
-                            while (vars.root.fixed['includes'](varname) || (vars.root.private[varname] && (vars.root.private[varname] !== vars))) {
+                            while (vars.scope.fixed['includes'](varname) || (vars.scope.private[varname] && (vars.scope.private[varname] !== vars))) {
                                 // console.log(varname);
                                 varname = varname + '_' + vars.index;
                             }
@@ -4121,7 +4121,7 @@
 
                             }
                             vars.fixed.push(varname);
-                            vars.root.fixed.push(varname);
+                            vars.scope.fixed.push(varname);
                         }
                     }
             }
@@ -4134,7 +4134,7 @@
                 // console.log(code);
                 return code.replace(/(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)\s*=\s*/g, (match, before, definition, varname) => {
                     // console.log(match, "\r\n", before, '[', varname, '](', type, ')', after);
-                    if (!definition && hasProp(vars.root.const, varname)) {
+                    if (!definition && hasProp(vars.scope.const, varname)) {
                         this.error('Cannot re-assign constant `' + varname + '`');
                     }
                     return match;
@@ -4152,29 +4152,29 @@
         }
         patchVariable(varname: string, vars: any): string {
             // if (varname === 'document')
-            //     console.log(!vars.root.fixed['includes'](varname) || (vars.root.private[varname] !== vars), vars.root.fixed, vars.root.private);
+            //     console.log(!vars.scope.fixed['includes'](varname) || (vars.scope.private[varname] !== vars), vars.scope.fixed, vars.scope.private);
             // console.log('before:', varname, vars);
             if (vars.fix_map && hasProp(vars.fix_map, varname)) {
                 // console.log(varname, vars.fix_map[varname]);
                 return vars.fix_map[varname];
             }
-            if (hasProp(vars.root.fix_map, varname)) {
-                // console.log(varname, vars.root.fix_map[varname]);
-                return vars.root.fix_map[varname];
+            if (hasProp(vars.scope.fix_map, varname)) {
+                // console.log(varname, vars.scope.fix_map[varname]);
+                return vars.scope.fix_map[varname];
             }
-            if (!keywords['includes'](varname) && !this.xvars['includes'](varname) && (!vars.root.fixed['includes'](varname) || (vars.root.private[varname]!==vars))) {
+            if (!keywords['includes'](varname) && !this.xvars['includes'](varname) && (!vars.scope.fixed['includes'](varname) || (vars.scope.private[varname]!==vars))) {
                 // console.log(varname);
-                if (hasProp(vars.root.private, varname)) {
-                    // console.log(varname, vars.root.private);
+                if (hasProp(vars.scope.private, varname)) {
+                    // console.log(varname, vars.scope.private);
                     let _varname = varname;
                     // console.log(vars);
-                    while (hasProp(vars.root.private, varname)) {
+                    while (hasProp(vars.scope.private, varname)) {
                         varname = varname + '_' + vars.index;
                     }
-                    while (vars.root.fixed['includes'](varname)) {
+                    while (vars.scope.fixed['includes'](varname)) {
                         varname = varname + '_' + vars.index;
                     }
-                    // vars.root.fix_map[_varname] = varname;
+                    // vars.scope.fix_map[_varname] = varname;
                 } else {
                     for (const key in vars.locals) {
                         if (hasProp(vars.locals, key)) {
@@ -4182,10 +4182,10 @@
                             // console.log(_key);
                             if (varname === _key) {
                                 varname = varname + '_' + vars.index;
-                                while (vars.root.private[varname]) {
+                                while (vars.scope.private[varname]) {
                                     varname = varname + '_' + vars.index;
                                 }
-                                while (vars.root.fixed['includes'](varname)) {
+                                while (vars.scope.fixed['includes'](varname)) {
                                     varname = varname + '_' + vars.index;
                                 }
                                 // console.log(vars);
@@ -4206,8 +4206,8 @@
             if (node === '.') {
                 return 'pandora';
             }
-            if (vars.root.namespace) {
-                return ('pandora.' + vars.root.namespace).replace(/\.+$/, '');
+            if (vars.scope.namespace) {
+                return ('pandora.' + vars.scope.namespace).replace(/\.+$/, '');
             }
             // console.log(this.namespace);
             return ('pandora.' + this.namespace).replace(/\.+$/, '');
