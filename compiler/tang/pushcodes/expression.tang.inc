@@ -1,4 +1,4 @@
-pushExpressionCodes(codes[], element, layer, namespace)[] {
+pushExpressionCodes(codes, element, layer, namespace) {
     let indent1 = "\r\n" + stringRepeat("    ", layer);
     let indent2 = "\r\n" + stringRepeat("    ", layer);
     if (element.posi) {
@@ -31,7 +31,7 @@ pushExpressionCodes(codes[], element, layer, namespace)[] {
     indent1 = indent2 = undefined;
     return codes;
 }
-pushTravelCodes(codes[], element, layer, namespace)[] {
+pushTravelCodes(codes, element, layer, namespace) {
     let index = codes.length,
         indent = "\r\n" + stringRepeat("    ", layer);
     // console.log(element);
@@ -39,7 +39,7 @@ pushTravelCodes(codes[], element, layer, namespace)[] {
     this.pushElement(codes, element.vars, element.iterator, layer, namespace);
     codes.push(', ');
     this.pushFunctionCodes(codes, element.callback, layer, namespace);
-    if (element.vars.root.break === true) {
+    if (element.vars.scope.break === true) {
         codes[index] = indent + 'pandora.loop(';
     }
     if (element.subtype === 'ownprop') {

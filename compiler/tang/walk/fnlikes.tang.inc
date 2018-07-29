@@ -34,12 +34,15 @@ walkFnLike(index, display, vars, type) {
         if (reservedFname['includes'](fname)) {
             const headline = matches[4];
             let localvars = {
+                // 父级作用域
                 parent: vars,
-                root: vars.root,
+                // ES5实际作用域
+                scope: vars.scope,
+                // 当前作用域本级变量
                 self: {},
+                // 子域变量
                 locals: vars.locals,
-                fixed: [],
-                fix_map: {},
+                // 类型：局部
                 type: 'local'
             };
             if (fname === 'for') {
@@ -103,21 +106,34 @@ walkFnLike(index, display, vars, type) {
                 this.useEach = true;
 
                 let localvars = {
+                    // 父级作用域
                     parent: vars,
-                    root: {
+                    // ES5实际作用域
+                    scope: {
+                    // 局域命名空间
                         namespace: null,
+                        // 局域变量
                         public: {},
+                        // 局域常量
                         const: {},
+                        // 局域私有变量
                         private: {},
+                        // 子域受保护变量
                         protected: {},
+                        // 局域变量校正
                         fixed: [],
+                        // 局域变量校正量映射
                         fix_map: {},
+                        // 遍历是否可跳出
                         break: false
                     },
+                    // 子域变量
                     locals: vars.locals,
+                    // 类型：遍历
                     type: 'travel'
                 };
-                localvars.self = localvars.root.protected;
+                // 当前作用域本级变量
+                localvars.self = localvars.scope.protected;
                 localvars.locals['arguments'] = null;
                 let iterator = this.pushSentencesToAST([], localvars, condition[1], false, this.getPosition(condition[2]))[0] || (() => {
                     this.error(' Must have statements in head of each expreesion.');
@@ -171,20 +187,32 @@ walkFnLike(index, display, vars, type) {
     
 
     let localvars = {
+        // 父级作用域
         parent: vars,
-        root: {
+        // ES5实际作用域
+        scope: {
+            // 局域命名空间
             namespace: vars.namespace,
+            // 局域变量
             public: {},
+            // 局域常量
             const: {},
+            // 局域私有变量
             private: {},
+            // 子域受保护变量
             protected: {},
+            // 局域变量校正
             fixed: [],
+            // 局域变量校正量映射
             fix_map: {}
         },
+        // 子域变量
         locals: {},
-        type: 'root'
+        // 类型：ES5标准函数作用域
+        type: 'scope'
     };
-    localvars.self = localvars.root.protected;
+    // 当前作用域本级变量
+    localvars.self = localvars.scope.protected;
     let args = this.checkArgs(matches[4], localvars);
     tem = undefined;
     return {

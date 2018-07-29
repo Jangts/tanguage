@@ -81,9 +81,9 @@ pushVariableToVars(vars, symbol, variable, position){
         vars.self[variable] = symbol;
     }
     if (symbol === 'const') {
-        vars.root.const[variable] = variable;
+        vars.scope.const[variable] = variable;
     }
-    else if (symbol === 'public' && (vars.root.namespace !== null)) {
-        vars.root.public[variable] = variable;
+    else if (symbol === 'public' && (vars.scope.namespace !== null)) {
+        vars.scope.public[variable] = variable;
     }
 }

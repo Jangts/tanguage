@@ -1,16 +1,67 @@
-let var1 = 'bar'
-if(1){
-    let var1 = 'foo'
-    each ([1,2,3] as index, item) {
-        let var1 = 'var1';
-        let var1_1 = 'var1';
-    }
+// let var1 = 'bar'
+// let var2 = 'bar'
+// let var3 = 'bar'
+// let root = 'root'
+// if(1){
+//     let var1 = 'foo'
+    // let root = 'root'
+    // var root = 'root'
+    // each ([1,2,3] as index, item) {
+    //     // var root = 'root'
+    //     let var1 = var1;
+    //     var var2 = 'var1';
+    //     let var1_1 = var3;
+    // }
 // }else{
 //     let var1 = 'bar'
 //     let fn2 = () => {
 //         let var1 = var1;
 //     }
-//     fn () {
-//         let elem = var1;
+    // fn () {
+    //     let elem = var1;
+    // }
+// }
+// root = 'hahaha'
+// var obj = {
+//     foo(){
+//         let subtype = matches[2] || 'function';
+//         let fname = matches[3] !== 'function' ? matches[3] : '';
+//         if ((type === 'def' && subtype === 'function')|| type === 'exp') {
+//             if (fname === 'each') {
+//                 const condition = matches[4].match(matchExpRegPattern.travelargs);
+//                 // console.log(matches, condition);
+//             }
+//         }
+//     },
+//     bar(){
+//         let subtype = matches[2] || 'function';
+//         let fname = matches[3] !== 'function' ? matches[3] : '';
+//         if ((type === 'def' && subtype === 'function')|| type === 'exp') {
+//             if (fname === 'each') {
+//                 const condition = matches[4].match(matchExpRegPattern.travelargs);
+//                 // console.log(matches, condition);
+//             }
+//         }
 //     }
+// }
+
+// var obj = {
+//     foo(){
+//         const a = 'a';
+//     },
+//     bar(){
+//         const a = 'b';
+//     }
+// }
+
+let fixVariables = (vars) => {
+    this.a = 'a'
+    // if ((vars.type !== 'blocklike')) {
+    //     for (const varname in vars.parent.scope.fix_map) {
+    //     }
+    // }
+    // for (const element in vars.self) {
+    //     // let varname;
+    //     varname = element + '_' + vars.index;
+    // }
 }

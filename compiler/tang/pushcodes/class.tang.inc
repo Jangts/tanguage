@@ -1,4 +1,4 @@
-pushClassCodes(codes[], element, layer, namespace)[] {
+pushClassCodes(codes, element, layer, namespace) {
     let indent1 = "\r\n" + stringRepeat("    ", layer);
     let indent2 = "\r\n" + stringRepeat("    ", layer + 1);
     let elements = [];

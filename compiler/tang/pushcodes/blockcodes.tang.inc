@@ -1,4 +1,4 @@
-pushBlockHeader(codes[], imports[])[] {
+pushBlockHeader(codes, imports) {
     codes.push('/*!');
     codes.push("\r\n" + ' * tanguage script compiled code');
     codes.push("\r\n" + ' *');
@@ -41,7 +41,7 @@ pushBlockHeader(codes[], imports[])[] {
     }
     return codes;
 }
-pushAlias(codes[], vars, alias)[] {
+pushAlias(codes, vars, alias) {
     for (var key in vars.locals) {
         codes.push("\r\n    var " + vars.locals[key] + ' = ' + key + ';');
     }

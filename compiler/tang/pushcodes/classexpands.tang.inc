@@ -1,4 +1,4 @@
-pushExpandClassCodes(codes[], element, layer, namespace)[] {
+pushExpandClassCodes(codes, element, layer, namespace) {
     let indent1 = "\r\n" + stringRepeat("    ", layer);
     let indent2 = "\r\n" + stringRepeat("    ", layer + 1);
     if (element.posi) {

@@ -20,7 +20,7 @@ getPosition(string) {
     }
     return void 0;
 }
-pickReplacePosis(lines[], vars) {
+pickReplacePosis(lines, vars) {
     let imports = [],
         using_as = {},
         preast = [];

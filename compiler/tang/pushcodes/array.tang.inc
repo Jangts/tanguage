@@ -1,4 +1,4 @@
-pushArrayCodes(codes[], element, layer, namespace)[] {
+pushArrayCodes(codes, element, layer, namespace) {
     let elements = [];
     if (element.posi) {
         this.pushPostionsToMap(element.posi, codes);

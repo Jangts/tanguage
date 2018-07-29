@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Fri, 20 Jul 2018 18:49:01 GMT
+ * Datetime: Sun, 29 Jul 2018 20:13:16 GMT
  */;
 void
 
@@ -241,7 +241,7 @@ function(root, factory) {
         display: 'inline',
         vars: {
             parent: null,
-            root: {
+            scope: {
                 namespace: this.namespace,
                 public:  {},
                 const:  {},
@@ -355,6 +355,8 @@ function(root, factory) {
         sources: [],
         output: undefined,
         tess: {},
+        blockreserved: undefined,
+        xvars: undefined,
         total_opens: 0,
         last_opens: [0],
         last_closed: true,
@@ -395,7 +397,7 @@ function(root, factory) {
             var string = this.encode(newcontent);
             var vars = {
                 parent: null,
-                root: {
+                scope: {
                     namespace: this.namespace,
                     public:  {},
                     const:  {},
@@ -405,9 +407,9 @@ function(root, factory) {
                     fix_map:  {}
                 },
                 locals:  {},
-                type: 'root'
+                type: 'blocklike'
             };
-            vars.self = vars.root.protected;
+            vars.self = vars.scope.protected;
             this.buildAST(this.pickReplacePosis(this.getLines(string, vars), vars), vars);
             this.generate();
             newcontent = string = vars = undefined;
@@ -425,8 +427,6 @@ function(root, factory) {
             return this.replacements[index][0].toString();
         },
         markPosition: function (string, sourceid) {
-            var _this = this;
-            var _arguments = arguments;
             if (sourceid === void 0) { sourceid = 0;}
             var lines = string.split(/\r{0,1}\n/);
             var positions = [];
@@ -455,8 +455,6 @@ function(root, factory) {
             return newlines.join("\r\n");
         },
         tidyPosition: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             var on = true;
             while (on) {
                 on = false;
@@ -509,8 +507,6 @@ function(root, factory) {
             return string;
         },
         encode: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             string = string
                 .replace(replaceExpRegPattern.typetag, function (match, gaps, preline, posi, gap, tag) {
                     _this.isMainBlock = false;
@@ -574,8 +570,6 @@ function(root, factory) {
             return string;
         },
         replaceUsing: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             return string.replace(replaceExpRegPattern.use, function (match, posi, $, url, as, alias, variables, posimembers, members) {
                 if (_this.isNativeCode) {
                     _this.error('Native Code Not Support Use Expression');
@@ -598,8 +592,6 @@ function(root, factory) {
             });
         },
         replaceWords: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             return string.replace(replaceWords, function (match, posi, word, after) {
                 var index = _this.replacements.length;
                 if (word === 'else') {
@@ -615,8 +607,6 @@ function(root, factory) {
             });
         },
         replaceIncludes: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             if (this.sources.length) {
                 var on = true;
                 var id = this.sources.length - 1;
@@ -657,8 +647,6 @@ function(root, factory) {
             return "";
         },
         replaceStrings: function (string, ignoreComments) {
-            var _this = this;
-            var _arguments = arguments;
             if (ignoreComments === void 0) { ignoreComments = false;}
             string = string.replace(/\\+(`|")/g, function (match) {
                 var index = _this.replacements.length;
@@ -738,8 +726,6 @@ function(root, factory) {
             return string;
         },
         replaceTemplate: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             var lines = string.replace(/"/g, function () {
                 return '"';
             }).replace(/`/g, '').split(/\r{0,1}\n/);
@@ -836,8 +822,6 @@ function(root, factory) {
             return string;
         },
         replaceBrackets: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             var left = string.indexOf('[');
             var right = string.indexOf(']');
             var count = 0;
@@ -903,8 +887,6 @@ function(root, factory) {
             return string;
         },
         replaceCodeSegments: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             var matched = false;
             string = string.replace(replaceExpRegPattern.class, function (match, posi, body) {
                 matched = true;
@@ -1058,8 +1040,6 @@ function(root, factory) {
             });
         },
         replaceParentheses: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             string = this.replaceWords(string);
             var left = string.indexOf('(');
             var right = string.indexOf(')');
@@ -1099,8 +1079,6 @@ function(root, factory) {
             return string;
         },
         recheckFnOrCallLikes: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             string = string.replace(replaceExpRegPattern.expression, function (match, posi, expname, exp, expindex, closure, closureindex) {
                 var expressioncontent = _this.readBuffer(expindex);
                 var body = _this.readBuffer(closureindex);
@@ -1115,8 +1093,6 @@ function(root, factory) {
             return string;
         },
         replaceCalls: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             string = string.replace(replaceExpRegPattern.clog, function (match, posi, args) {
                 var index1 = _this.replacements.length;
                 _this.pushBuffer(['(' + args + ')', undefined]);
@@ -1148,8 +1124,6 @@ function(root, factory) {
             }));
         },
         replaceCallsChain: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             return string.replace(replaceExpRegPattern.callschain, function (match, posi, _index) {
                 var index = _this.replacements.length;
                 match = match.replace(/_as_call___/g, '_as_callmethod___');
@@ -1158,8 +1132,6 @@ function(root, factory) {
             });
         },
         replaceArrowFunctions: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             var arrowcodes = string.match(/(->|=>)/);
             if (arrowcodes) {
                 if (string.match(replaceExpRegPattern.arrowfn)) {
@@ -1171,9 +1143,9 @@ function(root, factory) {
                             var posi_203 = _this.replacements[matches[2]][1];
                             if (matches[3] === 'parentheses') {
                                 body = code.replace(/^\(\s*(.*?)\s*\)$/, function (match, code) {
-                                    var index = _this.replacements.length;
+                                    var index_204 = _this.replacements.length;
                                     _this.pushBuffer(['return ', posi]);
-                                    return '@boundary_' + index + '_as_preoperator:: ' + code;
+                                    return '@boundary_' + index_204 + '_as_preoperator:: ' + code;
                                 });
                             }
                             else {
@@ -1185,9 +1157,9 @@ function(root, factory) {
                             _this.pushBuffer(['return ', void 0]);
                             body = '@boundary_' + index_207 + '_as_preoperator:: ' + body;
                         }
-                        var index_202 = _this.replacements.length;
+                        var index_207 = _this.replacements.length;
                         _this.pushBuffer([args + arrow + body, posi]);
-                        return '___boundary_' + _this.uid + '_' + index_202 + '_as_arrowfn___' + end;
+                        return '___boundary_' + _this.uid + '_' + index_207 + '_as_arrowfn___' + end;
                     });
                 }
                 else {
@@ -1198,8 +1170,6 @@ function(root, factory) {
             return string;
         },
         replaceOperators: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             var on = true;
             while (on) {
                 on = false;
@@ -1328,7 +1298,7 @@ function(root, factory) {
             }
             return void 0;
         },
-        pickReplacePosis: function (lines___boundary_7KJDZBGV_R15S_Y6UW_Q1P3_1B8EPIASJAVZ_3967_as_arraylike___, vars) {
+        pickReplacePosis: function (lines, vars) {
             var imports = [];
             var using_as = {};
             var preast = [];
@@ -1396,7 +1366,7 @@ function(root, factory) {
             imports = using_as = undefined;
             return preast;
         },
-        pickTretOfMatch: function (match_as_statement___boundary_7KJDZBGV_R15S_Y6UW_Q1P3_1B8EPIASJAVZ_3988_as_arraylike___, isblock) {
+        pickTretOfMatch: function (match_as_statement, isblock) {
             if (isblock === void 0) { isblock = true;}
             var tret_of_match = match_as_statement[3].trim();
             if (
@@ -1454,7 +1424,7 @@ function(root, factory) {
             }
             return lines;
         },
-        pushSentenceToLines: function (lines___boundary_7KJDZBGV_R15S_Y6UW_Q1P3_1B8EPIASJAVZ_4009_as_arraylike___, code, display) {
+        pushSentenceToLines: function (lines, code, display) {
             value = code.trim();
             if (value && !value.match(/^@\d+L\d+P\d+O?\d*:::$/)) {
                 var match_as_statement = value.match(/^(@\d+L\d+P\d+O?\d*:::)?\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_([a-z]+)___([\r\n]+|$)/);
@@ -1600,9 +1570,9 @@ function(root, factory) {
                         else {
                             var match_294 = element.match_294(/^___boundary_[A-Z0-9_]{36}_(\d+)_as_(sets|list)___$/);
                             if (match_294) {
-                                return this.pushVariablesToLine(lines, vars, match, symbol, _symbol, value, position, endmark);
+                                return this.pushVariablesToLine(lines, vars, match_294, symbol, _symbol, value, position, endmark);
                             }
-                            else if (element.match(/^[\$a-zA-Z_][\$\w]*$/)) {
+                            else if (element.match_294(/^[\$a-zA-Z_][\$\w]*$/)) {
                                 this.pushVariableToVars(vars, symbol, element, position);
                                 lines.push({
                                     type: 'line',
@@ -1634,7 +1604,7 @@ function(root, factory) {
                     }
                     array = value = undefined;
                 }
-                position = match = undefined;
+                position = match_294 = undefined;
             };
         },
         pushVariablesToLine: function (lines, vars, match, symbol, _symbol, value, position, endmark) {
@@ -1661,11 +1631,11 @@ function(root, factory) {
                 var position_306 = this.getPosition(elements[i]);
                 var element = elements[i].replace(position_306.match, '').trim();
                 if (element.indexOf('.') >= 0) {
-                    this.pushSetsToVars(lines, vars, type, i, symbol, _symbol, element, value, position_307, endmark);
+                    this.pushSetsToVars(lines, vars, type, i, symbol, _symbol, element, value, position_306, endmark);
                     break;
                 }
                 else {
-                    this.pushSetToVars(lines, vars, type, i, elements.length, symbol, _symbol, element, value, position_308, endmark);
+                    this.pushSetToVars(lines, vars, type, i, elements.length, symbol, _symbol, element, value, position_306, endmark);
                 }
                 position_306 = element = undefined;
             }
@@ -1803,10 +1773,10 @@ function(root, factory) {
                 vars.self[variable] = symbol;
             }
             if (symbol === 'const') {
-                vars.root.const[variable] = variable;
+                vars.scope.const[variable] = variable;
             }
-            else if (symbol === 'public' && (vars.root.namespace !== null)) {
-                vars.root.public[variable] = variable;
+            else if (symbol === 'public' && (vars.scope.namespace !== null)) {
+                vars.scope.public[variable] = variable;
             };
         },
         pushSentencesToPREAST: function (preast, vars, code, display, lineposi) {
@@ -2187,8 +2157,6 @@ function(root, factory) {
             };
         },
         walkCallsChain: function (index, display, vars, type) {
-            var _this = this;
-            var _arguments = arguments;
             var code = this.readBuffer(index);
             var position = this.getPosition(this.replacements[index][1]);
             var calls = [];
@@ -2215,7 +2183,7 @@ function(root, factory) {
             if (vars === void 0) { vars = true;}
             var matches = this.readBuffer(index).match(matchExpRegPattern.class);
             var type = matches[1];
-            var namespace = vars.root.namespace || this.namespace;
+            var namespace = vars.scope.namespace || this.namespace;
             var cname = matches[3];
             var subtype = 'stdClass';
             if (matches[2]) {
@@ -2285,11 +2253,9 @@ function(root, factory) {
         walkClosure: function (index, display, vars) {
             var localvars = {
                 parent: vars,
-                root: vars.root,
+                scope: vars.scope,
                 self:  {},
                 locals: vars.locals,
-                fixed: [],
-                fix_map:  {},
                 type: 'local'
             };
             var array = this.readBuffer(index).split(/\s*(\{|\})\s*/);
@@ -2334,7 +2300,7 @@ function(root, factory) {
                 }
                 localvars = {
                     parent: vars,
-                    root: {
+                    scope: {
                         namespace: namespace,
                         public:  {},
                         const:  {},
@@ -2344,9 +2310,9 @@ function(root, factory) {
                         fix_map:  {}
                     },
                     locals:  {},
-                    type: 'root'
+                    type: 'scope'
                 };
-                localvars.self = localvars.root.protected;
+                localvars.self = localvars.scope.protected;
                 body = this.pushBodyToAST([], localvars, matches[3]);
             }
             else {
@@ -2399,7 +2365,7 @@ function(root, factory) {
             }
             var localvars = {
                 parent: vars,
-                root: {
+                scope: {
                     namespace: vars.namespace,
                     public:  {},
                     const:  {},
@@ -2411,8 +2377,8 @@ function(root, factory) {
                 locals: locals,
                 type: varstype
             };
-            localvars.self = localvars.root.protected;
-            localvars.fix_map = localvars.root.fix_map;
+            localvars.self = localvars.scope.protected;
+            localvars.fix_map = localvars.scope.fix_map;
             var args = this.checkArgs(this.replacements[matches[2]][0].toString().replace(/(^\(|\)$)/g, ''), localvars);
             return {
                 type: 'def',
@@ -2426,8 +2392,6 @@ function(root, factory) {
             };
         },
         walkFnLike: function (index, display, vars, type) {
-            var _this = this;
-            var _arguments = arguments;
             function push (semicolons, lines) {
                 for (var index = 0;index < lines.length;index++) {
                     if (lines[index].type === 'codes') {
@@ -2454,42 +2418,40 @@ function(root, factory) {
                 fnlike: /(^|(function|def|public|method)\s+)?([\$a-zA-Z_][\$\w]*)?\s*\(([^\(\)]*)\)\s*\{([^\{\}]*?)\}/
             };
             var matches = this.readBuffer(index).match(matchExpRegPattern.fnlike);
-            var subtype_462 = matches[2] || 'function';
+            var subtype_461 = matches[2] || 'function';
             var fname = matches[3] !== 'function' ? matches[3]:'';
-            if ((type === 'def' && subtype_470 === 'function') || type === 'exp') {
+            if ((type === 'def' && subtype_469 === 'function') || type === 'exp') {
                 if (reservedFname['includes'](fname)) {
                     var headline = matches[4];
-                    var localvars_471 = {
+                    var localvars_470 = {
                         parent: vars,
-                        root: vars.root,
+                        scope: vars.scope,
                         self:  {},
                         locals: vars.locals,
-                        fixed: [],
-                        fix_map:  {},
                         type: 'local'
                     };
                     if (fname === 'for') {
                         var head = {
                             type: 'codes',
-                            vars: localvars_474,
+                            vars: localvars_470,
                             display: 'inline',
                             body: []
                         };
-                        var lines = this.pushBodyToAST([], localvars_474, headline, true);
+                        var lines = this.pushBodyToAST([], localvars_470, headline, true);
                         var semicolons = push(0, lines);
                     }
                     else {
-                        var head = this.pushSentencesToAST([],localvars_475,headline,false,this.getPosition(headline))[0] || (function () {
+                        var head = this.pushSentencesToAST([],localvars_470,headline,false,this.getPosition(headline))[0] || (function () {
                             _this.error(' Must have statements in head of ' + fname + ' expreesion.');
                         })();
                     }
-                    var body = this.pushBodyToAST([], localvars_471, matches[5]);
-                    this.resetVarsRoot(localvars_471);
+                    var body = this.pushBodyToAST([], localvars_470, matches[5]);
+                    this.resetVarsRoot(localvars_470);
                     return {
                         type: 'exp',
                         posi: this.getPosition(this.replacements[index][1]),
                         display: 'block',
-                        vars: localvars_471,
+                        vars: localvars_470,
                         expression: fname,
                         head: head,
                         body: body
@@ -2526,9 +2488,9 @@ function(root, factory) {
                             }
                         }
                         this.useEach = true;
-                        var localvars_478 = {
+                        var localvars_476 = {
                             parent: vars,
-                            root: {
+                            scope: {
                                 namespace: null,
                                 public:  {},
                                 const:  {},
@@ -2541,30 +2503,30 @@ function(root, factory) {
                             locals: vars.locals,
                             type: 'travel'
                         };
-                        localvars_478.self = localvars_478.root.protected;
-                        localvars_478.locals['arguments'] = null;
-                        var iterator = this.pushSentencesToAST([],localvars_478,condition[1],false,this.getPosition(condition[2]))[0] || (function () {
+                        localvars_476.self = localvars_476.scope.protected;
+                        localvars_476.locals['arguments'] = null;
+                        var iterator = this.pushSentencesToAST([],localvars_476,condition[1],false,this.getPosition(condition[2]))[0] || (function () {
                             _this.error(' Must have statements in head of each expreesion.');
                         })();
-                        var subtype_478 = 'allprop';
+                        var subtype_476 = 'allprop';
                         var code = matches[5].replace(/@ownprop[;\s]*/g, function () {
-                            subtype = 'ownprop';
+                            subtype_476 = 'ownprop';
                             return '';
                         });
                         return {
                             type: 'travel',
                             posi: this.getPosition(this.replacements[index][1]),
                             display: 'block',
-                            subtype: subtype_478,
+                            subtype: subtype_476,
                             iterator: iterator,
-                            vars: localvars_478,
+                            vars: localvars_476,
                             callback: {
                                 type: 'def',
                                 display: 'inline',
-                                vars: localvars_478,
+                                vars: localvars_476,
                                 fname: '',
                                 args: agrs,
-                                body: this.pushBodyToAST([], localvars_478, code)
+                                body: this.pushBodyToAST([], localvars_476, code)
                             }
                         };
                     }
@@ -2578,7 +2540,7 @@ function(root, factory) {
                     }
                 }
                 else {
-                    if (subtype_498 === 'function') {
+                    if (subtype_476 === 'function') {
                         if (display === 'block') {
                             fname = '_ανώνυμος_function_' + this.anonymous_variables;
                             this.anonymous_variables++;
@@ -2586,15 +2548,15 @@ function(root, factory) {
                     }
                     else {
                         display = 'block';
-                        fname = subtype_500;
-                        subtype_500 = 'function';
+                        fname = subtype_476;
+                        subtype_476 = 'function';
                     }
                     this.pushVariableToVars(vars, 'var', fname, position);
                 }
             }
-            var localvars_462 = {
+            var localvars_476 = {
                 parent: vars,
-                root: {
+                scope: {
                     namespace: vars.namespace,
                     public:  {},
                     const:  {},
@@ -2604,24 +2566,24 @@ function(root, factory) {
                     fix_map:  {}
                 },
                 locals:  {},
-                type: 'root'
+                type: 'scope'
             };
-            localvars_462.self = localvars_462.root.protected;
-            var args = this.checkArgs(matches[4], localvars_462);
+            localvars_476.self = localvars_476.scope.protected;
+            var args = this.checkArgs(matches[4], localvars_476);
             tem = undefined;
             return {
                 type: type,
-                vars: localvars_462,
+                vars: localvars_476,
                 posi: this.getPosition(this.replacements[index][1]),
                 display: display,
-                subtype: subtype_462,
+                subtype: subtype_476,
                 fname: fname,
                 args: args.keys,
                 defaults: args.vals,
-                body: this.checkFnBody(localvars_462, args, matches[5])
+                body: this.checkFnBody(localvars_476, args, matches[5])
             };
         },
-        checkProp: function (vars, posi, type, attr___boundary_7KJDZBGV_R15S_Y6UW_Q1P3_1B8EPIASJAVZ_4169_as_arraylike___, array___boundary_7KJDZBGV_R15S_Y6UW_Q1P3_1B8EPIASJAVZ_4170_as_arraylike___) {
+        checkProp: function (vars, posi, type, attr, array) {
             var position = this.getPosition(posi);
             if (array.length > 1) {
                 var body = [];
@@ -2949,7 +2911,7 @@ function(root, factory) {
             preoutput = undefined;
             return this;
         },
-        pushPostionsToMap: function (position) {
+        pushPostionsToMap: function (position, codes) {
             if (position && (typeof position === 'object')) {
                 var index = this.posimap.length;
                 this.posimap.push(position);
@@ -2992,6 +2954,368 @@ function(root, factory) {
             mappings = undefined;
             return _lines.join("\r\n");
         },
+        pushNativeHeader: function (codes) {
+            codes.push('/*!');
+            codes.push("\r\n" + ' * tanguage script compiled code');
+            codes.push("\r\n" + ' *');
+            codes.push("\r\n" + ' * Datetime: ' + (new Date()).toUTCString());
+            codes.push("\r\n" + ' */');
+            codes.push("\r\n" + ';');
+            codes.push("\r\nvoid\r\n");
+            codes.push('\r\nfunction(root, factory) {');
+            codes.push('\r\n    if (typeof exports === \'object\') {');
+            codes.push('\r\n        root.console = console;');
+            codes.push('\r\n        exports = factory(root);');
+            codes.push('\r\n        if (typeof module === \'object\') {');
+            codes.push('\r\n            module.exports = exports;');
+            codes.push('\r\n        }');
+            codes.push('\r\n    }');
+            codes.push('\r\n    else if (typeof root.define === \'function\' && root.define.amd) {');
+            codes.push('\r\n        root.define(function () {');
+            codes.push('\r\n            return factory(root);');
+            codes.push('\r\n        });');
+            codes.push('\r\n    }');
+            codes.push('\r\n    else if (typeof root.tang === \'object\' && typeof root.tang.init === \'function\') {');
+            codes.push('\r\n        root.tang.init();');
+            codes.push('\r\n        root.tang.module.exports = factory(root);');
+            codes.push('\r\n    }');
+            codes.push('\r\n    else {');
+            codes.push('\r\n        factory(root)');
+            codes.push('\r\n    }');
+            codes.push('\r\n}(typeof window === \'undefined\' ? global : window, function(root, undefined) {');
+            codes.push('\r\n    var pandora = {};');
+            return codes;
+        },
+        pushDeclare: function (codes) {
+            codes.push('\r\n    pandora.declareClass = (function () {');
+            codes.push('\r\n        var blockClass = {');
+            codes.push('\r\n            _public: {},');
+            codes.push('\r\n            _init: function () {}');
+            codes.push('\r\n        };');
+            codes.push('\r\n        function prepareClassMembers (target, data, start) {');
+            codes.push('\r\n            for (start;start < data.length;start++) {');
+            codes.push('\r\n                if (data[start]&& typeof data[start] === \'object\') {');
+            codes.push('\r\n                    pandora.extend(target, true, data[start]);');
+            codes.push('\r\n                }');
+            codes.push('\r\n                else {');
+            codes.push('\r\n                    break;');
+            codes.push('\r\n                }');
+            codes.push('\r\n            }');
+            codes.push('\r\n            return target;');
+            codes.push('\r\n        }');
+            codes.push('\r\n        function produceClass (superclass, members) {');
+            codes.push('\r\n            var Class = function () {};');
+            codes.push('\r\n            var constructor = void 0;');
+            codes.push('\r\n            Class.prototype = superclass;');
+            codes.push('\r\n            var constructor = function () {');
+            codes.push('\r\n                if (this instanceof constructor) {');
+            codes.push('\r\n                    this._private = {};');
+            codes.push('\r\n                    this._init.apply(this, arguments);');
+            codes.push('\r\n                    return this;');
+            codes.push('\r\n                }');
+            codes.push('\r\n                else {');
+            codes.push('\r\n                    var instance = new constructor();');
+            codes.push('\r\n                    instance._private = {};');
+            codes.push('\r\n                    instance._init.apply(instance, arguments);');
+            codes.push('\r\n                    return instance;');
+            codes.push('\r\n                };');
+            codes.push('\r\n            }');
+            codes.push('\r\n            constructor.prototype = new Class();');
+            codes.push('\r\n            members._parent = superclass;');
+            codes.push('\r\n            pandora.extend(constructor.prototype, true, members);');
+            codes.push('\r\n            return constructor;');
+            codes.push('\r\n        }');
+            codes.push('\r\n        function declareClass () {');
+            codes.push('\r\n            var superclass = void 0;var members = {};');
+            codes.push('\r\n            if (arguments.length > 0) {');
+            codes.push('\r\n                if (typeof arguments[0] === \'function\') {');
+            codes.push('\r\n                    superclass = arguments[0].prototype || blockClass;');
+            codes.push('\r\n                    members = prepareClassMembers(members, arguments, 1);');
+            codes.push('\r\n                }');
+            codes.push('\r\n                else {');
+            codes.push('\r\n                    superclass = blockClass;');
+            codes.push('\r\n                    members = prepareClassMembers(members, arguments, 0);');
+            codes.push('\r\n                }');
+            codes.push('\r\n            }');
+            codes.push('\r\n            else {');
+            codes.push('\r\n                superclass = blockClass;');
+            codes.push('\r\n                members = {};');
+            codes.push('\r\n            }');
+            codes.push('\r\n            return produceClass(superclass, members);');
+            codes.push('\r\n        }');
+            codes.push('\r\n        return declareClass;');
+            codes.push('\r\n    }());');
+            return codes;
+        },
+        pushEach: function (codes) {
+            codes.push('\r\n    pandora.slice = function (arrayLike, startIndex, endIndex) {');
+            codes.push('\r\n        startIndex = parseInt(startIndex) || 0;');
+            codes.push('\r\n        return Array.prototype.slice.call(arrayLike, startIndex, endIndex);');
+            codes.push('\r\n    }');
+            codes.push('\r\n    pandora.each = function (obj, handler, that, hasOwnProperty) {');
+            codes.push('\r\n        if (typeof(obj) == \'object\' && obj) {');
+            codes.push('\r\n            var addArgs = pandora.slice(arguments, 3);');
+            codes.push('\r\n            if (hasOwnProperty) {');
+            codes.push('\r\n                for (var i in obj) {');
+            codes.push('\r\n                    if (obj.hasOwnProperty(i)) {');
+            codes.push('\r\n                        handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));');
+            codes.push('\r\n                    }');
+            codes.push('\r\n                }');
+            codes.push('\r\n            }');
+            codes.push('\r\n            else if ((obj instanceof Array) || (Object.prototype.toString.call(obj) === \'[object Array]\') || ((typeof(obj.length) === \'number\') && ((typeof(obj.item) === \'function\') || (typeof(obj.splice) != \'undefined\')))) {');
+            codes.push('\r\n                for (var i = 0;i < obj.length;i++) {');
+            codes.push('\r\n                    handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));');
+            codes.push('\r\n                }');
+            codes.push('\r\n            }');
+            codes.push('\r\n            else {');
+            codes.push('\r\n                for (var i in obj) {');
+            codes.push('\r\n                    handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));');
+            codes.push('\r\n                }');
+            codes.push('\r\n            }');
+            codes.push('\r\n        };');
+            codes.push('\r\n    }');
+            return codes;
+        },
+        pushExtends: function (codes) {
+            codes.push('\r\n    pandora.extend = function (base) {');
+            codes.push('\r\n        base = (base && (typeof(base) === \'object\' || typeof(base) === \'function\')) ? base : root;');
+            codes.push('\r\n        var rewrite = (arguments[1] === 1 || arguments[1] === true) ? true : false;');
+            codes.push('\r\n        pandora.each(pandora.slice(arguments, 1), function (index, source) {');
+            codes.push('\r\n            pandora.each(source, function (key, value) {');
+            codes.push('\r\n                if (source.hasOwnProperty(key)) {');
+            codes.push('\r\n                    if (typeof base[key] === \'undefined\' || rewrite) {');
+            codes.push('\r\n                        base[key] = value;');
+            codes.push('\r\n                    }');
+            codes.push('\r\n                };');
+            codes.push('\r\n            });');
+            codes.push('\r\n        });');
+            codes.push('\r\n        return base;');
+            codes.push('\r\n    };');
+            return codes;
+        },
+        pushLoop: function (codes) {
+            codes.push('\r\n    pandora.loop = (function () {');
+            codes.push('\r\n        var BREAK = false;');
+            codes.push('\r\n        loop.out = function () {');
+            codes.push('\r\n            BREAK = true;');
+            codes.push('\r\n        }');
+            codes.push('\r\n        function loop (obj, handler, that, hasOwnProperty) {');
+            codes.push('\r\n            if (typeof(obj) == \'object\' && obj) {');
+            codes.push('\r\n                var addArgs = pandora.slice(arguments, 3);');
+            codes.push('\r\n                BREAK = false;');
+            codes.push('\r\n                if (hasOwnProperty) {');
+            codes.push('\r\n                    for (var i in obj) {');
+            codes.push('\r\n                        if (BREAK) {');
+            codes.push('\r\n                            BREAK = false;');
+            codes.push('\r\n                            break;');
+            codes.push('\r\n                        }');
+            codes.push('\r\n                        if (obj.hasOwnProperty(i)) {');
+            codes.push('\r\n                            handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));');
+            codes.push('\r\n                        }');
+            codes.push('\r\n                    }');
+            codes.push('\r\n                }');
+            codes.push('\r\n                else if ((obj instanceof Array) || (Object.prototype.toString.call(obj) === \'[object Array]\') || ((typeof(obj.length) === \'number\') && ((typeof(obj.item) === \'function\') || (typeof(obj.splice) != \'undefined\')))) {');
+            codes.push('\r\n                    for (var i = 0;i < obj.length;i++) {');
+            codes.push('\r\n                        if (BREAK) {');
+            codes.push('\r\n                            BREAK = false;');
+            codes.push('\r\n                            break;');
+            codes.push('\r\n                        }');
+            codes.push('\r\n                        handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));');
+            codes.push('\r\n                    }');
+            codes.push('\r\n                }');
+            codes.push('\r\n                else {');
+            codes.push('\r\n                    for (var i in obj) {');
+            codes.push('\r\n                        if (BREAK) {');
+            codes.push('\r\n                            BREAK = false;');
+            codes.push('\r\n                            break;');
+            codes.push('\r\n                        }');
+            codes.push('\r\n                        handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));');
+            codes.push('\r\n                    }');
+            codes.push('\r\n                }');
+            codes.push('\r\n            };');
+            codes.push('\r\n        }');
+            codes.push('\r\n        return loop;');
+            codes.push('\r\n    }());');
+            return codes;
+        },
+        pushBlockHeader: function (codes, imports) {
+            codes.push('/*!');
+            codes.push("\r\n" + ' * tanguage script compiled code');
+            codes.push("\r\n" + ' *');
+            codes.push("\r\n" + ' * Datetime: ' + (new Date()).toUTCString());
+            codes.push("\r\n" + ' */');
+            codes.push("\r\n" + ';');
+            codes.push("\r\n");
+            if (this.configinfo === '{}') {
+                codes.push("// ");
+            }
+            else {
+                this.pushPostionsToMap(this.getPosition(this.configinfo_posi), codes);
+            }
+            codes.push('tang.config(' + this.configinfo + ');');
+            if (this.isMainBlock) {
+                codes.push("\r\n" + 'tang.init().block([');
+            }
+            else {
+                codes.push("\r\n" + 'tang.init().block([');
+            }
+            if (imports.length) {
+                var stropmi = [];
+                for (var index = 0;index < imports.length;index += 2) {
+                    stropmi.push(this.pushPostionsToMap(this.getPosition(imports[index + 1])) + "'" + imports[index] + "'");
+                }
+                codes.push("\r\n    " + stropmi.join(",\r\n    ") + "\r\n");
+                stropmi = undefined;
+            }
+            if (this.isMainBlock) {
+                codes.push('], function (pandora, root, imports, undefined) {');
+            }
+            else {
+                codes.push('], function (pandora, root, imports, undefined) {');
+                codes.push("\r\n    var module = this.module;");
+            }
+            if (this.namespace) {
+                var namespace = this.namespace.replace(/\.$/, "");
+                var name = namespace.replace(/^(.*\.)?([\$a-zA-Z_][\$\w]*)$/, "$2");
+                codes.push("\r\n    var " + name + " = pandora.ns('" + namespace + "', {});");
+                namespace = name = undefined;
+            }
+            return codes;
+        },
+        pushAlias: function (codes, vars, alias) {
+            for (var key in vars.locals) {
+                codes.push("\r\n    var " + vars.locals[key] + ' = ' + key + ';');
+            }
+            for (const key in alias) {
+                var value = alias[key][0].toLowerCase();
+                codes.push("\r\n    " + this.pushPostionsToMap(alias[key][2]) + "var " + this.patchVariables(key, vars));
+                codes.push(" = imports['" + value);
+                if (alias[key][1] === '*') {
+                    codes.push("'];");
+                }
+                else {
+                    codes.push("'] && imports['" + value + "']['" + key + "'];");
+                }
+                value = undefined;
+            }
+            return codes;
+        },
+        pushCodes: function (codes, vars, array, layer, namespace, lasttype) {
+            if (namespace === void 0) { namespace = this.namespace;}
+            if (lasttype === void 0) { lasttype = '';}
+            for (var index = 0;index < array.length;index++) {
+                var element = array[index];
+                this.pushElement(codes, vars, element, layer, namespace, (index - 1 >= 0) ? array[index - 1].type : lasttype);
+            }
+            return codes;
+        },
+        pushElement: function (codes, vars, element, layer, namespace, lasttype) {
+            if (namespace === void 0) { namespace = this.namespace;}
+            if (lasttype === void 0) { lasttype = '';}
+            var indent = "\r\n" + stringRepeat("    ", layer);
+            switch (element.type) {
+                case 'arraylike':
+                this.pushArrayCodes(codes, element, layer, namespace);
+                break;
+                case 'if':
+                case 'call':
+                case 'callmethod':
+                case 'construct':
+                this.pushCallCodes(codes, element, layer, namespace);
+                break;
+                case 'log':
+                case 'callschain':
+                this.pushCallsCodes(codes, element, layer, namespace, lasttype);
+                break;
+                case 'class':
+                case 'dec':
+                this.pushClassCodes(codes, element, layer, namespace);
+                break;
+                case 'code':
+                if (element.value) {
+                    var code = this.patchVariables(element.value, vars);
+                    if (vars.scope.break !== undefined) {
+                        code = code.replace(/@return;*/g, function () {
+                            vars.scope.break = true;
+                            _this.useLoop = true;
+                            return 'pandora.loop.out();' + indent + 'return;';
+                        });
+                    }
+                    if (element.display === 'block' || lasttype === 'exp') {
+                        codes.push(indent + this.pushPostionsToMap(element.posi) + code);
+                    }
+                    else {
+                        if (element.posi) {
+                            if (element.posi.head) {
+                                codes.push(indent);
+                            }
+                            this.pushPostionsToMap(element.posi, codes);
+                        }
+                        codes.push(code);
+                    }
+                }
+                break;
+                case 'codes':
+                this.pushCodes(codes, element.vars, element.body, layer + ((element.posi && element.posi.head) ? 1:0), namespace, lasttype);
+                break;
+                case 'def':
+                this.pushFunctionCodes(codes, element, layer, namespace);
+                break;
+                case 'extends':
+                this.pushExtendsCodes(codes, element, layer, namespace);
+                break;
+                case 'exp':
+                case 'closure':
+                this.pushExpressionCodes(codes, element, layer, namespace);
+                break;
+                case 'expands':
+                this.pushExpandClassCodes(codes, element, layer, namespace);
+                break;
+                case 'object':
+                this.pushObjCodes(codes, element, layer, namespace);
+                break;
+                case 'travel':
+                this.pushTravelCodes(codes, element, layer, namespace);
+                break;
+            }
+            indent = undefined;
+            return codes;
+        },
+        pushArrayCodes: function (codes, element, layer, namespace) {
+            var elements = [];
+            if (element.posi) {
+                this.pushPostionsToMap(element.posi, codes);
+            }
+            codes.push('[');
+            if (element.body.length) {
+                var _layer = layer;
+                var indent1 = void 0;var indent2 = void 0;
+                var _break = false;
+                if (element.body[0].posi && element.body[0].posi.head) {
+                    indent1 = "\r\n" + stringRepeat("    ", _layer);
+                    _layer++;
+                    indent2 = "\r\n" + stringRepeat("    ", _layer);
+                    codes.push(indent2);
+                    _break = true;
+                }
+                this.pushArrayElements(elements, element.body, element.vars, _layer, namespace);
+                while (elements.length && !elements[0].trim()) {
+                    elements.shift();
+                }
+                if (elements.length) {
+                    if (_break) {
+                        codes.push(elements.join(',' + indent2) + indent1);
+                    }
+                    else {
+                        codes.push(elements.join(', '));
+                    }
+                }
+                _layer = indent1 = indent2 = _break = undefined;
+            }
+            codes.push(']');
+            elements = undefined;
+            return codes;
+        },
         pushArrayElements: function (elements, body, vars, _layer, namespace) {
             for (var index = 0;index < body.length;index++) {
                 if (body[index].value) {
@@ -3008,6 +3332,64 @@ function(root, factory) {
                 }
             };
         },
+        pushCallCodes: function (codes, element, layer, namespace) {
+            var naming = this.pushCodes([], element.vars, element.name, layer, namespace);
+            if (element.posi) {
+                if (element.type === 'callmethod') {
+                    element.posi.head = false;
+                }
+                if (element.posi.head) {
+                    var indent = "\r\n" + stringRepeat("    ", layer);
+                    codes.push(indent);
+                }
+                this.pushPostionsToMap(element.posi, codes);
+            }
+            var name = naming.join('');
+            if (name === 'new') {
+                codes.push('new (');
+            }
+            else {
+                if (element.type === 'construct') {
+                    codes.push('new ');
+                }
+                codes.push(name + '(');
+            }
+            var args = [];
+            if (element.args.length) {
+                var _layer = layer;
+                var indent2 = void 0;
+                var _break = false;
+                if ((element.args.length > 1) && element.args[0].posi && element.args[0].posi.head) {
+                    _layer++;
+                    indent2 = "\r\n" + stringRepeat("    ", _layer);
+                    _break = true;
+                }
+                this.pushCallArgs(args, element.args, element.vars, _layer, namespace);
+                while (args.length && !args[0].trim()) {
+                    args.shift();
+                }
+                if (args.length) {
+                    if (_break) {
+                        codes.push(indent2 + args.join(',' + indent2));
+                    }
+                    else {
+                        codes.push(args.join(', '));
+                    }
+                }
+                _layer = indent2 = _break = undefined;
+            }
+            if (element.type === 'if') {
+                codes.push(') ');
+            }
+            else if (element.display === 'block') {
+                codes.push(');');
+            }
+            else {
+                codes.push(')');
+            }
+            naming = name = undefined;
+            return codes;
+        },
         pushCallArgs: function (args, body, vars, _layer, namespace) {
             for (var index = 0;index < body.length;index++) {
                 var param = body[index].body;
@@ -3019,6 +3401,206 @@ function(root, factory) {
                 }
                 paramCodes = undefined;
             };
+        },
+        pushCallsCodes: function (codes, element, layer, namespace, lasttype) {
+            var elements = [];
+            var _layer = layer;
+            var indent = void 0;
+            var _break = false;
+            if (element.type === 'log') {
+                if (lasttype === 'if') {
+                    indent = "";
+                }
+                else {
+                    indent = "\r\n" + stringRepeat("    ", _layer);
+                }
+                codes.push(indent + this.pushPostionsToMap(element.posi) + 'root.console');
+            }
+            else if (element.posi && element.posi.head) {
+                _layer++;
+                _break = true;
+                indent = "\r\n" + stringRepeat("    ", _layer);
+            }
+            for (var index = 0;index < element.calls.length;index++) {
+                var method = element.calls[index];
+                elements.push(this.pushElement([], element.vars, method, _layer, namespace).join(''));
+            }
+            if (_break) {
+                codes.push(indent + '.' + elements.join(indent + '.'));
+            }
+            else {
+                codes.push('.' + elements.join('.'));
+                if (element.type === 'log') {
+                    codes.push(';');
+                }
+            }
+            elements = _layer = indent = _break = undefined;
+            return codes;
+        },
+        pushClassCodes: function (codes, element, layer, namespace) {
+            var indent1 = "\r\n" + stringRepeat("    ", layer);
+            var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
+            var elements = [];
+            var static_elements = [];
+            var cname = '';
+            if (element.subtype === 'stdClass') {
+                cname = 'pandora.' + element.cname.trim();
+                codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(\'' + element.cname.trim() + '\', ');
+            }
+            else {
+                if (element.cname && element.cname.trim()) {
+                    cname = element.cname.trim();
+                    if (cname.match(/^[\$a-zA-Z_][\$\w]*$/)) {
+                        codes.push(indent1 + 'var ' + this.pushPostionsToMap(element.posi) + cname + ' = ' + 'pandora.declareClass(');
+                    }
+                    else {
+                        codes.push(indent1 + this.pushPostionsToMap(element.posi) + cname + ' = ' + 'pandora.declareClass(');
+                    }
+                }
+                else {
+                    this.pushPostionsToMap(element.posi, codes);
+                    codes.push('pandora.declareClass(');
+                }
+            }
+            if (element.base) {
+                codes.push(element.base + ', ');
+            }
+            codes.push('{');
+            var overrides = {};
+            var setters = [];
+            var getters = [];
+            var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
+            for (var index = 0;index < element.body.length;index++) {
+                var member = element.body[index];
+                var elem = [];
+                switch (member.type) {
+                    case 'method':
+                    elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
+                    this.pushFunctionCodes(elem, member, layer + 1, namespace);
+                    elements.push(elem.join(''));
+                    break;
+                    case 'overrideMethod':
+                    overrides[member.fname] = overrides[member.fname] || {}
+                    var argslen = member.args.length;
+                    if (!overrides[member.fname][argslen]) {
+                        var fname = overrides[member.fname][argslen] = '___override_method_' + member.fname + '_' + argslen;
+                        elem.push(indent2 + this.pushPostionsToMap(member.posi) + fname + ': ');
+                        this.pushFunctionCodes(elem, member, layer + 1, namespace);
+                        elements.push(elem.join(''));
+                    }
+                    break;
+                    case 'prop':
+                    elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.pname + ': ');
+                    this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
+                    elements.push(elem.join(''));
+                    break;
+                    case 'setPropMethod':
+                    elem.push(indent3 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
+                    this.pushFunctionCodes(elem, member, layer + 2, namespace);
+                    setters.push(elem.join(''));
+                    break;
+                    case 'getPropMethod':
+                    elem.push(indent3 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
+                    this.pushFunctionCodes(elem, member, layer + 2, namespace);
+                    getters.push(elem.join(''));
+                    break;
+                    case 'staticMethod':
+                    elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
+                    this.pushFunctionCodes(elem, member, layer + 1, namespace);
+                    static_elements.push(elem.join(''));
+                    break;
+                    case 'staticProp':
+                    elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.pname + ': ');
+                    this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
+                    static_elements.push(elem.join(''));
+                    break;
+                }
+                this.pushOverrideMethod(elements, overrides, indent2, indent3);
+                if (setters.length) {
+                    elements.push(indent2 + '_setters: {' + setters.join(',') + '}');
+                }
+                if (getters.length) {
+                    elements.push(indent2 + '_getters: {' + getters.join(',') + '}');
+                }
+                elem = undefined;
+            }
+            if (elements.length) {
+                codes.push(elements.join(','));
+            }
+            codes.push(indent1 + '})');
+            if (cname) {
+                if (static_elements.length) {
+                    codes.push(';' + indent1 + this.pushPostionsToMap(element.posi) + 'pandora.extend(' + cname + ', {');
+                    codes.push(static_elements.join(','));
+                    codes.push(indent1 + '});');
+                }
+                else {
+                    codes.push(';');
+                }
+                codes.push(indent1);
+            }
+            indent1 = indent2 = indent3 = elements = static_elements = cname = overrides = getters = setters = undefined;
+            return codes;
+        },
+        pushFunctionCodes: function (codes, element, layer, namespace) {
+            var indent = "\r\n" + stringRepeat("    ", layer);
+            if (element.posi) {
+                var posi = this.pushPostionsToMap(element.posi);
+            }
+            else {
+                var posi = '';
+            }
+            this.fixVariables(element.vars);
+            if (element.type === 'def' && element.fname) {
+                if (element.fname === 'return') {
+                    codes.push(indent + posi + 'return function (');
+                }
+                else {
+                    var fname = this.patchVariable(element.fname, element.vars.parent);
+                    switch (element.subtype) {
+                        case 'def':
+                        codes.push(indent + posi + 'pandora.' + namespace + element.fname + ' = function (');
+                        break;
+                        case 'public':
+                        codes.push(indent + posi + 'var ' + fname + ' = pandora.' + namespace + element.fname + ' = function (');
+                        break;
+                        default:
+                        if (element.display === 'block') {
+                            codes.push(indent + posi + 'function ' + fname + ' (');
+                        }
+                        else {
+                            codes.push(posi + 'function ' + fname + ' (');
+                        }
+                    }
+                }
+            }
+            else {
+                codes.push(posi + 'function (');
+            }
+            if (element.args.length) {
+                var args = [];
+                for (var index = 0;index < element.args.length;index++) {
+                    args.push(this.pushPostionsToMap(element.args[index][1]) + element.args[index][0]);
+                }
+                codes.push(args.join(', '));
+            }
+            codes.push(') {');
+            if (element.body.length) {
+                if (element.vars.type === 'root') {
+                    for (var key in element.vars.locals) {
+                        codes.push(indent + "    var " + element.vars.locals[key] + ' = ' + key + ';');
+                    }
+                }
+                element.body.push(semicolon);
+                this.pushCodes(codes, element.vars, element.body, layer + 1, namespace);
+            }
+            else {
+                indent = '';
+            }
+            console.log(element.display, element.subtype);
+            codes.push(indent + '}');
+            indent = undefined;
+            return codes;
         },
         pushOverrideMethod: function (elements, overrides, indent2, indent3) {
             for (const fname in overrides) {
@@ -3039,7 +3621,59 @@ function(root, factory) {
                 }
             };
         },
-        pushObjCodes: function (codes___boundary_7KJDZBGV_R15S_Y6UW_Q1P3_1B8EPIASJAVZ_4322_as_arraylike___, element, layer, namespace) {
+        pushExtendsCodes: function (codes, element, layer, namespace) {
+            var indent1 = "\r\n" + stringRepeat("    ", layer);
+            var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
+            var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
+            if (element.posi) {
+                var posi = this.pushPostionsToMap(element.posi);
+            }
+            else {
+                var posi = '';
+            }
+            if (element.subtype === 'global' || element.subtype === 'globalassign') {
+                namespace = '';
+            }
+            if (element.subtype === 'voidanonspace' || element.subtype === 'voidns' || element.subtype === 'voidglobal' || element.subtype === 'anonspace' || element.subtype === 'ns' || element.subtype === 'global') {
+                this.fixVariables(element.vars);
+                if (element.subtype === 'voidanonspace' || element.subtype === 'anonspace') {
+                    codes.push(indent1 + posi + '(function () {');
+                    this.pushCodes(codes, element.vars, element.body, layer + 1, namespace + '.');
+                }
+                else {
+                    codes.push(indent1 + posi + 'pandora.ns(\'' + namespace + element.oname.trim() + '\', function () {');
+                    this.pushCodes(codes, element.vars, element.body, layer + 1, namespace + element.oname.trim() + '.');
+                }
+                if (element.subtype === 'anonspace' || element.subtype === 'ns' || element.subtype === 'global') {
+                    var exports = [];
+                    codes.push(indent2 + 'return {');
+                    for (const name in element.vars.scope.public) {
+                        exports.push(name + ': ' + element.vars.scope.public[name]);
+                    }
+                    if (exports.length) {
+                        codes.push(indent3 + exports.join(',' + indent3));
+                    }
+                    codes.push(indent2 + '}');
+                }
+                codes.push(indent1 + '}');
+                if (element.subtype === 'voidanonspace' || element.subtype === 'anonspace') {
+                    codes.push('()');
+                }
+            }
+            else if (element.subtype === 'nsassign' || element.subtype === 'globalassign') {
+                codes.push(indent1 + posi + 'pandora.ns(\'' + namespace + element.oname.trim() + '\', ');
+                this.pushObjCodes(codes, element, layer, namespace);
+            }
+            else {
+                codes.push(indent1 + posi + 'pandora.extend(' + element.oname + ', ');
+                this.pushObjCodes(codes, element, layer, namespace);
+            }
+            codes.push(');');
+            codes.push(indent1);
+            indent1 = indent2 = indent3 = posi = undefined;
+            return codes;
+        },
+        pushObjCodes: function (codes, element, layer, namespace) {
             var indent1 = "\r\n" + stringRepeat("    ", layer);
             var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
             if (element.type === 'object' && element.display === 'block') {
@@ -3087,103 +3721,261 @@ function(root, factory) {
             indent1 = indent2 = undefined;
             return codes;
         },
+        pushExpandClassCodes: function (codes, element, layer, namespace) {
+            var indent1 = "\r\n" + stringRepeat("    ", layer);
+            var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
+            if (element.posi) {
+                var posi = this.pushPostionsToMap(element.posi);
+            }
+            else {
+                var posi = '';
+            }
+            var elements = [];
+            var static_elements = [];
+            var cname = '';
+            if (element.subtype === 'stdClass') {
+                cname = 'pandora.' + element.cname.trim();
+            }
+            else {
+                if (element.cname && element.cname.trim()) {
+                    cname = element.cname.trim();
+                }
+                else {
+                    return codes;
+                }
+            }
+            codes.push(indent1 + posi + 'pandora.extend(' + cname + '.prototype, ');
+            if (element.base === false) {
+                codes.push('true, ');
+            }
+            codes.push('{');
+            var overrides = {};
+            var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
+            for (var index = 0;index < element.body.length;index++) {
+                var member = element.body[index];
+                var elem = [];
+                switch (member.type) {
+                    case 'method':
+                    elem.push(indent2 + member.fname + ': ');
+                    this.pushFunctionCodes(elem, member, layer + 1, namespace);
+                    elements.push(elem.join(''));
+                    break;
+                    case 'overrideMethod':
+                    overrides[member.fname] = overrides[member.fname] || {}
+                    var argslen = member.args.length;
+                    if (!overrides[member.fname][argslen]) {
+                        var fname = overrides[member.fname][argslen] = '___override_method_' + member.fname + '_' + argslen;
+                        elem.push(indent2 + fname + ': ');
+                        this.pushFunctionCodes(elem, member, layer + 1, namespace);
+                        elements.push(elem.join(''));
+                    }
+                    break;
+                    case 'prop':
+                    elem.push(indent2 + member.pname + ': ');
+                    this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
+                    elements.push(elem.join(''));
+                    break;
+                    case 'staticMethod':
+                    elem.push(indent2 + member.fname + ': ');
+                    this.pushFunctionCodes(elem, member, layer + 1, namespace);
+                    static_elements.push(elem.join(''));
+                    break;
+                    case 'staticProp':
+                    elem.push(indent2 + member.pname + ': ');
+                    this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
+                    static_elements.push(elem.join(''));
+                    break;
+                }
+            }
+            this.pushOverrideMethod(elements, overrides, indent2, indent3);
+            if (elements.length) {
+                codes.push(elements.join(','));
+            }
+            codes.push(indent1 + '})');
+            if (static_elements.length) {
+                codes.push(';' + indent1 + 'pandora.extend(' + cname + ', {');
+                codes.push(static_elements.join(','));
+                codes.push(indent1 + '});');
+            }
+            else {
+                codes.push(';');
+            }
+            codes.push(indent1);
+            indent1 = indent2 = elements = static_elements = cname = overrides = indent3 = undefined;
+            return codes;
+        },
+        pushExpressionCodes: function (codes, element, layer, namespace) {
+            var indent1 = "\r\n" + stringRepeat("    ", layer);
+            var indent2 = "\r\n" + stringRepeat("    ", layer);
+            if (element.posi) {
+                var posi = this.pushPostionsToMap(element.posi);
+            }
+            else {
+                var posi = '';
+            }
+            this.fixVariables(element.vars);
+            if (element.type === 'closure') {
+                if (element.posi) {
+                    codes.push(indent1 + posi + '{');
+                }
+                else {
+                    codes.push(' {');
+                }
+            }
+            else {
+                codes.push(indent1 + posi + element.expression + ' (');
+                this.pushElement(codes, element.vars.parent, element.head, layer, namespace);
+                codes.push(') {');
+            }
+            if (element.body.length) {
+                codes.push(indent2);
+                this.pushCodes(codes, element.vars, element.body, layer + 1, namespace);
+                codes.push(indent1 + '}');
+            }
+            else {
+                codes.push('}');
+            }
+            indent1 = indent2 = undefined;
+            return codes;
+        },
+        pushTravelCodes: function (codes, element, layer, namespace) {
+            var index = codes.length;
+            var indent = "\r\n" + stringRepeat("    ", layer);
+            codes.push(indent + 'pandora.each(');
+            this.pushElement(codes, element.vars, element.iterator, layer, namespace);
+            codes.push(', ');
+            this.pushFunctionCodes(codes, element.callback, layer, namespace);
+            if (element.vars.scope.break === true) {
+                codes[index] = indent + 'pandora.loop(';
+            }
+            if (element.subtype === 'ownprop') {
+                codes.push(', this, true);');
+            }
+            else {
+                codes.push(', this);');
+            }
+            codes.push(indent);
+            index = indent = undefined;
+            return codes;
+        },
+        pushFooter: function (codes, vars) {
+            for (const name in vars.scope.public) {
+                codes.push("\r\n    pandora('" + this.namespace + name + "', " + vars.scope.public[name] + ");");
+            }
+            if (this.isMainBlock) {
+                codes.push("\r\n" + '}, true);');
+            }
+            else {
+                codes.push("\r\n" + '});');
+            }
+            return codes;
+        },
         resetVarsRoot: function (vars) {
-            var root_593 = vars.root;
+            var root_734 = vars.root;
             for (const varname in vars.self) {
                 if (hasProp(vars.self, varname)) {
                     if (vars.self[varname] === 'const' || vars.self[varname] === 'let') {
-                        if (hasProp(root_593.protected, varname) && (!hasProp(root_593.private, varname) || (root_593.private[varname].parent === vars))) {
-                            root_593.private[varname] = vars;
+                        if (hasProp(root_734.protected, varname) && (!hasProp(root_734.private, varname) || (root_734.private[varname].parent === vars))) {
+                            root_734.private[varname] = vars;
                         }
                     }
                     else {
-                        if (hasProp(root_593.protected, varname)) {
-                            root_593.protected[varname] = 'var';
+                        if (hasProp(root_734.protected, varname)) {
+                            root_734.protected[varname] = 'var';
                         }
-                        else if (root_593.protected[varname] === 'let') {
+                        else if (root_734.protected[varname] === 'let') {
                             this.error(' Variable `' + varname + '` has already been declared.');
                         }
                     }
                 }
             }
-            root_593 = undefined;
+            root_734 = undefined;
         },
         fixVariables: function (vars) {
             vars.index = this.closurecount;
             switch (vars.type) {
                 case 'arrowfn':
-                vars.root.fix_map['this'] = vars.locals['this'];
-                vars.root.fixed.push(vars.locals['this']);
+                vars.scope.fix_map['this'] = vars.locals['this'];
+                vars.scope.fixed.push(vars.locals['this']);
                 case 'travel':
                 if (vars.type === 'travel') {
-                    vars.root.fixed.push('this');
+                    vars.scope.fixed.push('this');
                 }
-                vars.root.fix_map['arguments'] = vars.locals['arguments'];
-                vars.root.fixed.push(vars.locals['arguments']);
-                case 'root':
-                for (var element in vars.self) {
-                    var varname = element;
+                vars.scope.fix_map['arguments'] = vars.locals['arguments'];
+                vars.scope.fixed.push(vars.locals['arguments']);
+                case 'blocklike':
+                case 'scope':
+                if ((vars.type !== 'blocklike')) {
+                    for (const varname in vars.parent.scope.fix_map) {
+                        if (hasProp(vars.parent.scope.fix_map, varname)) {
+                            vars.scope.fixed.push(varname);
+                            vars.locals[varname] = vars.scope.fix_map[varname] = vars.parent.scope.fix_map[varname];
+                        }
+                    }
+                }
+                for (const element in vars.self) {
+                    var varname_748 = element;
                     if (keywords['includes'](element) || reserved['includes'](element)) {
                         this.error('keywords `' + element + '` cannot be a variable name.');
                     }
                     if (this.blockreserved['includes'](element)) {
-                        varname = element + '_' + vars.index;
+                        varname_748 = element + '_' + vars.index;
                         while (vars.self[varname]) {
-                            varname = varname + '_' + vars.index;
+                            varname_748 = varname_748 + '_' + vars.index;
                         }
                     }
-                    if (varname !== element) {
-                        vars.root.fix_map[element] = varname;
-                        if (hasProp(vars.root.public, element)) {
-                            vars.root.public[element] = varname;
+                    while (vars.scope.fixed['includes'](varname_748)) {
+                        varname_748 = varname_748 + '_' + vars.index;
+                    }
+                    if (varname_748 !== element) {
+                        vars.scope.fix_map[element] = varname_748;
+                        if (hasProp(vars.scope.public, element)) {
+                            vars.scope.public[element] = varname_748;
                         }
                     }
-                    vars.root.fixed.push(varname);
+                    vars.scope.fixed.push(varname_748);
                 }
-                if (vars.type === 'root') {
+                if ((vars.type === 'blocklike') || (vars.type === 'scope')) {
                     for (const key in vars.locals) {
                         if (hasProp(vars.locals, key)) {
-                            var varname_612 = '_' + key;
+                            var varname_757 = '_' + key;
                             while (vars.self[varname]) {
-                                varname = varname + '_' + vars.index;
+                                varname_757 = varname_757 + '_' + vars.index;
                             }
-                            vars.locals[key] = varname_612;
+                            vars.locals[key] = varname_757;
                         }
                     }
                 }
                 break;
                 case 'local':
-                for (var element in vars.self) {
+                for (const element in vars.self) {
                     if (vars.self[element] === 'const' || vars.self[element] === 'let') {
-                        var varname_615 = element;
-                        if (keywords['includes'](element) || reserved['includes'](element)) {
-                            this.error('keywords `' + element + '` cannot be a variable name.');
+                        var varname_760 = element_759;
+                        if (keywords['includes'](element_759) || reserved['includes'](element_759)) {
+                            this.error('keywords `' + element_759 + '` cannot be a variable name.');
                         }
-                        if (this.blockreserved['includes'](element) || this.xvars['includes'](element)) {
-                            varname = element + '_' + vars.index;
+                        if (this.blockreserved['includes'](element_759) || this.xvars['includes'](element_759)) {
+                            varname_760 = element_759 + '_' + vars.index;
                             while (vars.self[varname]) {
-                                varname = varname + '_' + vars.index;
+                                varname_760 = varname_760 + '_' + vars.index;
                             }
                         }
-                        while (vars.root.fixed['includes'](varname) || (vars.root.private[varname] && (vars.root.private[varname] !== vars))) {
-                            varname = varname + '_' + vars.index;
+                        while (vars.scope.fixed['includes'](varname_760) || (vars.scope.private[varname] && (vars.scope.private[varname] !== vars))) {
+                            varname_760 = varname_760 + '_' + vars.index;
                         }
-                        if (varname_615 !== element) {
-                            vars.fix_map[element] = varname;
+                        if (varname_760 !== element_759) {
+                            vars.scope.fix_map[element] = varname_760;
                         }
-                        vars.fixed.push(varname_615);
-                        vars.root.fixed.push(varname_615);
+                        vars.scope.fixed.push(varname_760);
                     }
                 }
             }
             this.closurecount++;
         },
         patchVariables: function (code, vars) {
-            var _this = this;
-            var _arguments = arguments;
             if (code) {
                 return code.replace(/(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)\s*=\s*/g, function (match, before, definition, varname) {
-                    if (!definition && hasProp(vars.root.const, varname)) {
+                    if (!definition && hasProp(vars.scope.const, varname)) {
                         _this.error('Cannot re-assign constant `' + varname + '`');
                     }
                     return match;
@@ -3199,16 +3991,16 @@ function(root, factory) {
             if (vars.fix_map && hasProp(vars.fix_map, varname)) {
                 return vars.fix_map[varname];
             }
-            if (hasProp(vars.root.fix_map, varname)) {
-                return vars.root.fix_map[varname];
+            if (hasProp(vars.scope.fix_map, varname)) {
+                return vars.scope.fix_map[varname];
             }
-            else if (!keywords['includes'](varname)&& !this.xvars['includes'](varname) && (!vars.root.fixed['includes'](varname) || (vars.root.private[varname] !== vars))) {
-                if (hasProp(vars.root.private, varname)) {
+            else if (!keywords['includes'](varname)&& !this.xvars['includes'](varname) && (!vars.scope.fixed['includes'](varname) || (vars.scope.private[varname] !== vars))) {
+                if (hasProp(vars.scope.private, varname)) {
                     var _varname = varname;
-                    while (hasProp(vars.root.private, varname)) {
+                    while (hasProp(vars.scope.private, varname)) {
                         varname = varname + '_' + vars.index;
                     }
-                    while (vars.root.fixed['includes'](varname)) {
+                    while (vars.scope.fixed['includes'](varname)) {
                         varname = varname + '_' + vars.index;
                     }
                 }
@@ -3218,10 +4010,10 @@ function(root, factory) {
                             var _key = vars.locals[key];
                             if (varname === _key) {
                                 varname = varname + '_' + vars.index;
-                                while (vars.root.private[varname]) {
+                                while (vars.scope.private[varname]) {
                                     varname = varname + '_' + vars.index;
                                 }
-                                while (vars.root.fixed['includes'](varname)) {
+                                while (vars.scope.fixed['includes'](varname)) {
                                     varname = varname + '_' + vars.index;
                                 }
                                 vars.fix_map[_key] = varname;
@@ -3236,8 +4028,8 @@ function(root, factory) {
             if (node === '.') {
                 return 'pandora';
             }
-            if (vars.root.namespace) {
-                return ('pandora.' + vars.root.namespace).replace(/\.+$/, '');
+            if (vars.scope.namespace) {
+                return ('pandora.' + vars.scope.namespace).replace(/\.+$/, '');
             }
             return ('pandora.' + this.namespace).replace(/\.+$/, '');
         },
@@ -3274,8 +4066,6 @@ function(root, factory) {
             return string.replace(/(@\d+L\d+P\d+O?\d*:::)/g, '');
         },
         trim: function (string) {
-            var _this = this;
-            var _arguments = arguments;
             string = this.replaceStrings(string, true);
             string = string.replace(/\s*(@boundary_\d+_as_comments::)?@(ownprop|return)[; \t]*/g, function () {
                 return '';

@@ -34,8 +34,8 @@ class Script {
     sources = [];
     output;
     tess = {};
-    blockreserved[];
-    xvars[];
+    blockreserved;
+    xvars;
     total_opens = 0;
     last_opens = [0];
     last_closed = true;
@@ -75,20 +75,31 @@ class Script {
         let newcontent = this.markPosition(this.input, 0);
         let string = this.encode(newcontent);
         let vars = {
+            // 父级作用域
             parent: null,
-            root: {
+            // ES5实际作用域
+            scope: {
+                // 局域命名空间
                 namespace: this.namespace,
+                // 局域变量
                 public: {},
+                // 局域常量
                 const: {},
+                // 局域私有变量
                 private: {},
+                // 子域受保护变量
                 protected: {},
+                // 局域变量校正
                 fixed: [],
+                // 局域变量校正量映射
                 fix_map: {}
             },
+            // 子域变量
             locals: {},
-            type: 'root'
+            // 类型：类全域代码块
+            type: 'blocklike'
         };
-        vars.self = vars.root.protected;
+        vars.self = vars.scope.protected;
         this.buildAST(this.pickReplacePosis(this.getLines(string, vars), vars), vars);
         // this.output = 'console.log("Hello, world!");';
         this.generate();

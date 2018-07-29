@@ -292,6 +292,7 @@
                 // 类型：类全域代码块
                 type: 'blocklike'
             };
+            // 当前作用域本级变量
             vars.self = vars.scope.protected;
             this.buildAST(this.pickReplacePosis(this.getLines(string, vars), vars), vars);
             // this.output = 'console.log("Hello, world!");';
@@ -2151,7 +2152,7 @@
                 type: varstype
             };
             localvars.self = localvars.scope.protected;
-            localvars.fix_map = localvars.scope.fix_map;
+            // localvars.fix_map = localvars.scope.fix_map;
             let args: any = this.checkArgs(this.replacements[matches[2]][0].toString().replace(/(^\(|\)$)/g, ''), localvars);
             // console.log(matches);
             return {
@@ -2340,12 +2341,17 @@
         walkClosure(index: number, display: any, vars: any) {
             // console.log(this.replacements[index]);
             let localvars = {
+                // 父级作用域
                 parent: vars,
+                // ES5实际作用域
                 scope: vars.scope,
+                // 当前作用域本级变量
                 self: {},
+                // 子域变量
                 locals: vars.locals,
-                fixed: [],
-                fix_map: {},
+                // fixed: [],
+                // fix_map: {},
+                // 类型：局部
                 type: 'local'
             };
             let array = this.readBuffer(index).split(/\s*(\{|\})\s*/);
@@ -2414,6 +2420,7 @@
                     // 类型：ES5标准函数作用域
                     type: 'scope'
                 };
+                // 当前作用域本级变量
                 localvars.self = localvars.scope.protected;
                 body = this.pushBodyToAST([], localvars, matches[3]);
             } else {
@@ -2475,12 +2482,15 @@
                 if (reservedFname['includes'](fname)) {
                     const headline = matches[4];
                     let localvars = {
+                        // 父级作用域
                         parent: vars,
+                        // ES5实际作用域
                         scope: vars.scope,
+                        // 当前作用域本级变量
                         self: {},
+                        // 子域变量
                         locals: vars.locals,
-                        fixed: [],
-                        fix_map: {},
+                        // 类型：局部
                         type: 'local'
                     };
                     if (fname === 'for') {
@@ -2570,6 +2580,7 @@
                             // 类型：遍历
                             type: 'travel'
                         };
+                        // 当前作用域本级变量
                         localvars.self = localvars.scope.protected;
                         localvars.locals['arguments'] = null;
                         let iterator = this.pushSentencesToAST([], localvars, condition[1], false, this.getPosition(condition[2]))[0] || (() => {
@@ -2648,6 +2659,7 @@
                 // 类型：ES5标准函数作用域
                 type: 'scope'
             };
+            // 当前作用域本级变量
             localvars.self = localvars.scope.protected;
             let args: any = this.checkArgs(matches[4], localvars);
             tem = undefined;
@@ -4043,12 +4055,22 @@
                     vars.scope.fixed.push(vars.locals['this']);
                 case 'travel':
                     if (vars.type === 'travel') {
-                        console.log(vars);
+                        // console.log(vars);
                         vars.scope.fixed.push('this');
                     }
                     vars.scope.fix_map['arguments'] = vars.locals['arguments'];
                     vars.scope.fixed.push(vars.locals['arguments']);
                 case 'blocklike':
+                case 'scope':
+                    if ((vars.type !== 'blocklike')) {
+                        // console.log('foo', vars.parent, vars.parent.scope.fix_map);
+                        for (const varname in vars.parent.scope.fix_map) {
+                            if (hasProp(vars.parent.scope.fix_map, varname)) {
+                                vars.scope.fixed.push(varname);
+                                vars.locals[varname] = vars.scope.fix_map[varname] = vars.parent.scope.fix_map[varname];
+                            }
+                        }
+                    }
                     for (const element in vars.self) {
                         let varname = element;
                         if (keywords['includes'](element) || reserved['includes'](element)) {
@@ -4061,6 +4083,10 @@
                                 varname = varname + '_' + vars.index;
                             }
                         }
+                        while (vars.scope.fixed['includes'](varname)) {
+                            // console.log(varname);
+                            varname = varname + '_' + vars.index;
+                        }
                         if (varname !== element) {
                             // console.log(varname);
                             vars.scope.fix_map[element] = varname;
@@ -4068,9 +4094,10 @@
                                 vars.scope.public[element] = varname;
                             }
                         }
+                        
                         vars.scope.fixed.push(varname);
                     }
-                    if (vars.type === 'blocklike') {
+                    if ((vars.type === 'blocklike') || (vars.type === 'scope')) {
                         for (const key in vars.locals) {
                             if (hasProp(vars.locals, key)) {
                                 let varname = '_' + key;
@@ -4080,17 +4107,6 @@
                                 vars.locals[key] = varname;
                             }
                         }
-                        // if (vars.parent){
-                        //     for (const key in vars.parent.locals) {
-                        //         if (hasProp(vars.parent.locals, key)) {
-                        //             let varname = '_' + key;
-                        //             while (vars.self[varname]) {
-                        //                 varname = varname + '_' + vars.index;
-                        //             }
-                        //             vars.locals[key] = varname;
-                        //         }
-                        //     }
-                        // }
                     }
                     // console.log(vars);
                     break;
@@ -4117,10 +4133,10 @@
 
                             if (varname !== element) {
                                 // console.log(varname);
-                                vars.fix_map[element] = varname;
+                                vars.scope.fix_map[element] = varname;
 
                             }
-                            vars.fixed.push(varname);
+                            // vars.fixed.push(varname);
                             vars.scope.fixed.push(varname);
                         }
                     }
@@ -4134,7 +4150,8 @@
                 // console.log(code);
                 return code.replace(/(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)\s*=\s*/g, (match, before, definition, varname) => {
                     // console.log(match, "\r\n", before, '[', varname, '](', type, ')', after);
-                    if (!definition && hasProp(vars.scope.const, varname)) {
+                    if (!definition && hasProp(vars.self, varname) && (vars.self[varname]==='const')) {
+                        // console.log(vars);
                         this.error('Cannot re-assign constant `' + varname + '`');
                     }
                     return match;
@@ -4154,9 +4171,9 @@
             // if (varname === 'document')
             //     console.log(!vars.scope.fixed['includes'](varname) || (vars.scope.private[varname] !== vars), vars.scope.fixed, vars.scope.private);
             // console.log('before:', varname, vars);
-            if (vars.fix_map && hasProp(vars.fix_map, varname)) {
-                // console.log(varname, vars.fix_map[varname]);
-                return vars.fix_map[varname];
+            if (vars.scope.fix_map && hasProp(vars.scope.fix_map, varname)) {
+                // console.log(varname, vars.scope.fix_map[varname]);
+                return vars.scope.fix_map[varname];
             }
             if (hasProp(vars.scope.fix_map, varname)) {
                 // console.log(varname, vars.scope.fix_map[varname]);
@@ -4189,7 +4206,7 @@
                                     varname = varname + '_' + vars.index;
                                 }
                                 // console.log(vars);
-                                vars.fix_map[_key] = varname;
+                                vars.scope.fix_map[_key] = varname;
                             }
                         }
                     }

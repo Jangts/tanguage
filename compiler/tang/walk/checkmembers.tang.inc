@@ -1,4 +1,4 @@
-checkProp(vars, posi, type, attr[], array[]) {
+checkProp(vars, posi, type, attr, array) {
     // console.log(posi);
     // console.log(type, posi, attr, array);
     let position = this.getPosition(posi);

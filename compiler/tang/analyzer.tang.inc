@@ -1,5 +1,5 @@
 @include 'buildast/positions';
-pickTretOfMatch(match_as_statement[], isblock = true) {
+pickTretOfMatch(match_as_statement, isblock = true) {
     let tret_of_match = match_as_statement[3].trim();
     if (
         tret_of_match

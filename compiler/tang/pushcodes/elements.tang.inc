@@ -1,4 +1,4 @@
-pushCodes(codes[], vars, array[], layer, namespace = this.namespace, lasttype = '')[] {
+pushCodes(codes, vars, array, layer, namespace = this.namespace, lasttype = '') {
     // console.log(codes, array);
     // console.log(array);
     // console.log(layer, array);
@@ -9,7 +9,7 @@ pushCodes(codes[], vars, array[], layer, namespace = this.namespace, lasttype = 
     }
     return codes;
 }
-pushElement(codes[], vars, element, layer, namespace = this.namespace, lasttype = '')[] {
+pushElement(codes, vars, element, layer, namespace = this.namespace, lasttype = '') {
     let indent = "\r\n" + stringRepeat("    ", layer);
     switch (element.type) {
         case 'arraylike':
@@ -34,9 +34,9 @@ pushElement(codes[], vars, element, layer, namespace = this.namespace, lasttype 
             if (element.value) {
                 // console.log(element.posi&&element.posi.head, element.display, element.value);
                 var code = this.patchVariables(element.value, vars);
-                if (vars.root.break !== undefined) {
+                if (vars.scope.break !== undefined) {
                     code = code.replace(/@return;*/g, () => {
-                        vars.root.break = true;
+                        vars.scope.break = true;
                         this.useLoop = true;
                         return 'pandora.loop.out();' + indent + 'return;';
                     });

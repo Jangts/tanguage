@@ -1,12 +1,15 @@
 walkClosure(index, display, vars) {
     // console.log(this.replacements[index]);
     let localvars = {
+        // 父级作用域
         parent: vars,
-        root: vars.root,
+        // ES5实际作用域
+        scope: vars.scope,
+        // 当前作用域本级变量
         self: {},
+        // 子域变量
         locals: vars.locals,
-        fixed: [],
-        fix_map: {},
+        // 类型：局部
         type: 'local'
     };
     let array = this.readBuffer(index).split(/\s*(\{|\})\s*/);
@@ -51,20 +54,32 @@ walkExtends(index, display, vars) {
             namespace = (vars.namespace || this.namespace) + objname + '.';
         }
         localvars = {
+            // 父级作用域
             parent: vars,
-            root: {
+            // ES5实际作用域
+            scope: {
+            // 局域命名空间
                 namespace: namespace,
+                // 局域变量
                 public: {},
+                // 局域常量
                 const: {},
+                // 局域私有变量
                 private: {},
+                // 子域受保护变量
                 protected: {},
+                // 局域变量校正
                 fixed: [],
+                // 局域变量校正量映射
                 fix_map: {}
             },
+            // 子域变量
             locals: {},
-            type: 'root'
+            // 类型：ES5标准函数作用域
+            type: 'scope'
         };
-        localvars.self = localvars.root.protected;
+        // 当前作用域本级变量
+        localvars.self = localvars.scope.protected;
         body = this.pushBodyToAST([], localvars, matches[3]);
     } else {
         if ((matches[1] === 'nsassign') || (matches[1] === 'globalassign')) {

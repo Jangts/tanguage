@@ -1,4 +1,4 @@
-pushFunctionCodes(codes[], element, layer, namespace)[] {
+pushFunctionCodes(codes, element, layer, namespace) {
     let indent = "\r\n" + stringRepeat("    ", layer);
     if (element.posi) {
         var posi = this.pushPostionsToMap(element.posi);

@@ -1,4 +1,4 @@
-pushSentenceToLines(lines[], code, display) {
+pushSentenceToLines(lines, code, display) {
     value = code.trim();
     if (value && !value.match(/^@\d+L\d+P\d+O?\d*:::$/)) {
         let match_as_statement = value.match(/^(@\d+L\d+P\d+O?\d*:::)?\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_([a-z]+)___([\r\n]+|$)/);

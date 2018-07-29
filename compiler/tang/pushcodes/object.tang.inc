@@ -1,4 +1,4 @@
-pushExtendsCodes(codes[], element, layer, namespace)[] {
+pushExtendsCodes(codes, element, layer, namespace) {
     let indent1 = "\r\n" + stringRepeat("    ", layer);
     let indent2 = "\r\n" + stringRepeat("    ", layer + 1);
     let indent3 = "\r\n" + stringRepeat("    ", layer + 2);
@@ -22,10 +22,10 @@ pushExtendsCodes(codes[], element, layer, namespace)[] {
         // console.log(element.body);
         if (element.subtype === 'anonspace' || element.subtype === 'ns' || element.subtype === 'global'){
             let exports = [];
-            // console.log(element.vars.root.public);
+            // console.log(element.vars.scope.public);
             codes.push(indent2 + 'return {');
-            for (const name in element.vars.root.public) {
-                exports.push(name + ': ' + element.vars.root.public[name]);
+            for (const name in element.vars.scope.public) {
+                exports.push(name + ': ' + element.vars.scope.public[name]);
             }
             if (exports.length) {
                 codes.push(indent3 + exports.join(',' + indent3));
@@ -50,7 +50,7 @@ pushExtendsCodes(codes[], element, layer, namespace)[] {
     indent1 = indent2 = indent3 = posi = undefined;
     return codes;
 }
-pushObjCodes(codes[], element, layer, namespace) {
+pushObjCodes(codes, element, layer, namespace) {
     let indent1 = "\r\n" + stringRepeat("    ", layer);
     let indent2 = "\r\n" + stringRepeat("    ", layer + 1);
     // console.log(element);

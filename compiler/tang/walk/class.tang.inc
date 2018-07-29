@@ -3,7 +3,7 @@ walkClass(index, display, vars = true) {
     let matches = this.readBuffer(index).match(matchExpRegPattern.class);
     // console.log(matches);
     let type = matches[1];
-    let namespace = vars.root.namespace || this.namespace;
+    let namespace = vars.scope.namespace || this.namespace;
     let cname = matches[3];
     let subtype = 'stdClass';
     if (matches[2]) {

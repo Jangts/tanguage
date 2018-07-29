@@ -1,4 +1,4 @@
-pushNativeHeader(codes[])[] {
+pushNativeHeader(codes) {
     codes.push('/*!');
     codes.push("\r\n" + ' * tanguage script compiled code');
     codes.push("\r\n" + ' *');
@@ -31,7 +31,7 @@ pushNativeHeader(codes[])[] {
     codes.push('\r\n    var pandora = {};');
     return codes;
 }
-pushDeclare(codes[])[] {
+pushDeclare(codes) {
     codes.push('\r\n    pandora.declareClass = (function () {');
     codes.push('\r\n        var blockClass = {');
     codes.push('\r\n            _public: {},');
@@ -92,7 +92,7 @@ pushDeclare(codes[])[] {
     codes.push('\r\n    }());');
     return codes;
 }
-pushEach(codes[])[] {
+pushEach(codes) {
     codes.push('\r\n    pandora.slice = function (arrayLike, startIndex, endIndex) {');
     codes.push('\r\n        startIndex = parseInt(startIndex) || 0;');
     codes.push('\r\n        return Array.prototype.slice.call(arrayLike, startIndex, endIndex);');
@@ -121,7 +121,7 @@ pushEach(codes[])[] {
     codes.push('\r\n    }');
     return codes;
 }
-pushExtends(codes[])[] {
+pushExtends(codes) {
     codes.push('\r\n    pandora.extend = function (base) {');
     codes.push('\r\n        base = (base && (typeof(base) === \'object\' || typeof(base) === \'function\')) ? base : root;');
     codes.push('\r\n        var rewrite = (arguments[1] === 1 || arguments[1] === true) ? true : false;');
@@ -138,7 +138,7 @@ pushExtends(codes[])[] {
     codes.push('\r\n    };');
     return codes;
 }
-pushLoop(codes[])[] {
+pushLoop(codes) {
     codes.push('\r\n    pandora.loop = (function () {');
     codes.push('\r\n        var BREAK = false;');
     codes.push('\r\n        loop.out = function () {');

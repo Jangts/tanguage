@@ -1,4 +1,4 @@
-pushCallCodes(codes[], element, layer, namespace)[] {
+pushCallCodes(codes, element, layer, namespace) {
     let naming = this.pushCodes([], element.vars, element.name, layer, namespace);
     // console.log(element);
     // console.log(element.name.length, element.name[0], naming);
@@ -76,7 +76,7 @@ pushCallArgs(args, body, vars, _layer, namespace){
         paramCodes = undefined;
     }
 }
-pushCallsCodes(codes[], element, layer, namespace, lasttype)[] {
+pushCallsCodes(codes, element, layer, namespace, lasttype) {
     let elements = [];
     let _layer = layer;
     let indent;

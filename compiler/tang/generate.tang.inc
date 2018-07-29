@@ -49,7 +49,7 @@ generate() {
     // console.log(this.output);
     return this;
 }
-pushPostionsToMap(position, codes[] | undefined = undefined) {
+pushPostionsToMap(position, codes) {
     if (position && (typeof position === 'object')) {
         let index = this.posimap.length;
         this.posimap.push(position);
@@ -107,10 +107,10 @@ pickUpMap(string) {
 @include 'pushcodes/object';
 @include 'pushcodes/classexpands';
 @include 'pushcodes/expression';
-pushFooter(codes[], vars)[] {
-    // console.log(vars.root.public);
-    for (const name in vars.root.public) {
-        codes.push("\r\n    pandora('" + this.namespace + name + "', " + vars.root.public[name] + ");");
+pushFooter(codes, vars) {
+    // console.log(vars.scope.public);
+    for (const name in vars.scope.public) {
+        codes.push("\r\n    pandora('" + this.namespace + name + "', " + vars.scope.public[name] + ");");
     }
     if (this.isMainBlock) {
         codes.push("\r\n" + '}, true);');
@@ -124,8 +124,8 @@ patchNamespace(node, vars) {
     if (node === '.') {
         return 'pandora';
     }
-    if (vars.root.namespace) {
-        return ('pandora.' + vars.root.namespace).replace(/\.+$/, '');
+    if (vars.scope.namespace) {
+        return ('pandora.' + vars.scope.namespace).replace(/\.+$/, '');
     }
     // console.log(this.namespace);
     return ('pandora.' + this.namespace).replace(/\.+$/, '');
