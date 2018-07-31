@@ -8,8 +8,8 @@
 ;
 this.tang.init().auto([
     '$_/data/',
-    '$_/../../compiler/js/script as tanguage_script'
-    // '$_/../../compiler/tang/tanguage_script as tanguage_script'
+    // '$_/../../compiler/js/script as tanguage_script'
+    '$_/../../compiler/tang/tanguage_script as tanguage_script'
 ], function (_, root, imports) {
     var tanguage_script = imports.tanguage_script,
     tangs = [], scripts = document.getElementsByTagName('script');
@@ -26,6 +26,7 @@ this.tang.init().auto([
                 var i = 0;
                 _.data.ajax(src, function (data) {
                     // console.log(data);
+                    // console.log(tanguage_script(data).compile());
                     let tang = tanguage_script(data).compile().run(function (content) {
                         console.log(this.ast);
                         // console.log(this.posimap, this.mappings);

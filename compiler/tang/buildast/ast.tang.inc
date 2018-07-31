@@ -65,7 +65,7 @@ buildAST(preast, vars) {
             };
             for (let b = 0; b < block.length; b++) {
                 const el = block[b];
-                if (element.type === 'code') {
+                if (el.type === 'code') {
                     codes.body.push(el);
                 } else {
                     codes.body.push(this.walk(el, vars, true));

@@ -39,6 +39,8 @@ semicolon = {
             // 局域变量校正量映射
             fix_map: {}
         },
+        // 是否含有箭头函数和遍历语句
+        hasHalfFunScope: false,
         // 子域变量
         locals: {},
         // 类型：分号

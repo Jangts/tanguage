@@ -61,5 +61,8 @@ trim(string) {
         }
         return operator;
     });
+    // console.log(string);
+    string = string.replace(/\)\s*return\s+/, ') return ');
+    // console.log(string);
     return string;
 }

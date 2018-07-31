@@ -121,7 +121,7 @@ replaceWords(string) {
             return ";\r\n" + '@boundary_' + index + '_as_keyword::;';
         }
         this.pushBuffer([word + ' ', posi && posi.trim()]);
-        return ";\r\n" + '@boundary_' + index + '_as_keyword::' + after;
+        return ";\r\n" + '@boundary_' + index + '_as_preoperator::' + after;
     })
 }
 @include 'replace/files';

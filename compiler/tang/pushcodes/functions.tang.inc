@@ -34,7 +34,7 @@ pushFunctionCodes(codes, element, layer, namespace) {
     if (element.args.length) {
         let args = [];
         for (let index = 0; index < element.args.length; index++) {
-            args.push(this.pushPostionsToMap(element.args[index][1]) + element.args[index][0]);
+            args.push(this.pushPostionsToMap(element.args[index][1]) + this.patchVariable(element.args[index][0], element.vars));
         }
         codes.push(args.join(', '));
     }
@@ -44,7 +44,7 @@ pushFunctionCodes(codes, element, layer, namespace) {
     // console.log(element);
     if (element.body.length) {
         // console.log(element);
-        if (element.vars.type === 'root') {
+         if ((element.vars.type === 'blocklike') || (element.vars.type === 'scope')) {
             for (var key in element.vars.locals) {
                 codes.push(indent + "    var " + element.vars.locals[key] + ' = ' + key + ';');
             }
@@ -55,7 +55,7 @@ pushFunctionCodes(codes, element, layer, namespace) {
         indent = '';
     }
     //
-    console.log(element.display, element.subtype);
+    // console.log(element.display, element.subtype);
     codes.push(indent + '}');
     indent = undefined;
     return codes;

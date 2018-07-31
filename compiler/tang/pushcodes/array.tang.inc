@@ -37,7 +37,7 @@ pushArrayCodes(codes, element, layer, namespace) {
 pushArrayElements(elements, body, vars, _layer, namespace){
     for (let index = 0; index < body.length; index++) {
         if (body[index].value) {
-            elements.push(this.pushPostionsToMap(body[index].posi) + body[index].value);
+            elements.push(this.pushPostionsToMap(body[index].posi) + this.patchVariables(body[index].value, vars));
         } else {
             let elemCodes = [];
             this.pushPostionsToMap(body[index].posi, elemCodes);

@@ -5,14 +5,16 @@ walkArrowFn(index, display, vars) {
     let selfvas = {};
     if (matches[3] === '=>') {
         subtype = '=>';
+        vars.hasHalfFunScope = true;
         vars.locals['this'] = null;
         vars.locals['arguments'] = null;
         var locals = vars.locals;
         var varstype = 'arrowfn';
     } else {
         var locals = {};
-        var varstype = 'root';
+        var varstype = 'scope';
     }
+
     let localvars = {
         // 父级作用域
         parent: vars,
@@ -33,6 +35,8 @@ walkArrowFn(index, display, vars) {
             // 局域变量校正量映射
             fix_map: {}
         },
+        // 是否含有箭头函数和遍历语句
+        hasHalfFunScope: false,
         // 子域变量
         locals: locals,
         // 类型：ES5标准函数作用域/箭头函数作用域

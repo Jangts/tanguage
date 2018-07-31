@@ -10,7 +10,7 @@ pushVariableToLine(lines, vars, code, symbol, posi = '', display = 'inline', _sy
                 subtype: 'sentence',
                 display: 'inline',
                 posi: void 0,
-                value: symbol + ' ' + code
+                value: _symbol + ' ' + code
             });
             this.pushVariableToVars(vars, symbol, element, position);
             element = undefined;

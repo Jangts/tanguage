@@ -1,24 +1,24 @@
 resetVarsRoot(vars) {
-    let root = vars.root;
+    let scope = vars.scope;
     for (const varname in vars.self) {
         if (hasProp(vars.self, varname)) {
             if (vars.self[varname] === 'const' || vars.self[varname] === 'let') {
                 // console.log(vars);
-                if (hasProp(root.protected, varname) && (!hasProp(root.private, varname) || (root.private[varname].parent === vars))) {
-                    root.private[varname] = vars;
+                if (hasProp(scope.protected, varname) && (!hasProp(scope.private, varname) || (scope.private[varname].parent === vars))) {
+                    scope.private[varname] = vars;
                 }
             } else {
-                // console.log(root.protected, root.protected.hasOwnProperty, root);
-                if (hasProp(root.protected, varname)) {
-                    root.protected[varname] = 'var';
+                // console.log(scope.protected, scope.protected.hasOwnProperty, scope);
+                if (hasProp(scope.protected, varname)) {
+                    scope.protected[varname] = 'var';
                     // delete vars.self[varname];
-                } else if (root.protected[varname] === 'let') {
+                } else if (scope.protected[varname] === 'let') {
                     this.error(' Variable `' + varname + '` has already been declared.');
                 }
             }
         }
     }
-    root = undefined;
+    scope = undefined;
 }
 fixVariables(vars) {
     vars.index = this.closurecount;
@@ -37,15 +37,16 @@ fixVariables(vars) {
             vars.scope.fixed.push(vars.locals['arguments']);
         case 'blocklike':
         case 'scope':
-            if ((vars.type !== 'blocklike')) {
-                // console.log('foo', vars.parent, vars.parent.scope.fix_map);
-                for (const varname in vars.parent.scope.fix_map) {
-                    if (hasProp(vars.parent.scope.fix_map, varname)) {
-                        vars.scope.fixed.push(varname);
-                        vars.locals[varname] = vars.scope.fix_map[varname] = vars.parent.scope.fix_map[varname];
-                    }
-                }
-            }
+            // if ((vars.type !== 'blocklike')) {
+            //     // console.log('foo', vars.parent, vars.parent.scope.fix_map);
+            //     for (const element in vars.parent.scope.fix_map) {
+            //         if (hasProp(vars.parent.scope.fix_map, element)) {
+            //             vars.scope.fixed.push(element);
+            //             // vars.locals[element] = 
+            //             vars.scope.fix_map[element] = vars.parent.scope.fix_map[element];
+            //         }
+            //     }
+            // }
             for (const element in vars.self) {
                 let varname = element;
                 if (keywords['includes'](element) || reserved['includes'](element)) {
@@ -62,14 +63,15 @@ fixVariables(vars) {
                     // console.log(varname);
                     varname = varname + '_' + vars.index;
                 }
-                if (varname !== element) {
+                
+                // if (varname !== element) {
                     // console.log(varname);
                     vars.scope.fix_map[element] = varname;
                     if (hasProp(vars.scope.public, element)) {
                         vars.scope.public[element] = varname;
                     }
-                }
-                
+                // }
+                // console.log(varname, element);
                 vars.scope.fixed.push(varname);
             }
             if ((vars.type === 'blocklike') || (vars.type === 'scope')) {
@@ -107,11 +109,16 @@ fixVariables(vars) {
                     }
 
                     if (varname !== element) {
-                        // console.log(varname);
-                        vars.scope.fix_map[element] = varname;
-
+                        // console.log(varname, vars, vars.scope.fixed[element]);
+                        // console.log(aaaaa);
+                        if (vars.scope.fixed['includes'](element)){
+                            vars.fix_map[element] = varname;
+                        }else{
+                            vars.scope.fix_map[element] = varname;
+                        }
                     }
-                    // vars.scope.fixed.push(varname);
+                    // console.log(varname, element, vars);
+                    // vars.fixed.push(varname);
                     vars.scope.fixed.push(varname);
                 }
             }
@@ -142,15 +149,39 @@ patchVariables(code, vars) {
     return '';
 }
 patchVariable(varname, vars) {
+    // console.log('before:', varname, vars);
+    // if (varname === 'posi') console.log('before:', varname, vars);
+    // if (varname === 'subtype') console.log('before:', varname, vars);
+    // if (varname === 'code') console.log('before:', varname, vars);
+    // if (varname === 'match') console.log('before:', varname, vars);
+    // if (varname === 'element') console.log('before:', varname, vars);
+    // if (varname === 'localvars') console.log('before:', varname, vars);
+    // if (varname === 'block') console.log('before:', varname, vars);
+    // if (varname === 'block_2') console.log('before:', varname, vars);
+    
     if (vars.fix_map && hasProp(vars.fix_map, varname)) {
         // console.log(varname, vars.fix_map[varname]);
         return vars.fix_map[varname];
     }
+    if (vars.type === 'local'){
+        let parent = vars.parent;
+        while (parent && parent.type === 'local') {
+            if (parent.fix_map && hasProp(parent.fix_map, varname)) {
+                // console.log(varname, vars.fix_map[varname]);
+                return parent.fix_map[varname];
+            }
+            parent = parent.parent;
+        }
+    }
+    
     if (hasProp(vars.scope.fix_map, varname)) {
         // console.log(varname, vars.scope.fix_map[varname]);
         return vars.scope.fix_map[varname];
     }
-    else if (!keywords['includes'](varname) && !this.xvars['includes'](varname) && (!vars.scope.fixed['includes'](varname) || (vars.scope.private[varname]!==vars))) {
+
+    // if (varname === 'block_2') console.log(!vars.scope.fixed['includes'](varname), (hasProp(vars.scope.private, varname) && (vars.scope.private[varname]!==vars)));
+    
+    if (!keywords['includes'](varname) && !this.xvars['includes'](varname) && (!vars.scope.fixed['includes'](varname) || (hasProp(vars.scope.private, varname) && (vars.scope.private[varname] !== vars)))) {
         // console.log(varname);
         if (hasProp(vars.scope.private, varname)) {
             // console.log(varname, vars.scope.private);
@@ -177,12 +208,25 @@ patchVariable(varname, vars) {
                             varname = varname + '_' + vars.index;
                         }
                         // console.log(vars);
-                        vars.fix_map[_key] = varname;
+                        vars.scope.fix_map[_key] = varname;
                     }
                 }
             }
+            if (vars.parent) {
+                varname = this.patchVariable(varname, vars.parent);
+            }
         }
     }
+    else if (
+        !vars.scope.fixed['includes'](varname) &&
+        !keywords['includes'](varname) && 
+        !reserved['includes'](varname) && 
+        !this.blockreserved['includes'](varname) &&
+        !this.xvars['includes'](varname)) {
+        varname = this.patchVariable(varname + '_' + vars.index, vars);
+        // console.log(varname);
+    }
+
     // console.log('after:', varname);
     return varname;
 }

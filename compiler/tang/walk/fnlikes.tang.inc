@@ -38,10 +38,14 @@ walkFnLike(index, display, vars, type) {
                 parent: vars,
                 // ES5实际作用域
                 scope: vars.scope,
+                // 是否含有箭头函数和遍历语句
+                hasHalfFunScope: false,
                 // 当前作用域本级变量
                 self: {},
                 // 子域变量
                 locals: vars.locals,
+                // 当前作用域本级变量校正量映射
+                fix_map: {},
                 // 类型：局部
                 type: 'local'
             };
@@ -56,7 +60,7 @@ walkFnLike(index, display, vars, type) {
                 var semicolons = push(0, lines);
                 // console.log(semicolons, lines);
             } else {
-                var head = this.pushSentencesToAST([], localvars, headline, false, this.getPosition(headline))[0] || (() => {
+                var head = this.pushSentencesToAST([], vars, headline, false, this.getPosition(headline))[0] || (() => {
                     this.error(' Must have statements in head of ' + fname + ' expreesion.');
                 })();
                 // console.log(localvars, head);
@@ -104,7 +108,8 @@ walkFnLike(index, display, vars, type) {
                 }
 
                 this.useEach = true;
-
+                vars.hasHalfFunScope = true;
+                vars.locals['arguments'] = null;
                 let localvars = {
                     // 父级作用域
                     parent: vars,
@@ -119,7 +124,7 @@ walkFnLike(index, display, vars, type) {
                         // 局域私有变量
                         private: {},
                         // 子域受保护变量
-                        protected: {},
+                        protected: self,
                         // 局域变量校正
                         fixed: [],
                         // 局域变量校正量映射
@@ -127,6 +132,8 @@ walkFnLike(index, display, vars, type) {
                         // 遍历是否可跳出
                         break: false
                     },
+                    // 是否含有箭头函数和遍历语句
+                    hasHalfFunScope: false,
                     // 子域变量
                     locals: vars.locals,
                     // 类型：遍历
@@ -134,7 +141,6 @@ walkFnLike(index, display, vars, type) {
                 };
                 // 当前作用域本级变量
                 localvars.self = localvars.scope.protected;
-                localvars.locals['arguments'] = null;
                 let iterator = this.pushSentencesToAST([], localvars, condition[1], false, this.getPosition(condition[2]))[0] || (() => {
                     this.error(' Must have statements in head of each expreesion.');
                 })();
@@ -206,6 +212,8 @@ walkFnLike(index, display, vars, type) {
             // 局域变量校正量映射
             fix_map: {}
         },
+        // 是否含有箭头函数和遍历语句
+        hasHalfFunScope: false,
         // 子域变量
         locals: {},
         // 类型：ES5标准函数作用域

@@ -119,7 +119,7 @@ pushFooter(codes, vars) {
     }
     return codes;
 }
-@include 'pushcodes/variables';
+@include 'utils/variables';
 patchNamespace(node, vars) {
     if (node === '.') {
         return 'pandora';
@@ -130,5 +130,5 @@ patchNamespace(node, vars) {
     // console.log(this.namespace);
     return ('pandora.' + this.namespace).replace(/\.+$/, '');
 }
-@include 'pushcodes/decode';
-@include 'pushcodes/trim';
+@include 'utils/decode';
+@include 'utils/trim';

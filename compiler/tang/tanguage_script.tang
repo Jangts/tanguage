@@ -94,6 +94,8 @@ class Script {
                 // 局域变量校正量映射
                 fix_map: {}
             },
+            // 是否含有箭头函数和遍历语句
+            hasHalfFunScope: false,
             // 子域变量
             locals: {},
             // 类型：类全域代码块
@@ -131,6 +133,7 @@ class Script {
         }
         precall && precall.call(this, this.output);
         eval(this.output);
+        // if (typeof callback === 'function') 
         callback.call(this);
     }
 }

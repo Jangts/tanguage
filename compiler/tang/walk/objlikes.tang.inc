@@ -6,9 +6,13 @@ walkClosure(index, display, vars) {
         // ES5实际作用域
         scope: vars.scope,
         // 当前作用域本级变量
+        // 是否含有箭头函数和遍历语句
+        hasHalfFunScope: false,
         self: {},
         // 子域变量
         locals: vars.locals,
+        // 当前作用域本级变量校正量映射
+        fix_map: {},
         // 类型：局部
         type: 'local'
     };
@@ -58,7 +62,7 @@ walkExtends(index, display, vars) {
             parent: vars,
             // ES5实际作用域
             scope: {
-            // 局域命名空间
+                // 局域命名空间
                 namespace: namespace,
                 // 局域变量
                 public: {},
@@ -73,6 +77,8 @@ walkExtends(index, display, vars) {
                 // 局域变量校正量映射
                 fix_map: {}
             },
+            // 是否含有箭头函数和遍历语句
+            hasHalfFunScope: false,
             // 子域变量
             locals: {},
             // 类型：ES5标准函数作用域

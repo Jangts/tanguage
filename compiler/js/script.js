@@ -93,6 +93,8 @@
                 // 局域变量校正量映射
                 fix_map: {}
             },
+            // 是否含有箭头函数和遍历语句
+            hasHalfFunScope: false,
             // 子域变量
             locals: {},
             // 类型：分号
@@ -141,6 +143,7 @@
         callschain: /\s*(@\d+L\d+P\d+O*\d*:::)?\.\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_(call|callmethod)___(\s*(@\d+L\d+P\d+O*\d*:::)?\.\s*___boundary_[A-Z0-9_]{36}_\d+_as_(call|callmethod)___)*/g,
         arrowfn: /(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*(->|=>)\s*([^,;\r\n]+)\s*(,|;|\r|\n|$)/g,
         closure: /(@\d+L\d+P\d+O*\d*:::)?(@*[\$a-zA-Z_][\$\w]*|\)|\=|\(\s)?(@\d+L\d+P\d+O*\d*:::)?\s*\{(\s*[^\{\}]*?)\s*\}/g,
+        recheckfn: /(@\d+L\d+P\d+O?\d*:::|\s+)?([\$a-zA-Z_][\$\w]*)?\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_closure___(@\d+L\d+P\d+O?\d*:::)?/,
         expression: /(@\d+L\d+P\d+O*\d*:::)?(if|for|while|switch|with|catch|each)\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*;*\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_(closure|objlike)___)/g,
         if: /(@\d+L\d+P\d+O*\d*:::)?if\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*/g,
         object: /(@\d+L\d+P\d+O*\d*:::)?\{\s*(@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*(\s*,@\d+L\d+P\d+O*\d*:::(\.\.\.)?[\$a-zA-Z_][\$\w]*)*)\s*\}(@\d+L\d+P\d+O*\d*:::)?/g,
@@ -161,7 +164,7 @@
         class: /(class|expands)\s*(\.{1,3})?([\$a-zA-Z_][\$\w\.]*)?(\s+extends\s+(\.{1,3})?([\$a-zA-Z_][\$\w\.]*)|ignore)?\s*\{([^\{\}]*?)\}/,
         fnlike: /(^|(function|def|public)\s+)?([\$a-zA-Z_][\$\w]*)?\s*\(([^\(\)]*)\)\s*\{([^\{\}]*?)\}/,
         call: /([\$a-zA-Z_\.][\$\w\.]*)\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___/,
-        arrowfn: /(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*(->|=>)\s*([\s\S]+)\s*$/,
+        arrowfn: /(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*(->|=>)\s*([\s\S]*)\s*$/,
         objectattr: /^\s*(@\d+L\d+P\d+O?\d*:::)?((([\$a-zA-Z_][\$\w]*)))\s*(\:*)([\s\S]*)$/,
         classelement: /^\s*(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om)\s+)?([\$\w]*)\s*(\=*)([\s\S]*)$/,
         travelargs: /^((@\d+L\d+P\d+O*\d*:::)?[\$a-zA-Z_][\$\w\.]*)\s+as\s(@\d+L\d+P\d+O*\d*:::)([\$a-zA-Z_][\$\w]*)(\s*,((@\d+L\d+P\d+O*\d*:::)([\$a-zA-Z_][\$\w]*)?)?)?/
@@ -253,6 +256,8 @@
                     // 局域变量校正量映射
                     fix_map: {}
                 },
+                // 是否含有箭头函数和遍历语句
+                hasHalfFunScope: false,
                 // 子域变量
                 locals: {},
                 // 类型：类全域代码块
@@ -809,6 +814,7 @@
                 // console.log(left, right);
                 if (left < right) {
                     string = this.replaceCodeSegments(string);
+                    // console.log(string);
                     string = this.recheckFnOrCallLikes(string);
                     left = string.indexOf('{');
                     right = string.indexOf('}');
@@ -833,6 +839,7 @@
         };
         Script.prototype.replaceCodeSegments = function (string) {
             var _this = this;
+            // console.log(string);
             var matched = false;
             string = string.replace(replaceExpRegPattern.class, function (match, posi, body) {
                 matched = true;
@@ -1001,7 +1008,7 @@
                         }
                         // console.log(word, closure);
                         _this.pushBuffer(['{' + closure + '}', posi3]);
-                        return posi1 + word + ";\r\n" + posi3 + '___boundary_' + _this.uid + '_' + index + '_as_closure___;';
+                        return posi1 + word + "\r\n" + posi3 + '___boundary_' + _this.uid + '_' + index + '_as_closure___';
                 }
             });
         };
@@ -1016,6 +1023,7 @@
                 // console.log(left, right);
                 if (left < right) {
                     string = string.replace(replaceExpRegPattern.parentheses, function (match, posi, argslike) {
+                        // console.log(argslike);
                         argslike = _this.replaceOperators(argslike);
                         argslike = _this.replaceCalls(argslike);
                         argslike = _this.replaceArrowFunctions(argslike);
@@ -1024,6 +1032,7 @@
                         return '___boundary_' + _this.uid + '_' + index + '_as_parentheses___';
                     });
                     // console.log(string);
+                    // string = this.recheckFnLikes(string);
                     string = this.recheckFnOrCallLikes(string);
                     left = string.indexOf('(');
                     right = string.indexOf(')');
@@ -1045,7 +1054,9 @@
             }
             string = this.replaceOperators(string);
             string = this.replaceCalls(string);
+            // console.log(string);
             string = this.replaceArrowFunctions(string);
+            // console.log(string);
             return string;
         };
         Script.prototype.replaceWords = function (string) {
@@ -1063,12 +1074,18 @@
                     return ";\r\n" + '@boundary_' + index + '_as_keyword::;';
                 }
                 _this.pushBuffer([word + ' ', posi && posi.trim()]);
-                return ";\r\n" + '@boundary_' + index + '_as_keyword::' + after;
+                // console.log(word, replaceWords);
+                return ";\r\n" + '@boundary_' + index + '_as_preoperator::' + after;
             });
         };
         Script.prototype.recheckFnOrCallLikes = function (string) {
             var _this = this;
-            string = string.replace(replaceExpRegPattern.expression, function (match, posi, expname, exp, expindex, closure, closureindex) {
+            string = string.replace(replaceExpRegPattern.recheckfn, function (match, posi, fname, parenthesesindex, closureindex) {
+                var fnlike = posi + fname + _this.replacements[parenthesesindex][0].toString() + _this.replacements[closureindex][0].toString();
+                var index = _this.replacements.length;
+                _this.pushBuffer([fnlike, posi]);
+                return '___boundary_' + _this.uid + '_' + index + '_as_function___ ';
+            }).replace(replaceExpRegPattern.expression, function (match, posi, expname, exp, expindex, closure, closureindex) {
                 // console.log(match, posi, expname, exp, expindex, closure, closureindex);
                 // console.log(expindex, closureindex);
                 // on = true;
@@ -1241,6 +1258,7 @@
                     else if (callname === 'if') {
                         return '___boundary_' + _this.uid + '_' + index + '_as_if___ ' + after;
                     }
+                    // console.log(after);
                     return '___boundary_' + _this.uid + '_' + index + '_as_call___' + after;
                 }
             }));
@@ -1263,7 +1281,7 @@
                 if (string.match(replaceExpRegPattern.arrowfn)) {
                     // console.log(string.match(matchExpRegPattern.arrowfn));
                     return string.replace(replaceExpRegPattern.arrowfn, function (match, args, argsindex, arrow, body, end) {
-                        // console.log(match, args, argsindex, arrow, body, end);
+                        // console.log(replaceExpRegPattern.arrowfn, match, args, argsindex, arrow, body, end);
                         // console.log(body);
                         var posi = _this.replacements[argsindex][1];
                         // console.log(match);
@@ -1282,14 +1300,40 @@
                             }
                             else {
                                 // console.log(code);
+                                // console.log(code.replace(/(^\{|\}$)/g, ''));
                                 body = code.replace(/(^\{|\}$)/g, '');
+                                // console.log([args + arrow + body, posi]);
                             }
                         }
                         else {
-                            var index_3 = _this.replacements.length;
-                            _this.pushBuffer(['return ', void 0]);
-                            body = '@boundary_' + index_3 + '_as_preoperator:: ' + body;
+                            // let index = this.replacements.length;
+                            // this.pushBuffer(['return ', void 0]);
+                            // body = '@boundary_' + index + '_as_preoperator:: ' + body;
                             // console.log(body);
+                            // body = body.replace(/(^\{|\}$)/g, '');
+                            var matches_1 = body.match(/^(@\d+L\d+P\d+O*\d*:::)?\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_(parentheses|object|closure)___\s*(@\d+L\d+P\d+O*\d*:::)?$/);
+                            // console.log(matches);
+                            if (matches_1) {
+                                var code = _this.replacements[matches_1[2]][0].toString();
+                                var posi_2 = _this.replacements[matches_1[2]][1];
+                                if (matches_1[3] === 'parentheses') {
+                                    body = code.replace(/^\(\s*(.*?)\s*\)$/, function (match, code) {
+                                        var index = _this.replacements.length;
+                                        _this.pushBuffer(['return ', posi_2]);
+                                        return '@boundary_' + index + '_as_preoperator:: ' + code;
+                                    });
+                                }
+                                else {
+                                    // console.log(code);
+                                    body = code.replace(/(^\{|\}$)/g, '');
+                                }
+                            }
+                            else {
+                                var index_3 = _this.replacements.length;
+                                _this.pushBuffer(['return ', void 0]);
+                                body = '@boundary_' + index_3 + '_as_preoperator:: ' + body;
+                                // console.log(body);
+                            }
                         }
                         var index = _this.replacements.length;
                         _this.pushBuffer([args + arrow + body, posi]);
@@ -1466,7 +1510,7 @@
             var display;
             var clauses = code.split(/,\s*(@\d+L\d+P\d+O?\d*:::)*/);
             clauses.unshift(posi);
-            // console.log(array, clauses);
+            // console.log(clauses, symbol);
             for (var c = 0; c < clauses.length; c += 2) {
                 if (inOrder) {
                     if (c) {
@@ -1519,7 +1563,7 @@
             if (code) {
                 var position = this.getPosition(posi);
                 var match = code.match(/^([\$\a-zA-Z_][\$\w]*)@boundary_(\d+)_as_operator::/);
-                // console.log(code);
+                // console.log(code, match);
                 if (match && ['in', 'of']['includes'](this.replacements[match[2]][0].toString().trim())) {
                     var element = match[1];
                     lines.push({
@@ -1527,7 +1571,7 @@
                         subtype: 'sentence',
                         display: 'inline',
                         posi: void 0,
-                        value: symbol + ' ' + code
+                        value: _symbol + ' ' + code
                     });
                     this.pushVariableToVars(vars, symbol, element, position);
                     element = undefined;
@@ -1822,7 +1866,6 @@
                                     alias = members[m].replace(position.match, '').trim();
                                     using_as[alias] = [src, alias, position];
                                 }
-                                // console.log(this.replacements[lines[index].index][1]);
                             }
                             else {
                                 position = this.getPosition(this.replacements[lines[index_5].index][1]);
@@ -1962,6 +2005,7 @@
                         break;
                     case 'variable':
                         // case 'assignment':
+                        // console.log(lines[index].value);
                         body.push({
                             type: 'code',
                             posi: lines[index_7].posi,
@@ -2131,9 +2175,6 @@
                         display: element.display || 'inline',
                         vars: vars,
                         value: '___boundary_' + this.uid + '_' + element.index + '_as_string___'
-                        // value: this.replacements[element.index][0].toString().replace(this.markPattern, function () {
-                        //     return that.replacements[arguments[1]][0].toString();
-                        // })
                     };
                 default:
                     return {
@@ -2168,11 +2209,14 @@
         };
         Script.prototype.walkArrowFn = function (index, display, vars) {
             var matches = this.readBuffer(index).match(matchExpRegPattern.arrowfn);
-            // console.log(this.replacements[index], matches);
+            // console.log(replaceExpRegPattern.arrowfn);
+            // console.log(matchExpRegPattern.arrowfn);
+            // console.log(this.readBuffer(index), matches);
             var subtype = 'fn';
             var selfvas = {};
             if (matches[3] === '=>') {
                 subtype = '=>';
+                vars.hasHalfFunScope = true;
                 vars.locals['this'] = null;
                 vars.locals['arguments'] = null;
                 var locals = vars.locals;
@@ -2202,6 +2246,8 @@
                     // 局域变量校正量映射
                     fix_map: {}
                 },
+                // 是否含有箭头函数和遍历语句
+                hasHalfFunScope: false,
                 // 子域变量
                 locals: locals,
                 // 类型：ES5标准函数作用域/箭头函数作用域
@@ -2403,12 +2449,15 @@
                 parent: vars,
                 // ES5实际作用域
                 scope: vars.scope,
+                // 是否含有箭头函数和遍历语句
+                hasHalfFunScope: false,
                 // 当前作用域本级变量
                 self: {},
                 // 子域变量
                 locals: vars.locals,
                 // fixed: [],
-                // fix_map: {},
+                // 当前作用域本级变量校正量映射
+                fix_map: {},
                 // 类型：局部
                 type: 'local'
             };
@@ -2474,6 +2523,8 @@
                         // 局域变量校正量映射
                         fix_map: {}
                     },
+                    // 是否含有箭头函数和遍历语句
+                    hasHalfFunScope: false,
                     // 子域变量
                     locals: {},
                     // 类型：ES5标准函数作用域
@@ -2548,10 +2599,14 @@
                         parent: vars,
                         // ES5实际作用域
                         scope: vars.scope,
+                        // 是否含有箭头函数和遍历语句
+                        hasHalfFunScope: false,
                         // 当前作用域本级变量
                         self: {},
                         // 子域变量
                         locals: vars.locals,
+                        // 当前作用域本级变量校正量映射
+                        fix_map: {},
                         // 类型：局部
                         type: 'local'
                     };
@@ -2567,7 +2622,7 @@
                         // console.log(semicolons, lines);
                     }
                     else {
-                        var head = this.pushSentencesToAST([], localvars_1, headline, false, this.getPosition(headline))[0] || (function () {
+                        var head = this.pushSentencesToAST([], vars, headline, false, this.getPosition(headline))[0] || (function () {
                             _this.error(' Must have statements in head of ' + fname + ' expreesion.');
                         })();
                         // console.log(localvars, head);
@@ -2617,6 +2672,8 @@
                             }
                         }
                         this.useEach = true;
+                        vars.hasHalfFunScope = true;
+                        vars.locals['arguments'] = null;
                         var localvars_2 = {
                             // 父级作用域
                             parent: vars,
@@ -2631,7 +2688,7 @@
                                 // 局域私有变量
                                 private: {},
                                 // 子域受保护变量
-                                protected: {},
+                                protected: self_1,
                                 // 局域变量校正
                                 fixed: [],
                                 // 局域变量校正量映射
@@ -2639,6 +2696,8 @@
                                 // 遍历是否可跳出
                                 break: false
                             },
+                            // 是否含有箭头函数和遍历语句
+                            hasHalfFunScope: false,
                             // 子域变量
                             locals: vars.locals,
                             // 类型：遍历
@@ -2646,7 +2705,6 @@
                         };
                         // 当前作用域本级变量
                         localvars_2.self = localvars_2.scope.protected;
-                        localvars_2.locals['arguments'] = null;
                         var iterator = this.pushSentencesToAST([], localvars_2, condition[1], false, this.getPosition(condition[2]))[0] || (function () {
                             _this.error(' Must have statements in head of each expreesion.');
                         })();
@@ -2716,6 +2774,8 @@
                     // 局域变量校正量映射
                     fix_map: {}
                 },
+                // 是否含有箭头函数和遍历语句
+                hasHalfFunScope: false,
                 // 子域变量
                 locals: {},
                 // 类型：ES5标准函数作用域
@@ -3381,23 +3441,25 @@
             }
             return codes;
         };
-        Script.prototype.pushCodes = function (codes, vars, array, layer, namespace, lasttype) {
+        Script.prototype.pushCodes = function (codes, vars, array, layer, namespace, lasttype, ignoreVarsPatch) {
             if (namespace === void 0) { namespace = this.namespace; }
             if (lasttype === void 0) { lasttype = ''; }
+            if (ignoreVarsPatch === void 0) { ignoreVarsPatch = false; }
             // console.log(codes, array);
             // console.log(array);
             // console.log(layer, array);
             for (var index_16 = 0; index_16 < array.length; index_16++) {
                 var element = array[index_16];
                 // console.log(element);
-                this.pushElement(codes, vars, element, layer, namespace, (index_16 - 1 >= 0) ? array[index_16 - 1].type : lasttype);
+                this.pushElement(codes, vars, element, layer, namespace, (index_16 - 1 >= 0) ? array[index_16 - 1].type : lasttype, ignoreVarsPatch);
             }
             return codes;
         };
-        Script.prototype.pushElement = function (codes, vars, element, layer, namespace, lasttype) {
+        Script.prototype.pushElement = function (codes, vars, element, layer, namespace, lasttype, ignoreVarsPatch) {
             var _this = this;
             if (namespace === void 0) { namespace = this.namespace; }
             if (lasttype === void 0) { lasttype = ''; }
+            if (ignoreVarsPatch === void 0) { ignoreVarsPatch = false; }
             var indent = "\r\n" + stringRepeat("    ", layer);
             switch (element.type) {
                 case 'arraylike':
@@ -3408,6 +3470,7 @@
                 case 'callmethod':
                 case 'construct':
                     // console.log(layer);
+                    // console.log(element);
                     this.pushCallCodes(codes, element, layer, namespace);
                     break;
                 case 'log':
@@ -3421,7 +3484,13 @@
                 case 'code':
                     if (element.value) {
                         // console.log(element.posi&&element.posi.head, element.display, element.value);
-                        var code = this.patchVariables(element.value, vars);
+                        // console.log(element.value, vars);
+                        if (ignoreVarsPatch) {
+                            var code = element.value;
+                        }
+                        else {
+                            var code = this.patchVariables(element.value, vars);
+                        }
                         if (vars.scope.break !== undefined) {
                             code = code.replace(/@return;*/g, function () {
                                 vars.scope.break = true;
@@ -3513,7 +3582,7 @@
         Script.prototype.pushArrayElements = function (elements, body, vars, _layer, namespace) {
             for (var index_17 = 0; index_17 < body.length; index_17++) {
                 if (body[index_17].value) {
-                    elements.push(this.pushPostionsToMap(body[index_17].posi) + body[index_17].value);
+                    elements.push(this.pushPostionsToMap(body[index_17].posi) + this.patchVariables(body[index_17].value, vars));
                 }
                 else {
                     var elemCodes = [];
@@ -3527,8 +3596,8 @@
             }
         };
         Script.prototype.pushCallCodes = function (codes, element, layer, namespace) {
-            var naming = this.pushCodes([], element.vars, element.name, layer, namespace);
-            // console.log(element);
+            var naming = this.pushCodes([], element.vars, element.name, layer, namespace, '', element.type === 'callmethod');
+            // console.log(naming, element);
             // console.log(element.name.length, element.name[0], naming);
             if (element.posi) {
                 if (element.type === 'callmethod') {
@@ -3629,6 +3698,7 @@
             for (var index_19 = 0; index_19 < element.calls.length; index_19++) {
                 var method = element.calls[index_19];
                 // console.log(method);
+                // method
                 elements.push(this.pushElement([], element.vars, method, _layer, namespace).join(''));
             }
             // console.log(elements);
@@ -3790,7 +3860,7 @@
             if (element.args.length) {
                 var args = [];
                 for (var index_21 = 0; index_21 < element.args.length; index_21++) {
-                    args.push(this.pushPostionsToMap(element.args[index_21][1]) + element.args[index_21][0]);
+                    args.push(this.pushPostionsToMap(element.args[index_21][1]) + this.patchVariable(element.args[index_21][0], element.vars));
                 }
                 codes.push(args.join(', '));
             }
@@ -3799,7 +3869,7 @@
             // console.log(element);
             if (element.body.length) {
                 // console.log(element);
-                if (element.vars.type === 'blocklike') {
+                if ((element.vars.type === 'blocklike') || (element.vars.type === 'scope')) {
                     for (var key in element.vars.locals) {
                         codes.push(indent + "    var " + element.vars.locals[key] + ' = ' + key + ';');
                     }
@@ -3872,6 +3942,7 @@
         Script.prototype.pushExpressionCodes = function (codes, element, layer, namespace) {
             var indent1 = "\r\n" + stringRepeat("    ", layer);
             var indent2 = "\r\n" + stringRepeat("    ", layer);
+            // console.log(element);
             if (element.posi) {
                 var posi = this.pushPostionsToMap(element.posi);
             }
@@ -3891,7 +3962,8 @@
             else {
                 codes.push(indent1 + posi + element.expression + ' (');
                 // console.log(element.head);
-                this.pushElement(codes, element.vars.parent, element.head, layer, namespace);
+                // this.pushElement(codes, element.head.vars.parent, element.head, layer, namespace);
+                this.pushElement(codes, element.head.vars, element.head, layer, namespace);
                 codes.push(') {');
             }
             if (element.body.length) {
@@ -4139,15 +4211,16 @@
                     vars.scope.fixed.push(vars.locals['arguments']);
                 case 'blocklike':
                 case 'scope':
-                    if ((vars.type !== 'blocklike')) {
-                        // console.log('foo', vars.parent, vars.parent.scope.fix_map);
-                        for (var varname in vars.parent.scope.fix_map) {
-                            if (hasProp(vars.parent.scope.fix_map, varname)) {
-                                vars.scope.fixed.push(varname);
-                                vars.locals[varname] = vars.scope.fix_map[varname] = vars.parent.scope.fix_map[varname];
-                            }
-                        }
-                    }
+                    // if ((vars.type !== 'blocklike')) {
+                    //     // console.log('foo', vars.parent, vars.parent.scope.fix_map);
+                    //     for (const element in vars.parent.scope.fix_map) {
+                    //         if (hasProp(vars.parent.scope.fix_map, element)) {
+                    //             vars.scope.fixed.push(element);
+                    //             // vars.locals[element] = 
+                    //             vars.scope.fix_map[element] = vars.parent.scope.fix_map[element];
+                    //         }
+                    //     }
+                    // }
                     for (var element in vars.self) {
                         var varname = element;
                         if (keywords['includes'](element) || reserved['includes'](element)) {
@@ -4164,13 +4237,14 @@
                             // console.log(varname);
                             varname = varname + '_' + vars.index;
                         }
-                        if (varname !== element) {
-                            // console.log(varname);
-                            vars.scope.fix_map[element] = varname;
-                            if (hasProp(vars.scope.public, element)) {
-                                vars.scope.public[element] = varname;
-                            }
+                        // if (varname !== element) {
+                        // console.log(varname);
+                        vars.scope.fix_map[element] = varname;
+                        if (hasProp(vars.scope.public, element)) {
+                            vars.scope.public[element] = varname;
                         }
+                        // }
+                        // console.log(varname, element);
                         vars.scope.fixed.push(varname);
                     }
                     if ((vars.type === 'blocklike') || (vars.type === 'scope')) {
@@ -4202,14 +4276,21 @@
                                 }
                                 // console.log(varname);
                             }
-                            while (vars.scope.fixed['includes'](varname) || (vars.scope.private[varname] && (vars.scope.private[varname] !== vars))) {
+                            while (vars.scope.fixed['includes'](varname) || (hasProp(vars.scope.private, varname) && (vars.scope.private[varname] !== vars))) {
                                 // console.log(varname);
                                 varname = varname + '_' + vars.index;
                             }
                             if (varname !== element) {
-                                // console.log(varname);
-                                vars.scope.fix_map[element] = varname;
+                                // console.log(varname, vars, vars.scope.fixed[element]);
+                                // console.log(aaaaa);
+                                if (vars.scope.fixed['includes'](element)) {
+                                    vars.fix_map[element] = varname;
+                                }
+                                else {
+                                    vars.scope.fix_map[element] = varname;
+                                }
                             }
+                            // console.log(varname, element, vars);
                             // vars.fixed.push(varname);
                             vars.scope.fixed.push(varname);
                         }
@@ -4231,7 +4312,7 @@
                     }
                     return match;
                 }).replace(/(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)(\s+|\s*[^\$\w]|\s*$)/g, function (match, before, definition, varname, after) {
-                    // console.log(match);
+                    // console.log(before, match, after);
                     // console.log(type);
                     return before + (definition || '') + _this.patchVariable(varname, vars) + after || '';
                 }).replace(/(^|[\?\:\=]\s*)(ns\.|\$\.|\.)(\.[\$a-zA-Z_][\$\w]*|$)/g, function (match, before, node, member) {
@@ -4245,16 +4326,36 @@
         Script.prototype.patchVariable = function (varname, vars) {
             // if (varname === 'document')
             //     console.log(!vars.scope.fixed['includes'](varname) || (vars.scope.private[varname] !== vars), vars.scope.fixed, vars.scope.private);
+            // if (varname === 'posi') console.log('before:', varname, vars);
+            // if (varname === 'subtype') console.log('before:', varname, vars);
+            // if (varname === 'code') console.log('before:', varname, vars);
+            // if (varname === 'match') console.log('before:', varname, vars);
+            // if (varname === 'element') console.log('before:', varname, vars);
+            // if (varname === 'localvars') console.log('before:', varname, vars);
+            // if (varname === 'block') console.log('before:', varname, vars);
+            // if (varname === 'block_2') console.log('before:', varname, vars);
+            // if (varname === 'c') console.log('before:', varname, vars);
             // console.log('before:', varname, vars);
-            if (vars.scope.fix_map && hasProp(vars.scope.fix_map, varname)) {
-                // console.log(varname, vars.scope.fix_map[varname]);
-                return vars.scope.fix_map[varname];
+            if (vars.fix_map && hasProp(vars.fix_map, varname)) {
+                // console.log(varname, vars.fix_map[varname]);
+                return vars.fix_map[varname];
+            }
+            if (vars.type === 'local') {
+                var parent_1 = vars.parent;
+                while (parent_1 && parent_1.type === 'local') {
+                    if (parent_1.fix_map && hasProp(parent_1.fix_map, varname)) {
+                        // console.log(varname, vars.fix_map[varname]);
+                        return parent_1.fix_map[varname];
+                    }
+                    parent_1 = parent_1.parent;
+                }
             }
             if (hasProp(vars.scope.fix_map, varname)) {
                 // console.log(varname, vars.scope.fix_map[varname]);
                 return vars.scope.fix_map[varname];
             }
-            if (!keywords['includes'](varname) && !this.xvars['includes'](varname) && (!vars.scope.fixed['includes'](varname) || (vars.scope.private[varname] !== vars))) {
+            // if (varname === 'block_2') console.log(!vars.scope.fixed['includes'](varname), (hasProp(vars.scope.private, varname) && (vars.scope.private[varname]!==vars)));
+            if (!keywords['includes'](varname) && !this.xvars['includes'](varname) && (!vars.scope.fixed['includes'](varname) || (hasProp(vars.scope.private, varname) && (vars.scope.private[varname] !== vars)))) {
                 // console.log(varname);
                 if (hasProp(vars.scope.private, varname)) {
                     // console.log(varname, vars.scope.private);
@@ -4288,8 +4389,17 @@
                     }
                     if (vars.parent) {
                         varname = this.patchVariable(varname, vars.parent);
+                        // console.log(varname);
                     }
                 }
+            }
+            else if (!vars.scope.fixed['includes'](varname) &&
+                !keywords['includes'](varname) &&
+                !reserved['includes'](varname) &&
+                !this.blockreserved['includes'](varname) &&
+                !this.xvars['includes'](varname)) {
+                varname = this.patchVariable(varname + '_' + vars.index, vars);
+                // console.log(varname);
             }
             // console.log('after:', varname);
             return varname;
@@ -4401,6 +4511,9 @@
                 }
                 return operator;
             });
+            // console.log(string);
+            string = string.replace(/\)\s*return\s+/, ') return ');
+            // console.log(string);
             return string;
         };
         Script.prototype.pickUpMap = function (string) {

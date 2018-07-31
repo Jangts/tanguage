@@ -1,67 +1,61 @@
-// let var1 = 'bar'
-// let var2 = 'bar'
-// let var3 = 'bar'
-// let root = 'root'
-// if(1){
-//     let var1 = 'foo'
-    // let root = 'root'
-    // var root = 'root'
-    // each ([1,2,3] as index, item) {
-    //     // var root = 'root'
-    //     let var1 = var1;
-    //     var var2 = 'var1';
-    //     let var1_1 = var3;
-    // }
-// }else{
-//     let var1 = 'bar'
-//     let fn2 = () => {
-//         let var1 = var1;
-//     }
-    // fn () {
-    //     let elem = var1;
-    // }
-// }
-// root = 'hahaha'
-// var obj = {
-//     foo(){
-//         let subtype = matches[2] || 'function';
-//         let fname = matches[3] !== 'function' ? matches[3] : '';
-//         if ((type === 'def' && subtype === 'function')|| type === 'exp') {
-//             if (fname === 'each') {
-//                 const condition = matches[4].match(matchExpRegPattern.travelargs);
-//                 // console.log(matches, condition);
-//             }
-//         }
-//     },
-//     bar(){
-//         let subtype = matches[2] || 'function';
-//         let fname = matches[3] !== 'function' ? matches[3] : '';
-//         if ((type === 'def' && subtype === 'function')|| type === 'exp') {
-//             if (fname === 'each') {
-//                 const condition = matches[4].match(matchExpRegPattern.travelargs);
-//                 // console.log(matches, condition);
-//             }
-//         }
-//     }
-// }
+let b = 1
+if(1){
+    let block = 'a';
+    let b = 'b';
+    if(1){
+        let block = 'b';
+        if(0){
+            let block = 'c';
+        }
 
-// var obj = {
-//     foo(){
-//         const a = 'a';
-//     },
-//     bar(){
-//         const a = 'b';
-//     }
-// }
+        fn1(){
+            let a = block_2;
+        }
 
-let fixVariables = (vars) => {
-    this.a = 'a'
-    // if ((vars.type !== 'blocklike')) {
-    //     for (const varname in vars.parent.scope.fix_map) {
-    //     }
-    // }
-    // for (const element in vars.self) {
-    //     // let varname;
-    //     varname = element + '_' + vars.index;
-    // }
+        fn2(block){
+            let b = block;
+        }
+
+        each ([] as index, block) {
+            let b = block;
+            if(b){
+                let block = 1;
+            }
+        }
+
+        fn3(c){
+            let a = c;
+            let block = b;
+        }
+    }
+}
+markPosition(string, sourceid = 0) {
+    let lines = string.split(/\r{0,1}\n/);
+    // console.log(lines);
+    let positions = [];
+    for (let l = 0; l < lines.length; l++) {
+        const elements = lines[l].split(/(,|;|\{|\[|\(|\}|\sas\s|->|=>)/);
+        // console.log(elements);
+        let newline = [];
+        for (let c = 0, length = 0; c < elements.length; c++) {
+            var element = elements[c];
+            if (c === 0) {
+                length = 0;
+            }
+            if (element === ',' || element === ';' || element === '{' || element === '[' || element === '(' || element === '}' || element === ' as ' || element === '->' || element === '=>') {
+                newline.push(element);
+            } else {
+                newline.push('@' + sourceid + 'L' + l + 'P' + length + ':::' + element);
+            }
+            length += element.length;
+        }
+        positions.push(newline);
+    }
+    let newlines = positions.map((line) => {
+        return line.join("");
+    })
+    // this.positions.push(positions);
+    // console.log(newlines.join("\r\n"));
+    lines = positions = undefined;
+    return newlines.join("\r\n");
 }

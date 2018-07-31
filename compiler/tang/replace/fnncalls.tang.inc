@@ -1,5 +1,10 @@
 recheckFnOrCallLikes(string) {
-    string = string.replace(replaceExpRegPattern.expression, (match, posi, expname, exp, expindex, closure, closureindex) => {
+    string = string.replace(replaceExpRegPattern.recheckfn, (match: string, posi, fname: string, parenthesesindex: string, closureindex: string) => {
+        let fnlike = posi + fname + this.replacements[parenthesesindex][0].toString() + this.replacements[closureindex][0].toString();
+        let index = this.replacements.length;
+        this.pushBuffer([fnlike, posi]);
+        return '___boundary_' + this.uid + '_' + index + '_as_function___ ';
+    }).replace(replaceExpRegPattern.expression, (match, posi, expname, exp, expindex, closure, closureindex) => {
         // console.log(match, posi, expname, exp, expindex, closure, closureindex);
         // console.log(expindex, closureindex);
         // on = true;
