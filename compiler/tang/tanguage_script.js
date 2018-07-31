@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Tue, 31 Jul 2018 15:52:36 GMT
+ * Datetime: Tue, 31 Jul 2018 16:35:05 GMT
  */;
 void
 
@@ -2350,7 +2350,7 @@ function(root, factory) {
                         const:  {},
                         private:  {},
                         protected:  {},
-                        fixed: [],
+                        fixed: ['this', 'arguments'],
                         fix_map:  {}
                     },
                     hasHalfFunScope: false,
@@ -2615,7 +2615,7 @@ function(root, factory) {
                     const:  {},
                     private:  {},
                     protected:  {},
-                    fixed: [],
+                    fixed: ['this', 'arguments'],
                     fix_map:  {}
                 },
                 hasHalfFunScope: false,

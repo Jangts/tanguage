@@ -44,11 +44,5 @@ public calculateDoughnutStyle = (options, width, height) {
         }
     }
     // clog width, height, x, y;
-    return {
-        maxRadius: maxRadius,
-        innerRadius: innerRadius,
-        outerRadius: outerRadius,
-        x: x,
-        y: y
-    }
+    return {maxRadius, innerRadius, outerRadius, x, y};
 };

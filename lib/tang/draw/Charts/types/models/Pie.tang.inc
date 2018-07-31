@@ -11,6 +11,8 @@ class Pie extends Charts.Type {
         var style = this.style = new PieStyle(helpers.calculateDoughnutStyle(options, instance.width, instance.height));
         style.fit(options);
 
+        clog helpers.calculateDoughnutStyle(options, instance.width, instance.height), style;
+
         this.options = {
             index: options.index,
             name: options.name,

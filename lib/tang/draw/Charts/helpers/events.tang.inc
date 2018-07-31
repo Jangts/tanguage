@@ -34,6 +34,7 @@ bindEvents = (instance, arrayOfEvents, handler) {
     }
     each(arrayOfEvents as index, eventName) {
         instance.events[eventName] = () {
+            // clog arguments;
             handler.apply(instance, arguments);
         };
         dom.events.add(instance.Element, eventName, null, null, instance.events[eventName]);
@@ -49,7 +50,8 @@ bindHover = (instance, callback) {
         hovers[instance.id] = {
             eventTypes: arr.merge(instance.options.tooltip.triggerOn, instance.options.tooltip.triggerOff),
             exceptEventTypes: instance.options.tooltip.triggerOff,
-            trigger: function(evt) {
+            trigger(evt) {
+                // clog evt, arguments;
                 if (hovers[instance.id].exceptEventTypes.indexOf(evt.type) < 0) {
                     _.each(hovers[instance.id].handlers, function(i, handler) {
                         handler(evt);
@@ -60,7 +62,7 @@ bindHover = (instance, callback) {
                     }
                 }
             },
-            handlers: [function(evt) {
+            handlers: [(evt) {
                 instance.actived = 0;
             }]
         };

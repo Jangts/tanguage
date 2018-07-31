@@ -106,6 +106,7 @@ class .Events {
     fire(event, eventType) {
         var callback = function(elem, sele) {
             event.data = sele.data;
+            // clog elem, event;
             sele.handler.call(elem, event);
         };
         event.currentTarget = event.currentTarget || event.target || event.relatedTarget || event.srcElement;

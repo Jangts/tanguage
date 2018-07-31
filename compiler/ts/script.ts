@@ -2460,7 +2460,7 @@
                         // 子域受保护变量
                         protected: {},
                         // 局域变量校正
-                        fixed: [],
+                        fixed: ['this', 'arguments'],
                         // 局域变量校正量映射
                         fix_map: {}
                     },
@@ -2707,7 +2707,7 @@
                     // 子域受保护变量
                     protected: {},
                     // 局域变量校正
-                    fixed: [],
+                    fixed: ['this', 'arguments'],
                     // 局域变量校正量映射
                     fix_map: {}
                 },
@@ -4255,6 +4255,7 @@
             // if (varname === 'block') console.log('before:', varname, vars);
             // if (varname === 'block_2') console.log('before:', varname, vars);
             // if (varname === 'c') console.log('before:', varname, vars);
+            // if (varname === 'arguments') console.log('before:', varname, vars);
             // console.log('before:', varname, vars);
             if (vars.fix_map && hasProp(vars.fix_map, varname)) {
                 // console.log(varname, vars.fix_map[varname]);

@@ -11,7 +11,7 @@ use $ math/;
 use $ math/easing;
 use $ obj/ as obj;
 use $ util/ as util;
-use $ draw/canvas;
+use $ draw/canvas as canvas;
 
 namespace draw;
 

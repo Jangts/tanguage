@@ -208,7 +208,7 @@ walkFnLike(index, display, vars, type) {
             // 子域受保护变量
             protected: {},
             // 局域变量校正
-            fixed: [],
+            fixed: ['this', 'arguments'],
             // 局域变量校正量映射
             fix_map: {}
         },
