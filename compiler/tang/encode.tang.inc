@@ -46,12 +46,12 @@ encode(string) {
     string = string.replace(/(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om)\s+)?___boundary_[A-Z0-9_]{36}_(\d+)_as_string___\s*(\:|\(|\=)/g, (match, posi, desc, type, index, after) => {
         // console.log(posi, desc, this.replacements[index][1]);
         if (this.replacements[index][1]) {
-            return "\r\n" + this.replacements[index][1] + '___boundary_' + index + '_as_propname___' + after;
+            return "\r\n" + this.replacements[index][1] + '@boundary_' + index + '_as_propname::' + after;
         }
         if (desc) {
-            return "\r\n" + posi + desc + '___boundary_' + index + '_as_propname___' + after;
+            return "\r\n" + posi + desc + '@boundary_' + index + '_as_propname::' + after;
         }
-        return "\r\n" + '___boundary_' + index + '_as_propname___' + after;
+        return "\r\n" + '@boundary_' + index + '_as_propname::' + after;
     });
     // console.log(string);
     string = string

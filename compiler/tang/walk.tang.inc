@@ -60,7 +60,7 @@ walk(element, vars = false, inOrder) {
             }
     }
 }
-walkParentheses(index, display: undefined, vars) {
+walkParentheses(index, display, vars) {
     let body = [],
         clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(/\s*(,)/),
         position = this.getPositionByIndex(index);

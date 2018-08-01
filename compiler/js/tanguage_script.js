@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Wed, 01 Aug 2018 06:45:28 GMT
+ * Datetime: Wed, 01 Aug 2018 13:39:40 GMT
  */;
 void
 
@@ -204,35 +204,7 @@ function(root, factory) {
             return this.value;
         }
     }
-    var keywords = [
-        'break',
-        'case',
-        'catch',
-        'const',
-        'continue',
-        'default',
-        'delete',
-        'do',
-        'else',
-        'finally',
-        'for',
-        'function',
-        'if',
-        'in',
-        'instanceof',
-        'let',
-        'new',
-        'null',
-        'return',
-        'switch',
-        'throw',
-        'try',
-        'typeof',
-        'var',
-        'void',
-        'while',
-        'with'
-    ];
+    var keywords = ['break', 'case', 'catch', 'const', 'continue', 'default', 'delete', 'do', 'else', 'finally', 'for', 'function', 'if', 'in', 'instanceof', 'let', 'new', 'null', 'return', 'switch', 'throw', 'try', 'typeof', 'var', 'void', 'while', 'with'];
     var reservedFname = ['if', 'for', 'while', 'switch', 'with', 'catch'];
     var reserved = ['window', 'global', 'tang', 'this', 'arguments'];
     var semicolon = {
@@ -374,7 +346,6 @@ function(root, factory) {
             if (run === void 0) { run = false;}
             this.uid = boundaryMaker();
             this.markPattern = new RegExp('@boundary_(\\\d+)_as_(mark)::', 'g');
-            this.trimPattern = new RegExp('(___boundary_' + this.uid + '_(\\\d+)_as_(string|pattern|template)___|___boundary_(\\\d+)_as_propname___)', 'g');
             this.lastPattern = new RegExp('(___boundary_' + this.uid + '_(\\\d+)_as_(string|pattern|template)___|@boundary_(\\\d+)_as_propname::|@boundary_(\\\d+)_as_(keyword|midword|preoperator|operator|aftoperator|comments)::)', 'g');
             this.input = input;
             this.output = undefined;
@@ -557,12 +528,12 @@ function(root, factory) {
             string = this.tidyPosition(string);
             string = string.replace(/(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om)\s+)?___boundary_[A-Z0-9_]{36}_(\d+)_as_string___\s*(\:|\(|\=)/g, function (match, posi, desc, type, index, after) {
                 if (_this.replacements[index][1]) {
-                    return "\r\n" + _this.replacements[index][1] + '___boundary_' + index + '_as_propname___' + after;
+                    return "\r\n" + _this.replacements[index][1] + '@boundary_' + index + '_as_propname::' + after;
                 }
                 if (desc) {
-                    return "\r\n" + posi + desc + '___boundary_' + index + '_as_propname___' + after;
+                    return "\r\n" + posi + desc + '@boundary_' + index + '_as_propname::' + after;
                 }
-                return "\r\n" + '___boundary_' + index + '_as_propname___' + after;
+                return "\r\n" + '@boundary_' + index + '_as_propname::' + after;
             });
             string = string
                 .replace(/([\$a-zA-Z_][\$\w]*)\s*(->|=>)/g, "($1)$2")
@@ -1776,7 +1747,7 @@ function(root, factory) {
             if (type === '...') {
                 var index_312 = this.replacements.length;
                 this.pushBuffer(["'" + variable + "'"]);
-                _value = 'pandora.remove(' + value + ', ___boundary_' + this.uid + '_' + index_312 + 'string___)';
+                _value = 'pandora.remove(' + value + ', ___boundary_' + this.uid + '_' + index_312 + '_as_string___)';
             }
             else if (type === 'object') {
                 _value = value + '.' + variable;
@@ -2126,28 +2097,7 @@ function(root, factory) {
                 };
             };
         },
-        walkArray: function (index, display, vars) {
-            var body = [];
-            var position = this.getPositionByIndex(index);
-            var clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(',');
-            for (var c = 0;c < clauses.length;c++) {
-                if (c) {
-                    var posi = this.getPosition(clauses[c]);
-                }
-                else {
-                    var posi = this.getPosition(clauses[c]) || position;
-                }
-                this.pushSentencesToAST(body, vars, clauses[c], false, posi);
-            }
-            return {
-                type: 'arraylike',
-                posi: position,
-                display: display,
-                vars: vars,
-                body: body
-            };
-        },
-        walkParentheses: function (index, vars) {
+        walkParentheses: function (index, display, vars) {
             var body = [];
             var clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(/\s*(,)/);
             var position = this.getPositionByIndex(index);
@@ -2166,6 +2116,58 @@ function(root, factory) {
             return {
                 type: 'codes',
                 display: 'inline',
+                vars: vars,
+                body: body
+            };
+        },
+        walkArray: function (index, display, vars) {
+            var body = [];
+            var elems = [];
+            var position = this.getPositionByIndex(index);
+            var clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(',');
+            for (var c = 0;c < clauses.length;c++) {
+                var posi = void 0;
+                if (c) {
+                    posi = this.getPosition(clauses[c]);
+                }
+                else {
+                    posi = this.getPosition(clauses[c]) || position;
+                }
+                var value = clauses[c].replace(posi, '');
+                var match = value.match(/\.\.\.(\w+)/);
+                if (match) {
+                    if (elems.length) {
+                        body.push({
+                            type: "arrEls",
+                            posi: posi,
+                            vars: vars,
+                            elems: elems
+                        });
+                    }
+                    body.push({
+                        type: "arrVar",
+                        posi: posi,
+                        vars: vars,
+                        aname: match[1]
+                    });
+                    elems = [];
+                }
+                else {
+                    this.pushSentencesToAST(elems, vars, clauses[c], false, posi);
+                    if (c === clauses.length - 1) {
+                        body.push({
+                            type: "arrEls",
+                            posi: posi,
+                            vars: vars,
+                            elems: elems
+                        });
+                    }
+                }
+            }
+            return {
+                type: 'arraylike',
+                posi: position,
+                display: display,
                 vars: vars,
                 body: body
             };
@@ -2520,7 +2522,7 @@ function(root, factory) {
             if ((type === 'def' && subtype === 'function') || type === 'exp') {
                 if (reservedFname['includes'](fname)) {
                     var headline = matches[4];
-                    var localvars_454 = {
+                    var localvars_458 = {
                         parent: vars,
                         scope: vars.scope,
                         hasHalfFunScope: false,
@@ -2532,11 +2534,11 @@ function(root, factory) {
                     if (fname === 'for') {
                         var head = {
                             type: 'codes',
-                            vars: localvars_454,
+                            vars: localvars_458,
                             display: 'inline',
                             body: []
                         };
-                        var lines = this.pushBodyToAST([], localvars_454, headline, true);
+                        var lines = this.pushBodyToAST([], localvars_458, headline, true);
                         var semicolons = push(0, lines);
                     }
                     else {
@@ -2544,13 +2546,13 @@ function(root, factory) {
                             _this.error(' Must have statements in head of ' + fname + ' expreesion.');
                         })();
                     }
-                    var body = this.pushBodyToAST([], localvars_454, matches[5]);
-                    this.resetVarsRoot(localvars_454);
+                    var body = this.pushBodyToAST([], localvars_458, matches[5]);
+                    this.resetVarsRoot(localvars_458);
                     return {
                         type: 'exp',
                         posi: this.getPositionByIndex(index),
                         display: 'block',
-                        vars: localvars_454,
+                        vars: localvars_458,
                         expression: fname,
                         head: head,
                         body: body
@@ -2589,7 +2591,7 @@ function(root, factory) {
                         this.useEach = true;
                         vars.hasHalfFunScope = true;
                         vars.locals['arguments'] = null;
-                        var localvars_459 = {
+                        var localvars_463 = {
                             parent: vars,
                             scope: {
                                 namespace: null,
@@ -2605,29 +2607,29 @@ function(root, factory) {
                             locals: vars.locals,
                             type: 'travel'
                         };
-                        localvars_459.self = localvars_459.scope.protected;
-                        var iterator = this.pushSentencesToAST([],localvars_459,condition[1],false,this.getPosition(condition[2]))[0] || (function () {
+                        localvars_463.self = localvars_463.scope.protected;
+                        var iterator = this.pushSentencesToAST([],localvars_463,condition[1],false,this.getPosition(condition[2]))[0] || (function () {
                             _this.error(' Must have statements in head of each expreesion.');
                         })();
-                        var subtype_459 = 'allprop';
+                        var subtype_463 = 'allprop';
                         var code = matches[5].replace(/@ownprop[;\s]*/g, function () {
-                            subtype_459 = 'ownprop';
+                            subtype_463 = 'ownprop';
                             return '';
                         });
                         return {
                             type: 'travel',
                             posi: this.getPositionByIndex(index),
                             display: 'block',
-                            subtype: subtype_459,
+                            subtype: subtype_463,
                             iterator: iterator,
-                            vars: localvars_459,
+                            vars: localvars_463,
                             callback: {
                                 type: 'def',
                                 display: 'inline',
-                                vars: localvars_459,
+                                vars: localvars_463,
                                 fname: '',
                                 args: agrs,
-                                body: this.pushBodyToAST([], localvars_459, code)
+                                body: this.pushBodyToAST([], localvars_463, code)
                             }
                         };
                     }
@@ -2774,7 +2776,16 @@ function(root, factory) {
                             bodyIndex++;
                             continue;
                         }
-                        else {}
+                        else {
+                            body.useExplode = true;
+                            var posi = this.getPosition(elArr[0]);
+                            body.push({
+                                type: 'object',
+                                posi: this.getPosition(elArr[0]),
+                                oname: elArr[0].replace((posi.match || '') + '...', ''),
+                                vars: vars
+                            });
+                        }
                     }
                     else {
                         for (var i = 1;i < elArr.length;i++) {
@@ -3384,11 +3395,9 @@ function(root, factory) {
             return codes;
         },
         pushArrayCodes: function (codes, element, layer, namespace) {
-            var elements = [];
             if (element.posi) {
                 this.pushPostionsToMap(element.posi, codes);
             }
-            codes.push('[');
             if (element.body.length) {
                 var _layer = layer;
                 var indent1 = void 0;var indent2 = void 0;
@@ -3400,22 +3409,50 @@ function(root, factory) {
                     codes.push(indent2);
                     _break = true;
                 }
-                this.pushArrayElements(elements, element.body, element.vars, _layer, namespace);
-                while (elements.length && !elements[0].trim()) {
-                    elements.shift();
-                }
-                if (elements.length) {
-                    if (_break) {
-                        codes.push(elements.join(',' + indent2) + indent1);
+                for (var index = 0;index < element.body.length;index++) {
+                    var group = element.body[index];
+                    var code = '';
+                    if (group.type === 'arrVar') {
+                        code += this.pushPostionsToMap(group.posi) + this.patchVariable(group.aname, group.vars);
                     }
                     else {
-                        codes.push(elements.join(', '));
+                        var elements = [];
+                        this.pushArrayElements(elements, group.elems, group.vars, _layer, namespace);
+                        while (elements.length && !elements[0].trim()) {
+                            elements.shift();
+                        }
+                        code += '[';
+                        if (elements.length) {
+                            if (_break) {
+                                code += elements.join(',' + indent2) + indent1;
+                            }
+                            else {
+                                code += elements.join(', ');
+                            }
+                        }
+                        code += ']';
+                        elements = undefined;
+                    }
+                    if (index === 0) {
+                        codes.push(code);
+                    }
+                    else {
+                        if (index === 1) {
+                            codes.push('.concat(' + code);
+                        }
+                        else {
+                            codes.push(', ' + code);
+                        }
+                        if (index === element.body.length - 1) {
+                            codes.push(')');
+                        }
                     }
                 }
                 _layer = indent1 = indent2 = _break = undefined;
             }
-            codes.push(']');
-            elements = undefined;
+            else {
+                codes.push('[]');
+            }
             return codes;
         },
         pushArrayElements: function (elements, body, vars, _layer, namespace) {
@@ -3576,8 +3613,8 @@ function(root, factory) {
             var setters = [];
             var getters = [];
             var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
-            for (var index_620 = 0;index_620 < element.body.length;index_620++) {
-                var member = element.body[index_620];
+            for (var index_633 = 0;index_633 < element.body.length;index_633++) {
+                var member = element.body[index_633];
                 var elem = [];
                 switch (member.type) {
                     case 'method':;
@@ -3768,9 +3805,9 @@ function(root, factory) {
                 }
             }
             else if (element.subtype === 'nsassign' || element.subtype === 'globalassign') {
-                var index_662 = this.replacements.length;
+                var index_675 = this.replacements.length;
                 this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
-                codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_662 + 'string___, ');
+                codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_675 + 'string___, ');
                 this.pushObjCodes(codes, element, layer, namespace);
             }
             else {
@@ -3786,7 +3823,11 @@ function(root, factory) {
             var indent1 = "\r\n" + stringRepeat("    ", layer);
             var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
             if (element.type === 'object' && element.display === 'block') {
-                codes.push(indent1 + this.pushPostionsToMap(element.posi) + '{');
+                codes.push(indent1 + this.pushPostionsToMap(element.posi));
+            }
+            if (element.body.useExplode) {
+                var objects = [];
+                codes.push('pandora.extend({');
             }
             else {
                 codes.push('{');
@@ -3804,6 +3845,9 @@ function(root, factory) {
                     var member = element.body[index];
                     var elem = [];
                     switch (member.type) {
+                        case 'object':;
+                        objects.push(this.pushPostionsToMap(member.posi) + this.patchVariable(member.oname, member.vars));
+                        break;
                         case 'method':;
                         elem.push(this.pushPostionsToMap(member.posi) + member.fname + ': ');
                         this.pushFunctionCodes(elem, member, _layer, namespace);
@@ -3826,7 +3870,12 @@ function(root, factory) {
                 }
                 elements = _layer = _break = undefined;
             }
-            codes.push('}');
+            if (element.body.useExplode) {
+                codes.push('}, true, ' + objects.join(', ') + ')');
+            }
+            else {
+                codes.push('}');
+            }
             indent1 = indent2 = undefined;
             return codes;
         },
@@ -4037,40 +4086,40 @@ function(root, factory) {
                 if ((vars.type === 'blocklike') || (vars.type === 'scope')) {
                     for (var key in vars.locals) {
                         if (hasProp(vars.locals, key)) {
-                            var varname_724 = '_' + key;
-                            while (vars.self[varname_724]) {
-                                varname_724 = varname_724 + '_' + vars.index;
+                            var varname_740 = '_' + key;
+                            while (vars.self[varname_740]) {
+                                varname_740 = varname_740 + '_' + vars.index;
                             }
-                            vars.locals[key] = varname_724;
+                            vars.locals[key] = varname_740;
                         }
                     }
                 }
                 break;
                 case 'local':;
-                for (var element_726 in vars.self) {
-                    if (vars.self[element_726] === 'const' || vars.self[element_726] === 'let') {
-                        var varname_727 = element_726;
-                        if (keywords['includes'](element_726) || reserved['includes'](element_726)) {
-                            this.error('keywords `' + element_726 + '` cannot be a variable name.');
+                for (var element_742 in vars.self) {
+                    if (vars.self[element_742] === 'const' || vars.self[element_742] === 'let') {
+                        var varname_743 = element_742;
+                        if (keywords['includes'](element_742) || reserved['includes'](element_742)) {
+                            this.error('keywords `' + element_742 + '` cannot be a variable name.');
                         }
-                        if (this.blockreserved['includes'](element_726) || this.xvars['includes'](element_726)) {
-                            varname_727 = element_726 + '_' + vars.index;
-                            while (vars.self[varname_727]) {
-                                varname_727 = varname_727 + '_' + vars.index;
+                        if (this.blockreserved['includes'](element_742) || this.xvars['includes'](element_742)) {
+                            varname_743 = element_742 + '_' + vars.index;
+                            while (vars.self[varname_743]) {
+                                varname_743 = varname_743 + '_' + vars.index;
                             }
                         }
-                        while (vars.scope.fixed['includes'](varname_727) || (vars.scope.private[varname_727] && (vars.scope.private[varname_727] !== vars))) {
-                            varname_727 = varname_727 + '_' + vars.index;
+                        while (vars.scope.fixed['includes'](varname_743) || (vars.scope.private[varname_743] && (vars.scope.private[varname_743] !== vars))) {
+                            varname_743 = varname_743 + '_' + vars.index;
                         }
-                        if (varname_727 !== element_726) {
-                            if (vars.scope.fixed['includes'](element_726)) {
-                                vars.fix_map[element_726] = varname_727;
+                        if (varname_743 !== element_742) {
+                            if (vars.scope.fixed['includes'](element_742)) {
+                                vars.fix_map[element_742] = varname_743;
                             }
                             else {
-                                vars.scope.fix_map[element_726] = varname_727;
+                                vars.scope.fix_map[element_742] = varname_743;
                             }
                         }
-                        vars.scope.fixed.push(varname_727);
+                        vars.scope.fixed.push(varname_743);
                     }
                 }
             }

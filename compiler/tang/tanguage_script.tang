@@ -49,7 +49,6 @@ class Script {
     _init(input, source = '', run = false) {
         this.uid = boundaryMaker();
         this.markPattern = new RegExp('@boundary_(\\\d+)_as_(mark)::', 'g');
-        this.trimPattern = new RegExp('(___boundary_' + this.uid + '_(\\\d+)_as_(string|pattern|template)___|___boundary_(\\\d+)_as_propname___)', 'g');
         this.lastPattern = new RegExp('(___boundary_' + this.uid + '_(\\\d+)_as_(string|pattern|template)___|@boundary_(\\\d+)_as_propname::|@boundary_(\\\d+)_as_(keyword|midword|preoperator|operator|aftoperator|comments)::)', 'g');
         this.input = input;
         this.output = undefined;

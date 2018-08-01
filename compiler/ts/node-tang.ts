@@ -13,8 +13,8 @@ const fs = require('fs');
 const glob = require("glob");
 const path = require('path');
 const getDirName = require('path').dirname;
-// const tanguage_script = require('./script.js');
-const tanguage_script = require('./tanguage_script.js');
+const tanguage_script = require('./script.js');
+// const tanguage_script = require('./tanguage_script.js');
 const vlq = require('./vlq.js');
 const commands = ['compile', 'test', 'cdir', 'build', 'help', 'version'];
 
