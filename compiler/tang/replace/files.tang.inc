@@ -33,18 +33,6 @@ replaceIncludes(string) {
                 }
             });
         }
-    } else {
-        // console.log('FOOOO', this.sources,  string);
-        // let on = true;
-        // while (on) {
-        //     on = false;
-        //     string = string.replace(replaceExpRegPattern.include, (match, type, index) => {
-        //         // console.log(match);
-        //         on = true;
-        //         let src = this.readBuffer(index).replace(/('|"|`)/g, '').trim();
-        //         return this.onReadFile(this.readBuffer(index).replace(/('|"|`)/g, '').trim());
-        //     });
-        // }
     }
     return string
 }

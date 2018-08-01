@@ -1,6 +1,7 @@
 recheckFnOrCallLikes(string) {
-    string = string.replace(replaceExpRegPattern.recheckfn, (match: string, posi, fname: string, parenthesesindex: string, closureindex: string) => {
+    string = string.replace(replaceExpRegPattern.recheckfn, (match, posi, fname, parenthesesindex, closureindex) => {
         let fnlike = posi + fname + this.replacements[parenthesesindex][0].toString() + this.replacements[closureindex][0].toString();
+        this.replacements[parenthesesindex] = this.replacements[closureindex] = null;
         let index = this.replacements.length;
         this.pushBuffer([fnlike, posi]);
         return '___boundary_' + this.uid + '_' + index + '_as_function___ ';
@@ -82,6 +83,7 @@ replaceArrowFunctions(string) {
                 if (matches) {
                     let code = this.replacements[matches[2]][0].toString();
                     let posi = this.replacements[matches[2]][1];
+                    this.replacements[matches[2]] = null;
                     if (matches[3] === 'parentheses') {
                         body = code.replace(/^\(\s*(.*?)\s*\)$/, (match, code) => {
                             let index = this.replacements.length;
@@ -92,11 +94,29 @@ replaceArrowFunctions(string) {
                         // console.log(code);
                         body = code.replace(/(^\{|\}$)/g, '');
                     }
-                } else {
-                    let index = this.replacements.length;
-                    this.pushBuffer(['return ', void 0]);
-                    body = '@boundary_' + index + '_as_preoperator:: ' + body;
-                    // console.log(body);
+               } else {
+                    let matches = body.match(/^(@\d+L\d+P\d+O*\d*:::)?\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_(parentheses|object|closure)___\s*(@\d+L\d+P\d+O*\d*:::)?$/);
+                    // console.log(matches);
+                    if (matches) {
+                        let code = this.replacements[matches[2]][0].toString();
+                        let posi = this.replacements[matches[2]][1];
+                        this.replacements[matches[2]] = null;
+                        if (matches[3] === 'parentheses') {
+                            body = code.replace(/^\(\s*(.*?)\s*\)$/, (match, code) => {
+                                let index = this.replacements.length;
+                                this.pushBuffer(['return ', posi]);
+                                return '@boundary_' + index + '_as_preoperator:: ' + code;
+                            });
+                        } else {
+                            // console.log(code);
+                            body = code.replace(/(^\{|\}$)/g, '');
+                        }
+                    } else {
+                        let index = this.replacements.length;
+                        this.pushBuffer(['return ', void 0]);
+                        body = '@boundary_' + index + '_as_preoperator:: ' + body;
+                        // console.log(body);
+                    }
                 }
                 let index = this.replacements.length;
                 this.pushBuffer([args + arrow + body, posi]);

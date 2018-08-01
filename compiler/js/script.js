@@ -142,7 +142,7 @@
         call: /(@\d+L\d+P\d+O*\d*:::)?((new)\s+([\$a-zA-Z_\.][\$\w\.]*)|(\.)?([\$a-zA-Z_][\$\w]*))\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*([^\$\w\s\{]|[\r\n].|\s*___boundary_[A-Z0-9_]{36}_\d+_as_array___|\s*@boundary_\d+_as_operator::|$)/g,
         callschain: /\s*(@\d+L\d+P\d+O*\d*:::)?\.\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_(call|callmethod)___(\s*(@\d+L\d+P\d+O*\d*:::)?\.\s*___boundary_[A-Z0-9_]{36}_\d+_as_(call|callmethod)___)*/g,
         arrowfn: /(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*(->|=>)\s*([^,;\r\n]+)\s*(,|;|\r|\n|$)/g,
-        closure: /(@\d+L\d+P\d+O*\d*:::)?(@*[\$a-zA-Z_][\$\w]*|\)|\=|\(\s)?(@\d+L\d+P\d+O*\d*:::)?\s*\{(\s*[^\{\}]*?)\s*\}/g,
+        closure: /(@\d+L\d+P\d+O*\d*:::)?(@*[\$a-zA-Z_][\$\w]*|\)|\=|\:+|\(\s)?(@\d+L\d+P\d+O*\d*:::)?\s*\{(\s*[^\{\}]*?)\s*\}/g,
         recheckfn: /(@\d+L\d+P\d+O?\d*:::|\s+)?([\$a-zA-Z_][\$\w]*)?\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_closure___(@\d+L\d+P\d+O?\d*:::)?/,
         expression: /(@\d+L\d+P\d+O*\d*:::)?(if|for|while|switch|with|catch|each)\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*;*\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_(closure|objlike)___)/g,
         if: /(@\d+L\d+P\d+O*\d*:::)?if\s*(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*/g,
@@ -165,7 +165,7 @@
         fnlike: /(^|(function|def|public)\s+)?([\$a-zA-Z_][\$\w]*)?\s*\(([^\(\)]*)\)\s*\{([^\{\}]*?)\}/,
         call: /([\$a-zA-Z_\.][\$\w\.]*)\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___/,
         arrowfn: /(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*(->|=>)\s*([\s\S]*)\s*$/,
-        objectattr: /^\s*(@\d+L\d+P\d+O?\d*:::)?((([\$a-zA-Z_][\$\w]*)))\s*(\:*)([\s\S]*)$/,
+        objectattr: /^\s*(@\d+L\d+P\d+O?\d*:::)?((([\$a-zA-Z_][\$\w]*|@boundary_\d+_as_propname::)))\s*(\:*)([\s\S]*)$/,
         classelement: /^\s*(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om)\s+)?([\$\w]*)\s*(\=*)([\s\S]*)$/,
         travelargs: /^((@\d+L\d+P\d+O*\d*:::)?[\$a-zA-Z_][\$\w\.]*)\s+as\s(@\d+L\d+P\d+O*\d*:::)([\$a-zA-Z_][\$\w]*)(\s*,((@\d+L\d+P\d+O*\d*:::)([\$a-zA-Z_][\$\w]*)?)?)?/
     }, boundaryMaker = function () {
@@ -211,10 +211,10 @@
             this.useExtends = false;
             this.useEach = false;
             this.useLoop = false;
+            this.consoleDateTime('BEGIN:');
             this.uid = boundaryMaker();
             this.markPattern = new RegExp('@boundary_(\\\d+)_as_(mark)::', 'g');
-            this.trimPattern = new RegExp('(___boundary_' + this.uid + '_(\\\d+)_as_(string|pattern|template)___|___boundary_(\\\d+)_as_propname___)', 'g');
-            this.lastPattern = new RegExp('(___boundary_' + this.uid + '_(\\\d+)_as_(string|pattern|template)___|___boundary_(\\\d+)_as_propname___|@boundary_(\\\d+)_as_(keyword|midword|preoperator|operator|aftoperator|comments)::)', 'g');
+            this.lastPattern = new RegExp('(___boundary_' + this.uid + '_(\\\d+)_as_(string|pattern|template)___|@boundary_(\\\d+)_as_propname::|@boundary_(\\\d+)_as_(keyword|midword|preoperator|operator|aftoperator|comments)::)', 'g');
             this.input = input;
             this.output = undefined;
             this.blockreserved = ['pandora', 'root'];
@@ -232,7 +232,14 @@
                 this.run();
             }
         }
+        Script.prototype.consoleDateTime = function (tag) {
+            if (false) {
+                console.log(tag);
+                console.log(new Date());
+            }
+        };
         Script.prototype.compile = function () {
+            this.consoleDateTime('START COMPILE:');
             // console.log(this.input);
             var newcontent = this.markPosition(this.input, 0);
             var string = this.encode(newcontent);
@@ -265,9 +272,12 @@
             };
             // 当前作用域本级变量
             vars.self = vars.scope.protected;
+            this.consoleDateTime('BUILD AST:');
             this.buildAST(this.pickReplacePosis(this.getLines(string, vars), vars), vars);
             // this.output = 'console.log("Hello, world!");';
+            this.consoleDateTime('GENERATE:');
             this.generate();
+            this.consoleDateTime('COMPLETED:');
             // console.log(this.replacements);
             newcontent = string = vars = undefined;
             return this;
@@ -373,6 +383,11 @@
         };
         Script.prototype.readBuffer = function (index) {
             // console.log(this.replacements[index][0]);
+            if (index > 9) {
+                var string = this.replacements[index][0].toString();
+                this.replacements[index][0] = undefined;
+                return string;
+            }
             return this.replacements[index][0].toString();
         };
         Script.prototype.encode = function (string) {
@@ -416,7 +431,9 @@
             string = this.replaceUsing(string);
             // console.log(string);
             string = this.replaceStrings(string);
+            this.consoleDateTime('LOADING SRCS:');
             string = this.replaceIncludes(string);
+            this.consoleDateTime('SRCS LOADED:');
             // console.log(string);
             // console.log(this.replacements);
             string = this.tidyPosition(string);
@@ -424,12 +441,12 @@
             string = string.replace(/(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om)\s+)?___boundary_[A-Z0-9_]{36}_(\d+)_as_string___\s*(\:|\(|\=)/g, function (match, posi, desc, type, index, after) {
                 // console.log(posi, desc, this.replacements[index][1]);
                 if (_this.replacements[index][1]) {
-                    return "\r\n" + _this.replacements[index][1] + '___boundary_' + index + '_as_propname___' + after;
+                    return "\r\n" + _this.replacements[index][1] + '@boundary_' + index + '_as_propname::' + after;
                 }
                 if (desc) {
-                    return "\r\n" + posi + desc + '___boundary_' + index + '_as_propname___' + after;
+                    return "\r\n" + posi + desc + '@boundary_' + index + '_as_propname::' + after;
                 }
-                return "\r\n" + '___boundary_' + index + '_as_propname___' + after;
+                return "\r\n" + '@boundary_' + index + '_as_propname::' + after;
             });
             // console.log(string);
             string = string
@@ -446,6 +463,7 @@
             // console.log(string);
             // console.log(this.xvars, string);
             // console.log(this.replacements);
+            this.consoleDateTime('ANALYZE:');
             string = this.replaceBrackets(string);
             // console.log(string);
             string = this.replaceBraces(string);
@@ -583,6 +601,7 @@
             // console.log(string);
             // console.log(this.replacements);
             matches = undefined;
+            // console.log('LOOP TIMES: ' + count);
             return string;
         };
         Script.prototype.replaceTemplate = function (string) {
@@ -711,7 +730,6 @@
                 while (on_1) {
                     on_1 = false;
                     string = string.replace(replaceExpRegPattern.include, function (match, type, index) {
-                        // console.log(match, this.readBuffer(index));
                         // console.log(this.sources);
                         // console.log(id, this.sources[id].src);
                         on_1 = true;
@@ -737,19 +755,6 @@
                         }
                     });
                 }
-            }
-            else {
-                // console.log('FOOOO', this.sources,  string);
-                // let on = true;
-                // while (on) {
-                //     on = false;
-                //     string = string.replace(replaceExpRegPattern.include, (match: string, type: string, index) => {
-                //         // console.log(match);
-                //         on = true;
-                //         let src = this.readBuffer(index).replace(/('|"|`)/g, '').trim();
-                //         return this.onReadFile(this.readBuffer(index).replace(/('|"|`)/g, '').trim());
-                //     });
-                // }
             }
             return string;
         };
@@ -945,8 +950,12 @@
             });
             if (matched)
                 return string;
+            return this.replaceClosures(string);
+        };
+        Script.prototype.replaceClosures = function (string) {
+            var _this = this;
             return string.replace(replaceExpRegPattern.closure, function (match, posi1, word, posi3, closure) {
-                // console.log(match, '|', word, '|', posi2, '|', posi3, '|', closure);
+                // console.log(match, '|', word, '|', posi3, '|', closure);
                 // if (!word && match.match(/\s*\{\s*\}/)) {
                 //     console.log(posi2, '|', posi3);
                 //     return '@boundary_0_as_mark::';
@@ -958,14 +967,20 @@
                 posi3 = posi3 ? posi3.trim() : '';
                 var index = _this.replacements.length;
                 var index2;
+                // console.log(word, closure);
                 switch (word) {
                     case undefined:
+                        // console.log(word, closure);
+                        // console.log(closure.indexOf(';') >= 0);
+                        // console.log(!closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|[\$a-zA-Z_][\$\w]*\s*(,|:|$))/));
                         if ((closure.indexOf(';') >= 0) ||
                             !closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|[\$a-zA-Z_][\$\w]*\s*(,|:|$))/)) {
+                            // console.log('foo');
                             _this.pushBuffer(['{' + closure + '}', posi3]);
                             return posi1 + (word || '') + posi3 + ' ___boundary_' + _this.uid + '_' + index + '_as_closure___';
                         }
                         if (closure.match(/^\s*___boundary_[A-Z0-9_]{36}_\d+_as_function___\s*$/)) {
+                            // console.log('bar');
                             _this.pushBuffer(['{' + closure + '}', posi3]);
                             return posi1 + (word || '') + posi3 + ' ___boundary_' + _this.uid + '_' + index + '_as_objlike___';
                         }
@@ -973,9 +988,11 @@
                         // console.log(word, '|', posi2, '|', posi3);
                         _this.pushBuffer(['{' + closure + '}', posi3]);
                         return '___boundary_' + _this.uid + '_' + index + '_as_object___';
+                    case ':':
+                    case ':::':
                     case '=':
                         _this.pushBuffer(['{' + closure + '}']);
-                        return '= ___boundary_' + _this.uid + '_' + index + '_as_object___';
+                        return word + ' ___boundary_' + _this.uid + '_' + index + '_as_object___';
                     case '@config':
                         if (_this.configinfo === '{}') {
                             _this.configinfo_posi = posi1 || posi3;
@@ -999,7 +1016,7 @@
                         _this.pushBuffer([word + ' ', posi1]);
                         index2 = _this.replacements.length;
                         _this.pushBuffer(['{' + closure + '}', posi3]);
-                        return ";\r\n" + '@boundary_' + index + '_as_midword::___boundary_' + _this.uid + '_' + index2 + '_as_closure___';
+                        return "\r\n" + '@boundary_' + index + '_as_midword::___boundary_' + _this.uid + '_' + index2 + '_as_closure___';
                     default:
                         if (word.indexOf('(') === 0) {
                             // console.log(true, word);
@@ -1082,6 +1099,7 @@
             var _this = this;
             string = string.replace(replaceExpRegPattern.recheckfn, function (match, posi, fname, parenthesesindex, closureindex) {
                 var fnlike = posi + fname + _this.replacements[parenthesesindex][0].toString() + _this.replacements[closureindex][0].toString();
+                _this.replacements[parenthesesindex] = _this.replacements[closureindex] = null;
                 var index = _this.replacements.length;
                 _this.pushBuffer([fnlike, posi]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_function___ ';
@@ -1094,11 +1112,16 @@
                 var index = _this.replacements.length;
                 // console.log(index, match, expname + '(' + expressioncontent + ')' + body);
                 // console.log(expressioncontent, body);
+                // console.log(index, match);
                 _this.pushBuffer([expname + expressioncontent + body, posi]);
+                // if (expname==='if'){
+                //     return '___boundary_' + this.uid + '_' + index + '_as_if___';
+                // }
                 return '___boundary_' + _this.uid + '_' + index + '_as_expression___';
             }).replace(replaceExpRegPattern.if, function (match, posi, parentheses) {
                 // on = true;
                 var index = _this.replacements.length;
+                // console.log(index, match);
                 _this.pushBuffer(['if ' + parentheses, posi]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_if___ ';
             });
@@ -1256,6 +1279,7 @@
                         return '.___boundary_' + _this.uid + '_' + index + '_as_callmethod___' + after;
                     }
                     else if (callname === 'if') {
+                        console.log(index);
                         return '___boundary_' + _this.uid + '_' + index + '_as_if___ ' + after;
                     }
                     // console.log(after);
@@ -1291,6 +1315,7 @@
                         if (matches) {
                             var code = _this.replacements[matches[2]][0].toString();
                             var posi_1 = _this.replacements[matches[2]][1];
+                            _this.replacements[matches[2]] = null;
                             if (matches[3] === 'parentheses') {
                                 body = code.replace(/^\(\s*(.*?)\s*\)$/, function (match, code) {
                                     var index = _this.replacements.length;
@@ -1316,6 +1341,7 @@
                             if (matches_1) {
                                 var code = _this.replacements[matches_1[2]][0].toString();
                                 var posi_2 = _this.replacements[matches_1[2]][1];
+                                _this.replacements[matches_1[2]] = null;
                                 if (matches_1[3] === 'parentheses') {
                                     body = code.replace(/^\(\s*(.*?)\s*\)$/, function (match, code) {
                                         var index = _this.replacements.length;
@@ -1370,6 +1396,11 @@
                 }
             }
             return void 0;
+        };
+        Script.prototype.getPositionByIndex = function (index) {
+            var posi = this.replacements[index][1];
+            this.replacements[index][1] = undefined;
+            return this.getPosition(posi);
         };
         Script.prototype.pickTretOfMatch = function (match_as_statement, isblock) {
             if (isblock === void 0) { isblock = true; }
@@ -1484,7 +1515,7 @@
                             var value = element.trim();
                             var match_as_mark = value.match(/^@boundary_(\d+)_as_([a-z]+)::/);
                             if (match_as_mark && this.replacements[match_as_mark[1]][1]) {
-                                position = this.getPosition(this.replacements[match_as_mark[1]][1]);
+                                position = this.getPositionByIndex(match_as_mark[1]);
                                 if (position && (display === 'block')) {
                                     position.head = true;
                                 }
@@ -1650,7 +1681,7 @@
             if (endmark === void 0) { endmark = ','; }
             var type, elements = [];
             if (match[2] === 'sets') {
-                var closure = this.replacements[match[1]][0].toString().replace(/(\{|\})/g, '');
+                var closure = this.readBuffer(match[1]).replace(/(\{|\})/g, '');
                 if (/\.+/.test(closure)) {
                     type = '...';
                 }
@@ -1662,7 +1693,7 @@
             }
             else {
                 type = 'array';
-                elements = this.replacements[match[1]][0].toString().replace(/(\[|\])/g, '').split(',');
+                elements = this.readBuffer(match[1]).replace(/(\[|\])/g, '').split(',');
             }
             value = this.pushVariableValueToLine(lines, vars, type, symbol, _symbol, value, position, endmark);
             // console.log(elements, value);
@@ -1732,7 +1763,9 @@
         Script.prototype.pushSetToVars = function (lines, vars, type, index, length, symbol, _symbol, variable, value, position, endmark) {
             var _value, __value;
             if (type === '...') {
-                _value = 'pandora.remove(' + value + ', \'' + variable + '\')';
+                var index_5 = this.replacements.length;
+                this.pushBuffer(["'" + variable + "'"]);
+                _value = 'pandora.remove(' + value + ', ___boundary_' + this.uid + '_' + index_5 + 'string___)';
             }
             else if (type === 'object') {
                 // console.log(value, variable, index, endmark);
@@ -1828,39 +1861,41 @@
         };
         Script.prototype.pickReplacePosis = function (lines, vars) {
             var imports = [], using_as = {}, preast = [];
-            for (var index_5 = 0; index_5 < lines.length; index_5++) {
+            for (var index_6 = 0; index_6 < lines.length; index_6++) {
                 // console.log(lines[index]);
-                switch (lines[index_5].subtype) {
+                switch (lines[index_6].subtype) {
                     case 'sentence':
                         // console.log(lines[index]);
-                        var code = lines[index_5].value.trim();
-                        this.pushSentencesToPREAST(preast, vars, code, lines[index_5].display, lines[index_5].posi);
+                        var code = lines[index_6].value.trim();
+                        this.pushSentencesToPREAST(preast, vars, code, lines[index_6].display, lines[index_6].posi);
                         break;
                     case 'variable':
                         // case 'assignment':
                         preast.push([{
                                 type: 'code',
-                                posi: lines[index_5].posi,
-                                display: lines[index_5].display,
+                                posi: lines[index_6].posi,
+                                display: lines[index_6].display,
                                 vars: vars,
-                                value: lines[index_5].value
+                                value: lines[index_6].value
                             }]);
                         break;
                     case 'using':
                     case 'usings':
                         // console.log(lines[index]);.return
-                        var posi = this.replacements[lines[index_5].index][2];
-                        var src = this.replacements[lines[index_5].index][0].toString().trim();
+                        var posi = this.replacements[lines[index_6].index][2];
+                        var src = this.replacements[lines[index_6].index][0].toString().trim();
+                        this.replacements[lines[index_6].index] = null;
                         // let alias = .trim();
                         if (!imports['includes'](src)) {
                             imports.push(src);
                             imports.push(posi);
                         }
-                        if (this.replacements[lines[index_5].index][1]) {
+                        if (this.replacements[lines[index_6].index][1]) {
                             var position = void 0;
                             var alias = void 0;
-                            if (lines[index_5].subtype === 'usings') {
-                                var members = this.replacements[lines[index_5].index][1].split(',');
+                            if (lines[index_6].subtype === 'usings') {
+                                var members = this.replacements[lines[index_6].index][1].split(',');
+                                this.replacements[lines[index_6].index][1] = undefined;
                                 for (var m = 0; m < members.length; m++) {
                                     position = this.getPosition(members[m]);
                                     alias = members[m].replace(position.match, '').trim();
@@ -1868,8 +1903,10 @@
                                 }
                             }
                             else {
-                                position = this.getPosition(this.replacements[lines[index_5].index][1]);
-                                alias = this.replacements[lines[index_5].index][1].replace(position.match, '').trim();
+                                var posi_3 = this.replacements[lines[index_6].index][1];
+                                position = this.getPositionByIndex(lines[index_6].index);
+                                alias = posi_3.replace(position.match, '').trim();
+                                posi_3 = undefined;
                                 // console.log(alias);
                                 using_as[alias] = [src, '*', position];
                             }
@@ -1886,10 +1923,10 @@
                         break;
                     default:
                         preast.push([{
-                                index: lines[index_5].index,
+                                index: lines[index_6].index,
                                 // posi: lines[index].posi,
-                                display: lines[index_5].display,
-                                type: lines[index_5].subtype
+                                display: lines[index_6].display,
+                                type: lines[index_6].subtype
                             }]);
                         break;
                 }
@@ -1956,8 +1993,8 @@
                 vars: vars,
                 body: []
             };
-            for (var index_6 = 0; index_6 < preast.length; index_6++) {
-                var block = preast[index_6];
+            for (var index_7 = 0; index_7 < preast.length; index_7++) {
+                var block = preast[index_7];
                 if (block.length === 1) {
                     var element = block[0];
                     if (element.type === 'code') {
@@ -1995,30 +2032,30 @@
             if (inOrder === void 0) { inOrder = false; }
             var lines = code ? this.getLines(code, vars, inOrder) : [];
             // console.log(code, lines);
-            for (var index_7 = 0; index_7 < lines.length; index_7++) {
-                switch (lines[index_7].subtype) {
+            for (var index_8 = 0; index_8 < lines.length; index_8++) {
+                switch (lines[index_8].subtype) {
                     case 'sentence':
-                        var code_1 = lines[index_7].value.trim();
+                        var code_1 = lines[index_8].value.trim();
                         // console.log(lines[index].display === 'block', line);
                         // console.log(lines[index]);
-                        this.pushSentencesToAST(body, vars, code_1, !inOrder && (lines[index_7].display === 'block'), lines[index_7].posi);
+                        this.pushSentencesToAST(body, vars, code_1, !inOrder && (lines[index_8].display === 'block'), lines[index_8].posi);
                         break;
                     case 'variable':
                         // case 'assignment':
                         // console.log(lines[index].value);
                         body.push({
                             type: 'code',
-                            posi: lines[index_7].posi,
-                            display: inOrder ? 'inline' : lines[index_7].display,
+                            posi: lines[index_8].posi,
+                            display: inOrder ? 'inline' : lines[index_8].display,
                             vars: vars,
-                            value: lines[index_7].value
+                            value: lines[index_8].value
                         });
                         break;
                     default:
                         body.push(this.walk({
-                            index: lines[index_7].index,
+                            index: lines[index_8].index,
                             display: inOrder ? 'inline' : 'block',
-                            type: lines[index_7].subtype
+                            type: lines[index_8].subtype
                         }, vars, inOrder));
                         break;
                 }
@@ -2167,7 +2204,7 @@
                 case 'string':
                 case 'template':
                     var that = this;
-                    var position = this.getPosition(this.replacements[element.index][1]);
+                    var position = this.getPositionByIndex(element.index);
                     // console.log(position);
                     return {
                         type: 'code',
@@ -2187,7 +2224,7 @@
             }
         };
         Script.prototype.walkArray = function (index, display, vars) {
-            var body = [], position = this.getPosition(this.replacements[index][1]), clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(',');
+            var body = [], position = this.getPositionByIndex(index), clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(',');
             // console.log(this.replacements[index], clauses);
             for (var c = 0; c < clauses.length; c++) {
                 if (c) {
@@ -2255,11 +2292,11 @@
             };
             localvars.self = localvars.scope.protected;
             // localvars.fix_map = localvars.scope.fix_map;
-            var args = this.checkArgs(this.replacements[matches[2]][0].toString().replace(/(^\(|\)$)/g, ''), localvars);
+            var args = this.checkArgs(this.readBuffer(matches[2]).replace(/(^\(|\)$)/g, ''), localvars);
             // console.log(matches);
             return {
                 type: 'def',
-                posi: this.getPosition(this.replacements[index][1]),
+                posi: this.getPositionByIndex(index),
                 display: 'inline',
                 vars: localvars,
                 subtype: subtype,
@@ -2270,8 +2307,7 @@
         };
         Script.prototype.walkCall = function (index, display, vars, type) {
             // console.log(this.replacements[index]);
-            var name = [], args = [], matches = this.readBuffer(index).match(matchExpRegPattern.call), position = this.getPosition(this.replacements[index][1]), nameArr = matches[1].split('___boundary_' + this.uid), paramArr = this.replacements[matches[2]][0].toString().split(/([\(,\)])/);
-            // console.log(this.getLines(this.replacements[matches[2]][0].toString(), vars));
+            var name = [], args = [], matches = this.readBuffer(index).match(matchExpRegPattern.call), position = this.getPositionByIndex(index), nameArr = matches[1].split('___boundary_' + this.uid), paramArr = this.readBuffer(matches[2]).split(/([\(,\)])/);
             // console.log(this.replacements[index], matches);
             for (var n = 0; n < nameArr.length; n++) {
                 var element = nameArr[n];
@@ -2347,7 +2383,7 @@
         };
         Script.prototype.walkCallsChain = function (index, display, vars, type) {
             var _this = this;
-            var code = this.readBuffer(index), position = this.getPosition(this.replacements[index][1]), calls = [];
+            var code = this.readBuffer(index), position = this.getPositionByIndex(index), calls = [];
             code.replace(/(@\d+L\d+P\d+O*\d*:::)?\.___boundary_[A-Z0-9_]{36}_(\d+)_as_callmethod___/g, function (match, posi, _index) {
                 // console.log(match, posi, _index);
                 if (posi) {
@@ -2406,7 +2442,7 @@
                 }
             }
             var basename = matches[6];
-            var position = this.getPosition(this.replacements[index][1]);
+            var position = this.getPositionByIndex(index);
             if (type === 'class') {
                 this.useDeclare = true;
                 if ((subtype === 'anonClass') && cname && cname.match(namingExpr)) {
@@ -2462,7 +2498,7 @@
                 type: 'local'
             };
             var array = this.readBuffer(index).split(/\s*(\{|\})\s*/);
-            var position = this.getPosition(this.replacements[index][1]);
+            var position = this.getPositionByIndex(index);
             var body = this.pushBodyToAST([], localvars, array[2]);
             this.resetVarsRoot(localvars);
             array = undefined;
@@ -2477,7 +2513,7 @@
         Script.prototype.walkExtends = function (index, display, vars) {
             // console.log(this.replacements[index]);
             var matches = this.readBuffer(index).match(matchExpRegPattern.extends);
-            var position = this.getPosition(this.replacements[index][1]);
+            var position = this.getPositionByIndex(index);
             var subtype = 'ext';
             var objname = matches[2];
             var localvars = vars;
@@ -2560,26 +2596,26 @@
         Script.prototype.walkFnLike = function (index, display, vars, type) {
             var _this = this;
             function push(semicolons, lines) {
-                for (var index_8 = 0; index_8 < lines.length; index_8++) {
-                    if (lines[index_8].type === 'codes') {
-                        semicolons = push(semicolons, lines[index_8].body);
+                for (var index_9 = 0; index_9 < lines.length; index_9++) {
+                    if (lines[index_9].type === 'codes') {
+                        semicolons = push(semicolons, lines[index_9].body);
                         continue;
                     }
-                    if (lines[index_8].posi)
-                        lines[index_8].posi.head = false;
-                    if (lines[index_8].value) {
-                        if (lines[index_8].value.match(/;/)) {
+                    if (lines[index_9].posi)
+                        lines[index_9].posi.head = false;
+                    if (lines[index_9].value) {
+                        if (lines[index_9].value.match(/;/)) {
                             if (semicolons < 2) {
-                                lines[index_8].value = lines[index_8].value.replace(/;\s*/, '; ');
+                                lines[index_9].value = lines[index_9].value.replace(/;\s*/, '; ');
                                 semicolons++;
                             }
                             else {
                                 // console.log(lines[index].value);
-                                lines[index_8].value = lines[index_8].value.replace(/;\s*/, '');
+                                lines[index_9].value = lines[index_9].value.replace(/;\s*/, '');
                             }
                         }
                     }
-                    head.body.push(lines[index_8]);
+                    head.body.push(lines[index_9]);
                 }
                 return semicolons;
             }
@@ -2632,7 +2668,7 @@
                     // console.log(body);
                     return {
                         type: 'exp',
-                        posi: this.getPosition(this.replacements[index][1]),
+                        posi: this.getPositionByIndex(index),
                         display: 'block',
                         vars: localvars_1,
                         expression: fname,
@@ -2715,7 +2751,7 @@
                         });
                         return {
                             type: 'travel',
-                            posi: this.getPosition(this.replacements[index][1]),
+                            posi: this.getPositionByIndex(index),
                             display: 'block',
                             subtype: subtype_1,
                             iterator: iterator,
@@ -2732,7 +2768,7 @@
                     }
                 }
             }
-            var position = this.getPosition(this.replacements[index][1]);
+            var position = this.getPositionByIndex(index);
             if (type === 'def') {
                 if (fname) {
                     if (fname !== 'return') {
@@ -2788,7 +2824,7 @@
             return {
                 type: type,
                 vars: localvars,
-                posi: this.getPosition(this.replacements[index][1]),
+                posi: this.getPositionByIndex(index),
                 display: display,
                 subtype: subtype,
                 fname: fname,
@@ -2798,7 +2834,7 @@
             };
         };
         Script.prototype.walkParentheses = function (index, display, vars) {
-            var body = [], clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(/\s*(,)/), position = this.getPosition(this.replacements[index][1]);
+            var body = [], clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(/\s*(,)/), position = this.getPositionByIndex(index);
             for (var c = 0; c < clauses.length; c++) {
                 if (c) {
                     var posi = this.getPosition(clauses[c]);
@@ -2824,7 +2860,7 @@
             return {
                 type: 'object',
                 display: display || 'inline',
-                posi: this.getPosition(this.replacements[index][1]),
+                posi: this.getPositionByIndex(index),
                 vars: vars,
                 body: this.checkObjMember(vars, this.readBuffer(index))
             };
@@ -2846,8 +2882,8 @@
                         value: attr[6].trim()
                     });
                 }
-                for (var index_9 = 1; index_9 < array.length; index_9++) {
-                    var element = array[index_9];
+                for (var index_10 = 1; index_10 < array.length; index_10++) {
+                    var element = array[index_10];
                     var match_as_statement = element.trim().match(matchExpRegPattern.index3);
                     // console.log(matches);
                     if (match_as_statement) {
@@ -2906,8 +2942,8 @@
             // console.log(code);
             var body = [], array = code.replace('_as_function___', '_as_function___;').split(/[;,\r\n]+/);
             // console.log(code);
-            for (var index_10 = 0; index_10 < array.length; index_10++) {
-                var element = array[index_10].trim();
+            for (var index_11 = 0; index_11 < array.length; index_11++) {
+                var element = array[index_11].trim();
                 var type = 'method';
                 // console.log(element);
                 if (element) {
@@ -2982,8 +3018,8 @@
         Script.prototype.checkObjMember = function (vars, code) {
             var that = this, body = [], bodyIndex = -1, lastIndex = 0, array = code.split(/\s*[\{,\}]\s*/);
             // console.log(code, array);
-            for (var index_11 = 0; index_11 < array.length; index_11++) {
-                var element = array[index_11].trim();
+            for (var index_12 = 0; index_12 < array.length; index_12++) {
+                var element = array[index_12].trim();
                 if (element) {
                     var elArr = element.split('___boundary_' + this.uid);
                     if (elArr[0] && elArr[0].trim()) {
@@ -3004,7 +3040,7 @@
                             continue;
                         }
                         else {
-                            // console.log(elArr);
+                            console.log(elArr);
                         }
                     }
                     else {
@@ -3015,15 +3051,17 @@
                                 case 'string':
                                 case 'pattern':
                                 case 'tamplate':
-                                    console.log(body, bodyIndex);
+                                    // console.log(match_as_statement);
+                                    // console.log(body, bodyIndex);
                                     body[bodyIndex].body.push({
                                         type: 'code',
                                         posi: void 0,
                                         display: 'inline',
                                         vars: vars,
-                                        value: ',' + this.replacements[parseInt(match_as_statement[1])][0].toString().replace(this.markPattern, function () {
-                                            return that.replacements[arguments[1]][0].toString();
-                                        })
+                                        // value: ',' + this.readBuffer(parseInt(match_as_statement[1])).replace(this.markPattern, function () {
+                                        //     return that.readBuffer(arguments[1]);
+                                        // })
+                                        value: ',' + match_as_statement[0]
                                     });
                                     if (match_as_statement[3]) {
                                         body[bodyIndex].body.push({
@@ -3053,8 +3091,8 @@
         Script.prototype.checkArgs = function (code, localvars) {
             var args = code.split(/\s*,\s*/), keys = [], keysArray = void 0, vals = [];
             // console.log(code, args);
-            for (var index_12 = 0; index_12 < args.length; index_12++) {
-                var arg = args[index_12];
+            for (var index_13 = 0; index_13 < args.length; index_13++) {
+                var arg = args[index_13];
                 if (arg) {
                     var array = arg.split(/\s*=\s*/);
                     var position = this.getPosition(array[0]);
@@ -3090,17 +3128,17 @@
             // console.log(code);
             var body = [];
             // console.log(args, lines);
-            for (var index_13 = 0; index_13 < args.vals.length; index_13++) {
-                if (args.vals[index_13] !== undefined) {
-                    var valArr = args.vals[index_13].split('___boundary_' + this.uid);
+            for (var index_14 = 0; index_14 < args.vals.length; index_14++) {
+                if (args.vals[index_14] !== undefined) {
+                    var valArr = args.vals[index_14].split('___boundary_' + this.uid);
                     if (valArr[1]) {
                         body.push({
                             type: 'code',
-                            posi: args.keys[index_13][1],
+                            posi: args.keys[index_14][1],
                             display: 'block',
-                            value: 'if (' + args.keys[index_13][0] + '@boundary_5_as_operator::void 0) { ' + args.keys[index_13][0] + ' = ' + valArr[0]
+                            value: 'if (' + args.keys[index_14][0] + '@boundary_5_as_operator::void 0) { ' + args.keys[index_14][0] + ' = ' + valArr[0]
                         });
-                        this.pushReplacementsToAST(body, vars, valArr[1], false, this.getPosition(args.vals[index_13]));
+                        this.pushReplacementsToAST(body, vars, valArr[1], false, this.getPosition(args.vals[index_14]));
                         body.push({
                             type: 'code',
                             posi: void 0,
@@ -3111,9 +3149,9 @@
                     else {
                         body.push({
                             type: 'code',
-                            posi: args.keys[index_13][1],
+                            posi: args.keys[index_14][1],
                             display: 'block',
-                            value: 'if (' + args.keys[index_13][0] + '@boundary_5_as_operator::void 0) { ' + args.keys[index_13][0] + ' = ' + valArr[0] + '; }'
+                            value: 'if (' + args.keys[index_14][0] + '@boundary_5_as_operator::void 0) { ' + args.keys[index_14][0] + ' = ' + valArr[0] + '; }'
                         });
                     }
                     valArr = undefined;
@@ -3140,8 +3178,11 @@
             var neck = [];
             var body = [];
             var foot = [];
+            this.consoleDateTime('FIX VARS:');
             this.fixVariables(ast.vars);
+            this.consoleDateTime('PUSH BODY:');
             this.pushCodes(body, ast.vars, ast.body, 1, this.namespace);
+            this.consoleDateTime('PUSH HEAD:');
             if (this.isNativeCode) {
                 this.pushNativeHeader(head);
                 this.useDeclare && this.pushDeclare(neck);
@@ -3169,11 +3210,14 @@
                 imports = undefined;
                 alias = undefined;
             }
+            this.consoleDateTime('PUSH FOOT:');
             this.pushFooter(foot, ast.vars);
             ast = undefined;
+            this.consoleDateTime('JOIN PRE OPT:');
             var preoutput = head.join('') + neck.join('') + this.trim(body.join('')) + foot.join('');
             head = neck = body = foot = undefined;
-            this.output = this.pickUpMap(this.restoreStrings(preoutput, true)).replace(/[\s;]+;/g, ';');
+            this.consoleDateTime('PICK MAP:');
+            this.output = this.pickUpMap(this.restoreStrings(preoutput)).replace(/[\s;]+;/g, ';');
             preoutput = undefined;
             // console.log(this.output);
             return this;
@@ -3181,10 +3225,10 @@
         Script.prototype.pushPostionsToMap = function (position, codes) {
             if (codes === void 0) { codes = undefined; }
             if (position && (typeof position === 'object')) {
-                var index_14 = this.posimap.length;
+                var index_15 = this.posimap.length;
                 this.posimap.push(position);
-                var replace = '/* @posi' + index_14 + ' */';
-                index_14 = undefined;
+                var replace = '/* @posi' + index_15 + ' */';
+                index_15 = undefined;
                 if (codes) {
                     codes.push(replace);
                 }
@@ -3398,8 +3442,8 @@
             }
             if (imports.length) {
                 var stropmi = [];
-                for (var index_15 = 0; index_15 < imports.length; index_15 += 2) {
-                    stropmi.push(this.pushPostionsToMap(this.getPosition(imports[index_15 + 1])) + "'" + imports[index_15] + "'");
+                for (var index_16 = 0; index_16 < imports.length; index_16 += 2) {
+                    stropmi.push(this.pushPostionsToMap(this.getPosition(imports[index_16 + 1])) + "'" + imports[index_16] + "'");
                 }
                 // console.log(imports, stropmi);
                 codes.push("\r\n    " + stropmi.join(",\r\n    ") + "\r\n");
@@ -3448,10 +3492,10 @@
             // console.log(codes, array);
             // console.log(array);
             // console.log(layer, array);
-            for (var index_16 = 0; index_16 < array.length; index_16++) {
-                var element = array[index_16];
+            for (var index_17 = 0; index_17 < array.length; index_17++) {
+                var element = array[index_17];
                 // console.log(element);
-                this.pushElement(codes, vars, element, layer, namespace, (index_16 - 1 >= 0) ? array[index_16 - 1].type : lasttype, ignoreVarsPatch);
+                this.pushElement(codes, vars, element, layer, namespace, (index_17 - 1 >= 0) ? array[index_17 - 1].type : lasttype, ignoreVarsPatch);
             }
             return codes;
         };
@@ -3580,14 +3624,14 @@
             return codes;
         };
         Script.prototype.pushArrayElements = function (elements, body, vars, _layer, namespace) {
-            for (var index_17 = 0; index_17 < body.length; index_17++) {
-                if (body[index_17].value) {
-                    elements.push(this.pushPostionsToMap(body[index_17].posi) + this.patchVariables(body[index_17].value, vars));
+            for (var index_18 = 0; index_18 < body.length; index_18++) {
+                if (body[index_18].value) {
+                    elements.push(this.pushPostionsToMap(body[index_18].posi) + this.patchVariables(body[index_18].value, vars));
                 }
                 else {
                     var elemCodes = [];
-                    this.pushPostionsToMap(body[index_17].posi, elemCodes);
-                    this.pushElement(elemCodes, vars, body[index_17], _layer, namespace);
+                    this.pushPostionsToMap(body[index_18].posi, elemCodes);
+                    this.pushElement(elemCodes, vars, body[index_18], _layer, namespace);
                     if (elemCodes.length) {
                         elements.push(elemCodes.join('').trim());
                     }
@@ -3663,10 +3707,10 @@
             return codes;
         };
         Script.prototype.pushCallArgs = function (args, body, vars, _layer, namespace) {
-            for (var index_18 = 0; index_18 < body.length; index_18++) {
-                var param = body[index_18].body;
+            for (var index_19 = 0; index_19 < body.length; index_19++) {
+                var param = body[index_19].body;
                 var paramCodes = [];
-                this.pushPostionsToMap(body[index_18].posi, paramCodes);
+                this.pushPostionsToMap(body[index_19].posi, paramCodes);
                 this.pushCodes(paramCodes, vars, param, _layer, namespace);
                 if (paramCodes.length) {
                     args.push(paramCodes.join('').trim());
@@ -3695,8 +3739,8 @@
                 _break = true;
                 indent = "\r\n" + stringRepeat("    ", _layer);
             }
-            for (var index_19 = 0; index_19 < element.calls.length; index_19++) {
-                var method = element.calls[index_19];
+            for (var index_20 = 0; index_20 < element.calls.length; index_20++) {
+                var method = element.calls[index_20];
                 // console.log(method);
                 // method
                 elements.push(this.pushElement([], element.vars, method, _layer, namespace).join(''));
@@ -3721,8 +3765,12 @@
             var static_elements = [];
             var cname = '';
             if (element.subtype === 'stdClass') {
-                cname = 'pandora.' + element.cname.trim();
-                codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(\'' + element.cname.trim() + '\', ');
+                var cnt = element.cname.trim();
+                var index_21 = this.replacements.length;
+                this.pushBuffer(["'" + cnt + "'"]);
+                cname = 'pandora.' + cnt;
+                cnt = undefined;
+                codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(___boundary_' + this.uid + '_' + index_21 + 'string___, ');
             }
             else {
                 if (element.cname && element.cname.trim()) {
@@ -3748,8 +3796,8 @@
             var setters = [];
             var getters = [];
             var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
-            for (var index_20 = 0; index_20 < element.body.length; index_20++) {
-                var member = element.body[index_20];
+            for (var index_22 = 0; index_22 < element.body.length; index_22++) {
+                var member = element.body[index_22];
                 var elem = [];
                 // console.log(member);
                 switch (member.type) {
@@ -3859,8 +3907,8 @@
             }
             if (element.args.length) {
                 var args = [];
-                for (var index_21 = 0; index_21 < element.args.length; index_21++) {
-                    args.push(this.pushPostionsToMap(element.args[index_21][1]) + this.patchVariable(element.args[index_21][0], element.vars));
+                for (var index_23 = 0; index_23 < element.args.length; index_23++) {
+                    args.push(this.pushPostionsToMap(element.args[index_23][1]) + this.patchVariable(element.args[index_23][0], element.vars));
                 }
                 codes.push(args.join(', '));
             }
@@ -3905,7 +3953,9 @@
                     this.pushCodes(codes, element.vars, element.body, layer + 1, namespace + '.');
                 }
                 else {
-                    codes.push(indent1 + posi + 'pandora.ns(\'' + namespace + element.oname.trim() + '\', function () {');
+                    var index_24 = this.replacements.length;
+                    this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
+                    codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_24 + 'string___, function () {');
                     this.pushCodes(codes, element.vars, element.body, layer + 1, namespace + element.oname.trim() + '.');
                 }
                 // console.log(element.body);
@@ -3927,7 +3977,9 @@
                 }
             }
             else if (element.subtype === 'nsassign' || element.subtype === 'globalassign') {
-                codes.push(indent1 + posi + 'pandora.ns(\'' + namespace + element.oname.trim() + '\', ');
+                var index_25 = this.replacements.length;
+                this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
+                codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_25 + 'string___, ');
                 this.pushObjCodes(codes, element, layer, namespace);
             }
             else {
@@ -4009,8 +4061,8 @@
             // console.log(element);
             var overrides = {};
             var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
-            for (var index_22 = 0; index_22 < element.body.length; index_22++) {
-                var member = element.body[index_22];
+            for (var index_26 = 0; index_26 < element.body.length; index_26++) {
+                var member = element.body[index_26];
                 var elem = [];
                 // console.log(member);
                 switch (member.type) {
@@ -4126,8 +4178,8 @@
                     _break = true;
                 }
                 // console.log(_break, element);
-                for (var index_23 = 0; index_23 < element.body.length; index_23++) {
-                    var member = element.body[index_23];
+                for (var index_27 = 0; index_27 < element.body.length; index_27++) {
+                    var member = element.body[index_27];
                     var elem = [];
                     // console.log(member);
                     switch (member.type) {
@@ -4415,21 +4467,17 @@
             // console.log(this.namespace);
             return ('pandora.' + this.namespace).replace(/\.+$/, '');
         };
-        Script.prototype.restoreStrings = function (string, last) {
+        Script.prototype.restoreStrings = function (string) {
+            this.consoleDateTime('RESTORE STRINGS:');
             var that = this;
-            if (last) {
-                var pattern = this.lastPattern;
-            }
-            else {
-                var pattern = this.trimPattern;
-            }
-            return string.replace(pattern, function () {
+            return string.replace(this.lastPattern, function () {
+                // all + string|pattern|template  + type + propname + keyword|midword|preoperator|operator|aftoperator|comments + type
                 if (arguments[5]) {
-                    return that.replacements[arguments[5]][0].toString();
+                    return that.readBuffer(arguments[5]);
                 }
-                return that.replacements[arguments[2] || arguments[4]][0].toString();
+                return that.readBuffer(arguments[2] || arguments[4]);
             }).replace(this.markPattern, function () {
-                return that.replacements[arguments[1]][0].toString();
+                return that.readBuffer(arguments[1]);
             }).replace(/(@\d+L\d+P\d+O?\d*:::)/g, '');
         };
         Script.prototype.decode = function (string) {
@@ -4437,13 +4485,13 @@
             var matches = string.match(/___boundary_([A-Z0-9_]{37})?(\d+)_as_[a-z]+___/);
             while (matches) {
                 // console.log(matches, this.replacements[matches[2]]);
-                string = string.replace(matches[0], this.replacements[matches[2]][0].toString()).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
+                string = string.replace(matches[0], this.readBuffer(matches[2])).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
                 matches = string.match(/___boundary_([A-Z0-9_]{37})?(\d+)_as_[a-z]+___/);
             }
             matches = string.match(/@boundary_(\d+)_as_[a-z]+::/);
             while (matches) {
                 // console.log(matches, this.replacements[matches[2]]);
-                string = string.replace(matches[0], this.replacements[matches[1]][0].toString()).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
+                string = string.replace(matches[0], this.readBuffer(matches[1])).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
                 matches = string.match(/@boundary_(\d+)_as_[a-z]+::/);
             }
             matches = undefined;
@@ -4452,10 +4500,12 @@
         };
         Script.prototype.trim = function (string) {
             var _this = this;
+            this.consoleDateTime('START TRIM:');
             // 此处的replace在整理完成后，将进行分析归纳，最后改写为callback形式的
             // console.log(string);
-            string = this.replaceStrings(string, true);
+            // string = this.replaceStrings(string, true);
             // console.log(string);
+            this.consoleDateTime('DEALING TRIM:');
             // 去除多余标注
             string = string.replace(/\s*(@boundary_\d+_as_comments::)?@(ownprop|return)[; \t]*/g, function () {
                 return '';
@@ -4515,6 +4565,7 @@
             // console.log(string);
             string = string.replace(/\)\s*return\s+/, ') return ');
             // console.log(string);
+            this.consoleDateTime('FINISH TRIM:');
             return string;
         };
         Script.prototype.pickUpMap = function (string) {
@@ -4527,13 +4578,13 @@
                 var mapping = [];
                 var match = void 0;
                 while (match = line.match(/\/\*\s@posi(\d+)\s\*\//)) {
-                    var index_24 = match.index;
+                    var index_28 = match.index;
                     // console.log(line, match);
                     if (match[1] < this.posimap.length - 1) {
                         var i = parseInt(match[1]) + 1;
                         var position = this.posimap[i];
                         this.posimap[i] = undefined;
-                        mapping.push([index_24, position.o[0], position.o[1], position.o[2], 0]);
+                        mapping.push([index_28, position.o[0], position.o[1], position.o[2], 0]);
                     }
                     else {
                         // console.log(match);

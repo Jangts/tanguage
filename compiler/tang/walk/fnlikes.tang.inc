@@ -71,7 +71,7 @@ walkFnLike(index, display, vars, type) {
             // console.log(body);
             return {
                 type: 'exp',
-                posi: this.getPosition(this.replacements[index][1]),
+                posi: this.getPositionByIndex(index),
                 display: 'block',
                 vars: localvars,
                 expression: fname,
@@ -153,7 +153,7 @@ walkFnLike(index, display, vars, type) {
 
                 return {
                     type: 'travel',
-                    posi: this.getPosition(this.replacements[index][1]),
+                    posi: this.getPositionByIndex(index),
                     display: 'block',
                     subtype: subtype,
                     iterator: iterator,
@@ -170,7 +170,7 @@ walkFnLike(index, display, vars, type) {
             }
         }
     }
-    let position = this.getPosition(this.replacements[index][1]);
+    let position = this.getPositionByIndex(index);
     if (type === 'def'){
         if (fname) {
             if (fname !== 'return') {
@@ -226,7 +226,7 @@ walkFnLike(index, display, vars, type) {
     return {
         type: type,
         vars: localvars,
-        posi: this.getPosition(this.replacements[index][1]),
+        posi: this.getPositionByIndex(index),
         display: display,
         subtype: subtype,
         fname: fname,

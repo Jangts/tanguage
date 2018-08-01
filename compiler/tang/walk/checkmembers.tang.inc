@@ -113,9 +113,10 @@ checkObjMember(vars, code) {
                                 posi: void 0,
                                 display: 'inline',
                                 vars: vars,
-                                value: ',' + this.replacements[parseInt(match_as_statement[1])][0].toString().replace(this.markPattern, function () {
-                                    return that.replacements[arguments[1]][0].toString();
-                                })
+                                // value: ',' + this.readBuffer(parseInt(match_as_statement[1])).replace(this.markPattern, function () {
+                                //     return that.readBuffer(arguments[1]);
+                                // })
+                                value: ',' + match_as_statement[0]
                             });
                             if (match_as_statement[3]) {
                                 body[bodyIndex].body.push({

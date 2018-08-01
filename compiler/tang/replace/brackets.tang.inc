@@ -68,6 +68,7 @@ replaceBraces(string) {
     return string;
 }
 @include 'codes';
+@include 'closures';
 replaceParentheses(string) {
     string = this.replaceWords(string);
     let left = string.indexOf('(');

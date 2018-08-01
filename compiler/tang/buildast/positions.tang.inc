@@ -20,6 +20,11 @@ getPosition(string) {
     }
     return void 0;
 }
+getPositionByIndex(index) {
+    let posi = this.replacements[index][1];
+    this.replacements[index][1] = undefined;
+    return this.getPosition(posi);
+}
 pickReplacePosis(lines, vars) {
     let imports = [],
         using_as = {},
@@ -49,6 +54,7 @@ pickReplacePosis(lines, vars) {
                 // console.log(lines[index]);.return
                 let posi = this.replacements[lines[index].index][2];
                 let src = this.replacements[lines[index].index][0].toString().trim();
+                this.replacements[lines[index].index] = null;
                 // let alias = .trim();
 
                 if (!imports['includes'](src)) {
@@ -60,6 +66,7 @@ pickReplacePosis(lines, vars) {
                     let alias;
                     if (lines[index].subtype === 'usings') {
                         let members = this.replacements[lines[index].index][1].split(',');
+                        this.replacements[lines[index].index][1] = undefined;
                         for (let m = 0; m < members.length; m++) {
                             position = this.getPosition(members[m]);
                             alias = members[m].replace(position.match, '').trim();
@@ -67,8 +74,10 @@ pickReplacePosis(lines, vars) {
                         }
                         // console.log(this.replacements[lines[index].index][1]);
                     } else {
-                        position = this.getPosition(this.replacements[lines[index].index][1]);
-                        alias = this.replacements[lines[index].index][1].replace(position.match, '').trim();
+                        let posi = this.replacements[lines[index].index][1];
+                        position = this.getPositionByIndex(lines[index].index);
+                        alias = posi.replace(position.match, '').trim();
+                        posi = undefined;
                         // console.log(alias);
                         using_as[alias] = [src, '*', position];
                     }

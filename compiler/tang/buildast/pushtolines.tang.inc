@@ -41,7 +41,7 @@ pushSentenceToLines(lines, code, display) {
                     var value = element.trim();
                     let match_as_mark = value.match(/^@boundary_(\d+)_as_([a-z]+)::/);
                     if (match_as_mark && this.replacements[match_as_mark[1]][1]) {
-                        position = this.getPosition(this.replacements[match_as_mark[1]][1]);
+                        position = this.getPositionByIndex(match_as_mark[1]);
                         if (position && (display === 'block')) {
                             position.head = true;
                         }

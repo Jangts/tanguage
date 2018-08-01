@@ -8,8 +8,8 @@
 ;
 this.tang.init().auto([
     '$_/data/',
+    '$_/../../compiler/js/tanguage_script as tanguage_script'
     // '$_/../../compiler/js/script as tanguage_script'
-    '$_/../../compiler/tang/tanguage_script as tanguage_script'
 ], function (_, root, imports) {
     var tanguage_script = imports.tanguage_script, tangs = [], scripts = document.getElementsByTagName('script');
     // console.log(imports);

@@ -19,7 +19,6 @@ class Script {
     namespace = '';
     namespace_posi;
     markPattern;
-    trimPattern;
     lastPattern;
     stringReplaceTimes = 65536;
     positions = [];
@@ -51,7 +50,7 @@ class Script {
         this.uid = boundaryMaker();
         this.markPattern = new RegExp('@boundary_(\\\d+)_as_(mark)::', 'g');
         this.trimPattern = new RegExp('(___boundary_' + this.uid + '_(\\\d+)_as_(string|pattern|template)___|___boundary_(\\\d+)_as_propname___)', 'g');
-        this.lastPattern = new RegExp('(___boundary_' + this.uid + '_(\\\d+)_as_(string|pattern|template)___|___boundary_(\\\d+)_as_propname___|@boundary_(\\\d+)_as_(keyword|midword|preoperator|operator|aftoperator|comments)::)', 'g');
+        this.lastPattern = new RegExp('(___boundary_' + this.uid + '_(\\\d+)_as_(string|pattern|template)___|@boundary_(\\\d+)_as_propname::|@boundary_(\\\d+)_as_(keyword|midword|preoperator|operator|aftoperator|comments)::)', 'g');
         this.input = input;
         this.output = undefined;
         this.blockreserved = ['pandora', 'root'];
@@ -120,6 +119,11 @@ class Script {
     }
     readBuffer(index) {
         // console.log(this.replacements[index][0]);
+        if(index>9){
+            let string = this.replacements[index][0].toString();
+            this.replacements[index][0] = undefined;
+            return string;
+        }
         return this.replacements[index][0].toString();
     }
     @include 'position';

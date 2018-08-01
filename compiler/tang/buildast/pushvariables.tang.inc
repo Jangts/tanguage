@@ -81,7 +81,7 @@ pushVariableToLine(lines, vars, code, symbol, posi = '', display = 'inline', _sy
 pushVariablesToLine(lines, vars, match, symbol, _symbol = '', value, position, endmark = ','){
     let type, elements = [];
     if (match[2] === 'sets') {
-        let closure = this.replacements[match[1]][0].toString().replace(/(\{|\})/g, '');
+        let closure = this.readBuffer(match[1]).replace(/(\{|\})/g, '');
         if (/\.+/.test(closure)) {
             type = '...';
         } else {
@@ -91,7 +91,7 @@ pushVariablesToLine(lines, vars, match, symbol, _symbol = '', value, position, e
         closure = undefined;
     } else {
         type = 'array';
-        elements = this.replacements[match[1]][0].toString().replace(/(\[|\])/g, '').split(',');
+        elements = this.readBuffer(match[1]).replace(/(\[|\])/g, '').split(',');
     }
     value = this.pushVariableValueToLine(lines, vars, type, symbol, _symbol, value, position, endmark);
     // console.log(elements, value);

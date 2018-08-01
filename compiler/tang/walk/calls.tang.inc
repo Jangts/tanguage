@@ -3,10 +3,9 @@ walkCall(index, display, vars, type) {
     let name = [],
         args = [],
         matches = this.readBuffer(index).match(matchExpRegPattern.call),
-        position = this.getPosition(this.replacements[index][1]),
+        position = this.getPositionByIndex(index),
         nameArr = matches[1].split('___boundary_' + this.uid),
-        paramArr = this.replacements[matches[2]][0].toString().split(/([\(,\)])/);
-    // console.log(this.getLines(this.replacements[matches[2]][0].toString(), vars));
+        paramArr = this.readBuffer(matches[2]).split(/([\(,\)])/);
     // console.log(this.replacements[index], matches);
     for (let n = 0; n < nameArr.length; n++) {
         var element = nameArr[n];
@@ -78,7 +77,7 @@ walkCall(index, display, vars, type) {
 }
 walkCallsChain(index, display, vars, type) {
     let code = this.readBuffer(index),
-        position = this.getPosition(this.replacements[index][1]),
+        position = this.getPositionByIndex(index),
         calls = [];
 
     code.replace(/(@\d+L\d+P\d+O*\d*:::)?\.___boundary_[A-Z0-9_]{36}_(\d+)_as_callmethod___/g, (match, posi, _index) => {

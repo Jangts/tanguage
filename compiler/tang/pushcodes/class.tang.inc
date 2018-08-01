@@ -5,8 +5,12 @@ pushClassCodes(codes, element, layer, namespace) {
     let static_elements = [];
     let cname = '';
     if (element.subtype === 'stdClass') {
-        cname = 'pandora.' + element.cname.trim();
-        codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(\'' + element.cname.trim() + '\', ');
+        let cnt = element.cname.trim();
+        let index = this.replacements.length;
+        this.pushBuffer(["'" + cnt + "'"]);
+        cname = 'pandora.' + cnt;
+        cnt = undefined;
+        codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(___boundary_' + this.uid + '_' + index + 'string___, ');
     } else {
         if (element.cname && element.cname.trim()) {
             cname = element.cname.trim();

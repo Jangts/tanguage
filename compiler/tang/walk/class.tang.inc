@@ -31,7 +31,7 @@ walkClass(index, display, vars = true) {
         }
     }
     let basename = matches[6];
-    let position = this.getPosition(this.replacements[index][1]);
+    let position = this.getPositionByIndex(index);
     if (type === 'class') {
         this.useDeclare = true;
         if ((subtype === 'anonClass') && cname && cname.match(namingExpr)){

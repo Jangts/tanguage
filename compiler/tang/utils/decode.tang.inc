@@ -7,11 +7,11 @@ restoreStrings(string, last) {
     }
     return string.replace(pattern, function () {
         if (arguments[5]) {
-            return that.replacements[arguments[5]][0].toString();
+            return that.readBuffer(arguments[5]);
         }
-        return that.replacements[arguments[2] || arguments[4]][0].toString();
+        return that.readBuffer(arguments[2] || arguments[4]);
     }).replace(this.markPattern, function () {
-        return that.replacements[arguments[1]][0].toString();
+        return that.readBuffer(arguments[1]);
     }).replace(/(@\d+L\d+P\d+O?\d*:::)/g, '');
 }
 decode(string) {
@@ -19,13 +19,13 @@ decode(string) {
     let matches = string.match(/___boundary_([A-Z0-9_]{37})?(\d+)_as_[a-z]+___/);
     while (matches) {
         // console.log(matches, this.replacements[matches[2]]);
-        string = string.replace(matches[0], this.replacements[matches[2]][0].toString()).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
+        string = string.replace(matches[0], this.readBuffer(matches[2])).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
         matches = string.match(/___boundary_([A-Z0-9_]{37})?(\d+)_as_[a-z]+___/);
     }
     matches = string.match(/@boundary_(\d+)_as_[a-z]+::/);
     while (matches) {
         // console.log(matches, this.replacements[matches[2]]);
-        string = string.replace(matches[0], this.replacements[matches[1]][0].toString()).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
+        string = string.replace(matches[0], thisreadBuffer(matches[1])).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
         matches = string.match(/@boundary_(\d+)_as_[a-z]+::/);
     }
     matches = undefined;

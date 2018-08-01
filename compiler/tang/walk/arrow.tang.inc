@@ -44,11 +44,11 @@ walkArrowFn(index, display, vars) {
     };
     localvars.self = localvars.scope.protected;
     localvars.fix_map = localvars.scope.fix_map;
-    let args = this.checkArgs(this.replacements[matches[2]][0].toString().replace(/(^\(|\)$)/g, ''), localvars);
+    let args = this.checkArgs(this.readBuffer(matches[2]).replace(/(^\(|\)$)/g, ''), localvars);
     // console.log(matches);
     return {
         type: 'def',
-        posi: this.getPosition(this.replacements[index][1]),
+        posi: this.getPositionByIndex(index),
         display: 'inline',
         vars: localvars,
         subtype: subtype,

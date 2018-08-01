@@ -41,7 +41,7 @@ walk(element, vars = false, inOrder) {
         case 'string':
         case 'template':
             let that = this;
-            let position = this.getPosition(this.replacements[element.index][1]);
+            let position = this.getPositionByIndex(element.index);
             // console.log(position);
             return {
                 type: 'code',
@@ -49,9 +49,6 @@ walk(element, vars = false, inOrder) {
                 display: element.display || 'inline',
                 vars: vars,
                 value: '___boundary_' + this.uid + '_' + element.index + '_as_string___'
-                // value: this.replacements[element.index][0].toString().replace(this.markPattern, function () {
-                //     return that.replacements[arguments[1]][0].toString();
-                // })
             }
         default:
             return {
@@ -65,7 +62,7 @@ walk(element, vars = false, inOrder) {
 }
 walkArray(index, display, vars) {
     let body = [],
-        position = this.getPosition(this.replacements[index][1]),
+        position = this.getPositionByIndex(index),
         clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(',');
     // console.log(this.replacements[index], clauses);
     for (let c = 0; c < clauses.length; c++) {
@@ -88,7 +85,7 @@ walkArray(index, display, vars) {
 walkParentheses(index, display: undefined, vars) {
     let body = [],
         clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(/\s*(,)/),
-        position = this.getPosition(this.replacements[index][1]);
+        position = this.getPositionByIndex(index);
     for (let c = 0; c < clauses.length; c++) {
         if (c) {
             var posi = this.getPosition(clauses[c]);

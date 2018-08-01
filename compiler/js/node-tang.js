@@ -4,7 +4,8 @@ var fs = require('fs');
 var glob = require("glob");
 var path = require('path');
 var getDirName = require('path').dirname;
-var tanguage_script = require('./script.js');
+// const tanguage_script = require('./script.js');
+var tanguage_script = require('./tanguage_script.js');
 var vlq = require('./vlq.js');
 var commands = ['compile', 'test', 'cdir', 'build', 'help', 'version'];
 // console.log(process.argv);
@@ -52,7 +53,8 @@ var onReadFile = function (src, context) {
         src: source
     });
     this.sources[source] = true;
-    // console.log('src: ' + source);
+    // console.log('READ SRC: ' + source);
+    // console.log(new Date());
     return fs.readFileSync(source, 'utf-8');
 }, getTplContent = function (src, context) {
     // console.log(src, context.source);

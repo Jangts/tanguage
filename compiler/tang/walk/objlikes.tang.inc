@@ -17,7 +17,7 @@ walkClosure(index, display, vars) {
         type: 'local'
     };
     let array = this.readBuffer(index).split(/\s*(\{|\})\s*/);
-    let position = this.getPosition(this.replacements[index][1]);
+    let position = this.getPositionByIndex(index);
     let body = this.pushBodyToAST([], localvars, array[2]);
     this.resetVarsRoot(localvars);
     array = undefined;
@@ -32,7 +32,7 @@ walkClosure(index, display, vars) {
 walkExtends(index, display, vars) {
     // console.log(this.replacements[index]);
     let matches = this.readBuffer(index).match(matchExpRegPattern.extends);
-    let position = this.getPosition(this.replacements[index][1]);
+    let position = this.getPositionByIndex(index);
     let subtype = 'ext';
     let objname = matches[2];
     let localvars = vars;
@@ -115,7 +115,7 @@ walkObject(index, display, vars = true) {
     return {
         type: 'object',
         display: display || 'inline',
-        posi: this.getPosition(this.replacements[index][1]),
+        posi: this.getPositionByIndex(index),
         vars: vars,
         body: this.checkObjMember(vars, this.readBuffer(index))
     };

@@ -29,6 +29,23 @@
 //         }
 //     }
 // }
+// let block = 'a';
+// {
+    
+//     let block = 'a';
+
+//     function fn1(block) {
+//         let a = block;
+//     }
+
+//     function fn2(a) {
+//         let block = a;
+//     }
+
+//     function fn3() {
+//         let a = block;
+//     }
+// }
 // markPosition(string, sourceid = 0) {
 //     let lines = string.split(/\r{0,1}\n/);
 //     // console.log(lines);
@@ -73,51 +90,90 @@
 //         dom.events.add(instance.Element, eventName, null, null, instance.events[eventName]);
 //     }
 // }
-ns {
-    public calculateDoughnutStyle = (options, width, height) {
-        // clog width, height;
-        var maxRadius = arr.min([width, height]) / 2;
-        innerRadius = 0,
-            outerRadius = maxRadius * 0.75,
-            x = width / 2,
-            y = height / 2;
-        if (util.isArr(options.radius)) {
-            if (options.radius[0]) {
-                if (util.isPercent(options.radius[0])) {
-                    innerRadius = maxRadius * parseInt(options.radius[0]) / 100
-                } else if (util.isNumeric(options.radius[0])) {
-                    innerRadius = parseFloat(options.radius[0]);
-                }
-            }
-            if (options.radius[1]) {
-                if (util.isPercent(options.radius[1])) {
-                    outerRadius = maxRadius * parseInt(options.radius[1]) / 100
-                } else if (util.isNumeric(options.radius[1])) {
-                    outerRadius = parseFloat(options.radius[1]);
-                }
-            }
+// ns {
+//     public calculateDoughnutStyle = (options, width, height) {
+//         // clog width, height;
+//         var maxRadius = arr.min([width, height]) / 2;
+//         innerRadius = 0,
+//             outerRadius = maxRadius * 0.75,
+//             x = width / 2,
+//             y = height / 2;
+//         if (util.isArr(options.radius)) {
+//             if (options.radius[0]) {
+//                 if (util.isPercent(options.radius[0])) {
+//                     innerRadius = maxRadius * parseInt(options.radius[0]) / 100
+//                 } else if (util.isNumeric(options.radius[0])) {
+//                     innerRadius = parseFloat(options.radius[0]);
+//                 }
+//             }
+//             if (options.radius[1]) {
+//                 if (util.isPercent(options.radius[1])) {
+//                     outerRadius = maxRadius * parseInt(options.radius[1]) / 100
+//                 } else if (util.isNumeric(options.radius[1])) {
+//                     outerRadius = parseFloat(options.radius[1]);
+//                 }
+//             }
 
-        }
+//         }
 
-        if (util.isArr(options.center) && options.center.length === 2) {
-            if (util.isPercent(options.center[0])) {
-                x = width * parseInt(options.center[0]) / 100
-            } else if (util.isNumeric(options.center[0])) {
-                x = parseFloat(options.center[0]);
-            }
-            if (util.isPercent(options.center[1])) {
-                y = height * parseInt(options.center[1]) / 100
-            } else if (util.isNumeric(options.center[1])) {
-                y = parseFloat(options.center[1]);
-            }
+//         if (util.isArr(options.center) && options.center.length === 2) {
+//             if (util.isPercent(options.center[0])) {
+//                 x = width * parseInt(options.center[0]) / 100
+//             } else if (util.isNumeric(options.center[0])) {
+//                 x = parseFloat(options.center[0]);
+//             }
+//             if (util.isPercent(options.center[1])) {
+//                 y = height * parseInt(options.center[1]) / 100
+//             } else if (util.isNumeric(options.center[1])) {
+//                 y = parseFloat(options.center[1]);
+//             }
+//         }
+//         // clog width, height, x, y;
+//         return {
+//             maxRadius,
+//             innerRadius,
+//             outerRadius,
+//             x,
+//             y
+//         }
+//     };
+// }
+// matchExpRegPattern = {
+//     string: /(\/|\#|`|"|')([\*\/\=])?/,
+//     'obj': {
+//         a:'a'
+//     },
+//     strings: {
+//         // 位置是在replace usings 和 strings 之后才tidy的，所以还存在后接空格
+//         '/': /(\s*@\d+L\d+P\d+O?\d*:::\s*)?(\/[^\/\r\n]+\/[img]*)(\s+in\s|\s*@boundary_\d+_as_(preoperator|operator|aftoperator|comments)::|\s*[\r\n]|(\s*[\$\w])|\s*[^\$\w]|\s*$)/,
+//         "'": /(\s*@\d+L\d+P\d+O*\d*:::\s*)?('[^\'\r\n]*')(\s+in\s|\s*@boundary_\d+_as_(preoperator|operator|aftoperator|comments)::|\s*[\r\n]|\s*([\$\w])|\s*[^\$\w]|\s*$)/
+//     },
+//     '/': /(\s*@\d+L\d+P\d+O?\d*:::\s*)?(\/[^\/\r\n]+\/[img]*)(\s+in\s|\s*@boundary_\d+_as_(preoperator|operator|aftoperator|comments)::|\s*[\r\n]|(\s*[\$\w])|\s*[^\$\w]|\s*$)/,
+//     index: /(\d+)_as_([a-z]+)/,
+//     index3: /^_(\d+)_as_([a-z]+)___([\s\S]*)$/
+// }
+// loadnext () {
+//     if (this.requires[this.onload]) {
+//         if (arr[0].match(/^~/)) {
+//             var id = this.core.url + arr[0].toLowerCase();
+//         } else {
+//             var id = arr[0].toLowerCase();
+//         }
+
+//         /** 检查引用文件类型 */
+        if (url.match(/\.css$/)) {
+            filetype = 'css';
+        } else if (url.match(/\.js$/)) {
+            filetype = 'js';
+        } else {
+            filetype = 'js';
         }
-        // clog width, height, x, y;
-        return {
-            maxRadius,
-            innerRadius,
-            outerRadius,
-            x,
-            y
-        }
-    };
-}
+    //     if (!!storage.blocks.requires[id]) {
+    //         this.listene();
+    //     } else {
+    //         loadURL();
+    //     }
+    // } else {
+    //     that.listene();
+    // }
+// }

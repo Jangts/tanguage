@@ -1,7 +1,7 @@
 trim(string) {
     // 此处的replace在整理完成后，将进行分析归纳，最后改写为callback形式的
     // console.log(string);
-    string = this.replaceStrings(string, true);
+    // string = this.replaceStrings(string, true);
     // console.log(string);
 
     // 去除多余标注
