@@ -4355,8 +4355,6 @@
         patchVariables(code: string, vars: any): string {
             // console.log(code, vars);
             if (code) {
-                // console.log(code);
-                
                 return code.replace(matchExpRegPattern.pickConst, (match, before, definition, varname) => {
                     // console.log(match, "\r\n", before, '[', varname, '](', type, ')', after);
                     if (!definition && hasProp(vars.self, varname) && (vars.self[varname] === 'const')) {
@@ -4366,9 +4364,8 @@
                     return match;
                 }).replace(matchExpRegPattern.pickVars, (match, before, definition, varname, after) => {
                     // console.log(before, match, after);
-                    // console.log(type);
                     return before + (definition || '') + this.patchVariable(varname, vars) + after || '';
-                    }).replace(matchExpRegPattern.pickNS, (match, before, node, member) => {
+                }).replace(matchExpRegPattern.pickNS, (match, before, node, member) => {
                     // console.log(match, "\r\n", before, '[', node, ']', member, vars);
                     return before + this.patchNamespace(node, vars) + member;
                 });

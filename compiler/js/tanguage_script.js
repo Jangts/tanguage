@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Wed, 01 Aug 2018 14:03:17 GMT
+ * Datetime: Wed, 01 Aug 2018 15:29:37 GMT
  */;
 void
 
@@ -3313,20 +3313,22 @@ function(root, factory) {
             }
             return codes;
         },
-        pushCodes: function (codes, vars, array, layer, namespace, lasttype) {
+        pushCodes: function (codes, vars, array, layer, namespace, lasttype, ignoreVarsPatch) {
             if (namespace === void 0) { namespace = this.namespace;}
             if (lasttype === void 0) { lasttype = '';}
+            if (ignoreVarsPatch === void 0) { ignoreVarsPatch = false;}
             for (var index = 0;index < array.length;index++) {
                 var element = array[index];
-                this.pushElement(codes, vars, element, layer, namespace, (index - 1 >= 0) ? array[index - 1].type : lasttype);
+                this.pushElement(codes, vars, element, layer, namespace, (index - 1 >= 0) ? array[index - 1].type : lasttype, ignoreVarsPatch);
             }
             return codes;
         },
-        pushElement: function (codes, vars, element, layer, namespace, lasttype) {
+        pushElement: function (codes, vars, element, layer, namespace, lasttype, ignoreVarsPatch) {
             var _this = this;
             var _arguments = arguments;
             if (namespace === void 0) { namespace = this.namespace;}
             if (lasttype === void 0) { lasttype = '';}
+            if (ignoreVarsPatch === void 0) { ignoreVarsPatch = false;}
             var indent = "\r\n" + stringRepeat("    ", layer);
             switch (element.type) {
                 case 'arraylike':;
@@ -3348,7 +3350,12 @@ function(root, factory) {
                 break;
                 case 'code':;
                 if (element.value) {
-                    var code = this.patchVariables(element.value, vars);
+                    if (ignoreVarsPatch) {
+                        var code = element.value;
+                    }
+                    else {
+                        var code = this.patchVariables(element.value, vars);
+                    }
                     if (vars.scope.break !== undefined) {
                         code = code.replace(/@return;*/g, function () {
                             vars.scope.break = true;
@@ -3474,7 +3481,7 @@ function(root, factory) {
             };
         },
         pushCallCodes: function (codes, element, layer, namespace) {
-            var naming = this.pushCodes([], element.vars, element.name, layer, namespace);
+            var naming = this.pushCodes([], element.vars, element.name, layer, namespace, '', element.type === 'callmethod');
             if (element.posi) {
                 if (element.type === 'callmethod') {
                     element.posi.head = false;
@@ -3615,8 +3622,8 @@ function(root, factory) {
             var setters = [];
             var getters = [];
             var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
-            for (var index_633 = 0;index_633 < element.body.length;index_633++) {
-                var member = element.body[index_633];
+            for (var index_635 = 0;index_635 < element.body.length;index_635++) {
+                var member = element.body[index_635];
                 var elem = [];
                 switch (member.type) {
                     case 'method':;
@@ -3807,9 +3814,9 @@ function(root, factory) {
                 }
             }
             else if (element.subtype === 'nsassign' || element.subtype === 'globalassign') {
-                var index_675 = this.replacements.length;
+                var index_677 = this.replacements.length;
                 this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
-                codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_675 + 'string___, ');
+                codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_677 + 'string___, ');
                 this.pushObjCodes(codes, element, layer, namespace);
             }
             else {
@@ -4088,40 +4095,40 @@ function(root, factory) {
                 if ((vars.type === 'blocklike') || (vars.type === 'scope')) {
                     for (var key in vars.locals) {
                         if (hasProp(vars.locals, key)) {
-                            var varname_740 = '_' + key;
-                            while (vars.self[varname_740]) {
-                                varname_740 = varname_740 + '_' + vars.index;
+                            var varname_742 = '_' + key;
+                            while (vars.self[varname_742]) {
+                                varname_742 = varname_742 + '_' + vars.index;
                             }
-                            vars.locals[key] = varname_740;
+                            vars.locals[key] = varname_742;
                         }
                     }
                 }
                 break;
                 case 'local':;
-                for (var element_742 in vars.self) {
-                    if (vars.self[element_742] === 'const' || vars.self[element_742] === 'let') {
-                        var varname_743 = element_742;
-                        if (keywords['includes'](element_742) || reserved['includes'](element_742)) {
-                            this.error('keywords `' + element_742 + '` cannot be a variable name.');
+                for (var element_744 in vars.self) {
+                    if (vars.self[element_744] === 'const' || vars.self[element_744] === 'let') {
+                        var varname_745 = element_744;
+                        if (keywords['includes'](element_744) || reserved['includes'](element_744)) {
+                            this.error('keywords `' + element_744 + '` cannot be a variable name.');
                         }
-                        if (this.blockreserved['includes'](element_742) || this.xvars['includes'](element_742)) {
-                            varname_743 = element_742 + '_' + vars.index;
-                            while (vars.self[varname_743]) {
-                                varname_743 = varname_743 + '_' + vars.index;
+                        if (this.blockreserved['includes'](element_744) || this.xvars['includes'](element_744)) {
+                            varname_745 = element_744 + '_' + vars.index;
+                            while (vars.self[varname_745]) {
+                                varname_745 = varname_745 + '_' + vars.index;
                             }
                         }
-                        while (vars.scope.fixed['includes'](varname_743) || (vars.scope.private[varname_743] && (vars.scope.private[varname_743] !== vars))) {
-                            varname_743 = varname_743 + '_' + vars.index;
+                        while (vars.scope.fixed['includes'](varname_745) || (vars.scope.private[varname_745] && (vars.scope.private[varname_745] !== vars))) {
+                            varname_745 = varname_745 + '_' + vars.index;
                         }
-                        if (varname_743 !== element_742) {
-                            if (vars.scope.fixed['includes'](element_742)) {
-                                vars.fix_map[element_742] = varname_743;
+                        if (varname_745 !== element_744) {
+                            if (vars.scope.fixed['includes'](element_744)) {
+                                vars.fix_map[element_744] = varname_745;
                             }
                             else {
-                                vars.scope.fix_map[element_742] = varname_743;
+                                vars.scope.fix_map[element_744] = varname_745;
                             }
                         }
-                        vars.scope.fixed.push(varname_743);
+                        vars.scope.fixed.push(varname_745);
                     }
                 }
             }

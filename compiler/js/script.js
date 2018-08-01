@@ -4435,7 +4435,6 @@
             var _this = this;
             // console.log(code, vars);
             if (code) {
-                // console.log(code);
                 return code.replace(matchExpRegPattern.pickConst, function (match, before, definition, varname) {
                     // console.log(match, "\r\n", before, '[', varname, '](', type, ')', after);
                     if (!definition && hasProp(vars.self, varname) && (vars.self[varname] === 'const')) {
@@ -4445,7 +4444,6 @@
                     return match;
                 }).replace(matchExpRegPattern.pickVars, function (match, before, definition, varname, after) {
                     // console.log(before, match, after);
-                    // console.log(type);
                     return before + (definition || '') + _this.patchVariable(varname, vars) + after || '';
                 }).replace(matchExpRegPattern.pickNS, function (match, before, node, member) {
                     // console.log(match, "\r\n", before, '[', node, ']', member, vars);

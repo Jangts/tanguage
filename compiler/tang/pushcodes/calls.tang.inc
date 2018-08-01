@@ -1,5 +1,5 @@
 pushCallCodes(codes, element, layer, namespace) {
-    let naming = this.pushCodes([], element.vars, element.name, layer, namespace);
+    let naming = this.pushCodes([], element.vars, element.name, layer, namespace, '', element.type ==='callmethod');
     // console.log(element);
     // console.log(element.name.length, element.name[0], naming);
     if (element.posi) {

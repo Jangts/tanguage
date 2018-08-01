@@ -1,166 +1,166 @@
-// let b = 1
-// if(1){
-//     let block = 'a';
-//     let b = 'b';
-//     if(1){
-//         let block = 'b';
-//         if(0){
-//             let block = 'c';
-//         }
+let b = 1
+if(1){
+    let block = 'a';
+    let b = 'b';
+    if(1){
+        let block = 'b';
+        if(0){
+            let block = 'c';
+        }
 
-//         fn1(){
-//             let a = block_2;
-//         }
+        fn1(){
+            let a = block_2;
+        }
 
-//         fn2(block){
-//             let b = block;
-//         }
+        fn2(block){
+            let b = block;
+        }
 
-//         each ([] as index, block) {
-//             let b = block;
-//             if(b){
-//                 let block = 1;
-//             }
-//         }
+        each ([] as index, block) {
+            let b = block;
+            if(b){
+                let block = 1;
+            }
+        }
 
-//         fn3(c){
-//             let a = c;
-//             let block = b;
-//         }
-//     }
-// }
-// let block = 'a';
-// {
+        fn3(c){
+            let a = c;
+            let block = b;
+        }
+    }
+}
+let block = 'a';
+{
     
-//     let block = 'a';
+    let block = 'a';
 
-//     function fn1(block) {
-//         let a = block;
-//     }
+    function fn1(block) {
+        let a = block;
+    }
 
-//     function fn2(a) {
-//         let block = a;
-//     }
+    function fn2(a) {
+        let block = a;
+    }
 
-//     function fn3() {
-//         let a = block;
-//     }
-// }
-// markPosition(string, sourceid = 0) {
-//     let lines = string.split(/\r{0,1}\n/);
-//     // console.log(lines);
-//     let positions = [];
-//     for (let l = 0; l < lines.length; l++) {
-//         const elements = lines[l].split(/(,|;|\{|\[|\(|\}|\sas\s|->|=>)/);
-//         // console.log(elements);
-//         let newline = [];
-//         for (let c = 0, length = 0; c < elements.length; c++) {
-//             var element = elements[c];
-//             if (c === 0) {
-//                 length = 0;
-//             }
-//             if (element === ',' || element === ';' || element === '{' || element === '[' || element === '(' || element === '}' || element === ' as ' || element === '->' || element === '=>') {
-//                 newline.push(element);
-//             } else {
-//                 newline.push('@' + sourceid + 'L' + l + 'P' + length + ':::' + element);
-//             }
-//             length += element.length;
-//         }
-//         positions.push(newline);
-//     }
-//     let newlines = positions.map((line) => {
-//         return line.join("");
-//     })
-//     // this.positions.push(positions);
-//     // console.log(newlines.join("\r\n"));
-//     lines = positions = undefined;
-//     return newlines.join("\r\n");
-// }
-// bindEvents = (instance, arrayOfEvents, handler) {
-//     // Create the events object if it's not already present
-//     if (!instance.events) {
-//         instance.events = {};
-//     }
-//     each(arrayOfEvents as index, eventName) {
-//         clog arguments;
-//         instance.events[eventName] = () {
-//             clog arguments;
-//             handler.apply(instance, arguments);
-//         };
-//         dom.events.add(instance.Element, eventName, null, null, instance.events[eventName]);
-//     }
-// }
-// ns {
-//     public calculateDoughnutStyle = (options, width, height) {
-//         // clog width, height;
-//         var maxRadius = arr.min([width, height]) / 2;
-//         innerRadius = 0,
-//             outerRadius = maxRadius * 0.75,
-//             x = width / 2,
-//             y = height / 2;
-//         if (util.isArr(options.radius)) {
-//             if (options.radius[0]) {
-//                 if (util.isPercent(options.radius[0])) {
-//                     innerRadius = maxRadius * parseInt(options.radius[0]) / 100
-//                 } else if (util.isNumeric(options.radius[0])) {
-//                     innerRadius = parseFloat(options.radius[0]);
-//                 }
-//             }
-//             if (options.radius[1]) {
-//                 if (util.isPercent(options.radius[1])) {
-//                     outerRadius = maxRadius * parseInt(options.radius[1]) / 100
-//                 } else if (util.isNumeric(options.radius[1])) {
-//                     outerRadius = parseFloat(options.radius[1]);
-//                 }
-//             }
+    function fn3() {
+        let a = block;
+    }
+}
+markPosition(string, sourceid = 0) {
+    let lines = string.split(/\r{0,1}\n/);
+    // console.log(lines);
+    let positions = [];
+    for (let l = 0; l < lines.length; l++) {
+        const elements = lines[l].split(/(,|;|\{|\[|\(|\}|\sas\s|->|=>)/);
+        // console.log(elements);
+        let newline = [];
+        for (let c = 0, length = 0; c < elements.length; c++) {
+            var element = elements[c];
+            if (c === 0) {
+                length = 0;
+            }
+            if (element === ',' || element === ';' || element === '{' || element === '[' || element === '(' || element === '}' || element === ' as ' || element === '->' || element === '=>') {
+                newline.push(element);
+            } else {
+                newline.push('@' + sourceid + 'L' + l + 'P' + length + ':::' + element);
+            }
+            length += element.length;
+        }
+        positions.push(newline);
+    }
+    let newlines = positions.map((line) => {
+        return line.join("");
+    })
+    // this.positions.push(positions);
+    // console.log(newlines.join("\r\n"));
+    lines = positions = undefined;
+    return newlines.join("\r\n");
+}
+bindEvents = (instance, arrayOfEvents, handler) {
+    // Create the events object if it's not already present
+    if (!instance.events) {
+        instance.events = {};
+    }
+    each(arrayOfEvents as index, eventName) {
+        clog arguments;
+        instance.events[eventName] = () {
+            clog arguments;
+            handler.apply(instance, arguments);
+        };
+        dom.events.add(instance.Element, eventName, null, null, instance.events[eventName]);
+    }
+}
+ns {
+    public calculateDoughnutStyle = (options, width, height) {
+        // clog width, height;
+        var maxRadius = arr.min([width, height]) / 2;
+        innerRadius = 0,
+            outerRadius = maxRadius * 0.75,
+            x = width / 2,
+            y = height / 2;
+        if (util.isArr(options.radius)) {
+            if (options.radius[0]) {
+                if (util.isPercent(options.radius[0])) {
+                    innerRadius = maxRadius * parseInt(options.radius[0]) / 100
+                } else if (util.isNumeric(options.radius[0])) {
+                    innerRadius = parseFloat(options.radius[0]);
+                }
+            }
+            if (options.radius[1]) {
+                if (util.isPercent(options.radius[1])) {
+                    outerRadius = maxRadius * parseInt(options.radius[1]) / 100
+                } else if (util.isNumeric(options.radius[1])) {
+                    outerRadius = parseFloat(options.radius[1]);
+                }
+            }
 
-//         }
+        }
 
-//         if (util.isArr(options.center) && options.center.length === 2) {
-//             if (util.isPercent(options.center[0])) {
-//                 x = width * parseInt(options.center[0]) / 100
-//             } else if (util.isNumeric(options.center[0])) {
-//                 x = parseFloat(options.center[0]);
-//             }
-//             if (util.isPercent(options.center[1])) {
-//                 y = height * parseInt(options.center[1]) / 100
-//             } else if (util.isNumeric(options.center[1])) {
-//                 y = parseFloat(options.center[1]);
-//             }
-//         }
-//         // clog width, height, x, y;
-//         return {
-//             maxRadius,
-//             innerRadius,
-//             outerRadius,
-//             x,
-//             y
-//         }
-//     };
-// }
-// matchExpRegPattern = {
-//     string: /(\/|\#|`|"|')([\*\/\=])?/,
-//     'obj': {
-//         a:'a'
-//     },
-//     strings: {
-//         // 位置是在replace usings 和 strings 之后才tidy的，所以还存在后接空格
-//         '/': /(\s*@\d+L\d+P\d+O?\d*:::\s*)?(\/[^\/\r\n]+\/[img]*)(\s+in\s|\s*@boundary_\d+_as_(preoperator|operator|aftoperator|comments)::|\s*[\r\n]|(\s*[\$\w])|\s*[^\$\w]|\s*$)/,
-//         "'": /(\s*@\d+L\d+P\d+O*\d*:::\s*)?('[^\'\r\n]*')(\s+in\s|\s*@boundary_\d+_as_(preoperator|operator|aftoperator|comments)::|\s*[\r\n]|\s*([\$\w])|\s*[^\$\w]|\s*$)/
-//     },
-//     '/': /(\s*@\d+L\d+P\d+O?\d*:::\s*)?(\/[^\/\r\n]+\/[img]*)(\s+in\s|\s*@boundary_\d+_as_(preoperator|operator|aftoperator|comments)::|\s*[\r\n]|(\s*[\$\w])|\s*[^\$\w]|\s*$)/,
-//     index: /(\d+)_as_([a-z]+)/,
-//     index3: /^_(\d+)_as_([a-z]+)___([\s\S]*)$/
-// }
-// loadnext () {
-//     if (this.requires[this.onload]) {
-//         if (arr[0].match(/^~/)) {
-//             var id = this.core.url + arr[0].toLowerCase();
-//         } else {
-//             var id = arr[0].toLowerCase();
-//         }
+        if (util.isArr(options.center) && options.center.length === 2) {
+            if (util.isPercent(options.center[0])) {
+                x = width * parseInt(options.center[0]) / 100
+            } else if (util.isNumeric(options.center[0])) {
+                x = parseFloat(options.center[0]);
+            }
+            if (util.isPercent(options.center[1])) {
+                y = height * parseInt(options.center[1]) / 100
+            } else if (util.isNumeric(options.center[1])) {
+                y = parseFloat(options.center[1]);
+            }
+        }
+        // clog width, height, x, y;
+        return {
+            maxRadius,
+            innerRadius,
+            outerRadius,
+            x,
+            y
+        }
+    };
+}
+matchExpRegPattern = {
+    string: /(\/|\#|`|"|')([\*\/\=])?/,
+    'obj': {
+        a:'a'
+    },
+    strings: {
+        // 位置是在replace usings 和 strings 之后才tidy的，所以还存在后接空格
+        '/': /(\s*@\d+L\d+P\d+O?\d*:::\s*)?(\/[^\/\r\n]+\/[img]*)(\s+in\s|\s*@boundary_\d+_as_(preoperator|operator|aftoperator|comments)::|\s*[\r\n]|(\s*[\$\w])|\s*[^\$\w]|\s*$)/,
+        "'": /(\s*@\d+L\d+P\d+O*\d*:::\s*)?('[^\'\r\n]*')(\s+in\s|\s*@boundary_\d+_as_(preoperator|operator|aftoperator|comments)::|\s*[\r\n]|\s*([\$\w])|\s*[^\$\w]|\s*$)/
+    },
+    '/': /(\s*@\d+L\d+P\d+O?\d*:::\s*)?(\/[^\/\r\n]+\/[img]*)(\s+in\s|\s*@boundary_\d+_as_(preoperator|operator|aftoperator|comments)::|\s*[\r\n]|(\s*[\$\w])|\s*[^\$\w]|\s*$)/,
+    index: /(\d+)_as_([a-z]+)/,
+    index3: /^_(\d+)_as_([a-z]+)___([\s\S]*)$/
+}
+loadnext () {
+    if (this.requires[this.onload]) {
+        if (arr[0].match(/^~/)) {
+            var id = this.core.url + arr[0].toLowerCase();
+        } else {
+            var id = arr[0].toLowerCase();
+        }
 
-//         /** 检查引用文件类型 */
+        /** 检查引用文件类型 */
         if (url.match(/\.css$/)) {
             filetype = 'css';
         } else if (url.match(/\.js$/)) {
@@ -168,12 +168,24 @@
         } else {
             filetype = 'js';
         }
-    //     if (!!storage.blocks.requires[id]) {
-    //         this.listene();
-    //     } else {
-    //         loadURL();
-    //     }
-    // } else {
-    //     that.listene();
-    // }
-// }
+        if (!!storage.blocks.requires[id]) {
+            this.listene();
+        } else {
+            loadURL();
+        }
+    } else {
+        that.listene();
+    }
+}
+pushVariableToLine(lines, vars, code, symbol, posi = '', display = 'inline', _symbol = '', endmark = ',') {
+    let match = code.match(/^([\$\a-zA-Z_][\$\w]*)@boundary_(\d+)_as_operator::/);
+    if (match) {
+        let element = match[1];
+    } else {
+        let match = element.match(/^___boundary_[A-Z0-9_]{36}_(\d+)_as_(sets|list)___$/);
+        if (match) {
+        } else if (element.match(/^[\$a-zA-Z_][\$\w]*$/)) {
+        } else {
+        }
+    }
+}

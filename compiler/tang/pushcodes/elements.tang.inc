@@ -1,15 +1,15 @@
-pushCodes(codes, vars, array, layer, namespace = this.namespace, lasttype = '') {
+pushCodes(codes, vars, array, layer, namespace = this.namespace, lasttype = '', ignoreVarsPatch = false) {
     // console.log(codes, array);
     // console.log(array);
     // console.log(layer, array);
     for (let index = 0; index < array.length; index++) {
         var element = array[index];
         // console.log(element);
-        this.pushElement(codes, vars, element, layer, namespace, (index - 1 >= 0) ? array[index - 1].type : lasttype);
+        this.pushElement(codes, vars, element, layer, namespace, (index - 1 >= 0) ? array[index - 1].type : lasttype, ignoreVarsPatch);
     }
     return codes;
 }
-pushElement(codes, vars, element, layer, namespace = this.namespace, lasttype = '') {
+pushElement(codes, vars, element, layer, namespace = this.namespace, lasttype = '', ignoreVarsPatch = false) {
     let indent = "\r\n" + stringRepeat("    ", layer);
     switch (element.type) {
         case 'arraylike':
@@ -33,7 +33,12 @@ pushElement(codes, vars, element, layer, namespace = this.namespace, lasttype = 
         case 'code':
             if (element.value) {
                 // console.log(element.posi&&element.posi.head, element.display, element.value);
-                var code = this.patchVariables(element.value, vars);
+                if (ignoreVarsPatch) {
+                    var code = element.value;
+                }
+                else {
+                    var code = this.patchVariables(element.value, vars);
+                }
                 if (vars.scope.break !== undefined) {
                     code = code.replace(/@return;*/g, () => {
                         vars.scope.break = true;
