@@ -60,28 +60,6 @@ walk(element, vars = false, inOrder) {
             }
     }
 }
-walkArray(index, display, vars) {
-    let body = [],
-        position = this.getPositionByIndex(index),
-        clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(',');
-    // console.log(this.replacements[index], clauses);
-    for (let c = 0; c < clauses.length; c++) {
-        if (c) {
-            var posi = this.getPosition(clauses[c]);
-        } else {
-            var posi = this.getPosition(clauses[c]) || position;
-        }
-        this.pushSentencesToAST(body, vars, clauses[c], false, posi);
-    }
-    // console.log(body);
-    return {
-        type: 'arraylike',
-        posi: position,
-        display: display,
-        vars: vars,
-        body: body
-    };
-}
 walkParentheses(index, display: undefined, vars) {
     let body = [],
         clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(/\s*(,)/),
@@ -105,6 +83,7 @@ walkParentheses(index, display: undefined, vars) {
         body: body
     };
 }
+@include 'walk/arrays';
 @include 'walk/calls';
 @include 'walk/class';
 @include 'walk/objlikes';

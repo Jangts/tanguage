@@ -3,7 +3,7 @@ pushSetToVars(lines, vars, type, index, length, symbol, _symbol, variable, value
     if (type === '...') {
         let index = this.replacements.length;
         this.pushBuffer(["'" + variable + "'"]);
-        _value = 'pandora.remove(' + value + ', ___boundary_' + this.uid + '_' + index + 'string___)';
+        _value = 'pandora.remove(' + value + ', ___boundary_' + this.uid + '_' + index + '_as_string___)';
     } else if (type === 'object') {
         // console.log(value, variable, index, endmark);
         _value = value + '.' + variable;

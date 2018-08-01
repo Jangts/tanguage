@@ -1,9 +1,9 @@
 pushArrayCodes(codes, element, layer, namespace) {
-    let elements = [];
     if (element.posi) {
         this.pushPostionsToMap(element.posi, codes);
     }
-    codes.push('[');
+
+    // codes.push('[');
     if (element.body.length) {
         let _layer = layer;
         let indent1, indent2;
@@ -16,22 +16,47 @@ pushArrayCodes(codes, element, layer, namespace) {
             codes.push(indent2);
             _break = true;
         }
-        // console.log(element.body);
-        this.pushArrayElements(elements, element.body, element.vars, _layer, namespace);
-        while (elements.length && !elements[0].trim()) {
-            elements.shift();
-        }
-        if (elements.length) {
-            if (_break) {
-                codes.push(elements.join(',' + indent2) + indent1);
-            } else {
-                codes.push(elements.join(', '));
+        for (let index = 0; index < element.body.length; index++) {
+            const group = element.body[index];
+            let code = '';
+            if(group.type==='arrVar'){
+                code += this.pushPostionsToMap(group.posi) + this.patchVariable(group.aname, group.vars);
+            }else{
+                let elements = [];
+                this.pushArrayElements(elements, group.elems, group.vars, _layer, namespace);
+                while (elements.length && !elements[0].trim()) {
+                    elements.shift();
+                }
+                code += '[';
+                if (elements.length) {
+                    if (_break) {
+                        code += elements.join(',' + indent2) + indent1;
+                    } else {
+                        code += elements.join(', ');
+                    }
+                }
+                code += ']';
+                elements = undefined;
+            }
+            if (index === 0) {
+                codes.push(code);
+            }else{
+                if (index === 1){
+                    codes.push('.concat(' + code);
+                }
+                else{
+                    codes.push(', ' + code);
+                }
+                if (index === element.body.length-1) {
+                    codes.push(')');
+                }
             }
         }
         _layer = indent1 = indent2 = _break = undefined;
+    }else{
+        codes.push('[]');
     }
-    codes.push(']');
-    elements = undefined;
+    
     return codes;
 }
 pushArrayElements(elements, body, vars, _layer, namespace){

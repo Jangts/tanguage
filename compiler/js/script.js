@@ -1765,7 +1765,7 @@
             if (type === '...') {
                 var index_5 = this.replacements.length;
                 this.pushBuffer(["'" + variable + "'"]);
-                _value = 'pandora.remove(' + value + ', ___boundary_' + this.uid + '_' + index_5 + 'string___)';
+                _value = 'pandora.remove(' + value + ', ___boundary_' + this.uid + '_' + index_5 + '_as_string___)';
             }
             else if (type === 'object') {
                 // console.log(value, variable, index, endmark);
@@ -2224,16 +2224,47 @@
             }
         };
         Script.prototype.walkArray = function (index, display, vars) {
-            var body = [], position = this.getPositionByIndex(index), clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(',');
+            var body = [], elems = [], position = this.getPositionByIndex(index), clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(',');
             // console.log(this.replacements[index], clauses);
             for (var c = 0; c < clauses.length; c++) {
+                var posi = void 0;
                 if (c) {
-                    var posi = this.getPosition(clauses[c]);
+                    posi = this.getPosition(clauses[c]);
                 }
                 else {
-                    var posi = this.getPosition(clauses[c]) || position;
+                    posi = this.getPosition(clauses[c]) || position;
                 }
-                this.pushSentencesToAST(body, vars, clauses[c], false, posi);
+                var value = clauses[c].replace(posi, '');
+                var match = value.match(/\.\.\.(\w+)/);
+                if (match) {
+                    // console.log(match[1]);
+                    if (elems.length) {
+                        body.push({
+                            type: "arrEls",
+                            posi: posi,
+                            vars: vars,
+                            elems: elems
+                        });
+                    }
+                    body.push({
+                        type: "arrVar",
+                        posi: posi,
+                        vars: vars,
+                        aname: match[1]
+                    });
+                    elems = [];
+                }
+                else {
+                    this.pushSentencesToAST(elems, vars, clauses[c], false, posi);
+                    if (c === clauses.length - 1) {
+                        body.push({
+                            type: "arrEls",
+                            posi: posi,
+                            vars: vars,
+                            elems: elems
+                        });
+                    }
+                }
             }
             // console.log(body);
             return {
@@ -3040,7 +3071,15 @@
                             continue;
                         }
                         else {
-                            console.log(elArr);
+                            body.useExplode = true;
+                            var posi = this.getPosition(elArr[0]);
+                            // console.log(elArr);
+                            body.push({
+                                type: 'object',
+                                posi: this.getPosition(elArr[0]),
+                                oname: elArr[0].replace((posi.match || '') + '...', ''),
+                                vars: vars
+                            });
                         }
                     }
                     else {
@@ -3587,11 +3626,10 @@
             return codes;
         };
         Script.prototype.pushArrayCodes = function (codes, element, layer, namespace) {
-            var elements = [];
             if (element.posi) {
                 this.pushPostionsToMap(element.posi, codes);
             }
-            codes.push('[');
+            // codes.push('[');
             if (element.body.length) {
                 var _layer = layer;
                 var indent1 = void 0, indent2 = void 0;
@@ -3604,34 +3642,61 @@
                     codes.push(indent2);
                     _break = true;
                 }
-                // console.log(element.body);
-                this.pushArrayElements(elements, element.body, element.vars, _layer, namespace);
-                while (elements.length && !elements[0].trim()) {
-                    elements.shift();
-                }
-                if (elements.length) {
-                    if (_break) {
-                        codes.push(elements.join(',' + indent2) + indent1);
+                for (var index_18 = 0; index_18 < element.body.length; index_18++) {
+                    var group = element.body[index_18];
+                    var code = '';
+                    if (group.type === 'arrVar') {
+                        code += this.pushPostionsToMap(group.posi) + this.patchVariable(group.aname, group.vars);
                     }
                     else {
-                        codes.push(elements.join(', '));
+                        var elements = [];
+                        this.pushArrayElements(elements, group.elems, group.vars, _layer, namespace);
+                        while (elements.length && !elements[0].trim()) {
+                            elements.shift();
+                        }
+                        code += '[';
+                        if (elements.length) {
+                            if (_break) {
+                                code += elements.join(',' + indent2) + indent1;
+                            }
+                            else {
+                                code += elements.join(', ');
+                            }
+                        }
+                        code += ']';
+                        elements = undefined;
+                    }
+                    if (index_18 === 0) {
+                        codes.push(code);
+                    }
+                    else {
+                        if (index_18 === 1) {
+                            codes.push('.concat(' + code);
+                        }
+                        else {
+                            codes.push(', ' + code);
+                        }
+                        if (index_18 === element.body.length - 1) {
+                            codes.push(')');
+                        }
                     }
                 }
                 _layer = indent1 = indent2 = _break = undefined;
             }
-            codes.push(']');
-            elements = undefined;
+            else {
+                codes.push('[]');
+            }
             return codes;
         };
         Script.prototype.pushArrayElements = function (elements, body, vars, _layer, namespace) {
-            for (var index_18 = 0; index_18 < body.length; index_18++) {
-                if (body[index_18].value) {
-                    elements.push(this.pushPostionsToMap(body[index_18].posi) + this.patchVariables(body[index_18].value, vars));
+            for (var index_19 = 0; index_19 < body.length; index_19++) {
+                if (body[index_19].value) {
+                    elements.push(this.pushPostionsToMap(body[index_19].posi) + this.patchVariables(body[index_19].value, vars));
                 }
                 else {
                     var elemCodes = [];
-                    this.pushPostionsToMap(body[index_18].posi, elemCodes);
-                    this.pushElement(elemCodes, vars, body[index_18], _layer, namespace);
+                    this.pushPostionsToMap(body[index_19].posi, elemCodes);
+                    this.pushElement(elemCodes, vars, body[index_19], _layer, namespace);
                     if (elemCodes.length) {
                         elements.push(elemCodes.join('').trim());
                     }
@@ -3707,10 +3772,10 @@
             return codes;
         };
         Script.prototype.pushCallArgs = function (args, body, vars, _layer, namespace) {
-            for (var index_19 = 0; index_19 < body.length; index_19++) {
-                var param = body[index_19].body;
+            for (var index_20 = 0; index_20 < body.length; index_20++) {
+                var param = body[index_20].body;
                 var paramCodes = [];
-                this.pushPostionsToMap(body[index_19].posi, paramCodes);
+                this.pushPostionsToMap(body[index_20].posi, paramCodes);
                 this.pushCodes(paramCodes, vars, param, _layer, namespace);
                 if (paramCodes.length) {
                     args.push(paramCodes.join('').trim());
@@ -3739,8 +3804,8 @@
                 _break = true;
                 indent = "\r\n" + stringRepeat("    ", _layer);
             }
-            for (var index_20 = 0; index_20 < element.calls.length; index_20++) {
-                var method = element.calls[index_20];
+            for (var index_21 = 0; index_21 < element.calls.length; index_21++) {
+                var method = element.calls[index_21];
                 // console.log(method);
                 // method
                 elements.push(this.pushElement([], element.vars, method, _layer, namespace).join(''));
@@ -3766,11 +3831,11 @@
             var cname = '';
             if (element.subtype === 'stdClass') {
                 var cnt = element.cname.trim();
-                var index_21 = this.replacements.length;
+                var index_22 = this.replacements.length;
                 this.pushBuffer(["'" + cnt + "'"]);
                 cname = 'pandora.' + cnt;
                 cnt = undefined;
-                codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(___boundary_' + this.uid + '_' + index_21 + 'string___, ');
+                codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(___boundary_' + this.uid + '_' + index_22 + 'string___, ');
             }
             else {
                 if (element.cname && element.cname.trim()) {
@@ -3796,8 +3861,8 @@
             var setters = [];
             var getters = [];
             var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
-            for (var index_22 = 0; index_22 < element.body.length; index_22++) {
-                var member = element.body[index_22];
+            for (var index_23 = 0; index_23 < element.body.length; index_23++) {
+                var member = element.body[index_23];
                 var elem = [];
                 // console.log(member);
                 switch (member.type) {
@@ -3907,8 +3972,8 @@
             }
             if (element.args.length) {
                 var args = [];
-                for (var index_23 = 0; index_23 < element.args.length; index_23++) {
-                    args.push(this.pushPostionsToMap(element.args[index_23][1]) + this.patchVariable(element.args[index_23][0], element.vars));
+                for (var index_24 = 0; index_24 < element.args.length; index_24++) {
+                    args.push(this.pushPostionsToMap(element.args[index_24][1]) + this.patchVariable(element.args[index_24][0], element.vars));
                 }
                 codes.push(args.join(', '));
             }
@@ -3953,9 +4018,9 @@
                     this.pushCodes(codes, element.vars, element.body, layer + 1, namespace + '.');
                 }
                 else {
-                    var index_24 = this.replacements.length;
+                    var index_25 = this.replacements.length;
                     this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
-                    codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_24 + 'string___, function () {');
+                    codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_25 + 'string___, function () {');
                     this.pushCodes(codes, element.vars, element.body, layer + 1, namespace + element.oname.trim() + '.');
                 }
                 // console.log(element.body);
@@ -3977,9 +4042,9 @@
                 }
             }
             else if (element.subtype === 'nsassign' || element.subtype === 'globalassign') {
-                var index_25 = this.replacements.length;
+                var index_26 = this.replacements.length;
                 this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
-                codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_25 + 'string___, ');
+                codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_26 + 'string___, ');
                 this.pushObjCodes(codes, element, layer, namespace);
             }
             else {
@@ -4061,8 +4126,8 @@
             // console.log(element);
             var overrides = {};
             var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
-            for (var index_26 = 0; index_26 < element.body.length; index_26++) {
-                var member = element.body[index_26];
+            for (var index_27 = 0; index_27 < element.body.length; index_27++) {
+                var member = element.body[index_27];
                 var elem = [];
                 // console.log(member);
                 switch (member.type) {
@@ -4162,7 +4227,11 @@
             var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
             // console.log(element);
             if (element.type === 'object' && element.display === 'block') {
-                codes.push(indent1 + this.pushPostionsToMap(element.posi) + '{');
+                codes.push(indent1 + this.pushPostionsToMap(element.posi));
+            }
+            if (element.body.useExplode) {
+                var objects = [];
+                codes.push('pandora.extend({');
             }
             else {
                 codes.push('{');
@@ -4178,11 +4247,14 @@
                     _break = true;
                 }
                 // console.log(_break, element);
-                for (var index_27 = 0; index_27 < element.body.length; index_27++) {
-                    var member = element.body[index_27];
+                for (var index_28 = 0; index_28 < element.body.length; index_28++) {
+                    var member = element.body[index_28];
                     var elem = [];
                     // console.log(member);
                     switch (member.type) {
+                        case 'object':
+                            objects.push(this.pushPostionsToMap(member.posi) + this.patchVariable(member.oname, member.vars));
+                            break;
                         case 'method':
                             elem.push(this.pushPostionsToMap(member.posi) + member.fname + ': ');
                             this.pushFunctionCodes(elem, member, _layer, namespace);
@@ -4205,7 +4277,12 @@
                 }
                 elements = _layer = _break = undefined;
             }
-            codes.push('}');
+            if (element.body.useExplode) {
+                codes.push('}, true, ' + objects.join(', ') + ')');
+            }
+            else {
+                codes.push('}');
+            }
             indent1 = indent2 = undefined;
             return codes;
         };
@@ -4578,13 +4655,13 @@
                 var mapping = [];
                 var match = void 0;
                 while (match = line.match(/\/\*\s@posi(\d+)\s\*\//)) {
-                    var index_28 = match.index;
+                    var index_29 = match.index;
                     // console.log(line, match);
                     if (match[1] < this.posimap.length - 1) {
                         var i = parseInt(match[1]) + 1;
                         var position = this.posimap[i];
                         this.posimap[i] = undefined;
-                        mapping.push([index_28, position.o[0], position.o[1], position.o[2], 0]);
+                        mapping.push([index_29, position.o[0], position.o[1], position.o[2], 0]);
                     }
                     else {
                         // console.log(match);

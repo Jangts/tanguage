@@ -1729,7 +1729,7 @@
             if (type === '...') {
                 let index = this.replacements.length;
                 this.pushBuffer(["'" + variable + "'"]);
-                _value = 'pandora.remove(' + value + ', ___boundary_' + this.uid + '_' + index + 'string___)';
+                _value = 'pandora.remove(' + value + ', ___boundary_' + this.uid + '_' + index + '_as_string___)';
             } else if (type === 'object') {
                 // console.log(value, variable, index, endmark);
                 _value = value + '.' + variable;
@@ -2166,17 +2166,48 @@
             }
         }
         walkArray(index: number, display: any, vars: any): object {
-            let body = [],
+            let body: any = [],
+                elems: any = [],
                 position = this.getPositionByIndex(index),
                 clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(',');
             // console.log(this.replacements[index], clauses);
             for (let c = 0; c < clauses.length; c++) {
+                let posi;
                 if (c) {
-                    var posi = this.getPosition(clauses[c]);
+                    posi = this.getPosition(clauses[c]);
                 } else {
-                    var posi = this.getPosition(clauses[c]) || position;
+                    posi = this.getPosition(clauses[c]) || position;
                 }
-                this.pushSentencesToAST(body, vars, clauses[c], false, posi);
+                let value = clauses[c].replace(posi, '');
+                let match = value.match(/\.\.\.(\w+)/);
+                if (match){
+                    // console.log(match[1]);
+                    if (elems.length){
+                        body.push({
+                            type: "arrEls",
+                            posi,
+                            vars,
+                            elems: elems
+                        });
+                    }
+                    body.push({
+                        type: "arrVar", 
+                        posi, 
+                        vars,
+                        aname: match[1]
+                    });
+                    elems = [];
+                } else {
+                    this.pushSentencesToAST(elems, vars, clauses[c], false, posi);
+                    if (c === clauses.length-1){
+                        body.push({
+                            type: "arrEls",
+                            posi,
+                            vars,
+                            elems: elems
+                        });
+                    }
+                }
             }
             // console.log(body);
             return {
@@ -2951,7 +2982,7 @@
             return body;
         }
         checkObjMember(vars: any, code: string): object[] {
-            let that = this, body = [],
+            let that = this, body:any = [],
                 bodyIndex = -1,
                 lastIndex: number = 0,
                 array = code.split(/\s*[\{,\}]\s*/);
@@ -2977,7 +3008,15 @@
                             bodyIndex++;
                             continue;
                         } else {
-                            console.log(elArr);
+                            body.useExplode = true;
+                            let posi = this.getPosition(elArr[0]);
+                            // console.log(elArr);
+                            body.push({
+                                type: 'object',
+                                posi: this.getPosition(elArr[0]),
+                                oname: elArr[0].replace((posi.match || '') + '...', ''),
+                                vars: vars
+                            });
                         }
                     } else {
                         // console.log(elArr);
@@ -3520,11 +3559,11 @@
             return codes;
         }
         pushArrayCodes(codes: string[], element: any, layer: number, namespace: string): string[] {
-            let elements: string[] = [];
             if (element.posi) {
                 this.pushPostionsToMap(element.posi, codes);
             }
-            codes.push('[');
+
+            // codes.push('[');
             if (element.body.length) {
                 let _layer = layer;
                 let indent1, indent2;
@@ -3537,22 +3576,47 @@
                     codes.push(indent2);
                     _break = true;
                 }
-                // console.log(element.body);
-                this.pushArrayElements(elements, element.body, element.vars, _layer, namespace);
-                while (elements.length && !elements[0].trim()) {
-                    elements.shift();
-                }
-                if (elements.length) {
-                    if (_break) {
-                        codes.push(elements.join(',' + indent2) + indent1);
-                    } else {
-                        codes.push(elements.join(', '));
+                for (let index = 0; index < element.body.length; index++) {
+                    const group = element.body[index];
+                    let code:string = '';
+                    if(group.type==='arrVar'){
+                        code += this.pushPostionsToMap(group.posi) + this.patchVariable(group.aname, group.vars);
+                    }else{
+                        let elements: string[] = [];
+                        this.pushArrayElements(elements, group.elems, group.vars, _layer, namespace);
+                        while (elements.length && !elements[0].trim()) {
+                            elements.shift();
+                        }
+                        code += '[';
+                        if (elements.length) {
+                            if (_break) {
+                                code += elements.join(',' + indent2) + indent1;
+                            } else {
+                                code += elements.join(', ');
+                            }
+                        }
+                        code += ']';
+                        elements = undefined;
+                    }
+                    if (index === 0) {
+                        codes.push(code);
+                    }else{
+                        if (index === 1){
+                            codes.push('.concat(' + code);
+                        }
+                        else{
+                            codes.push(', ' + code);
+                        }
+                        if (index === element.body.length-1) {
+                            codes.push(')');
+                        }
                     }
                 }
                 _layer = indent1 = indent2 = _break = undefined;
+            }else{
+                codes.push('[]');
             }
-            codes.push(']');
-            elements = undefined;
+            
             return codes;
         }
         pushArrayElements(elements, body, vars, _layer, namespace){
@@ -4085,8 +4149,12 @@
             let indent2 = "\r\n" + stringRepeat("    ", layer + 1);
             // console.log(element);
             if (element.type === 'object' && element.display === 'block') {
-                codes.push(indent1 + this.pushPostionsToMap(element.posi) + '{');
-            } else {
+                codes.push(indent1 + this.pushPostionsToMap(element.posi));
+            }
+            if (element.body.useExplode) {
+                var objects: string[] = [];
+                codes.push('pandora.extend({');
+            }else{
                 codes.push('{');
             }
 
@@ -4106,6 +4174,10 @@
                     let elem: string[] = [];
                     // console.log(member);
                     switch (member.type) {
+                        case 'object':
+                            objects.push(this.pushPostionsToMap(member.posi) + this.patchVariable(member.oname, member.vars));
+                            break;
+
                         case 'method':
                             elem.push(this.pushPostionsToMap(member.posi) + member.fname + ': ');
                             this.pushFunctionCodes(elem, member, _layer, namespace);
@@ -4128,7 +4200,12 @@
                 }
                 elements = _layer = _break = undefined;
             }
-            codes.push('}');
+            if (element.body.useExplode) {
+                codes.push('}, true, ' + objects.join(', ') + ')');
+            } else {
+                codes.push('}');
+            }
+
             indent1 = indent2 = undefined;
             return codes;
         }

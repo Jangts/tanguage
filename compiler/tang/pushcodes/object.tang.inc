@@ -59,8 +59,12 @@ pushObjCodes(codes, element, layer, namespace) {
     let indent2 = "\r\n" + stringRepeat("    ", layer + 1);
     // console.log(element);
     if (element.type === 'object' && element.display === 'block') {
-        codes.push(indent1 + this.pushPostionsToMap(element.posi) + '{');
-    } else {
+        codes.push(indent1 + this.pushPostionsToMap(element.posi));
+    }
+    if (element.body.useExplode) {
+        var objects = [];
+        codes.push('pandora.extend({');
+    }else{
         codes.push('{');
     }
 
@@ -80,6 +84,10 @@ pushObjCodes(codes, element, layer, namespace) {
             let elem = [];
             // console.log(member);
             switch (member.type) {
+                case 'object':
+                    objects.push(this.pushPostionsToMap(member.posi) + this.patchVariable(member.oname, member.vars));
+                    break;
+
                 case 'method':
                     elem.push(this.pushPostionsToMap(member.posi) + member.fname + ': ');
                     this.pushFunctionCodes(elem, member, _layer, namespace);
@@ -102,7 +110,11 @@ pushObjCodes(codes, element, layer, namespace) {
         }
         elements = _layer = _break = undefined;
     }
-    codes.push('}');
+    if (element.body.useExplode) {
+        codes.push('}, true, ' + objects.join(', ') + ')');
+    } else {
+        codes.push('}');
+    }
     indent1 = indent2 = undefined;
     return codes;
 }

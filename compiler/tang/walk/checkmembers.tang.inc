@@ -97,7 +97,15 @@ checkObjMember(vars, code) {
                     bodyIndex++;
                     continue;
                 } else {
+                    body.useExplode = true;
+                    let posi = this.getPosition(elArr[0]);
                     // console.log(elArr);
+                    body.push({
+                        type: 'object',
+                        posi: this.getPosition(elArr[0]),
+                        oname: elArr[0].replace((posi.match || '') + '...', ''),
+                        vars: vars
+                    });
                 }
             } else {
                 // console.log(elArr);
