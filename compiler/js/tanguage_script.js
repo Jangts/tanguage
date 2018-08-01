@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Wed, 01 Aug 2018 13:39:40 GMT
+ * Datetime: Wed, 01 Aug 2018 14:03:17 GMT
  */;
 void
 
@@ -288,7 +288,10 @@ function(root, factory) {
         arrowfn: /(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*(->|=>)\s*([\s\S]*)\s*$/,
         objectattr: /^\s*(@\d+L\d+P\d+O?\d*:::)?((([\$a-zA-Z_][\$\w]*|@boundary_\d+_as_propname::)))\s*(\:*)([\s\S]*)$/,
         classelement: /^\s*(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om)\s+)?([\$\w]*)\s*(\=*)([\s\S]*)$/,
-        travelargs: /^((@\d+L\d+P\d+O*\d*:::)?[\$a-zA-Z_][\$\w\.]*)\s+as\s(@\d+L\d+P\d+O*\d*:::)([\$a-zA-Z_][\$\w]*)(\s*,((@\d+L\d+P\d+O*\d*:::)([\$a-zA-Z_][\$\w]*)?)?)?/
+        travelargs: /^((@\d+L\d+P\d+O*\d*:::)?[\$a-zA-Z_][\$\w\.]*)\s+as\s(@\d+L\d+P\d+O*\d*:::)([\$a-zA-Z_][\$\w]*)(\s*,((@\d+L\d+P\d+O*\d*:::)([\$a-zA-Z_][\$\w]*)?)?)?/,
+        pickConst: /(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)\s*=\s*/g,
+        pickVars: /(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)(\s+|\s*[^\$\w]|\s*$)/g,
+        pickNS: /(^|[\?\:\=]\s*)(ns\.|\$\.|\.)(\.[\$a-zA-Z_][\$\w]*|$)/g
     };
     var hasProp = function (obj, prop) {
         return Object.prototype.hasOwnProperty.call(obj, prop);
@@ -3116,7 +3119,6 @@ function(root, factory) {
             codes.push('\r\n        }');
             codes.push('\r\n        function produceClass (superclass, members) {');
             codes.push('\r\n            var Class = function () {};');
-            codes.push('\r\n            var constructor = void 0;');
             codes.push('\r\n            Class.prototype = superclass;');
             codes.push('\r\n            var constructor = function () {');
             codes.push('\r\n                if (this instanceof constructor) {');
@@ -4129,14 +4131,14 @@ function(root, factory) {
             var _this = this;
             var _arguments = arguments;
             if (code) {
-                return code.replace(/(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)\s*=\s*/g, function (match, before, definition, varname) {
-                    if (!definition && hasProp(vars.scope.const, varname)) {
+                return code.replace(matchExpRegPattern.pickConst, function (match, before, definition, varname) {
+                    if (!definition && hasProp(vars.self, varname) && (vars.self[varname] === 'const')) {
                         _this.error('Cannot re-assign constant `' + varname + '`');
                     }
                     return match;
-                }).replace(/(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)(\s+|\s*[^\$\w]|\s*$)/g, function (match, before, definition, varname, after) {
+                }).replace(matchExpRegPattern.pickVars, function (match, before, definition, varname, after) {
                     return before + (definition || '') + _this.patchVariable(varname, vars) + after || '';
-                }).replace(/(^|[\?\:\=]\s*)(ns\.|\$\.|\.)(\.[\$a-zA-Z_][\$\w]*|$)/g, function (match, before, node, member) {
+                }).replace(matchExpRegPattern.pickNS, function (match, before, node, member) {
                     return before + _this.patchNamespace(node, vars) + member;
                 });
             }

@@ -50,7 +50,6 @@ pushDeclare(codes) {
     codes.push('\r\n        }');
     codes.push('\r\n        function produceClass (superclass, members) {');
     codes.push('\r\n            var Class = function () {};');
-    codes.push('\r\n            var constructor = void 0;');
     codes.push('\r\n            Class.prototype = superclass;');
     codes.push('\r\n            var constructor = function () {');
     codes.push('\r\n                if (this instanceof constructor) {');

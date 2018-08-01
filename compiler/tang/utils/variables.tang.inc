@@ -130,17 +130,19 @@ patchVariables(code, vars) {
     // console.log(code, vars);
     if (code) {
         // console.log(code);
-        return code.replace(/(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)\s*=\s*/g, (match, before, definition, varname) => {
+        
+        return code.replace(matchExpRegPattern.pickConst, (match, before, definition, varname) => {
             // console.log(match, "\r\n", before, '[', varname, '](', type, ')', after);
-            if (!definition && hasProp(vars.scope.const, varname)) {
+            if (!definition && hasProp(vars.self, varname) && (vars.self[varname] === 'const')) {
+                // console.log(vars);
                 this.error('Cannot re-assign constant `' + varname + '`');
             }
             return match;
-        }).replace(/(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)(\s+|\s*[^\$\w]|\s*$)/g, (match, before, definition, varname, after) => {
-            // console.log(match, "\r\n", before, '[', varname, '](', type, ')', after);
+        }).replace(matchExpRegPattern.pickVars, (match, before, definition, varname, after) => {
+            // console.log(before, match, after);
             // console.log(type);
             return before + (definition || '') + this.patchVariable(varname, vars) + after || '';
-        }).replace(/(^|[\?\:\=]\s*)(ns\.|\$\.|\.)(\.[\$a-zA-Z_][\$\w]*|$)/g, (match, before, node, member) => {
+            }).replace(matchExpRegPattern.pickNS, (match, before, node, member) => {
             // console.log(match, "\r\n", before, '[', node, ']', member, vars);
             return before + this.patchNamespace(node, vars) + member;
         });

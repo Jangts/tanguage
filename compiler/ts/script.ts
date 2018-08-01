@@ -180,7 +180,10 @@
             arrowfn: /(___boundary_[A-Z0-9_]{36}_(\d+)_as_parentheses___)\s*(->|=>)\s*([\s\S]*)\s*$/,
             objectattr: /^\s*(@\d+L\d+P\d+O?\d*:::)?((([\$a-zA-Z_][\$\w]*|@boundary_\d+_as_propname::)))\s*(\:*)([\s\S]*)$/,
             classelement: /^\s*(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om)\s+)?([\$\w]*)\s*(\=*)([\s\S]*)$/,
-            travelargs: /^((@\d+L\d+P\d+O*\d*:::)?[\$a-zA-Z_][\$\w\.]*)\s+as\s(@\d+L\d+P\d+O*\d*:::)([\$a-zA-Z_][\$\w]*)(\s*,((@\d+L\d+P\d+O*\d*:::)([\$a-zA-Z_][\$\w]*)?)?)?/
+            travelargs: /^((@\d+L\d+P\d+O*\d*:::)?[\$a-zA-Z_][\$\w\.]*)\s+as\s(@\d+L\d+P\d+O*\d*:::)([\$a-zA-Z_][\$\w]*)(\s*,((@\d+L\d+P\d+O*\d*:::)([\$a-zA-Z_][\$\w]*)?)?)?/,
+            pickConst: /(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)\s*=\s*/g,
+            pickVars: /(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)(\s+|\s*[^\$\w]|\s*$)/g,
+            pickNS: /(^|[\?\:\=]\s*)(ns\.|\$\.|\.)(\.[\$a-zA-Z_][\$\w]*|$)/g
         },
         boundaryMaker = (): string => {
             let radix = 36;
@@ -4353,18 +4356,19 @@
             // console.log(code, vars);
             if (code) {
                 // console.log(code);
-                return code.replace(/(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)\s*=\s*/g, (match, before, definition, varname) => {
+                
+                return code.replace(matchExpRegPattern.pickConst, (match, before, definition, varname) => {
                     // console.log(match, "\r\n", before, '[', varname, '](', type, ')', after);
                     if (!definition && hasProp(vars.self, varname) && (vars.self[varname] === 'const')) {
                         // console.log(vars);
                         this.error('Cannot re-assign constant `' + varname + '`');
                     }
                     return match;
-                }).replace(/(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)(\s+|\s*[^\$\w]|\s*$)/g, (match, before, definition, varname, after) => {
+                }).replace(matchExpRegPattern.pickVars, (match, before, definition, varname, after) => {
                     // console.log(before, match, after);
                     // console.log(type);
                     return before + (definition || '') + this.patchVariable(varname, vars) + after || '';
-                }).replace(/(^|[\?\:\=]\s*)(ns\.|\$\.|\.)(\.[\$a-zA-Z_][\$\w]*|$)/g, (match, before, node, member) => {
+                    }).replace(matchExpRegPattern.pickNS, (match, before, node, member) => {
                     // console.log(match, "\r\n", before, '[', node, ']', member, vars);
                     return before + this.patchNamespace(node, vars) + member;
                 });
