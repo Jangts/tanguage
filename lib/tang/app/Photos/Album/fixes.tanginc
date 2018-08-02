@@ -1,4 +1,4 @@
-fit(origin) {
+fix(origin) {
     origin.onload = origin.onerror = null;
     this.Notice.style.display = 'none';
     var ratio = origin.width / origin.height;
@@ -29,7 +29,7 @@ fit(origin) {
     }
 }
 
-fitNav() {
+fixNav() {
     if (this.Nav) {
         each(query('li', this.Nav) as li) {
             _.dom.removeClass(li, 'actived');

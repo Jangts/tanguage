@@ -45,7 +45,7 @@ class Photos.Album extends Photos {
     }
 
     @include 'Album/build';
-    @include 'Album/fits';
+    @include 'Album/fixes';
 
     on() {
         this.state = true;
@@ -152,18 +152,18 @@ class Photos.Album extends Photos {
             that.Picture.src = origin.src;
             that.tips(that.tipsOnLoading);
             if (origin.complete) {
-                that.fit(origin);
+                that.fix(origin);
             } else {
                 origin.onload = function() {
                     if (this.src == that.Picture.src) {
-                        that.fit(this);
+                        that.fix(this);
                     }
                 };
                 origin.onerror = function() {
                     that.Picture.src = that.defaultImage;
                 }
             };
-            this.fitNav();
+            this.fixNav();
         }
     }
     

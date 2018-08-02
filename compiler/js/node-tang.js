@@ -58,7 +58,7 @@ var onReadFile = function (src, context) {
     return fs.readFileSync(source, 'utf-8');
 }, getTplContent = function (src, context) {
     // console.log(src, context.source);
-    var source = path.resolve(context + src + '.tang.tpl');
+    var source = path.resolve(context + src + '.ttpml');
     return fs.readFileSync(source, 'utf-8');
 };
 var options = {
