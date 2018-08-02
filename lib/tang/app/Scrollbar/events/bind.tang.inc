@@ -1,7 +1,7 @@
 bind () {
     var that = this;
     var _mousewheel = doc.onmousewheel;
-    new Events(this.Element)
+    new Events(this.HTMLElement)
         .push('resize', null, null, () {
             that.resize;
         })

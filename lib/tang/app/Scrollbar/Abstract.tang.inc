@@ -9,7 +9,7 @@
 class Abstract {
     disabled = false;
     protect = true;
-    Element;
+    HTMLElement;
     document;
     vertical;
     horizontal;
@@ -23,8 +23,8 @@ class Abstract {
     verticalDragger;
 
     resize () {
-        if (this.Element) {
-            this.document = this.document || this.Element;
+        if (this.HTMLElement) {
+            this.document = this.document || this.HTMLElement;
             this.amount();
         }
         return this;
@@ -33,7 +33,7 @@ class Abstract {
     amount () {
         //Horizontal
         if (this.horizontal) {
-            this.WinWidth = parseInt(getStyle(this.Element, 'width'));
+            this.WinWidth = parseInt(getStyle(this.HTMLElement, 'width'));
             this.DocWidth = getSize(this.document, 'box').width;
             this.documentLeft = this.style(this.document, 'left', getStyle(this.document, 'left') || 0);
             if (this.buttonLeft && this.buttonRight) {
@@ -59,7 +59,7 @@ class Abstract {
 
         //Vertical
         if (this.vertical) {
-            this.WinHeight = parseInt(getStyle(this.Element, 'height'));
+            this.WinHeight = parseInt(getStyle(this.HTMLElement, 'height'));
             this.DocHeight = getSize(this.document, 'box').height;
             this.documentTop = this.style(this.document, 'top', parseInt(getStyle(this.document, 'top')) || 0);
             if (this.buttonUp && this.buttonDown) {

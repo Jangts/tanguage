@@ -75,7 +75,7 @@ class .Charts {
                 'background-color': 'transparent'
             });
             
-            this.Element = elem;
+            this.HTMLElement = elem;
             var computeDimension = dom.getSize(elem, 'inner');
             this.width = computeDimension.width > this.options.minWidth ? computeDimension.width : this.options.minWidth;
             this.height = computeDimension.height;
@@ -102,7 +102,7 @@ class .Charts {
         this.series = {};
         this.options = obj.deepMerge(this.options || {}, options);
         if (options.backgroundColor) {
-            dom.setStyle(this.Element, 'backgroundColor', options.backgroundColor);
+            dom.setStyle(this.HTMLElement, 'backgroundColor', options.backgroundColor);
         }
         helpers.bindHover(this);
         if (options.series) {
@@ -149,7 +149,7 @@ class .Charts {
     getLayer(zIndex) {
         zIndex = zIndex || 0;
         if (!this.layers[zIndex]) {
-            var canvas = dom.create('canvas', this.Element, {
+            var canvas = dom.create('canvas', this.HTMLElement, {
                 width: this.width,
                 height: this.height,
                 style: {
@@ -229,11 +229,11 @@ class .Charts {
     resize() {
         this.stop();
         this.clear();
-        var newWidth = helpers.getMaximumWidth(this.Element),
+        var newWidth = helpers.getMaximumWidth(this.HTMLElement),
             newWidth = newWidth > this.options.minWidth ? newWidth : this.options.minWidth,
-            newHeight = this.options.maintainAspectRatio ? newWidth / this.ratio : draw.Charts.helpers.getMaximumHeight(this.Element);
+            newHeight = this.options.maintainAspectRatio ? newWidth / this.ratio : draw.Charts.helpers.getMaximumHeight(this.HTMLElement);
 
-            // clog newWidth, newHeight, this.Element
+            // clog newWidth, newHeight, this.HTMLElement
         this.width = newWidth;
         this.height = newHeight;
         // clog this.width, this.height;

@@ -19,10 +19,10 @@ class .media.Player {
     lastActionTime = Date.now()
     _init(elem, sheet) {
         if (_.util.isEl(elem) && _.uitl.bool.inArr(elem.tagName, ['AUDIO', 'VIDEO'])) {
-            this.Element = elem;
-            this.type = this.Element.tagName;
+            this.HTMLElement = elem;
+            this.type = this.HTMLElement.tagName;
         } else {
-            this.Element = new Audio;
+            this.HTMLElement = new Audio;
             this.type = 'AUDIO';
             sheet = elem;
         }
@@ -35,10 +35,10 @@ class .media.Player {
             for (var i in sources) {
                 if (this.canPlay(i) == 'maybe') {
                     try {
-                        that.Element.src = sources[i];
+                        that.HTMLElement.src = sources[i];
                     } catch (e) {
                         this.stop(function() {
-                            that.Element.src = sources[i];
+                            that.HTMLElement.src = sources[i];
                         });
                     }
                     break;
@@ -69,31 +69,31 @@ class .media.Player {
         var that = this,
             duration = Date.now() - this.lastActionTime;
         if (duration > this.protectTime) {
-            this.Element.play();
+            this.HTMLElement.play();
             this.lastActionTime = Date.now();
         } else {
             this.timer && clearTimeout(this.timer);
             this.timer = setTimeout(function() {
-                that.Element.play();
+                that.HTMLElement.play();
                 that.lastActionTime = Date.now();
             }, this.protectTime - duration);
         }
         return this;
     }
     canPlay(mime) {
-        return this.Element.canPlayType(mime);
+        return this.HTMLElement.canPlayType(mime);
     }
     pause(onpause) {
         var that = this,
             duration = Date.now() - this.lastActionTime;
         if (duration > this.protectTime) {
-            this.Element.pause();
+            this.HTMLElement.pause();
             this.lastActionTime = Date.now();
             _.util.isFn(onpause) && onpause.call(this);
         } else {
             this.timer && clearTimeout(this.timer);
             this.timer = setTimeout(function() {
-                that.Element.pause();
+                that.HTMLElement.pause();
                 that.lastActionTime = Date.now();
                 _.util.isFn(onpause) && onpause.call(this);
             }, this.protectTime - duration);
@@ -102,7 +102,7 @@ class .media.Player {
     }
     stop(onstop) {
         this.pause(function() {
-            this.Element.currentTime = 0;
+            this.HTMLElement.currentTime = 0;
             _.util.isFn(onstop) && onstop.call(this);
         });
         return this;
@@ -111,22 +111,22 @@ class .media.Player {
         switch (typeof vol) {
             case 'string':
                 if (vol == 'up') {
-                    var volume = this.Element.volume + 0.1;
+                    var volume = this.HTMLElement.volume + 0.1;
                     if (volume >= 1) {
                         volume = 1;
                     }
-                    this.Element.volume = volume;
+                    this.HTMLElement.volume = volume;
                 } else if (vol == 'down') {
-                    var volume = this.Element.volume - 0.1;
+                    var volume = this.HTMLElement.volume - 0.1;
                     if (volume <= 0) {
                         volume = 0;
                     }
-                    this.Element.volume = volume;
+                    this.HTMLElement.volume = volume;
                 }
                 break;
             case 'number':
                 if (vol >= 0 && vol <= 1) {
-                    this.Element.volume = vol;
+                    this.HTMLElement.volume = vol;
                 }
                 break;
         }

@@ -19,13 +19,13 @@ let {is, isFn, isStr} = ..util;
 createVDom (vNode){
     switch (typeof vNode) {
         case 'string':
-            return new virtual.Element(vNode);
+            return new virtual.HTMLElement(vNode);
 
         case 'object':
-            return new virtual.Element(vNode.tagName, vNode.props || {}, vNode.childs);
+            return new virtual.HTMLElement(vNode.tagName, vNode.props || {}, vNode.childs);
         
         default:
-            return new virtual.Element('div');
+            return new virtual.HTMLElement('div');
     }
 }
 
@@ -35,31 +35,31 @@ class .Component {
     static PROPS = PROPS;
     static TEXT = TEXT;
 
-    Element;
+    HTMLElement;
     vNode;
     _init(options={}){
         if(options.vNode){
-            // 检查vNode是否dom.virtual.Element实例
-            // clog virtual.Element;
-            if(is(options.vNode, virtual.Element)){
+            // 检查vNode是否dom.virtual.HTMLElement实例
+            // clog virtual.HTMLElement;
+            if(is(options.vNode, virtual.HTMLElement)){
                 this.vNode = options.vNode;
             }else{
                 this.vNode = createVDom (options.vNode);
             }
         }else{
-            this.vNode = new virtual.Element('div');
+            this.vNode = new virtual.HTMLElement('div');
         }
-        this.Element = this.vNode.render();
+        this.HTMLElement = this.vNode.render();
         if(options.context){
             if(isFn(options.context.appendChild)){
                 this.appendTo(options.context);
             }else{
-                doc.body.appendChild(this.Element);
+                doc.body.appendChild(this.HTMLElement);
             }
         }
     }
     appendTo(context){
-        context.appendChild(this.Element);
+        context.appendChild(this.HTMLElement);
         return this;
     }
     diff(vNode){
@@ -69,7 +69,7 @@ class .Component {
     patch(vNode, walker = { index: 0 }){
         let _vNode = createVDom (vNode);
         let patches = diff(this.vNode, _vNode);
-        patch(this.Element, patches, walker);
+        patch(this.HTMLElement, patches, walker);
         this.vNode = _vNode;
         return patches;
     }

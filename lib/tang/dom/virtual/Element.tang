@@ -29,7 +29,7 @@ console = root.console;
  * @param   {Array}     children        子元素（节点）
  * 
  */
-class .Element {
+class .HTMLElement {
     _init (tagName, props, children) {
         if (_.util.isArr(props)) {
             children = props;
@@ -41,7 +41,7 @@ class .Element {
         this.key = props ? props.key : undefined;
         var count = 0;
         each(this.children as i, child) {
-            if (child instanceof _.dom.virtual.Element) {
+            if (child instanceof _.dom.virtual.HTMLElement) {
                 count += child.count;
             } else {
                 children[i] = '' + child;
@@ -58,7 +58,7 @@ class .Element {
             _.dom.set(elem, propName, propValue);
         }
         each(this.children as i, child) {
-            var childEl = (child instanceof _.dom.virtual.Element) ?
+            var childEl = (child instanceof _.dom.virtual.HTMLElement) ?
                 child.render() :
                 doc.createTextNode(child);
             elem.appendChild(childEl);

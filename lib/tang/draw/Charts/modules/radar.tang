@@ -83,10 +83,10 @@ expands .Charts {
                 }
                 if (actives.length > 0) {
                     this.actived = 1;
-                    dom.setStyle(this.Element, 'cursor', 'pointer');
+                    dom.setStyle(this.HTMLElement, 'cursor', 'pointer');
                 } else {
                     this.actived = 0;
-                    dom.setStyle(this.Element, 'cursor', 'default');
+                    dom.setStyle(this.HTMLElement, 'cursor', 'default');
                 }
             });
         } else {

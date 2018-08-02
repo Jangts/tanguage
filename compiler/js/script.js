@@ -443,6 +443,9 @@
             // console.log(string);
             string = string.replace(/(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om|\+)\s+)?___boundary_[A-Z0-9_]{36}_(\d+)_as_string___\s*(\:|\(|\=)/g, function (match, posi, desc, type, index, after) {
                 // console.log(posi, desc, this.replacements[index][1]);
+                if (after === '(') {
+                    after = ': (';
+                }
                 if (_this.replacements[index][1]) {
                     return "\r\n" + _this.replacements[index][1] + '@boundary_' + index + '_as_propname::' + after;
                 }
@@ -471,15 +474,16 @@
             // console.log(this.replacements);
             this.consoleDateTime('ANALYZE:');
             string = this.replaceBrackets(string);
-            console.log(string);
+            // console.log(string);
             string = this.replaceBraces(string);
-            console.log(string);
+            // console.log(string);
             string = this.replaceParentheses(string);
             // console.log(string);
             string = string
                 .replace(/@\d+L\d+P\d+O?\d*:::(___boundary_|$)/g, "$1")
                 .replace(/@\d+L\d+P\d+O?\d*:::(___boundary_|$)/g, "$1")
-                .replace(/\s*(,|;)\s*/g, "$1\r\n");
+                .replace(/\s*(,|;)\s*/g, "$1\r\n")
+                .replace(/(_\d+_as_function___)[;\s]*(@boundary_\d+_as_midword::)/g, "$1\r\n$2");
             // console.log(string);
             // console.log(this.replacements);
             return string;
@@ -973,14 +977,15 @@
                 posi3 = posi3 ? posi3.trim() : '';
                 var index = _this.replacements.length;
                 var index2;
-                // console.log(word, closure);
+                // console.log(word, ':',closure);
                 switch (word) {
                     case undefined:
+                        // console.log(closure);
                         // console.log(word, closure);
                         // console.log(closure.indexOf(';') >= 0);
-                        // console.log(!closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|[\$a-zA-Z_][\$\w]*\s*(,|:|$))/));
+                        // console.log(!closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|[\$a-zA-Z_][\$\w]*\s*(,|:|$)|@boundary_\d+_as_propname:::)/));
                         if ((closure.indexOf(';') >= 0) ||
-                            !closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|[\$a-zA-Z_][\$\w]*\s*(,|:|$))/)) {
+                            !closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|@boundary_\d+_as_propname:::|[\$a-zA-Z_][\$\w]*\s*(,|:|$))/)) {
                             // console.log('foo');
                             _this.pushBuffer(['{' + closure + '}', posi3]);
                             return posi1 + (word || '') + posi3 + ' ___boundary_' + _this.uid + '_' + index + '_as_closure___';
@@ -4581,16 +4586,13 @@
         Script.prototype.trim = function (string) {
             var _this = this;
             this.consoleDateTime('START TRIM:');
-            // 此处的replace在整理完成后，将进行分析归纳，最后改写为callback形式的
             // console.log(string);
-            // string = this.replaceStrings(string, true);
-            // console.log(string);
-            this.consoleDateTime('DEALING TRIM:');
             // 去除多余标注
-            string = string.replace(/\s*(@boundary_\d+_as_comments::)?@(ownprop|return)[; \t]*/g, function () {
+            string = string.replace(/\s*(\/\*\s+@posi\d+\s+\*\/)?@(ownprop|return)[; \t]*/g, function () {
                 return '';
             });
-            string = string.replace(/((@boundary_\d+_as_comments::)\s*)+(@boundary_\d+_as_comments::)/g, "$3");
+            string = string.replace(/((\/\*\s+@posi\d+\s+\*\/)\s*)+(\/\*\s+@posi\d+\s+\*\/)/g, "$3");
+            // console.log(string);
             // 去除多余符号
             string = string.replace(/\s*;(\s*;)*[\t \x0B]*/g, ";");
             string = string.replace(/(.)(\{|\[|\(|\.|\:)\s*[,;]+/g, function (match, before, mark) {
@@ -4600,13 +4602,15 @@
                 return before + mark;
             });
             // console.log(string);
-            string = string.replace(/[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_operator::)\s*/g, function (match, white, comments, midword) {
+            // 主要用来处理加法链等
+            string = string.replace(/[;\s]*[\r\n]+(\t*)[ ]*(\/\*\s+@posi\d+\s+\*\/)(@boundary_\d+_as_operator::)\s*/g, function (match, white, comments, midword) {
                 return "\r\n" + white.replace(/\t/g, '    ') + '   ' + comments + midword;
             });
             // console.log(string);
-            string = string.replace(/\s*(@boundary_\d+_as_operator::)[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)/g, "\r\n$2   $3 $1 ");
+            string = string.replace(/\s*(@boundary_\d+_as_operator::)[;\s]*[\r\n]+(\t*)[ ]*(\/\*\s+@posi\d+\s+\*\/)/g, "\r\n$2   $3 $1 ");
             // console.log(string);
-            string = string.replace(/(}*[;\s]*)[\r\n]+([ \t]*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_midword::)\s*/g, function (match, pre, white, comments, midword) {
+            // 主要用来处理};else等
+            string = string.replace(/(}*[;\s]*)[\r\n]+([ \t]*)[ ]*(\/\*\s+@posi\d+\s+\*\/)(@boundary_\d+_as_midword::)\s*/g, function (match, pre, white, comments, midword) {
                 // console.log([match, pre, white, comments, midword]);
                 return pre.replace(/\s+/g, '').replace(/\};/g, '}') + "\r\n" + white.replace(/\t/g, '    ') + comments + midword;
             });
@@ -4614,9 +4618,9 @@
             // 格式化相应符号
             string = string.replace(/[;\s]*(\=|\?)[;\s]*/g, " $1 ");
             string = string.replace(/\s+(\:)[;\s]*/g, " $1 ");
-            string = string.replace(/[;\s]+(@boundary_\d+_as_comments::)(\:)[;\s]*/g, " $2 $1");
+            string = string.replace(/[;\s]+(\/\*\s+@posi\d+\s+\*\/)(\:)[;\s]*/g, " $2 $1");
             // console.log(string);
-            string = string.replace(/[^\:\S]+(\:)\s*(@boundary_\d+_as_comments::)/g, " $1 $2");
+            string = string.replace(/[^\:\S]+(\:)\s*(\/\*\s+@posi\d+\s+\*\/)/g, " $1 $2");
             // console.log(string);
             // 删除多余空白与换行
             // string = string.replace(/[ ]+/g, " ");

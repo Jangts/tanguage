@@ -24,8 +24,8 @@ class Photos.ThreeDimensionalEyes extends Photos {
     start = 0
 
     _init(stage, images) {
-        this.Element = _.util.isStr(stage) ? _.dom.selector.byId(stage) : stage;
-        _.dom.setStyle(this.Element, {
+        this.HTMLElement = _.util.isStr(stage) ? _.dom.selector.byId(stage) : stage;
+        _.dom.setStyle(this.HTMLElement, {
             cursor: 'default'
         });
         switch (typeof images) {
@@ -54,7 +54,7 @@ class Photos.ThreeDimensionalEyes extends Photos {
     
     loadBox() {
         var that = this;
-        this.loadingArea = query('.ib-3deyes-loading', this.Element)[0] || _.dom.create('div', this.Element, {
+        this.loadingArea = query('.ib-3deyes-loading', this.HTMLElement)[0] || _.dom.create('div', this.HTMLElement, {
             className: 'ib-3deyes-loading',
         });
         _.dom.setStyle(this.loadingArea, {
@@ -81,7 +81,7 @@ class Photos.ThreeDimensionalEyes extends Photos {
             opacity: .8
         });
         for (var n = 0; n < this.length; n++) {
-            var img = _.dom.create('img', this.Element, {
+            var img = _.dom.create('img', this.HTMLElement, {
                 src: this.images[n],
                 className: 'ib-3deyes-item'
             });
@@ -101,7 +101,7 @@ class Photos.ThreeDimensionalEyes extends Photos {
     noData() {
         this.images = [];
         var that = this;
-        _.each(query('img.ib-3deyes-item', this.Element), function() {
+        _.each(query('img.ib-3deyes-item', this.HTMLElement), function() {
             _.dom.setStyle(this, 'display', 'none');
             that.images.push(_.dom.getAttr(this, 'src'));
             that.length++;
@@ -110,7 +110,7 @@ class Photos.ThreeDimensionalEyes extends Photos {
 
     bind() {
         var that = this;
-        new Events(this.Element)
+        new Events(this.HTMLElement)
             .push('mousedown', null, null, function() {
                 that.state = true;
             })
@@ -161,7 +161,7 @@ class Photos.ThreeDimensionalEyes extends Photos {
     }
 
     play() {
-        _.dom.setStyle(this.Element, {
+        _.dom.setStyle(this.HTMLElement, {
             backgroundImage: 'url(' + this.images[this.cur] + ')',
             position: 'relative'
         });

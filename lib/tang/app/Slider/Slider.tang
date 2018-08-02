@@ -74,9 +74,9 @@ class .Slider {
     ontouched = false;
 
     _init (elem, preset, options) {
-        this.Element = bool.isStr(elem) ? ..dom.selector.byId(elem) : elem;
-        // clog elem, this.Element, this.Element.nodeType, bool.isEl, bool.isEl(this.Element);
-        if (bool.isEl(this.Element)) {
+        this.HTMLElement = bool.isStr(elem) ? ..dom.selector.byId(elem) : elem;
+        // clog elem, this.HTMLElement, this.HTMLElement.nodeType, bool.isEl, bool.isEl(this.HTMLElement);
+        if (bool.isEl(this.HTMLElement)) {
             options = options || {};
             if (bool.isStr(preset) && $..Slider.presets[preset]) {
                 ..extend(options, $..Slider.presets[preset]);
@@ -87,20 +87,20 @@ class .Slider {
             }
             ..extend(this, true, options);
 
-            if (this.Element && this.layout) {
+            if (this.HTMLElement && this.layout) {
                 var that = this;
-                $(this.Element).addClass(preset);
+                $(this.HTMLElement).addClass(preset);
                 this.data && this.bluider && this.bluider();
-                this.stages = $('.stage', this.Element).addClass(bool.isArr(this.stageTheme) ? (i) {
+                this.stages = $('.stage', this.HTMLElement).addClass(bool.isArr(this.stageTheme) ? (i) {
                     return that.theme[i];
                 } : this.stageTheme);
-                this.troupe = $('.troupe', this.Element).get(0);
+                this.troupe = $('.troupe', this.HTMLElement).get(0);
                 this.actors = $('.actor', this.troupe);
                 this.panelTheme = this.panelTheme || this.stageTheme;
-                this.panel = $('.panel', this.Element).addClass(bool.isArr(this.panelTheme) ? (i) {
+                this.panel = $('.panel', this.HTMLElement).addClass(bool.isArr(this.panelTheme) ? (i) {
                     return that.panelTheme[i];
                 } : this.panelTheme);
-                this.anchors = $('.slider-anchor', this.Element);
+                this.anchors = $('.slider-anchor', this.HTMLElement);
                 this.actorsNum = bool.isFn(this.counter) ? this.counter(this.actors.length) : this.actors.length;
                 this.layout();
                 this.bind();
@@ -187,7 +187,7 @@ class .Slider {
     bind () {
         var that = this;
         this.switchActionType = this.switchActionType == 'hover' ? 'mouseover' : 'click';
-        $(this.Element)
+        $(this.HTMLElement)
             .on(this.switchActionType, '.cutter.goto-prev', () {
                 that.pause(false).playPr();
                 that.pauseOnAction && (that.autoplay = false);
@@ -216,7 +216,7 @@ class .Slider {
                     }
                 }
             });
-        this.pauseOnHover && $(this.Element)
+        this.pauseOnHover && $(this.HTMLElement)
             .bind('mouseover', () {
                 that.pause(true);
             })

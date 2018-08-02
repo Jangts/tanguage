@@ -1,6 +1,6 @@
 //Expends CSS APIs To 'Elements'
 
-expands .Elements {
+expands .HTMLElements {
     css (style, value) {
         if (typeof style === 'object') {
             this.each(() {

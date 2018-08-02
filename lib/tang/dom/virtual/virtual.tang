@@ -9,5 +9,5 @@ public virtual = (options={}){
 };
 
 public createVElement (tagName, props, children) {
-    return new virtual.Element(tagName, props, children);
+    return new virtual.HTMLElement(tagName, props, children);
 }

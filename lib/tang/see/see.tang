@@ -17,25 +17,25 @@ location = root.location;
 
 class Menu {
     _init(elem) {
-        this.Element = _.util.isStr(elem) ? _.dom.selector.byId(elem) : elem;
-        if (_.util.isEl(this.Element)) {
+        this.HTMLElement = _.util.isStr(elem) ? _.dom.selector.byId(elem) : elem;
+        if (_.util.isEl(this.HTMLElement)) {
             this.render();
         }
     }
     render() {
-        $('.submenu[data-width]', this.Element).each(() {
+        $('.submenu[data-width]', this.HTMLElement).each(() {
             $(this).css('width', parseFloat($(this).data('width')));
         });
-        $('.submenu[data-height]', this.Element).each(() {
+        $('.submenu[data-height]', this.HTMLElement).each(() {
             $(this).css('height', parseFloat($(this).data('height')));
         });
-        $('.submenu.under.al-center, .submenu.upon.al-center', this.Element).each(() {
+        $('.submenu.under.al-center, .submenu.upon.al-center', this.HTMLElement).each(() {
             $('tang-see').addClass('__while-menu-item-get-size');
             width = $(this).width();
             $('tang-see').removeClass('__while-menu-item-get-size');
             $(this).css('margin-left', '-' + width / 2 + 'px');
         });
-        $('.submenu.rside.al-middle, .submenu.lside.al-middle', this.Element).each(() {
+        $('.submenu.rside.al-middle, .submenu.lside.al-middle', this.HTMLElement).each(() {
             $('tang-see').addClass('__while-menu-item-get-size');
             height = $(this).height();
             $('tang-see').removeClass('__while-menu-item-get-size');
@@ -46,15 +46,15 @@ class Menu {
 
 class List {
     _init(elem) {
-        this.Element = _.util.isStr(elem) ? _.dom.selector.byId(elem) : elem;
-        if (_.util.isEl(this.Element)) {
+        this.HTMLElement = _.util.isStr(elem) ? _.dom.selector.byId(elem) : elem;
+        if (_.util.isEl(this.HTMLElement)) {
             this.render();
         }
     }
     render() {
-        if (_.dom.hasClass(this.Element, 'withthumb')) {
+        if (_.dom.hasClass(this.HTMLElement, 'withthumb')) {
             var itemWidth, mediaWidth, bodyWidth;
-            $('.tang-see .articlelist.withthumb>.list-item', this.Element).each(() {
+            $('.tang-see .articlelist.withthumb>.list-item', this.HTMLElement).each(() {
                 if (_.dom.hasClass(this, 'top-bottom')) {
                     return this;
                 }

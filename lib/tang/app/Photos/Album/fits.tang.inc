@@ -35,7 +35,7 @@ fitNav() {
             _.dom.removeClass(li, 'actived');
         }
         _.dom.addClass(query('[data-photo-num=' + this.cur + ']', this.Nav)[0], 'actived');
-        var thumbWidth = _.dom.getWidth(query('.ib-photo-nav', this.Element)[0]) / this.thumbNum;
+        var thumbWidth = _.dom.getWidth(query('.ib-photo-nav', this.HTMLElement)[0]) / this.thumbNum;
         var midNum = Math.ceil(this.thumbNum / 2) - 1;
         if (this.cur < midNum) {
             this.Nav.style.left = '0px';

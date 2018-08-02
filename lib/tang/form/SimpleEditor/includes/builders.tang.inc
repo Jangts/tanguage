@@ -77,7 +77,7 @@ var builders = void ns {
             }
             _.dom.setStyle(elem, 'height', 'auto');
             return {
-                Element: elem,
+                HTMLElement: elem,
                 width: width,
                 height: height
             };
@@ -87,7 +87,7 @@ var builders = void ns {
                 htmlclose = new _.dom.HTMLCloser();
             _.dom.setStyle(textarea, 'display', 'none');
             return {
-                Element: textarea,
+                HTMLElement: textarea,
                 getText() {
                     if (textarea.value) {
                         text = textarea.value;
@@ -111,7 +111,7 @@ var builders = void ns {
         },
         mainarea(options, text) {
             var width = this.cElement.width,
-                mainarea = _.dom.create('div', this.cElement.Element, {
+                mainarea = _.dom.create('div', this.cElement.HTMLElement, {
                     className: 'tang-simpleeditor',
                     style: {
                         'width': width,
@@ -129,7 +129,7 @@ var builders = void ns {
                 height = this.cElement.height;
             this.richareas.push(_.dom.create('div', mainarea, {
                 className: 'tangram se-richarea',
-                placeholder: options.placeholder || '', // _.dom.getAttr(textarea.Element, 'placeholder'),
+                placeholder: options.placeholder || '', // _.dom.getAttr(textarea.HTMLElement, 'placeholder'),
                 contenteditable: 'true',
                 spellcheck: 'false',
                 talistenex: 1,

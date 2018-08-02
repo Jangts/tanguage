@@ -29,7 +29,7 @@ class Photos.Album extends Photos {
     tipsAlreadyLast = 'Already Last'
 
     _init(stage, options) {
-        this.Element = _.util.isStr(stage) ? _.dom.selector.byId(stage) : stage;
+        this.HTMLElement = _.util.isStr(stage) ? _.dom.selector.byId(stage) : stage;
         this.build(options);
         if (options.url) {
             this.redata(options.url);
@@ -89,7 +89,7 @@ class Photos.Album extends Photos {
 
     bind() {
         var that = this;
-        new Events(this.Element)
+        new Events(this.HTMLElement)
             .push('click', '.ib-photo-prev', null, () {
                 that.cur--;
                 that.play();
@@ -126,7 +126,7 @@ class Photos.Album extends Photos {
         if (this.Nav) {
             this.thumbs = this.thumbs || this.images;
             var nav = this.Nav;
-            var thumbWidth = _.dom.getWidth(query('.ib-photo-nav', this.Element)[0]) / this.thumbNum;
+            var thumbWidth = _.dom.getWidth(query('.ib-photo-nav', this.HTMLElement)[0]) / this.thumbNum;
             nav.style.position = 'absolute';
             nav.style.width = thumbWidth * this.length + 'px';
             nav.innerHTML = '';

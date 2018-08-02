@@ -26,9 +26,9 @@ class .TabView {
     trigger = 'click'
 
     _init (elem, options) {
-        this.Element = elem;
-        this.options = query('ul,tab-options', this.Element)[0];
-        this.sections = query('.tab-sections', this.Element)[0];
+        this.HTMLElement = elem;
+        this.options = query('ul,tab-options', this.HTMLElement)[0];
+        this.sections = query('.tab-sections', this.HTMLElement)[0];
         this.build(options);
         this.bind().start();
     }
@@ -83,7 +83,7 @@ class .TabView {
         if (tabName !== this.startTabName) {
             this.tabs[tabName] = null;
             delete this.tabs[tabName];
-            $('[data-tab-name=' + tabName + ']', this.Element).remove();
+            $('[data-tab-name=' + tabName + ']', this.HTMLElement).remove();
         }
         return this.aftrtDestroy(tabName);
     }
@@ -106,7 +106,7 @@ class .TabView {
     }
 
     open (tabName, tag, force, tabAlias) {
-        if (this.Element) {
+        if (this.HTMLElement) {
             tabName = tabName.toUpperCase();
             if (!this.tabs[tabName]) {
                 this.create(tabName, tabAlias);
@@ -163,8 +163,8 @@ class .TabView {
         this.onbeforecut(tag);
         this.currTabName = tabName.toUpperCase();
         this.tabs[tabName].tag = tag;
-        $('[data-tab-name]', this.Element).removeClass('curr');
-        $('[data-tab-name=' + this.currTabName + ']', this.Element).addClass('curr');
+        $('[data-tab-name]', this.HTMLElement).removeClass('curr');
+        $('[data-tab-name=' + this.currTabName + ']', this.HTMLElement).addClass('curr');
         return this.onaftercut(tag).resize();
     }
 

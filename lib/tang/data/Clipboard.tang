@@ -55,9 +55,9 @@ class .Clipboard {
     _init(elem) {
         // constructor for new simple upload client
         if (_.util.isEl(elem) && (elem.tagName == 'INPUTS' || elem.tagName == 'TEXTAREA')) {
-            this.Element = elem;
+            this.HTMLElement = elem;
         } else {
-            this.Element = _.dom.create('textarea', doc.getElementsByTagName('body')[0], {
+            this.HTMLElement = _.dom.create('textarea', doc.getElementsByTagName('body')[0], {
                 style: {
                     position: 'fixed',
                     top: -2000,
@@ -75,13 +75,13 @@ class .Clipboard {
     setText(newText) {
         // set text to be copied to clipboard
         this.clipText = newText;
-        this.Element.value = newText;
+        this.HTMLElement.value = newText;
         return this;
     }
 
     copy() {
-        if (_.util.isFn(this.Element.focus)) {
-            this.Element.focus();
+        if (_.util.isFn(this.HTMLElement.focus)) {
+            this.HTMLElement.focus();
             if (window.getSelection) {
                 var selection = window.getSelection();
                 if (selection.rangeCount > 0) {
@@ -97,8 +97,8 @@ class .Clipboard {
             } else {
                 alert('Error');
             }
-            this.Element.value = '';
-            this.Element.blur();
+            this.HTMLElement.value = '';
+            this.HTMLElement.blur();
         } else {
             alert('Error');
         }

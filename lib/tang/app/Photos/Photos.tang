@@ -21,9 +21,9 @@ console = root.console;
 class .Photo {
     images;
     _init(stage, images) {
-        this.Element = _.util.isStr(stage) ? _.dom.selector.byId(stage) : stage;
+        this.HTMLElement = _.util.isStr(stage) ? _.dom.selector.byId(stage) : stage;
         this.images = [];
-        _.dom.setStyle(this.Element, {
+        _.dom.setStyle(this.HTMLElement, {
             cursor: 'default'
         });
         switch (typeof images) {

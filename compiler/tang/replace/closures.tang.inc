@@ -16,9 +16,10 @@ replaceClosures(string) {
             case undefined:
                 // console.log(word, closure);
                 // console.log(closure.indexOf(';') >= 0);
-                // console.log(!closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|[\$a-zA-Z_][\$\w]*\s*(,|:|$))/));
+                // console.log(!closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|[\$a-zA-Z_][\$\w]*\s*(,|:|$)|@boundary_\d+_as_propname:::)/));
+
                 if ((closure.indexOf(';') >= 0) ||
-                    !closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|[\$a-zA-Z_][\$\w]*\s*(,|:|$))/)) {
+                    !closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|@boundary_\d+_as_propname:::|[\$a-zA-Z_][\$\w]*\s*(,|:|$))/)) {
                     // console.log('foo');
                     this.pushBuffer(['{' + closure + '}', posi3]);
                     return posi1 + (word || '') + posi3 + ' ___boundary_' + this.uid + '_' + index + '_as_closure___';

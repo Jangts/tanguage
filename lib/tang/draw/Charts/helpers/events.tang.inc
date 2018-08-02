@@ -37,12 +37,12 @@ bindEvents = (instance, arrayOfEvents, handler) {
             // clog arguments;
             handler.apply(instance, arguments);
         };
-        dom.events.add(instance.Element, eventName, null, null, instance.events[eventName]);
+        dom.events.add(instance.HTMLElement, eventName, null, null, instance.events[eventName]);
     }
 },
 unbindEvents = (instance, arrayOfEvents) {
     each(arrayOfEvents as eventName, handler) {
-        dom.removeEvents(instance.Element, eventName, null, handler);
+        dom.removeEvents(instance.HTMLElement, eventName, null, handler);
     }
 },
 bindHover = (instance, callback) {

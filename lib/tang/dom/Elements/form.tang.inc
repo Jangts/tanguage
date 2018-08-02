@@ -1,4 +1,4 @@
-expands .Elements {
+expands .HTMLElements {
     val (value) {
         if (typeof value == 'string' || typeof value == 'number') {
             this.each( (i, el) {

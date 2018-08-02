@@ -3,7 +3,12 @@
  * 定义标识符类
  */
 Identifier (salt, type) {
-    this._init(salt, type);
+    if (this instanceof Identifier) {
+        this._private = {};
+        this._init(salt, type);
+    } else {
+        return new Identifier(salt, type);
+    }
 }
 
 /** 为标识符构造器绑定原型 */

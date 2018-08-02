@@ -1,5 +1,5 @@
 //Expends Attributes APIs To 'Elements'
-expands .Elements {
+expands .HTMLElements {
     attr (attr, value) {
         switch (typeof value) {
             case 'string':

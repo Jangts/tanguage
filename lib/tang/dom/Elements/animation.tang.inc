@@ -1,7 +1,7 @@
 $..Animation.setTweens(..math.easing.all);
 
 //Expends Animation APIs To 'Elements'
-expands .Elements {
+expands .HTMLElements {
     transition (style, value, duration, easing, callback) {
         //duration = duration,
         to = {};

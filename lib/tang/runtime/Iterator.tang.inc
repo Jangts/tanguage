@@ -3,7 +3,13 @@
  * 定义迭代器类
  */
 Iterator (obj, onlyKey) {
-    this._init(obj, onlyKey);
+    if (this instanceof Iterator) {
+        this._private = {};
+        this._init(obj, onlyKey);
+    } else {
+        return new Iterator(obj, onlyKey);
+    }
+    
 }
 
 /** 为迭代器绑定原型 */

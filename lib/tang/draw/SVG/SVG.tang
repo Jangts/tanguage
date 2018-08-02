@@ -44,7 +44,7 @@ class .SVG {
     Element
     _init (rootnode, width, height) {
         if (_.util.isEl(rootnode)) {
-            this.Element = rootnode;
+            this.HTMLElement = rootnode;
             this.width = width || 800;
             this.height = height || 600;
             var SVG = new SVGElement('svg', { width: width, height: height }, rootnode);
@@ -59,7 +59,7 @@ class .SVG {
             y: y,
             width: width,
             height: height
-        }, this.Element);
+        }, this.HTMLElement);
         if (data) {
             each(data as attr, ) {
                 rect.attr(attr, this);
@@ -72,7 +72,7 @@ class .SVG {
             cx: cx,
             cy: cy,
             r: r
-        }, this.Element);
+        }, this.HTMLElement);
         if (data) {
             each(data as attr, ) {
                 circle.attr(attr, this);
@@ -86,7 +86,7 @@ class .SVG {
             cy: cy,
             rx: rx,
             ry: ry
-        }, this.Element);
+        }, this.HTMLElement);
         if (data) {
             each(data as attr, ) {
                 eliipse.attr(attr, this);
@@ -100,7 +100,7 @@ class .SVG {
             y1: y1,
             x2: x2,
             y2: y2
-        }, this.Element);
+        }, this.HTMLElement);
         if (data) {
             each(data as attr, ) {
                 line.attr(attr, this);
@@ -111,7 +111,7 @@ class .SVG {
     path (pathString, data) {
         var path = new SVGElement('path', {
             d: pathString
-        }, this.Element);
+        }, this.HTMLElement);
         if (data) {
             each(data as attr, ) {
                 path.attr(attr, this);
@@ -123,8 +123,8 @@ class .SVG {
         var text = new SVGElement('text', {
             x: x,
             y: y,
-        }, this.Element);
-        text.Element.textContent = textContent;
+        }, this.HTMLElement);
+        text.HTMLElement.textContent = textContent;
         if (data) {
             each(data as attr, ) {
                 text.attr(attr, this);
@@ -134,8 +134,8 @@ class .SVG {
             var tspan = new SVGElement('tspan', {
                 x: x,
                 y: y,
-            }, text.Element);
-            tspan.Element.textContent = textContent;
+            }, text.HTMLElement);
+            tspan.HTMLElement.textContent = textContent;
             if (data) {
                 each(data as attr, ) {
                     tspan.attr(attr, this);

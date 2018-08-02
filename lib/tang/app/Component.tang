@@ -11,19 +11,19 @@ const errors = {
 }
 
 class .Component {
-    Element;
+    HTMLElement;
     template;
     _init(elem, template) {
         elem = _.util.isElement(elem) ? elem : doc.getElementById(elem);
         if(elem){
-            this.Element = elem;
+            this.HTMLElement = elem;
         }else{
             _.error(errors.NoElem);
         }
     }
     html(content){
-        if(this.Element){
-            this.Element.innerHTML = content;
+        if(this.HTMLElement){
+            this.HTMLElement.innerHTML = content;
         }else{
             _.error(errors.NoElem);
         }

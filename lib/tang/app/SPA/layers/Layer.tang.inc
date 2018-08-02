@@ -19,7 +19,7 @@ class Layer extends Component {
 scanLayer (app) {
     let
     layers = {},
-    elem = app.Element;
+    elem = app.HTMLElement;
 
     each (elem.childNodes as index, node) {
         if(dom.hasAttr(node, 'data-layer-name')){
@@ -31,7 +31,7 @@ scanLayer (app) {
 
             layers[layerName] = new Layer({
                 uid: layerName,
-                Element: node
+                HTMLElement: node
             });
             if(index===0){
                 app.defaultLayer = layers[layerName];

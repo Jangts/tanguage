@@ -80,7 +80,8 @@ encode(string) {
     string = string
         .replace(/@\d+L\d+P\d+O?\d*:::(___boundary_|$)/g, "$1")
         .replace(/@\d+L\d+P\d+O?\d*:::(___boundary_|$)/g, "$1")
-        .replace(/\s*(,|;)\s*/g, "$1\r\n");
+        .replace(/\s*(,|;)\s*/g, "$1\r\n")
+        .replace(/(_\d+_as_function___)[;\s]*(@boundary_\d+_as_midword::)/g, "$1\r\n$2");
     // console.log(string);
     // console.log(this.replacements);
     return string;

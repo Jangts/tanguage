@@ -1,8 +1,8 @@
 /** 自动配置 */
-if (storage.core.Element) {
-    var config = storage.core.Element.getAttribute('data-config'),
-        mains = storage.core.Element.getAttribute('data-mains'),
-        debug = storage.core.Element.getAttribute('data-tanguage-debug');
+if (storage.core.HTMLElement) {
+    var config = storage.core.HTMLElement.getAttribute('data-config'),
+        mains = storage.core.HTMLElement.getAttribute('data-mains'),
+        debug = storage.core.HTMLElement.getAttribute('data-tanguage-debug');
     if (config) {
         var url = url + '.js';
         loadURL(url, '$Config');

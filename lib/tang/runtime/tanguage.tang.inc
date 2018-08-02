@@ -24,13 +24,13 @@ let tanguage = {
         }
         if (options.corePath) {
             if (doc) {
-                if (storage.core.Element === null) {
+                if (storage.core.HTMLElement === null) {
                     var anchor = doc.createElement('a');
                     anchor.href = (options.corePath + '/').replace(/[\/\\]+$/, '/');
                     clog anchor.href;
                     var src = anchor.href;
                     storage.core.Pathname = calculateRelativePath(src);
-                    storage.core.Element = undefined;
+                    storage.core.HTMLElement = undefined;
                 }
             } else {
                 storage.core.Pathname = calculateRelativePath((options.corePath + '/').replace(/[\/\\]+$/, '/'));

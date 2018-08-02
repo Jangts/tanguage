@@ -24,7 +24,7 @@ $..Slider.extend({
             this.style.height = '100%';
         });
         if (this.renderPanel) {
-            $('.panel', this.Element).each(() {
+            $('.panel', this.HTMLElement).each(() {
                 $('.slider-anchor', this).each((i) {
                     this.setAttribute('data-actor-index', i);
                 });

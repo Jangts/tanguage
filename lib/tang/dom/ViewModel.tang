@@ -65,8 +65,8 @@ class .ViewModel {
         this.options = options;
         this.data = options.data;
         if (useVElement || (useVElement !== false && options.useVElement)) {
-            diff = _.dom.virtual.Element.diff;
-            patch = _.dom.virtual.Element.patch;
+            diff = _.dom.virtual.HTMLElement.diff;
+            patch = _.dom.virtual.HTMLElement.patch;
             var update = updateByVElement;
         } else {
             var update = updateByCustomRenderer;

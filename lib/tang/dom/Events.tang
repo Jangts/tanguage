@@ -23,20 +23,22 @@ removeByIndex = function(array, index) {
 };
 
 class .Events {
+    HTMLElement
+    
     _protected =  {
         types: {},
         keys: []
     }
 
     _init(elem) {
-        this.Element = elem;
+        this.HTMLElement = elem;
         this.eventTypes = {};
     }
     
     listen(eventType) {
         if (!this.eventTypes[eventType]) {
             var that = this;
-            var originType = this.originEventType(eventType, this.Element);
+            var originType = this.originEventType(eventType, this.HTMLElement);
             if (originType) {
                 this.eventTypes[eventType] = {
                     Listener(event) {
@@ -45,7 +47,7 @@ class .Events {
                     Selectors: {},
                     Elements: []
                 };
-                doc.addEventListener ? this.Element.addEventListener(originType, this.eventTypes[eventType].Listener, false) : this.Element.attachEvent("on" + originType, this.eventTypes[eventType].Listener);
+                doc.addEventListener ? this.HTMLElement.addEventListener(originType, this.eventTypes[eventType].Listener, false) : this.HTMLElement.attachEvent("on" + originType, this.eventTypes[eventType].Listener);
             }
         }
         return this;
@@ -64,7 +66,7 @@ class .Events {
                         });
                         break;
                     case 'object':
-                        selector = selector || this.Element;
+                        selector = selector || this.HTMLElement;
                         this.eventTypes[eventType]['Elements'].push({
                             elem: selector,
                             data: data,
@@ -111,7 +113,7 @@ class .Events {
         };
         event.currentTarget = event.currentTarget || event.target || event.relatedTarget || event.srcElement;
         event.target = event.target || event.currentTarget;
-        event.delegateTarget = this.Element;
+        event.delegateTarget = this.HTMLElement;
         event.path = event.path || $..getParentNodes(event.target, true);
         event.isCurrent = (event.delegateTarget === event.target);
         // if (event.delegateTarget === event.target) {
@@ -136,7 +138,7 @@ class .Events {
 
             for (var s in EventType['Selectors']) {
                 var selector = EventType['Selectors'][s];
-                var elements = query(s, this.Element);
+                var elements = query(s, this.HTMLElement);
                 // if (eventType === 'click') {
                 //     console.log(elements);
                 // }
@@ -162,10 +164,10 @@ class .Events {
         if (this.eventTypes[eventType]) {
             var originEventType = this.originEventType(eventType);
             var event = {
-                path: [this.Element],
+                path: [this.HTMLElement],
                 currentTarget: target,
                 data: data,
-                delegateTarget: this.Element,
+                delegateTarget: this.HTMLElement,
                 isCurrent: false,
                 isTrigger: true,
                 target: target,
@@ -185,7 +187,7 @@ class .Events {
             };
             for (var s in this.eventTypes[eventType]['Selectors']) {
                 var selector = this.eventTypes[eventType]['Selectors'][s];
-                var elements = query(s, this.Element);
+                var elements = query(s, this.HTMLElement);
                 for (var i = 0; i < elements.length; i++) {
                     if (elements[i] == target) {
                         for (var n in selector) {
@@ -206,7 +208,7 @@ class .Events {
 
     removeHandler(eventType, selector, handler) {
         if (this.eventTypes[eventType]) {
-            selector = selector || this.Element;
+            selector = selector || this.HTMLElement;
             switch (typeof selector) {
                 case 'string':
                     for (var h in this.eventTypes[eventType]['Selectors'][selector]) {
@@ -230,7 +232,7 @@ class .Events {
 
     removeSelector(eventType, selector) {
         if (this.eventTypes[eventType]) {
-            selector = selector || this.Element;
+            selector = selector || this.HTMLElement;
             switch (typeof selector) {
                 case 'string':
                     delete this.eventTypes[eventType]['Selectors'][selector];
@@ -251,7 +253,7 @@ class .Events {
     removeType(eventType) {
         if (this.eventTypes[eventType]) {
             var originType = this.originEventType(eventType);
-            doc.addEventListener ? this.Element.removeEventListener(originType, this.eventTypes[eventType].Listener, false) : this.Element.detachEvent("on" + originType, this.eventTypes[eventType].Listener);
+            doc.addEventListener ? this.HTMLElement.removeEventListener(originType, this.eventTypes[eventType].Listener, false) : this.HTMLElement.detachEvent("on" + originType, this.eventTypes[eventType].Listener);
             delete this.eventTypes[eventType];
         }
         return this;
@@ -260,11 +262,11 @@ class .Events {
     remove() {
         for (var eventType in this.eventTypes) {
             var originType = this.originEventType(eventType);
-            doc.addEventListener ? this.Element.removeEventListener(originType, this.eventTypes[eventType].Listener, false) : this.Element.detachEvent("on" + originType, this.eventTypes[eventType].Listener);
+            doc.addEventListener ? this.HTMLElement.removeEventListener(originType, this.eventTypes[eventType].Listener, false) : this.HTMLElement.detachEvent("on" + originType, this.eventTypes[eventType].Listener);
             delete this.eventTypes[eventType];
         }
         delete this.eventTypes;
-        delete this.Element;
+        delete this.HTMLElement;
         return this;
     }
 

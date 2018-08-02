@@ -1,9 +1,8 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Thu, 02 Aug 2018 01:01:02 GMT
- */
-;
+ * Datetime: Thu, 02 Aug 2018 07:22:47 GMT
+ */;
 void
 
 function(root, factory) {
@@ -13,44 +12,47 @@ function(root, factory) {
         if (typeof module === 'object') {
             module.exports = exports;
         }
-    } else if (typeof root.define === 'function' && root.define.amd) {
-        root.define(function() {
+    }
+    else if (typeof root.define === 'function' && root.define.amd) {
+        root.define(function () {
             return factory(root);
         });
-    } else if (typeof root.tang === 'object' && typeof root.tang.init === 'function') {
+    }
+    else if (typeof root.tang === 'object' && typeof root.tang.init === 'function') {
         root.tang.init();
         root.tang.module.exports = factory(root);
-    } else {
+    }
+    else {
         factory(root)
     }
 }(typeof window === 'undefined' ? global : window, function(root, undefined) {
     var pandora = {};
-    pandora.declareClass = (function() {
+    pandora.declareClass = (function () {
         var blockClass = {
             _public: {},
-            _init: function() {}
+            _init: function () {}
         };
-
-        function prepareClassMembers(target, data, start) {
-            for (start; start < data.length; start++) {
-                if (data[start] && typeof data[start] === 'object') {
+        function prepareClassMembers (target, data, start) {
+            for (start;start < data.length;start++) {
+                if (data[start]&& typeof data[start] === 'object') {
                     pandora.extend(target, true, data[start]);
-                } else {
+                }
+                else {
                     break;
                 }
             }
             return target;
         }
-
-        function produceClass(superclass, members) {
-            var Class = function() {};
+        function produceClass (superclass, members) {
+            var Class = function () {};
             Class.prototype = superclass;
-            var constructor = function() {
+            var constructor = function () {
                 if (this instanceof constructor) {
                     this._private = {};
                     this._init.apply(this, arguments);
                     return this;
-                } else {
+                }
+                else {
                     var instance = new constructor();
                     instance._private = {};
                     instance._init.apply(instance, arguments);
@@ -62,19 +64,19 @@ function(root, factory) {
             pandora.extend(constructor.prototype, true, members);
             return constructor;
         }
-
-        function declareClass() {
-            var superclass = void 0;
-            var members = {};
+        function declareClass () {
+            var superclass = void 0;var members = {};
             if (arguments.length > 0) {
                 if (typeof arguments[0] === 'function') {
                     superclass = arguments[0].prototype || blockClass;
                     members = prepareClassMembers(members, arguments, 1);
-                } else {
+                }
+                else {
                     superclass = blockClass;
                     members = prepareClassMembers(members, arguments, 0);
                 }
-            } else {
+            }
+            else {
                 superclass = blockClass;
                 members = {};
             }
@@ -82,11 +84,11 @@ function(root, factory) {
         }
         return declareClass;
     }());
-    pandora.slice = function(arrayLike, startIndex, endIndex) {
+    pandora.slice = function (arrayLike, startIndex, endIndex) {
         startIndex = parseInt(startIndex) || 0;
         return Array.prototype.slice.call(arrayLike, startIndex, endIndex);
     }
-    pandora.each = function(obj, handler, that, hasOwnProperty) {
+    pandora.each = function (obj, handler, that, hasOwnProperty) {
         if (typeof(obj) == 'object' && obj) {
             var addArgs = pandora.slice(arguments, 3);
             if (hasOwnProperty) {
@@ -95,22 +97,24 @@ function(root, factory) {
                         handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));
                     }
                 }
-            } else if ((obj instanceof Array) || (Object.prototype.toString.call(obj) === '[object Array]') || ((typeof(obj.length) === 'number') && ((typeof(obj.item) === 'function') || (typeof(obj.splice) != 'undefined')))) {
-                for (var i = 0; i < obj.length; i++) {
+            }
+            else if ((obj instanceof Array) || (Object.prototype.toString.call(obj) === '[object Array]') || ((typeof(obj.length) === 'number') && ((typeof(obj.item) === 'function') || (typeof(obj.splice) != 'undefined')))) {
+                for (var i = 0;i < obj.length;i++) {
                     handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));
                 }
-            } else {
+            }
+            else {
                 for (var i in obj) {
                     handler.apply(that || obj[i], [i, obj[i]].concat(addArgs));
                 }
             }
         };
     }
-    pandora.extend = function(base) {
+    pandora.extend = function (base) {
         base = (base && (typeof(base) === 'object' || typeof(base) === 'function')) ? base : root;
         var rewrite = (arguments[1] === 1 || arguments[1] === true) ? true : false;
-        pandora.each(pandora.slice(arguments, 1), function(index, source) {
-            pandora.each(source, function(key, value) {
+        pandora.each(pandora.slice(arguments, 1), function (index, source) {
+            pandora.each(source, function (key, value) {
                 if (source.hasOwnProperty(key)) {
                     if (typeof base[key] === 'undefined' || rewrite) {
                         base[key] = value;
@@ -120,32 +124,32 @@ function(root, factory) {
         });
         return base;
     };
-    pandora.declareClass = (function() {
+    pandora.declareClass = (function () {
         var blockClass = {
             _public: {},
-            _init: function() {}
+            _init: function () {}
         };
-
-        function prepareClassMembers(target, data, start) {
-            for (start; start < data.length; start++) {
-                if (data[start] && typeof data[start] === 'object') {
+        function prepareClassMembers (target, data, start) {
+            for (start;start < data.length;start++) {
+                if (data[start]&& typeof data[start] === 'object') {
                     pandora.extend(target, true, data[start]);
-                } else {
+                }
+                else {
                     break;
                 }
             }
             return target;
         }
-
-        function produceClass(superclass, members) {
-            var Class = function() {};
+        function produceClass (superclass, members) {
+            var Class = function () {};
             Class.prototype = superclass;
-            var constructor = function() {
+            var constructor = function () {
                 if (this instanceof constructor) {
                     this._private = {};
                     this._init.apply(this, arguments);
                     return this;
-                } else {
+                }
+                else {
                     var instance = new constructor();
                     instance._private = {};
                     instance._init.apply(instance, arguments);
@@ -157,19 +161,19 @@ function(root, factory) {
             pandora.extend(constructor.prototype, true, members);
             return constructor;
         }
-
-        function declareClass() {
-            var superclass = void 0;
-            var members = {};
+        function declareClass () {
+            var superclass = void 0;var members = {};
             if (arguments.length > 0) {
                 if (typeof arguments[0] === 'function') {
                     superclass = arguments[0].prototype || blockClass;
                     members = prepareClassMembers(members, arguments, 1);
-                } else {
+                }
+                else {
                     superclass = blockClass;
                     members = prepareClassMembers(members, arguments, 0);
                 }
-            } else {
+            }
+            else {
                 superclass = blockClass;
                 members = {};
             }
@@ -178,9 +182,9 @@ function(root, factory) {
         return declareClass;
     }());
     if (Array.prototype.includes == undefined) {
-        Array.prototype.includes = function(searchElement, fromIndex) {
+        Array.prototype.includes = function (searchElement, fromIndex) {
             fromIndex = parseInt(fromIndex) || 0;
-            for (fromIndex; fromIndex < this.length; fromIndex++) {
+            for (fromIndex;fromIndex < this.length;fromIndex++) {
                 if (this[fromIndex] === searchElement) {
                     return true;
                 }
@@ -191,11 +195,12 @@ function(root, factory) {
     var Buf = void 0;
     if (typeof Buffer === 'function') {
         Buf = Buffer;
-    } else {
-        Buf = function(string) {
+    }
+    else {
+        Buf = function (string) {
             this.value = string;
         }
-        Buf.prototype.toString = function() {
+        Buf.prototype.toString = function () {
             return this.value;
         }
     }
@@ -288,20 +293,20 @@ function(root, factory) {
         pickVars: /(^|[^\$\w\.])(var\s+)?([\$a-zA-Z_][\$\w]*)(\s+|\s*[^\$\w]|\s*$)/g,
         pickNS: /(^|[\?\:\=]\s*)(ns\.|\$\.|\.)(\.[\$a-zA-Z_][\$\w]*|$)/g
     };
-    var hasProp = function(obj, prop) {
+    var hasProp = function (obj, prop) {
         return Object.prototype.hasOwnProperty.call(obj, prop);
     };
-    var boundaryMaker = function() {
+    var boundaryMaker = function () {
         var radix = 36;
         var uid = new Array(radix);
-        for (var i = 0; i < radix; i++) {
+        for (var i = 0;i < radix;i++) {
             uid[i] = zero2z[Math.floor(Math.random() * radix)];
         }
         uid[8] = uid[13] = uid[18] = uid[23] = '_';
         radix = undefined;
         return uid.join('');
     };
-    var stringRepeat = function(string, number) {
+    var stringRepeat = function (string, number) {
         return new Array(number + 1).join(string);
     };
     var Script = pandora.declareClass({
@@ -339,9 +344,9 @@ function(root, factory) {
         useExtends: false,
         useEach: false,
         useLoop: false,
-        _init: function(input, source, run) {
-            if (source === void 0) { source = ''; }
-            if (run === void 0) { run = false; }
+        _init: function (input, source, run) {
+            if (source === void 0) { source = '';}
+            if (run === void 0) { run = false;}
             this.uid = boundaryMaker();
             this.markPattern = new RegExp('@boundary_(\\\d+)_as_(mark)::', 'g');
             this.lastPattern = new RegExp('(___boundary_' + this.uid + '_(\\\d+)_as_(string|pattern|template)___|@boundary_(\\\d+)_as_propname::|@boundary_(\\\d+)_as_(keyword|midword|preoperator|operator|aftoperator|comments)::)', 'g');
@@ -349,18 +354,7 @@ function(root, factory) {
             this.output = undefined;
             this.blockreserved = ['pandora', 'root'];
             this.xvars = [];
-            this.replacements = [
-                ['{}'],
-                ['/='],
-                ['/'],
-                [' +'],
-                [' -'],
-                [' === '],
-                [' + '],
-                ['\"'],
-                ['"\\r\\n"'],
-                ['[^\\/']
-            ];
+            this.replacements = [['{}'], ['/='], ['/'], [' +'], [' -'], [' === '], [' + '], ['\"'], ['"\\r\\n"'], ['[^\\/']];
             this.mappings = [];
             if (source) {
                 this.sources.push({
@@ -373,7 +367,7 @@ function(root, factory) {
                 this.run();
             };
         },
-        compile: function() {
+        compile: function () {
             var newcontent = this.markPosition(this.input, 0);
             var string = this.encode(newcontent);
             var vars = {
@@ -397,15 +391,15 @@ function(root, factory) {
             newcontent = string = vars = undefined;
             return this;
         },
-        error: function(str) {
+        error: function (str) {
             throw 'tanguage script Error: ' + str;
         },
-        pushBuffer: function(replacement) {
+        pushBuffer: function (replacement) {
             var buf = new Buf(replacement[0]);
             replacement[0] = buf;
             this.replacements.push(replacement);
         },
-        readBuffer: function(index) {
+        readBuffer: function (index) {
             if (index > 9) {
                 var string = this.replacements[index][0].toString();
                 this.replacements[index][0] = undefined;
@@ -413,42 +407,43 @@ function(root, factory) {
             }
             return this.replacements[index][0].toString();
         },
-        markPosition: function(string, sourceid) {
+        markPosition: function (string, sourceid) {
             var _this = this;
             var _arguments = arguments;
-            if (sourceid === void 0) { sourceid = 0; }
+            if (sourceid === void 0) { sourceid = 0;}
             var lines = string.split(/\r{0,1}\n/);
             var positions = [];
-            for (var l = 0; l < lines.length; l++) {
+            for (var l = 0;l < lines.length;l++) {
                 var elements = lines[l].split(/(,|;|\{|\[|\(|\}|\sas\s|->|=>)/);
                 var newline = [];
-                for (var c = 0, length = 0; c < elements.length; c++) {
+                for (var c = 0, length = 0;c < elements.length;c++) {
                     var element = elements[c];
                     if (c === 0) {
                         length = 0;
                     }
                     if (element === ',' || element === ';' || element === '{' || element === '[' || element === '(' || element === '}' || element === ' as ' || element === '->' || element === '=>') {
                         newline.push(element);
-                    } else {
+                    }
+                    else {
                         newline.push('@' + sourceid + 'L' + l + 'P' + length + ':::' + element);
                     }
                     length += element.length;
                 }
                 positions.push(newline);
             }
-            var newlines = positions.map(function(line) {
+            var newlines = positions.map(function (line) {
                 return line.join("");
             });
             lines = positions = undefined;
             return newlines.join("\r\n");
         },
-        tidyPosition: function(string) {
+        tidyPosition: function (string) {
             var _this = this;
             var _arguments = arguments;
             var on = true;
             while (on) {
                 on = false;
-                string = string.replace(/(@\d+L\d+P\d+O?\d*:::\s*)+(@\d+L\d+P0:::)/g, function(match, last, newline) {
+                string = string.replace(/(@\d+L\d+P\d+O?\d*:::\s*)+(@\d+L\d+P0:::)/g, function (match, last, newline) {
                     on = true;
                     return "\r\n" + newline;
                 });
@@ -456,7 +451,7 @@ function(root, factory) {
             on = true;
             while (on) {
                 on = false;
-                string = string.replace(/[\r\n]*(@\d+L\d+P)0:::(\s+)/g, function(match, pre, space) {
+                string = string.replace(/[\r\n]*(@\d+L\d+P)0:::(\s+)/g, function (match, pre, space) {
                     on = true;
                     return "\r\n" + pre + space.length + 'O0:::';
                 });
@@ -464,7 +459,7 @@ function(root, factory) {
             on = true;
             while (on) {
                 on = false;
-                string = string.replace(/(@\d+L\d+P)(\d+):::(\s+)/g, function(match, pre, num, space) {
+                string = string.replace(/(@\d+L\d+P)(\d+):::(\s+)/g, function (match, pre, num, space) {
                     on = true;
                     return pre + (parseInt(num) + space.length) + 'O' + num + ':::';
                 });
@@ -472,7 +467,7 @@ function(root, factory) {
             on = true;
             while (on) {
                 on = false;
-                string = string.replace(/(\{|\[|\(|\)|\]|\})\s*@\d+L\d+P\d+O?\d*:::\s*(\)|\]|\})/g, function(match, before, atfer) {
+                string = string.replace(/(\{|\[|\(|\)|\]|\})\s*@\d+L\d+P\d+O?\d*:::\s*(\)|\]|\})/g, function (match, before, atfer) {
                     on = true;
                     return before + atfer;
                 });
@@ -480,7 +475,7 @@ function(root, factory) {
             on = true;
             while (on) {
                 on = false;
-                string = string.replace(/(@\d+L\d+P\d+O?\d*:::\s*)+(\)|\]|\})/g, function(match, posi, panbrackets) {
+                string = string.replace(/(@\d+L\d+P\d+O?\d*:::\s*)+(\)|\]|\})/g, function (match, posi, panbrackets) {
                     on = true;
                     return panbrackets;
                 });
@@ -488,7 +483,7 @@ function(root, factory) {
             on = true;
             while (on) {
                 on = false;
-                string = string.replace(/(\s*@\d+L\d+P\d+O?\d*:::)+(,|;)/g, function(match, posi, panstop) {
+                string = string.replace(/(\s*@\d+L\d+P\d+O?\d*:::)+(,|;)/g, function (match, posi, panstop) {
                     on = true;
                     return panstop;
                 });
@@ -496,28 +491,30 @@ function(root, factory) {
             string = string.replace(/::::/g, '::: :');
             return string;
         },
-        encode: function(string) {
+        encode: function (string) {
             var _this = this;
             var _arguments = arguments;
             string = string
-                .replace(replaceExpRegPattern.typetag, function(match, gaps, preline, posi, gap, tag) {
+                .replace(replaceExpRegPattern.typetag, function (match, gaps, preline, posi, gap, tag) {
                     _this.isMainBlock = false;
                     if (gaps) {
                         _this.maintag_posi = posi;
                         if (!!gap) {
                             _this.maintag_posi += 'O' + gap.length;
                         }
-                    } else {
+                    }
+                    else {
                         _this.maintag_posi = '@0L0P0';
                     }
                     if (tag === 'module') {
                         _this.blockreserved.push('module');
-                    } else if (tag === 'native') {
+                    }
+                    else if (tag === 'native') {
                         _this.isNativeCode = true;
                     }
                     return '';
                 })
-                .replace(replaceExpRegPattern.namespace, function(match, linestart, posi, at, gap, namespace) {
+                .replace(replaceExpRegPattern.namespace, function (match, linestart, posi, at, gap, namespace) {
                     if (_this.namespace === '') {
                         _this.namespace += namespace + '.';
                         _this.namespace_posi = at;
@@ -532,7 +529,7 @@ function(root, factory) {
             string = this.replaceStrings(string);
             string = this.replaceIncludes(string);
             string = this.tidyPosition(string);
-            string = string.replace(/(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om|\+)\s+)?___boundary_[A-Z0-9_]{36}_(\d+)_as_string___\s*(\:|\(|\=)/g, function(match, posi, desc, type, index, after) {
+            string = string.replace(/(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om|\+)\s+)?___boundary_[A-Z0-9_]{36}_(\d+)_as_string___\s*(\:|\(|\=)/g, function (match, posi, desc, type, index, after) {
                 if (_this.replacements[index][1]) {
                     return "\r\n" + _this.replacements[index][1] + '@boundary_' + index + '_as_propname::' + after;
                 }
@@ -548,7 +545,7 @@ function(root, factory) {
                 .replace(/([\$a-zA-Z_][\$\w]*)\s*(->|=>)/g, "($1)$2")
                 .replace(/\.\s*\(/g, "..storage.set(")
                 .replace(/@\s*\(/g, "..storage.get(")
-                .replace(/@\d+L\d+P\d+O?\d*:::@var\s+([\$a-zA-Z_][\$\w]*(\s*,\s*@\d+L\d+P\d+O?\d*:::[\$a-zA-Z_][\$\w]*)*);*/g, function(match, words) {
+                .replace(/@\d+L\d+P\d+O?\d*:::@var\s+([\$a-zA-Z_][\$\w]*(\s*,\s*@\d+L\d+P\d+O?\d*:::[\$a-zA-Z_][\$\w]*)*);*/g, function (match, words) {
                     var vars = words.replace(/\s*@\d+L\d+P\d+O?\d*:::/g, '').split(',');
                     _this.xvars.push(...vars);
                     return '';
@@ -559,13 +556,14 @@ function(root, factory) {
             string = string
                 .replace(/@\d+L\d+P\d+O?\d*:::(___boundary_|$)/g, "$1")
                 .replace(/@\d+L\d+P\d+O?\d*:::(___boundary_|$)/g, "$1")
-                .replace(/\s*(,|;)\s*/g, "$1\r\n");
+                .replace(/\s*(,|;)\s*/g, "$1\r\n")
+                .replace(/(_\d+_as_function___)[;\s]*(@boundary_\d+_as_midword::)/g, "$1\r\n$2");
             return string;
         },
-        replaceUsing: function(string) {
+        replaceUsing: function (string) {
             var _this = this;
             var _arguments = arguments;
-            return string.replace(replaceExpRegPattern.use, function(match, posi, $, url, as, alias, variables, posimembers, members) {
+            return string.replace(replaceExpRegPattern.use, function (match, posi, $, url, as, alias, variables, posimembers, members) {
                 if (_this.isNativeCode) {
                     _this.error('Native Code Not Support Use Expression');
                 }
@@ -573,7 +571,8 @@ function(root, factory) {
                 if ($) {
                     if ($ === '@') {
                         url = '//' + url;
-                    } else {
+                    }
+                    else {
                         url = '$_/' + url;
                     }
                 }
@@ -585,10 +584,10 @@ function(root, factory) {
                 return '___boundary_' + _this.uid + '_' + index + '_as_using___;';
             });
         },
-        replaceWords: function(string) {
+        replaceWords: function (string) {
             var _this = this;
             var _arguments = arguments;
-            return string.replace(replaceWords, function(match, posi, word, after) {
+            return string.replace(replaceWords, function (match, posi, word, after) {
                 var index = _this.replacements.length;
                 if (word === 'else') {
                     _this.pushBuffer([word + ' ', posi && posi.trim()]);
@@ -602,7 +601,7 @@ function(root, factory) {
                 return ";\r\n" + '@boundary_' + index + '_as_preoperator::' + after;
             });
         },
-        replaceIncludes: function(string) {
+        replaceIncludes: function (string) {
             var _this = this;
             var _arguments = arguments;
             if (this.sources.length) {
@@ -611,53 +610,51 @@ function(root, factory) {
                 var str = void 0;
                 while (on) {
                     on = false;
-                    string = string.replace(replaceExpRegPattern.include, function(match, type, index) {
+                    string = string.replace(replaceExpRegPattern.include, function (match, type, index) {
                         on = true;
                         var context = _this.sources[id].src.replace(/[^\/\\]+$/, '');
                         var src = _this.readBuffer(index).replace(/('|"|`)/g, '').trim();
                         switch (type) {
-                            case 'template':
-                                ;
-                                if (_this.isNativeCode) {
-                                    _this.error('Native Code Not Support TPL File');
-                                }
-                                str = _this.getTplContent(src, context);
-                                _this.replacements[index][0] = "'" + escape(str) + "'";
-                                return 'new ..dom.Template(unescape(___boundary_' + _this.uid + '_' + index + '_as_string___));';
-                            case 'include':
-                                ;
-                                str = _this.onReadFile(src, context);
-                                str = _this.markPosition(str, _this.sources.length - 1);
-                                str = _this.replaceStrings(str);
-                                str = _this.replaceIncludes(str);
-                                return str + "\r\n";
+                            case 'template':;
+                            if (_this.isNativeCode) {
+                                _this.error('Native Code Not Support TPL File');
+                            }
+                            str = _this.getTplContent(src, context);
+                            _this.replacements[index][0] = "'" + escape(str) + "'";
+                            return 'new ..dom.Template(unescape(___boundary_' + _this.uid + '_' + index + '_as_string___));';
+                            case 'include':;
+                            str = _this.onReadFile(src, context);
+                            str = _this.markPosition(str, _this.sources.length - 1);
+                            str = _this.replaceStrings(str);
+                            str = _this.replaceIncludes(str);
+                            return str + "\r\n";
                         };
                     });
                 }
             }
             return string;
         },
-        onReadFile: function(source, context) {
-            if (context === void 0) { context = void 0; }
+        onReadFile: function (source, context) {
+            if (context === void 0) { context = void 0;}
             return "/* include '" + source + "' not be supported. */\r\n";
         },
-        getTplContent: function(source, context) {
-            if (context === void 0) { context = void 0; }
+        getTplContent: function (source, context) {
+            if (context === void 0) { context = void 0;}
             return "";
         },
-        replaceStrings: function(string, ignoreComments) {
+        replaceStrings: function (string, ignoreComments) {
             var _this = this;
             var _arguments = arguments;
-            if (ignoreComments === void 0) { ignoreComments = false; }
-            string = string.replace(/\\+(`|")/g, function(match) {
+            if (ignoreComments === void 0) { ignoreComments = false;}
+            string = string.replace(/\\+(`|")/g, function (match) {
                 var index = _this.replacements.length;
                 _this.pushBuffer([match]);
                 return '@boundary_' + index + '_as_mark::';
-            }).replace(/\\+(`|")/g, function(match) {
+            }).replace(/\\+(`|")/g, function (match) {
                 var index = _this.replacements.length;
                 _this.pushBuffer([match]);
                 return '@boundary_' + index + '_as_mark::';
-            }).replace(/\[@\d+L\d+P\d+O?\d*:::\^\//g, '[^\/').replace(/(=|:)\s*\/=/g, '$1 /\\=').replace(/\\[^\r\n](@\d+L\d+P\d+O?\d*:::)*/g, function(match) {
+            }).replace(/\[@\d+L\d+P\d+O?\d*:::\^\//g, '[^\/').replace(/(=|:)\s*\/=/g, '$1 /\\=').replace(/\\[^\r\n](@\d+L\d+P\d+O?\d*:::)*/g, function (match) {
                 var index = _this.replacements.length;
                 _this.pushBuffer([match]);
                 return '@boundary_' + index + '_as_mark::';
@@ -668,56 +665,57 @@ function(root, factory) {
                 count++;
                 var index = this.replacements.length;
                 switch (matches[1]) {
-                    case '#':
-                        ;
-                        string = string.replace(/(\S*)\s*\#.+/, "$1");
+                    case '#':;
+                    string = string.replace(/(\S*)\s*\#.+/, "$1");
+                    matches = string.match(matchExpRegPattern.string);
+                    continue;
+                    case '/':;
+                    switch (matches[2]) {
+                        case '*':;
+                        if (ignoreComments) {
+                            string = string.replace(/\/\*{1,2}[\s\S]*?(\*\/|$)/, function (match) {
+                                _this.pushBuffer([match]);
+                                return '@boundary_' + index + '_as_comments::';
+                            });
+                        }
+                        else {
+                            string = string.replace(/\/\*{1,2}[\s\S]*?(\*\/|$)/, "");
+                        }
                         matches = string.match(matchExpRegPattern.string);
                         continue;
-                    case '/':
-                        ;
-                        switch (matches[2]) {
-                            case '*':
-                                ;
-                                if (ignoreComments) {
-                                    string = string.replace(/\/\*{1,2}[\s\S]*?(\*\/|$)/, function(match) {
-                                        _this.pushBuffer([match]);
-                                        return '@boundary_' + index + '_as_comments::';
-                                    });
-                                } else {
-                                    string = string.replace(/\/\*{1,2}[\s\S]*?(\*\/|$)/, "");
-                                }
-                                matches = string.match(matchExpRegPattern.string);
-                                continue;
-                            case '/':
-                                ;
-                                string = string.replace(/(\S*)\s*\/\/.*/, "$1");
-                                matches = string.match(matchExpRegPattern.string);
-                                continue;
-                            case '=':
-                                ;
-                                string = string.replace(matches[0], '@boundary_1_as_operator::');
-                                matches = string.match(matchExpRegPattern.string);
-                                continue;
-                        }
-                        break;
+                        case '/':;
+                        string = string.replace(/(\S*)\s*\/\/.*/, "$1");
+                        matches = string.match(matchExpRegPattern.string);
+                        continue;
+                        case '=':;
+                        string = string.replace(matches[0], '@boundary_1_as_operator::');
+                        matches = string.match(matchExpRegPattern.string);
+                        continue;
+                    }
+                    break;
                 }
                 var match = string.match(matchExpRegPattern.strings[matches[1]]);
-                if (match && (matches.index >= match.index) && !match[5]) {
+                if (match && (matches.index >= match.index)&& !match[5]) {
                     if (matches[1] === '`') {
                         string = string.replace(match[2], this.replaceTemplate(match[2]));
-                    } else {
+                    }
+                    else {
                         if (match[1]) {
                             this.pushBuffer([match[2].replace(/@\d+L\d+P\d+O?\d*:::/g, ''), match[1].trim(), match[4]]);
-                        } else {
+                        }
+                        else {
                             this.pushBuffer([match[2].replace(/@\d+L\d+P\d+O?\d*:::/g, ''), void 0, match[4]]);
                         }
                         string = string.replace(match[0], '___boundary_' + this.uid + '_' + index + stringas[matches[1]] + match[3]);
                     }
-                } else if (matches[1] === '`' && match) {
+                }
+                else if (matches[1] === '`' && match) {
                     string = string.replace(match[2], this.replaceTemplate(match[2]));
-                } else if (matches[0] === '/') {
+                }
+                else if (matches[0] === '/') {
                     string = string.replace(matches[0], '@boundary_2_as_operator::');
-                } else {
+                }
+                else {
                     this.error('Unexpected `' + matches[1] + '` in `' + this.decode(string.substr(matches.index)).substr(0, 256) + '`');
                 }
                 matches = string.match(matchExpRegPattern.string);
@@ -725,10 +723,10 @@ function(root, factory) {
             matches = undefined;
             return string;
         },
-        replaceTemplate: function(string) {
+        replaceTemplate: function (string) {
             var _this = this;
             var _arguments = arguments;
-            var lines = string.replace(/"/g, function() {
+            var lines = string.replace(/"/g, function () {
                 return '"';
             }).replace(/`/g, '').split(/\r{0,1}\n/);
             var codes = [];
@@ -736,12 +734,13 @@ function(root, factory) {
                 var i = this.last_opens.length - 1;
                 var opens = this.last_opens[i];
                 this.last_opens.length = i;
-            } else {
+            }
+            else {
                 var opens = 0;
             }
-            for (var index = 0; index < lines.length; index++) {
+            for (var index = 0;index < lines.length;index++) {
                 var posi = '';
-                var line = lines[index].replace(/@\d+L\d+P\d+O?\d*:::/g, function(_posi) {
+                var line = lines[index].replace(/@\d+L\d+P\d+O?\d*:::/g, function (_posi) {
                     if (!posi) {
                         posi = _posi;
                     }
@@ -749,34 +748,38 @@ function(root, factory) {
                 });
                 if (line) {
                     var elements = line.split(/(\$\{|\{|\})/);
-                    var type = void 0;
-                    var lasttype = void 0;
+                    var type = void 0;var lasttype = void 0;
                     var inline = [];
                     var code = posi;
-                    for (var e = 0; e < elements.length; e++) {
+                    for (var e = 0;e < elements.length;e++) {
                         var element = elements[e];
                         if (opens === 0 && element === '${') {
                             opens++;
                             this.total_opens++;
-                        } else if (opens && element === '{') {
+                        }
+                        else if (opens && element === '{') {
                             opens++;
                             this.total_opens++;
                             inline[inline.length - 1].value += '{';
-                        } else if (opens && element === '}') {
+                        }
+                        else if (opens && element === '}') {
                             opens--;
                             this.total_opens--;
                             if (opens) {
                                 inline[inline.length - 1].value += '}';
                             }
-                        } else {
+                        }
+                        else {
                             if (opens === 0) {
                                 type = 'string';
-                            } else {
+                            }
+                            else {
                                 type = 'code';
                             }
                             if (type === lasttype) {
                                 inline[inline.length - 1].value += element;
-                            } else {
+                            }
+                            else {
                                 inline.push({
                                     type: type,
                                     value: element
@@ -785,13 +788,14 @@ function(root, factory) {
                             lasttype = type;
                         }
                     }
-                    for (var c = 0; c < inline.length; c++) {
+                    for (var c = 0;c < inline.length;c++) {
                         if (c) {
                             code += '@boundary_6_as_operator::';
                         }
                         if (inline[c].type === 'string') {
                             code += '"' + inline[c].value + '"';
-                        } else {
+                        }
+                        else {
                             code += inline[c].value.replace(/"/g, '"');
                         }
                     }
@@ -801,12 +805,14 @@ function(root, factory) {
             if (opens) {
                 this.last_closed = false;
                 this.last_opens.push(opens);
-            } else {
+            }
+            else {
                 this.last_closed = true;
             }
             if (this.total_opens) {
                 var after = '`';
-            } else {
+            }
+            else {
                 var after = '';
             }
             string = codes.join('@boundary_6_as_operator::___boundary_' + this.uid + '_8_as_string___' + '@boundary_6_as_operator::;' + "\r\n");
@@ -815,7 +821,7 @@ function(root, factory) {
             codes = undefined;
             return string;
         },
-        replaceBrackets: function(string) {
+        replaceBrackets: function (string) {
             var _this = this;
             var _arguments = arguments;
             var left = string.indexOf('[');
@@ -824,11 +830,11 @@ function(root, factory) {
             while ((count < this.stringReplaceTimes) && (left >= 0)) {
                 count++;
                 if (left < right) {
-                    string = string.replace(replaceExpRegPattern.array, function(match, posi, elements) {
+                    string = string.replace(replaceExpRegPattern.array, function (match, posi, elements) {
                         var index = _this.replacements.length;
                         _this.pushBuffer(['[' + elements + ']', posi && posi.trim()]);
                         return '___boundary_' + _this.uid + '_' + index + '_as_list___';
-                    }).replace(replaceExpRegPattern.arraylike, function(match, posi, elements) {
+                    }).replace(replaceExpRegPattern.arraylike, function (match, posi, elements) {
                         elements = _this.replaceBraces(elements);
                         elements = _this.replaceParentheses(elements);
                         var index = _this.replacements.length;
@@ -837,13 +843,15 @@ function(root, factory) {
                     });
                     left = string.indexOf('[');
                     right = string.indexOf(']');
-                } else {
+                }
+                else {
                     if (right >= 0) {
                         var index = right;
-                    } else {
+                    }
+                    else {
                         var index = left;
                     }
-                    this.error('Unexpected `' + (right >= 0 ? ']' : '[') + '` in `' + this.decode(string.substr(index)).substr(0, 256) + '`');
+                    this.error('Unexpected `' + (right >= 0 ? ']':'[') + '` in `' + this.decode(string.substr(index)).substr(0, 256) + '`');
                 }
             }
             if (right >= 0) {
@@ -852,7 +860,7 @@ function(root, factory) {
             }
             return string;
         },
-        replaceBraces: function(string) {
+        replaceBraces: function (string) {
             var left = string.indexOf('{');
             var right = string.indexOf('}');
             var count = 0;
@@ -863,13 +871,15 @@ function(root, factory) {
                     string = this.recheckFnOrCallLikes(string);
                     left = string.indexOf('{');
                     right = string.indexOf('}');
-                } else {
+                }
+                else {
                     if (right >= 0) {
                         var index = right;
-                    } else {
+                    }
+                    else {
                         var index = left;
                     }
-                    this.error('Unexpected `' + (right >= 0 ? '}' : '{') + '` in `' + this.decode(string.substr(index)).substr(0, 256) + '`');
+                    this.error('Unexpected `' + (right >= 0 ? '}':'{') + '` in `' + this.decode(string.substr(index)).substr(0, 256) + '`');
                 }
             }
             if (right >= 0) {
@@ -878,20 +888,19 @@ function(root, factory) {
             }
             return string;
         },
-        replaceCodeSegments: function(string) {
+        replaceCodeSegments: function (string) {
             var _this = this;
             var _arguments = arguments;
             var matched = false;
-            string = string.replace(replaceExpRegPattern.class, function(match, posi, body) {
+            string = string.replace(replaceExpRegPattern.class, function (match, posi, body) {
                 matched = true;
                 body = _this.replaceParentheses(body);
                 var index = _this.replacements.length;
                 _this.pushBuffer([body, posi && posi.trim()]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_class___';
             });
-
-            if (matched) return string;
-            string = string.replace(replaceExpRegPattern.extends, function(match, posi, exp, name, node, assign, closure) {
+            if(matched) return string;
+            string = string.replace(replaceExpRegPattern.extends, function (match, posi, exp, name, node, assign, closure) {
                 matched = true;
                 name = name.replace(/^\.+/, '');
                 exp = exp.replace(/\s+/, '');
@@ -899,35 +908,44 @@ function(root, factory) {
                 if (assign) {
                     if (exp === 'extends') {
                         _this.error('Unexpected `extends`: extends ' + name + ' with');
-                    } else {
+                    }
+                    else {
                         if (node && node.length === 2) {
                             body = 'globalassign ' + name + '{' + _this.replaceParentheses(closure) + '}';
-                        } else {
+                        }
+                        else {
                             body = 'nsassign ' + name + '{' + _this.replaceParentheses(closure) + '}';
                         }
                     }
-                } else {
+                }
+                else {
                     if (exp === 'extends') {
                         if (node) {
                             if (node.length === 2) {
                                 body = 'globalassign ' + name + '{' + _this.replaceParentheses(closure) + '}';
-                            } else {
+                            }
+                            else {
                                 body = 'nsassign ' + name + '{' + _this.replaceParentheses(closure) + '}';
                             }
-                        } else {
+                        }
+                        else {
                             body = 'extends ' + name + '{' + _this.replaceParentheses(closure) + '}';
                         }
-                    } else {
+                    }
+                    else {
                         if (node && node.length === 2) {
                             if (exp === 'voidns' || exp === 'voidnamespace') {
                                 body = 'voidglobal ' + name + '{' + _this.replaceParentheses(closure) + '}';
-                            } else {
+                            }
+                            else {
                                 body = 'global ' + name + '{' + _this.replaceParentheses(closure) + '}';
                             }
-                        } else {
+                        }
+                        else {
                             if (exp === 'voidns' || exp === 'voidnamespace') {
                                 body = 'voidns ' + name + '{' + _this.replaceParentheses(closure) + '}';
-                            } else {
+                            }
+                            else {
                                 body = 'ns ' + name + '{' + _this.replaceParentheses(closure) + '}';
                             }
                         }
@@ -937,23 +955,22 @@ function(root, factory) {
                 _this.pushBuffer([body, posi && posi.trim()]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_extends___';
             });
-
-            if (matched) return string;
-            string = string.replace(replaceExpRegPattern.anonspace, function(match, posi, exp, closure) {
+            if(matched) return string;
+            string = string.replace(replaceExpRegPattern.anonspace, function (match, posi, exp, closure) {
                 matched = true;
                 exp = exp.replace(/\s+/, '');
                 if (exp === 'voidns' || exp === 'voidnamespace') {
                     var body = 'voidanonspace {' + _this.replaceParentheses(closure) + '}';
-                } else {
+                }
+                else {
                     var body = 'anonspace {' + _this.replaceParentheses(closure) + '}';
                 }
                 var index = _this.replacements.length;
                 _this.pushBuffer([body, posi && posi.trim()]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_extends___';
             });
-
-            if (matched) return string;
-            string = string.replace(replaceExpRegPattern.fnlike, function(match, posi, definition, type, call, callname, closure) {
+            if(matched) return string;
+            string = string.replace(replaceExpRegPattern.fnlike, function (match, posi, definition, type, call, callname, closure) {
                 matched = true;
                 closure = _this.replaceParentheses(closure);
                 call = _this.replaceOperators(call);
@@ -962,90 +979,78 @@ function(root, factory) {
                 _this.pushBuffer([match, posi && posi.trim()]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_function___';
             });
-
-            if (matched) return string;
-            string = string.replace(replaceExpRegPattern.object, function(match, posi, closure) {
+            if(matched) return string;
+            string = string.replace(replaceExpRegPattern.object, function (match, posi, closure) {
                 matched = true;
                 var index = _this.replacements.length;
                 _this.pushBuffer([match, posi && posi.trim()]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_sets___';
             });
-
-            if (matched) return string;
+            if(matched) return string;
             return this.replaceClosures(string);
         },
-        replaceClosures: function(string) {
+        replaceClosures: function (string) {
             var _this = this;
             var _arguments = arguments;
-            return string.replace(replaceExpRegPattern.closure, function(match, posi1, word, posi3, closure) {
+            return string.replace(replaceExpRegPattern.closure, function (match, posi1, word, posi3, closure) {
                 closure = _this.replaceParentheses(closure);
-                posi1 = posi1 ? posi1.trim() : '';
-                posi3 = posi3 ? posi3.trim() : '';
+                posi1 = posi1 ? posi1.trim():'';
+                posi3 = posi3 ? posi3.trim():'';
                 var index = _this.replacements.length;
                 var index2 = void 0;
                 switch (word) {
                     case undefined:
-                        if ((closure.indexOf(';') >= 0) ||
-                            !closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|[\$a-zA-Z_][\$\w]*\s*(,|:|$))/)) {
-                            _this.pushBuffer(['{' + closure + '}', posi3]);
-                            return posi1 + (word || '') + posi3 + ' ___boundary_' + _this.uid + '_' + index + '_as_closure___';
-                        }
-                        if (closure.match(/^\s*___boundary_[A-Z0-9_]{36}_\d+_as_function___\s*$/)) {
-                            _this.pushBuffer(['{' + closure + '}', posi3]);
-                            return posi1 + (word || '') + posi3 + ' ___boundary_' + _this.uid + '_' + index + '_as_objlike___';
-                        }
+                    if ((closure.indexOf(';') >= 0)||
+                    !closure.match(/^\s*(@\d+L\d+P\d+O?\d*:::)?(___boundary_[A-Z0-9_]{36}_\d+_as_function___|@boundary_\d+_as_propname:::|[\$a-zA-Z_][\$\w]*\s*(,|:|$))/)) {
                         _this.pushBuffer(['{' + closure + '}', posi3]);
-                        return '___boundary_' + _this.uid + '_' + index + '_as_object___';
-                    case ':':
-                        ;
-                    case ':::':
-                        ;
-                    case '=':
-                        ;
-                        _this.pushBuffer(['{' + closure + '}']);
-                        return word + ' ___boundary_' + _this.uid + '_' + index + '_as_object___';
-                    case '@config':
-                        ;
-                        if (_this.configinfo === '{}') {
-                            _this.configinfo_posi = posi1 || posi3;
-                            _this.configinfo = _this.decode(match.replace('@config', ''));
-                        }
-                        return '';
-                    case 'return':
-                        ;
-                    case 'typeof':
-                        ;
-                        _this.pushBuffer([word + ' ', posi1]);
-                        index2 = _this.replacements.length;
-                        _this.pushBuffer(['{' + closure + '}']);
-                        return '@boundary_' + index + '_as_preoperator::___boundary_' + _this.uid + '_' + index2 + '_as_object___';
-                    case 'do':
-                        ;
-                    case 'try':
-                        ;
-                        _this.pushBuffer([word + ' ', posi1]);
-                        index2 = _this.replacements.length;
+                        return posi1 + (word || '') + posi3 + ' ___boundary_' + _this.uid + '_' + index + '_as_closure___';
+                    }
+                    if (closure.match(/^\s*___boundary_[A-Z0-9_]{36}_\d+_as_function___\s*$/)) {
                         _this.pushBuffer(['{' + closure + '}', posi3]);
-                        return '; @boundary_' + index + '_as_keyword::___boundary_' + _this.uid + '_' + index2 + '_as_closure___;';
-                    case 'else':
-                        ;
-                    case 'finally':
-                        ;
-                        _this.pushBuffer([word + ' ', posi1]);
-                        index2 = _this.replacements.length;
-                        _this.pushBuffer(['{' + closure + '}', posi3]);
-                        return "\r\n" + '@boundary_' + index + '_as_midword::___boundary_' + _this.uid + '_' + index2 + '_as_closure___';
+                        return posi1 + (word || '') + posi3 + ' ___boundary_' + _this.uid + '_' + index + '_as_objlike___';
+                    }
+                    _this.pushBuffer(['{' + closure + '}', posi3]);
+                    return '___boundary_' + _this.uid + '_' + index + '_as_object___';
+                    case ':':;
+                    case ':::':;
+                    case '=':;
+                    _this.pushBuffer(['{' + closure + '}']);
+                    return word + ' ___boundary_' + _this.uid + '_' + index + '_as_object___';
+                    case '@config':;
+                    if (_this.configinfo === '{}') {
+                        _this.configinfo_posi = posi1 || posi3;
+                        _this.configinfo = _this.decode(match.replace('@config', ''));
+                    }
+                    return '';
+                    case 'return':;
+                    case 'typeof':;
+                    _this.pushBuffer([word + ' ', posi1]);
+                    index2 = _this.replacements.length;
+                    _this.pushBuffer(['{' + closure + '}']);
+                    return '@boundary_' + index + '_as_preoperator::___boundary_' + _this.uid + '_' + index2 + '_as_object___';
+                    case 'do':;
+                    case 'try':;
+                    _this.pushBuffer([word + ' ', posi1]);
+                    index2 = _this.replacements.length;
+                    _this.pushBuffer(['{' + closure + '}', posi3]);
+                    return '; @boundary_' + index + '_as_keyword::___boundary_' + _this.uid + '_' + index2 + '_as_closure___;';
+                    case 'else':;
+                    case 'finally':;
+                    _this.pushBuffer([word + ' ', posi1]);
+                    index2 = _this.replacements.length;
+                    _this.pushBuffer(['{' + closure + '}', posi3]);
+                    return "\r\n" + '@boundary_' + index + '_as_midword::___boundary_' + _this.uid + '_' + index2 + '_as_closure___';
                     default:
-                        if (word.indexOf('(') === 0) {
-                            _this.pushBuffer(['{' + closure + '}', posi3]);
-                            return word + '___boundary_' + _this.uid + '_' + index + '_as_object___';
-                        }
+                    if (word.indexOf('(') === 0) {
                         _this.pushBuffer(['{' + closure + '}', posi3]);
-                        return posi1 + word + "\r\n" + posi3 + '___boundary_' + _this.uid + '_' + index + '_as_closure___';
+                        return word + '___boundary_' + _this.uid + '_' + index + '_as_object___';
+                    }
+                    _this.pushBuffer(['{' + closure + '}', posi3]);
+                    return posi1 + word + "\r\n" + posi3 + '___boundary_' + _this.uid + '_' + index + '_as_closure___';
                 };
             });
         },
-        replaceParentheses: function(string) {
+        replaceParentheses: function (string) {
             var _this = this;
             var _arguments = arguments;
             string = this.replaceWords(string);
@@ -1055,7 +1060,7 @@ function(root, factory) {
             while ((count < this.stringReplaceTimes) && (left >= 0)) {
                 count++;
                 if (left < right) {
-                    string = string.replace(replaceExpRegPattern.parentheses, function(match, posi, argslike) {
+                    string = string.replace(replaceExpRegPattern.parentheses, function (match, posi, argslike) {
                         argslike = _this.replaceOperators(argslike);
                         argslike = _this.replaceCalls(argslike);
                         argslike = _this.replaceArrowFunctions(argslike);
@@ -1066,13 +1071,15 @@ function(root, factory) {
                     string = this.recheckFnOrCallLikes(string);
                     left = string.indexOf('(');
                     right = string.indexOf(')');
-                } else {
+                }
+                else {
                     if (right >= 0) {
                         var index = right;
-                    } else {
+                    }
+                    else {
                         var index = left;
                     }
-                    this.error('Unexpected `' + (right >= 0 ? ')' : '(') + '` in `' + this.decode(string.substr(index)).substr(0, 256) + '`');
+                    this.error('Unexpected `' + (right >= 0 ? ')':'(') + '` in `' + this.decode(string.substr(index)).substr(0, 256) + '`');
                 }
             }
             if (right >= 0) {
@@ -1084,32 +1091,32 @@ function(root, factory) {
             string = this.replaceArrowFunctions(string);
             return string;
         },
-        recheckFnOrCallLikes: function(string) {
+        recheckFnOrCallLikes: function (string) {
             var _this = this;
             var _arguments = arguments;
-            string = string.replace(replaceExpRegPattern.recheckfn, function(match, posi, fname, parenthesesindex, closureindex) {
+            string = string.replace(replaceExpRegPattern.recheckfn, function (match, posi, fname, parenthesesindex, closureindex) {
                 var fnlike = posi + fname + _this.replacements[parenthesesindex][0].toString() + _this.replacements[closureindex][0].toString();
                 _this.replacements[parenthesesindex] = _this.replacements[closureindex] = null;
                 var index = _this.replacements.length;
                 _this.pushBuffer([fnlike, posi]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_function___ ';
-            }).replace(replaceExpRegPattern.expression, function(match, posi, expname, exp, expindex, closure, closureindex) {
+            }).replace(replaceExpRegPattern.expression, function (match, posi, expname, exp, expindex, closure, closureindex) {
                 var expressioncontent = _this.readBuffer(expindex);
                 var body = _this.readBuffer(closureindex);
                 var index = _this.replacements.length;
                 _this.pushBuffer([expname + expressioncontent + body, posi]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_expression___';
-            }).replace(replaceExpRegPattern.if, function(match, posi, parentheses) {
+            }).replace(replaceExpRegPattern.if, function (match, posi, parentheses) {
                 var index = _this.replacements.length;
                 _this.pushBuffer(['if ' + parentheses, posi]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_if___ ';
             });
             return string;
         },
-        replaceCalls: function(string) {
+        replaceCalls: function (string) {
             var _this = this;
             var _arguments = arguments;
-            string = string.replace(replaceExpRegPattern.clog, function(match, posi, args) {
+            string = string.replace(replaceExpRegPattern.clog, function (match, posi, args) {
                 var index1 = _this.replacements.length;
                 _this.pushBuffer(['(' + args + ')', undefined]);
                 var index2 = _this.replacements.length;
@@ -1118,7 +1125,7 @@ function(root, factory) {
                 _this.pushBuffer(['.___boundary_' + _this.uid + '_' + index2 + '_as_callmethod___', posi]);
                 return '___boundary_' + _this.uid + '_' + index3 + '_as_log___;';
             });
-            return this.replaceCallsChain(string.replace(replaceExpRegPattern.call, function(match, posi, fullname, constructor, methodname, dot, callname, args, argindex, after) {
+            return this.replaceCallsChain(string.replace(replaceExpRegPattern.call, function (match, posi, fullname, constructor, methodname, dot, callname, args, argindex, after) {
                 if (fullname.match(/^___boundary_[A-Z0-9_]{36}_\d+_as_(if|class|object|closure)___/)) {
                     return match;
                 }
@@ -1126,88 +1133,95 @@ function(root, factory) {
                 if (constructor) {
                     _this.pushBuffer([fullname + args, posi && posi.trim()]);
                     return '___boundary_' + _this.uid + '_' + index + '_as_construct___' + after;
-                } else {
+                }
+                else {
                     _this.pushBuffer([callname + args, posi && posi.trim()]);
                     if (dot) {
                         return '.___boundary_' + _this.uid + '_' + index + '_as_callmethod___' + after;
-                    } else if (callname === 'if') {
+                    }
+                    else if (callname === 'if') {
                         return '___boundary_' + _this.uid + '_' + index + '_as_if___ ' + after;
                     }
                     return '___boundary_' + _this.uid + '_' + index + '_as_call___' + after;
                 };
             }));
         },
-        replaceCallsChain: function(string) {
+        replaceCallsChain: function (string) {
             var _this = this;
             var _arguments = arguments;
-            return string.replace(replaceExpRegPattern.callschain, function(match, posi, _index) {
+            return string.replace(replaceExpRegPattern.callschain, function (match, posi, _index) {
                 var index = _this.replacements.length;
                 match = match.replace(/_as_call___/g, '_as_callmethod___');
                 _this.pushBuffer([match, posi || _this.replacements[_index][1]]);
                 return '___boundary_' + _this.uid + '_' + index + '_as_callschain___';
             });
         },
-        replaceArrowFunctions: function(string) {
+        replaceArrowFunctions: function (string) {
             var _this = this;
             var _arguments = arguments;
             var arrowcodes = string.match(/(->|=>)/);
             if (arrowcodes) {
                 if (string.match(replaceExpRegPattern.arrowfn)) {
-                    return string.replace(replaceExpRegPattern.arrowfn, function(match, args, argsindex, arrow, body, end) {
+                    return string.replace(replaceExpRegPattern.arrowfn, function (match, args, argsindex, arrow, body, end) {
                         var posi = _this.replacements[argsindex][1];
                         var matches = body.match(/^(@\d+L\d+P\d+O*\d*:::)?\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_(parentheses|object|closure)___\s*$/);
                         if (matches) {
                             var code = _this.replacements[matches[2]][0].toString();
-                            var posi_193 = _this.replacements[matches[2]][1];
+                            var posi_194 = _this.replacements[matches[2]][1];
                             _this.replacements[matches[2]] = null;
                             if (matches[3] === 'parentheses') {
-                                body = code.replace(/^\(\s*(.*?)\s*\)$/, function(match, code) {
+                                body = code.replace(/^\(\s*(.*?)\s*\)$/, function (match, code) {
                                     var index = _this.replacements.length;
-                                    _this.pushBuffer(['return ', posi_193]);
+                                    _this.pushBuffer(['return ', posi_194]);
                                     return '@boundary_' + index + '_as_preoperator:: ' + code;
                                 });
-                            } else {
+                            }
+                            else {
                                 body = code.replace(/(^\{|\}$)/g, '');
                             }
-                        } else {
-                            var matches_197 = body.match(/^(@\d+L\d+P\d+O*\d*:::)?\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_(parentheses|object|closure)___\s*(@\d+L\d+P\d+O*\d*:::)?$/);
-                            if (matches_197) {
-                                var code_198 = _this.replacements[matches_197[2]][0].toString();
-                                var posi_198 = _this.replacements[matches_197[2]][1];
-                                _this.replacements[matches_197[2]] = null;
-                                if (matches_197[3] === 'parentheses') {
-                                    body = code_198.replace(/^\(\s*(.*?)\s*\)$/, function(match, code) {
+                        }
+                        else {
+                            var matches_198 = body.match(/^(@\d+L\d+P\d+O*\d*:::)?\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_(parentheses|object|closure)___\s*(@\d+L\d+P\d+O*\d*:::)?$/);
+                            if (matches_198) {
+                                var code_199 = _this.replacements[matches_198[2]][0].toString();
+                                var posi_199 = _this.replacements[matches_198[2]][1];
+                                _this.replacements[matches_198[2]] = null;
+                                if (matches_198[3] === 'parentheses') {
+                                    body = code_199.replace(/^\(\s*(.*?)\s*\)$/, function (match, code) {
                                         var index = _this.replacements.length;
-                                        _this.pushBuffer(['return ', posi_198]);
+                                        _this.pushBuffer(['return ', posi_199]);
                                         return '@boundary_' + index + '_as_preoperator:: ' + code;
                                     });
-                                } else {
-                                    body = code_198.replace(/(^\{|\}$)/g, '');
                                 }
-                            } else {
-                                var index_202 = _this.replacements.length;
+                                else {
+                                    body = code_199.replace(/(^\{|\}$)/g, '');
+                                }
+                            }
+                            else {
+                                var index_203 = _this.replacements.length;
                                 _this.pushBuffer(['return ', void 0]);
-                                body = '@boundary_' + index_202 + '_as_preoperator:: ' + body;
+                                body = '@boundary_' + index_203 + '_as_preoperator:: ' + body;
                             }
                         }
                         var index = _this.replacements.length;
                         _this.pushBuffer([args + arrow + body, posi]);
                         return '___boundary_' + _this.uid + '_' + index + '_as_arrowfn___' + end;
                     });
-                } else {
+                }
+                else {
                     this.error('Unexpected `' + arrowcodes[0] + '` in `' + this.decode(string.substr(arrowcodes.index, 256)) + '`');
                 }
             }
             arrowcodes = undefined;
             return string;
         },
-        replaceOperators: function(string) {
+        replaceOperators: function (string) {
             var _this = this;
             var _arguments = arguments;
             var on = true;
             while (on) {
                 on = false;
-                string = string.replace(operators.owords, function(match, posi, word) {
+                string = string.replace(operators.owords, function (match, posi, word) {
                     on = true;
                     var index = _this.replacements.length;
                     _this.pushBuffer([' ' + word + ' ']);
@@ -1217,14 +1231,15 @@ function(root, factory) {
             on = true;
             while (on) {
                 on = false;
-                string = string.replace(operators.swords, function(match, before, word, right) {
+                string = string.replace(operators.swords, function (match, before, word, right) {
                     on = true;
                     var index = _this.replacements.length;
                     if (word === 'instanceof') {
                         _this.pushBuffer([' ' + word + ' ']);
                         before = before.trim();
                         return before + '@boundary_' + index + '_as_operator::' + right;
-                    } else {
+                    }
+                    else {
                         _this.pushBuffer([word + ' ']);
                     }
                     return before + '@boundary_' + index + '_as_preoperator::' + right;
@@ -1233,7 +1248,7 @@ function(root, factory) {
             on = true;
             while (on) {
                 on = false;
-                string = string.replace(operators.mixed, function(match, left, posi, op, right, posir, sign) {
+                string = string.replace(operators.mixed, function (match, left, posi, op, right, posir, sign) {
                     on = true;
                     if (sign) {
                         var _index = sign === '+' ? 3 : 4;
@@ -1247,7 +1262,7 @@ function(root, factory) {
             on = true;
             while (on) {
                 on = false;
-                string = string.replace(operators.bool, function(match, left, posi, op, right, posir, sign) {
+                string = string.replace(operators.bool, function (match, left, posi, op, right, posir, sign) {
                     on = true;
                     if (sign) {
                         var _index = sign === '+' ? 3 : 4;
@@ -1261,7 +1276,7 @@ function(root, factory) {
             on = true;
             while (on) {
                 on = false;
-                string = string.replace(operators.op, function(match, left, posi, op, right, posir, sign) {
+                string = string.replace(operators.op, function (match, left, posi, op, right, posir, sign) {
                     on = true;
                     if (sign) {
                         var _index = sign === '+' ? 3 : 4;
@@ -1275,7 +1290,7 @@ function(root, factory) {
             on = true;
             while (on) {
                 on = false;
-                string = string.replace(operators.sign, function(match, before, sign, number) {
+                string = string.replace(operators.sign, function (match, before, sign, number) {
                     on = true;
                     var index = sign === '+' ? 3 : 4;
                     return before + '@boundary_' + index + '_as_preoperator::' + number;
@@ -1284,7 +1299,7 @@ function(root, factory) {
             on = true;
             while (on) {
                 on = false;
-                string = string.replace(operators.before, function(match, op, number) {
+                string = string.replace(operators.before, function (match, op, number) {
                     on = true;
                     var index = _this.replacements.length;
                     _this.pushBuffer([op]);
@@ -1294,14 +1309,14 @@ function(root, factory) {
             on = true;
             while (on) {
                 on = false;
-                string = string.replace(operators.after, function(match, number, posi, op) {
+                string = string.replace(operators.after, function (match, number, posi, op) {
                     on = true;
                     var index = _this.replacements.length;
                     _this.pushBuffer([op]);
                     return number + (posi || '') + '@boundary_' + index + '_as_aftoperator::';
                 });
             }
-            return string.replace(operators.error, function(match, before, op, after) {
+            return string.replace(operators.error, function (match, before, op, after) {
                 if (after && after.indexOf('>') === 0) {
                     return match;
                 }
@@ -1309,13 +1324,14 @@ function(root, factory) {
                 return '';
             });
         },
-        getPosition: function(string) {
+        getPosition: function (string) {
             if (string) {
                 var match = string.match(/@(\d+)L(\d+)P(\d+)(O*)(\d*):{0,3}/);
                 if (match) {
                     if (match[4]) {
                         var index = parseInt(match[5]);
-                    } else {
+                    }
+                    else {
                         var index = parseInt(match[3]);
                     }
                     return {
@@ -1330,76 +1346,74 @@ function(root, factory) {
             }
             return void 0;
         },
-        getPositionByIndex: function(index) {
+        getPositionByIndex: function (index) {
             var posi = this.replacements[index][1];
             this.replacements[index][1] = undefined;
             return this.getPosition(posi);
         },
-        pickReplacePosis: function(lines, vars) {
+        pickReplacePosis: function (lines, vars) {
             var imports = [];
             var using_as = {};
             var preast = [];
-            for (var index = 0; index < lines.length; index++) {
+            for (var index = 0;index < lines.length;index++) {
                 switch (lines[index].subtype) {
-                    case 'sentence':
-                        ;
-                        var code = lines[index].value.trim();
-                        this.pushSentencesToPREAST(preast, vars, code, lines[index].display, lines[index].posi);
-                        break;
-                    case 'variable':
-                        ;
-                        preast.push([{
-                            type: 'code',
-                            posi: lines[index].posi,
-                            display: lines[index].display,
-                            vars: vars,
-                            value: lines[index].value
-                        }]);
-                        break;
-                    case 'using':
-                        ;
-                    case 'usings':
-                        ;
-                        var posi = this.replacements[lines[index].index][2];
-                        var mens = this.replacements[lines[index].index][1];
-                        var src = this.replacements[lines[index].index][0].toString().trim();
-                        this.replacements[lines[index].index] = null;
-                        if (!imports['includes'](src)) {
-                            imports.push(src);
-                            imports.push(posi);
-                        }
-                        if (mens) {
-                            var position = void 0;
-                            var alias = void 0;
-                            if (lines[index].subtype === 'usings') {
-                                var members = mens.split(',');
-                                for (var m = 0; m < members.length; m++) {
-                                    position = this.getPosition(members[m]);
-                                    alias = members[m].replace(position.match, '').trim();
-                                    using_as[alias] = [src, alias, position];
-                                }
-                            } else {
-                                position = this.getPosition(mens);
-                                alias = mens.replace(position.match, '').trim();
-                                using_as[alias] = [src, '*', position];
-                            }
-                            if (vars.self[alias] === void 0) {
-                                vars.self[alias] = 'var';
-                            } else if (vars.self[alias] === 'let') {
-                                if (position) {
-                                    this.error(' Variable `' + alias + '` has already been declared at char ' + position.col + ' on line ' + position.line + '.');
-                                }
-                                this.error(' Variable `' + alias + '` has already been declared.');
+                    case 'sentence':;
+                    var code = lines[index].value.trim();
+                    this.pushSentencesToPREAST(preast, vars, code, lines[index].display, lines[index].posi);
+                    break;
+                    case 'variable':;
+                    preast.push([{
+                        type: 'code',
+                        posi: lines[index].posi,
+                        display: lines[index].display,
+                        vars: vars,
+                        value: lines[index].value
+                    }]);
+                    break;
+                    case 'using':;
+                    case 'usings':;
+                    var posi = this.replacements[lines[index].index][2];
+                    var mens = this.replacements[lines[index].index][1];
+                    var src = this.replacements[lines[index].index][0].toString().trim();
+                    this.replacements[lines[index].index] = null;
+                    if (!imports['includes'](src)) {
+                        imports.push(src);
+                        imports.push(posi);
+                    }
+                    if (mens) {
+                        var position = void 0;
+                        var alias = void 0;
+                        if (lines[index].subtype === 'usings') {
+                            var members = mens.split(',');
+                            for (var m = 0;m < members.length;m++) {
+                                position = this.getPosition(members[m]);
+                                alias = members[m].replace(position.match, '').trim();
+                                using_as[alias] = [src, alias, position];
                             }
                         }
-                        break;
+                        else {
+                            position = this.getPosition(mens);
+                            alias = mens.replace(position.match, '').trim();
+                            using_as[alias] = [src, '*', position];
+                        }
+                        if (vars.self[alias] === void 0) {
+                            vars.self[alias] = 'var';
+                        }
+                        else if (vars.self[alias] === 'let') {
+                            if (position) {
+                                this.error(' Variable `' + alias + '` has already been declared at char ' + position.col + ' on line ' + position.line + '.');
+                            }
+                            this.error(' Variable `' + alias + '` has already been declared.');
+                        }
+                    }
+                    break;
                     default:
-                        preast.push([{
-                            index: lines[index].index,
-                            display: lines[index].display,
-                            type: lines[index].subtype
-                        }]);
-                        break;
+                    preast.push([{
+                        index: lines[index].index,
+                        display: lines[index].display,
+                        type: lines[index].subtype
+                    }]);
+                    break;
                 }
             }
             this.imports = imports;
@@ -1407,13 +1421,13 @@ function(root, factory) {
             imports = using_as = undefined;
             return preast;
         },
-        pickTretOfMatch: function(match_as_statement, isblock) {
-            if (isblock === void 0) { isblock = true; }
+        pickTretOfMatch: function (match_as_statement, isblock) {
+            if (isblock === void 0) { isblock = true;}
             var tret_of_match = match_as_statement[3].trim();
             if (
-                tret_of_match &&
-                !(tret_of_match === ';' && ['closure', 'if']['includes'](match_as_statement[2])) &&
-                !(tret_of_match === ';' && !isblock && ['class', 'function']['includes'](match_as_statement[2]))) {
+            tret_of_match
+            && !(tret_of_match === ';' && ['closure', 'if']['includes'](match_as_statement[2]))
+            && !(tret_of_match === ';'&&!isblock && ['class', 'function']['includes'](match_as_statement[2]))) {
                 return [{
                     index: match_as_statement[1],
                     display: 'inline',
@@ -1422,8 +1436,8 @@ function(root, factory) {
             }
             return null;
         },
-        getLines: function(string, vars, inOrder) {
-            if (inOrder === void 0) { inOrder = false; }
+        getLines: function (string, vars, inOrder) {
+            if (inOrder === void 0) { inOrder = false;}
             string = string
                 .replace(/:::(var|let|const|public)\s+(@\d+L\d+P(\d+O)?0:::)/g, ':::$1 ')
                 .replace(/([^,;\s])\s*(@\d+L\d+P(\d+O)?0:::[^\.\(\[)])/g, '$1;$2')
@@ -1434,7 +1448,7 @@ function(root, factory) {
                 .trim();
             var sentences = string.split(/\s*;+\s*/);
             var lines = [];
-            for (var s = 0; s < sentences.length; s++) {
+            for (var s = 0;s < sentences.length;s++) {
                 var sentence = sentences[s].trim();
                 if (sentence) {
                     var array = sentence.split(/:::(var|let|const|public)\s+/);
@@ -1448,13 +1462,16 @@ function(root, factory) {
                                 continue;
                             }
                             this.error('Unexpected `' + definition[1] + '` in `' + this.decode(sentence) + '`.');
-                        } else {
-                            this.pushSentenceToLines(lines, sentence, (inOrder && (s === sentences.length - 1)) ? 'inline' : 'block');
+                        }
+                        else {
+                            this.pushSentenceToLines(lines, sentence, (inOrder && (s === sentences.length - 1)) ? 'inline':'block');
                         }
                         definition = undefined;
-                    } else if (array.length === 3) {
+                    }
+                    else if (array.length === 3) {
                         this.pushVariablesToLines(lines, vars, array[0], array[2], array[1], inOrder);
-                    } else {
+                    }
+                    else {
                         var position = this.getPosition(array[2]);
                         this.error('Unexpected `' + array[3] + '` at char ' + position.col + ' on line ' + position.line + '， near ' + this.decode(array[2]) + '.');
                     }
@@ -1462,12 +1479,12 @@ function(root, factory) {
             }
             return lines;
         },
-        pushSentenceToLines: function(lines, code, display) {
+        pushSentenceToLines: function (lines, code, display) {
             value = code.trim();
             if (value && !value.match(/^@\d+L\d+P\d+O?\d*:::$/)) {
                 var match_as_statement = value.match(/^(@\d+L\d+P\d+O?\d*:::)?\s*___boundary_[A-Z0-9_]{36}_(\d+)_as_([a-z]+)___([\r\n]+|$)/);
                 if (match_as_statement) {
-                    if (display === 'block' && !['class', 'function', 'closure', 'if']['includes'](match_as_statement[3])) {
+                    if (display === 'block'&& !['class', 'function', 'closure', 'if']['includes'](match_as_statement[3])) {
                         value = value + ';';
                     }
                     this.replacements[match_as_statement[2]][1] = this.replacements[match_as_statement[2]][1] || match_as_statement[1];
@@ -1477,15 +1494,17 @@ function(root, factory) {
                         display: display,
                         index: match_as_statement[2]
                     });
-                } else {
-                    if ((display === 'block') && !/_as_closure___$/.test(value)) {
+                }
+                else {
+                    if ((display === 'block')&& !/_as_closure___$/.test(value)) {
                         value += ';';
-                    } else if (/_as_aftoperator::$/.test(value)) {
+                    }
+                    else if (/_as_aftoperator::$/.test(value)) {
                         value += ';';
                         display === 'block';
                     };
                     var clauses = value.split(',');
-                    for (var c = 0; c < clauses.length; c++) {
+                    for (var c = 0;c < clauses.length;c++) {
                         var element = clauses[c];
                         var position = this.getPosition(element);
                         if (position) {
@@ -1493,7 +1512,8 @@ function(root, factory) {
                                 position.head = true;
                             }
                             var value = element.replace(position.match, '');
-                        } else {
+                        }
+                        else {
                             var value = element.trim();
                             var match_as_mark = value.match(/^@boundary_(\d+)_as_([a-z]+)::/);
                             if (match_as_mark && this.replacements[match_as_mark[1]][1]) {
@@ -1515,58 +1535,59 @@ function(root, factory) {
                 match_as_statement = undefined;
             };
         },
-        pushVariablesToLines: function(lines, vars, posi, code, symbol, inOrder) {
-            if (inOrder === void 0) { inOrder = false; }
+        pushVariablesToLines: function (lines, vars, posi, code, symbol, inOrder) {
+            if (inOrder === void 0) { inOrder = false;}
             var display = void 0;
             var clauses = code.split(/,\s*(@\d+L\d+P\d+O?\d*:::)*/);
             clauses.unshift(posi);
-            for (var c = 0; c < clauses.length; c += 2) {
+            for (var c = 0;c < clauses.length;c += 2) {
                 if (inOrder) {
                     if (c) {
                         if (c === clauses.length - 2) {
                             display = 'last';
-                        } else {
+                        }
+                        else {
                             display = 'inline';
                         }
-                    } else {
+                    }
+                    else {
                         if (c === clauses.length - 2) {
                             display = 'block';
-                        } else {
+                        }
+                        else {
                             display = 'first';
                         }
                     }
-                } else {
+                }
+                else {
                     display = 'block';
                 }
                 this.pushVariableToLines(lines, vars, clauses[c], clauses[c + 1], symbol, display);
             }
             display = clauses = undefined;
         },
-        pushVariableToLines: function(lines, vars, posi, code, symbol, display) {
-            if (display === void 0) { display = 'block'; }
+        pushVariableToLines: function (lines, vars, posi, code, symbol, display) {
+            if (display === void 0) { display = 'block';}
             if (code) {
                 var _symbol = 'var';
                 switch (display) {
-                    case 'first':
-                        ;
-                        return this.pushVariableToLine(lines, vars, code, symbol, posi, 'inline', _symbol, ',');
-                    case 'last':
-                        ;
-                        return this.pushVariableToLine(lines, vars, code, symbol, posi, 'inline', '', ';');
-                    case 'block':
-                        ;
-                        return this.pushVariableToLine(lines, vars, code, symbol, posi, 'block', _symbol, ';');
+                    case 'first':;
+                    return this.pushVariableToLine(lines, vars, code, symbol, posi, 'inline', _symbol, ',');
+                    case 'last':;
+                    return this.pushVariableToLine(lines, vars, code, symbol, posi, 'inline', '', ';');
+                    case 'block':;
+                    return this.pushVariableToLine(lines, vars, code, symbol, posi, 'block', _symbol, ';');
                     default:
-                        return this.pushVariableToLine(lines, vars, code, symbol, posi, 'inline', '', ',');
+                    return this.pushVariableToLine(lines, vars, code, symbol, posi, 'inline', '', ',');
                 }
                 _symbol = undefined;
             };
         },
-        pushVariableToLine: function(lines, vars, code, symbol, posi, display, _symbol, endmark) {
-            if (posi === void 0) { posi = ''; }
-            if (display === void 0) { display = 'inline'; }
-            if (_symbol === void 0) { _symbol = ''; }
-            if (endmark === void 0) { endmark = ','; }
+        pushVariableToLine: function (lines, vars, code, symbol, posi, display, _symbol, endmark) {
+            if (posi === void 0) { posi = '';}
+            if (display === void 0) { display = 'inline';}
+            if (_symbol === void 0) { _symbol = '';}
+            if (endmark === void 0) { endmark = ',';}
             if (code) {
                 var position = this.getPosition(posi);
                 var match = code.match(/^([\$\a-zA-Z_][\$\w]*)@boundary_(\d+)_as_operator::/);
@@ -1581,14 +1602,16 @@ function(root, factory) {
                     });
                     this.pushVariableToVars(vars, symbol, element, position);
                     element = undefined;
-                } else {
+                }
+                else {
                     var array = code.split(/\s*=\s*/);
                     if (array.length === 1) {
                         var value = 'void 0';
-                    } else {
+                    }
+                    else {
                         var value = array.pop();
                     }
-                    for (var index = 0; index < array.length; index++) {
+                    for (var index = 0;index < array.length;index++) {
                         var element = array[index].trim();
                         if (index) {
                             lines.push({
@@ -1598,11 +1621,13 @@ function(root, factory) {
                                 display: 'inline',
                                 value: element + ' = '
                             });
-                        } else {
-                            var match_290 = element.match(/^___boundary_[A-Z0-9_]{36}_(\d+)_as_(sets|list)___$/);
-                            if (match_290) {
-                                return this.pushVariablesToLine(lines, vars, match_290, symbol, _symbol, value, position, endmark);
-                            } else if (element.match(/^[\$a-zA-Z_][\$\w]*$/)) {
+                        }
+                        else {
+                            var match_291 = element.match(/^___boundary_[A-Z0-9_]{36}_(\d+)_as_(sets|list)___$/);
+                            if (match_291) {
+                                return this.pushVariablesToLine(lines, vars, match_291, symbol, _symbol, value, position, endmark);
+                            }
+                            else if (element.match(/^[\$a-zA-Z_][\$\w]*$/)) {
                                 this.pushVariableToVars(vars, symbol, element, position);
                                 lines.push({
                                     type: 'line',
@@ -1611,14 +1636,16 @@ function(root, factory) {
                                     posi: position,
                                     value: _symbol + ' ' + element + ' = '
                                 });
-                            } else {
+                            }
+                            else {
                                 if (this.sources[position.file]) {
                                     this.error('Unexpected Definition `' + symbol + '` at char ' + position.col + ' on line ' + position.line + ' in file [' + position.file + '][' + this.sources[position.file].src + '].');
-                                } else {
+                                }
+                                else {
                                     this.error('Unexpected Definition `' + symbol + '` at char ' + position.col + ' on line ' + position.line + '.');
                                 }
                             }
-                            match_290 = undefined;
+                            match_291 = undefined;
                         }
                         if (index === array.length - 1) {
                             lines.push({
@@ -1635,41 +1662,43 @@ function(root, factory) {
                 position = match = undefined;
             };
         },
-        pushVariablesToLine: function(lines, vars, match, symbol, _symbol, value, position, endmark) {
-            if (_symbol === void 0) { _symbol = ''; }
-            if (endmark === void 0) { endmark = ','; }
-            var type = void 0;
-            var elements = [];
+        pushVariablesToLine: function (lines, vars, match, symbol, _symbol, value, position, endmark) {
+            if (_symbol === void 0) { _symbol = '';}
+            if (endmark === void 0) { endmark = ',';}
+            var type = void 0;var elements = [];
             if (match[2] === 'sets') {
                 var closure = this.readBuffer(match[1]).replace(/(\{|\})/g, '');
                 if (/\.+/.test(closure)) {
                     type = '...';
-                } else {
+                }
+                else {
                     type = 'object';
                 }
                 elements = closure.split(',');
                 closure = undefined;
-            } else {
+            }
+            else {
                 type = 'array';
                 elements = this.readBuffer(match[1]).replace(/(\[|\])/g, '').split(',');
             }
             value = this.pushVariableValueToLine(lines, vars, type, symbol, _symbol, value, position, endmark);
-            for (var i = 0; i < elements.length; i++) {
-                var position_302 = this.getPosition(elements[i]);
-                var element = elements[i].replace(position_302.match, '').trim();
+            for (var i = 0;i < elements.length;i++) {
+                var position_303 = this.getPosition(elements[i]);
+                var element = elements[i].replace(position_303.match, '').trim();
                 if (element.indexOf('.') >= 0) {
-                    this.pushSetsToVars(lines, vars, type, i, symbol, _symbol, element, value, position_302, endmark);
+                    this.pushSetsToVars(lines, vars, type, i, symbol, _symbol, element, value, position_303, endmark);
                     break;
-                } else {
-                    this.pushSetToVars(lines, vars, type, i, elements.length, symbol, _symbol, element, value, position_302, endmark);
                 }
-                position_302 = element = undefined;
+                else {
+                    this.pushSetToVars(lines, vars, type, i, elements.length, symbol, _symbol, element, value, position_303, endmark);
+                }
+                position_303 = element = undefined;
             }
             type = elements = undefined;
         },
-        pushVariableValueToLine: function(lines, vars, type, symbol, _symbol, value, position, endmark) {
+        pushVariableValueToLine: function (lines, vars, type, symbol, _symbol, value, position, endmark) {
             var anonvar = void 0;
-            if (value.match(/^[\$a-zA-Z_][\$\w]*(\s*\.\s*[\$a-zA-Z_][\$\w]*)*$/) && !value.match(/___boundary_[A-Z0-9_]{36}_(\d+)_as_[a-z]+___/)) {
+            if (value.match(/^[\$a-zA-Z_][\$\w]*(\s*\.\s*[\$a-zA-Z_][\$\w]*)*$/)&& !value.match(/___boundary_[A-Z0-9_]{36}_(\d+)_as_[a-z]+___/)) {
                 if (type === '...') {
                     this.anonymous_variables++;
                     anonvar = '_ανώνυμος_variable_' + this.anonymous_variables;
@@ -1687,7 +1716,8 @@ function(root, factory) {
                     return anonvar;
                 }
                 return value.replace(/\s+/g, '');
-            } else {
+            }
+            else {
                 this.anonymous_variables++;
                 anonvar = '_ανώνυμος_variable_' + this.anonymous_variables;
                 while (hasProp(vars.self, anonvar)) {
@@ -1712,26 +1742,29 @@ function(root, factory) {
                 return anonvar;
             };
         },
-        pushSetToVars: function(lines, vars, type, index, length, symbol, _symbol, variable, value, position, endmark) {
-            var _value = void 0;
-            var __value = void 0;
+        pushSetToVars: function (lines, vars, type, index, length, symbol, _symbol, variable, value, position, endmark) {
+            var _value = void 0;var __value = void 0;
             if (type === '...') {
-                var index_312 = this.replacements.length;
+                var index_313 = this.replacements.length;
                 this.pushBuffer(["'" + variable + "'"]);
-                _value = 'pandora.remove(' + value + ', ___boundary_' + this.uid + '_' + index_312 + '_as_string___)';
-            } else if (type === 'object') {
+                _value = 'pandora.remove(' + value + ', ___boundary_' + this.uid + '_' + index_313 + '_as_string___)';
+            }
+            else if (type === 'object') {
                 _value = value + '.' + variable;
-            } else {
+            }
+            else {
                 _value = value + '[' + index + ']';
             }
             this.pushVariableToVars(vars, symbol, variable, position);
             if (index) {
                 if (index === length - 1) {
                     __value = ', ' + variable + ' = ' + _value + endmark;
-                } else {
+                }
+                else {
                     __value = ', ' + variable + ' = ' + _value;
                 }
-            } else {
+            }
+            else {
                 position.head = true;
                 __value = _symbol + ' ' + variable + ' = ' + _value;
                 if (length === 1) {
@@ -1747,22 +1780,24 @@ function(root, factory) {
                 value: __value
             });
         },
-        pushSetsToVars: function(lines, vars, type, index, symbol, _symbol, variable, value, position, endmark) {
-            var _value = void 0;
-            var __value = void 0;
+        pushSetsToVars: function (lines, vars, type, index, symbol, _symbol, variable, value, position, endmark) {
+            var _value = void 0;var __value = void 0;
             variable = variable.replace(/\.+/, '');
             if (type === '...') {
                 if (index) {
                     __value = ', ' + variable + ' = ' + value + endmark;
-                } else {
+                }
+                else {
                     position.head = true;
                     __value = _symbol + ' ' + variable + ' = ' + value;
                 }
-            } else {
+            }
+            else {
                 _value = 'pandora.slice(' + value + ', ' + index + ')';
                 if (index) {
                     __value = ', ' + variable + ' = ' + _value + endmark;
-                } else {
+                }
+                else {
                     position.head = true;
                     __value = _symbol + ' ' + variable + ' = ' + _value;
                 }
@@ -1776,7 +1811,7 @@ function(root, factory) {
                 value: __value
             });
         },
-        pushVariableToVars: function(vars, symbol, variable, position) {
+        pushVariableToVars: function (vars, symbol, variable, position) {
             if (vars.self[variable] !== void 0) {
                 if (vars.self[variable] === 'let' || symbol === 'let') {
                     if (position) {
@@ -1790,25 +1825,27 @@ function(root, factory) {
                     }
                     this.error(' Const `' + variable + '` has already been declared.');
                 }
-            } else {
+            }
+            else {
                 vars.self[variable] = symbol;
             }
             if (symbol === 'const') {
                 vars.scope.const[variable] = variable;
-            } else if (symbol === 'public' && (vars.scope.namespace !== null)) {
+            }
+            else if (symbol === 'public' && (vars.scope.namespace !== null)) {
                 vars.scope.public[variable] = variable;
             };
         },
-        pushSentencesToPREAST: function(preast, vars, code, display, lineposi) {
-            if (preast === void 0) { preast = []; }
-            if (display === void 0) { display = 'block'; }
+        pushSentencesToPREAST: function (preast, vars, code, display, lineposi) {
+            if (preast === void 0) { preast = [];}
+            if (display === void 0) { display = 'block';}
             if (code) {
                 var inline = [];
                 var statements = code.split('___boundary_' + this.uid);
                 while (!statements[0].trim()) {
                     statements.shift();
                 }
-                for (var s = 0; s < statements.length; s++) {
+                for (var s = 0;s < statements.length;s++) {
                     var statement = statements[s];
                     if (statement.trim()) {
                         var match_as_statement = statement.match(matchExpRegPattern.index3);
@@ -1817,7 +1854,8 @@ function(root, factory) {
                             if (array) {
                                 inline.push(array[0]);
                                 this.pushRowsToAST(inline, vars, array[1], false, undefined);
-                            } else {
+                            }
+                            else {
                                 inline.push({
                                     index: match_as_statement[1],
                                     display: (statements.length === 1) ? display : 'inline',
@@ -1825,10 +1863,12 @@ function(root, factory) {
                                 });
                             }
                             array = undefined;
-                        } else {
+                        }
+                        else {
                             if ((statements.length === 1) && (display === 'block')) {
                                 this.pushRowsToAST(inline, vars, statements[0], true, lineposi);
-                            } else {
+                            }
+                            else {
                                 this.pushRowsToAST(inline, vars, statements[0], false, lineposi);
                             }
                         }
@@ -1841,32 +1881,35 @@ function(root, factory) {
                 return preast;
             };
         },
-        buildAST: function(preast, vars) {
+        buildAST: function (preast, vars) {
             var ast = {
                 type: 'codes',
                 vars: vars,
                 body: []
             };
-            for (var index = 0; index < preast.length; index++) {
+            for (var index = 0;index < preast.length;index++) {
                 var block = preast[index];
                 if (block.length === 1) {
                     var element = block[0];
                     if (element.type === 'code') {
                         ast.body.push(element);
-                    } else {
+                    }
+                    else {
                         ast.body.push(this.walk(element, vars, false));
                     }
-                } else {
+                }
+                else {
                     var codes = {
                         type: 'codes',
                         vars: vars,
                         body: []
                     };
-                    for (var b = 0; b < block.length; b++) {
+                    for (var b = 0;b < block.length;b++) {
                         var el = block[b];
                         if (el.type === 'code') {
                             codes.body.push(el);
-                        } else {
+                        }
+                        else {
                             codes.body.push(this.walk(el, vars, true));
                         }
                     }
@@ -1878,42 +1921,40 @@ function(root, factory) {
             ast = undefined;
             return this;
         },
-        pushBodyToAST: function(body, vars, code, inOrder) {
-            if (body === void 0) { body = []; }
-            if (inOrder === void 0) { inOrder = false; }
-            var lines = code ? this.getLines(code, vars, inOrder) : [];
-            for (var index = 0; index < lines.length; index++) {
+        pushBodyToAST: function (body, vars, code, inOrder) {
+            if (body === void 0) { body = [];}
+            if (inOrder === void 0) { inOrder = false;}
+            var lines = code ? this.getLines(code, vars, inOrder):[];
+            for (var index = 0;index < lines.length;index++) {
                 switch (lines[index].subtype) {
-                    case 'sentence':
-                        ;
-                        var code_358 = lines[index].value.trim();
-                        this.pushSentencesToAST(body, vars, code_358, !inOrder && (lines[index].display === 'block'), lines[index].posi);
-                        break;
-                    case 'variable':
-                        ;
-                        body.push({
-                            type: 'code',
-                            posi: lines[index].posi,
-                            display: inOrder ? 'inline' : lines[index].display,
-                            vars: vars,
-                            value: lines[index].value
-                        });
-                        break;
+                    case 'sentence':;
+                    var code_359 = lines[index].value.trim();
+                    this.pushSentencesToAST(body, vars, code_359, !inOrder && (lines[index].display === 'block'), lines[index].posi);
+                    break;
+                    case 'variable':;
+                    body.push({
+                        type: 'code',
+                        posi: lines[index].posi,
+                        display: inOrder ? 'inline': lines[index].display,
+                        vars: vars,
+                        value: lines[index].value
+                    });
+                    break;
                     default:
-                        body.push(this.walk({
-                            index: lines[index].index,
-                            display: inOrder ? 'inline' : 'block',
-                            type: lines[index].subtype
-                        }, vars, inOrder));
-                        break;
+                    body.push(this.walk({
+                        index: lines[index].index,
+                        display: inOrder ? 'inline':'block',
+                        type: lines[index].subtype
+                    }, vars, inOrder));
+                    break;
                 }
             }
             lines = undefined;
             return body;
         },
-        pushSentencesToAST: function(body, vars, code, isblock, lineposi) {
-            if (body === void 0) { body = []; }
-            if (isblock === void 0) { isblock = true; }
+        pushSentencesToAST: function (body, vars, code, isblock, lineposi) {
+            if (body === void 0) { body = [];}
+            if (isblock === void 0) { isblock = true;}
             if (code) {
                 var inline = [];
                 var statements = code.split('___boundary_' + this.uid);
@@ -1922,14 +1963,16 @@ function(root, factory) {
                 }
                 if (statements.length === 1) {
                     this.pushReplacementsToAST(inline, vars, statements[0], isblock, lineposi);
-                } else {
-                    for (var s = 0; s < statements.length; s++) {
+                }
+                else {
+                    for (var s = 0;s < statements.length;s++) {
                         this.pushReplacementsToAST(inline, vars, statements[s], false, (s === 0) && lineposi);
                     }
                 }
                 if (inline.length === 1) {
                     body.push(inline[0]);
-                } else {
+                }
+                else {
                     body.push({
                         type: 'codes',
                         vars: vars,
@@ -1940,7 +1983,7 @@ function(root, factory) {
             }
             return body;
         },
-        pushReplacementsToAST: function(body, vars, code, isblock, lineposi) {
+        pushReplacementsToAST: function (body, vars, code, isblock, lineposi) {
             if (code.trim()) {
                 var match_as_statement = code.match(matchExpRegPattern.index3);
                 if (match_as_statement) {
@@ -1948,24 +1991,26 @@ function(root, factory) {
                     if (array) {
                         body.push(this.walk(array[0], vars, true));
                         this.pushRowsToAST(body, vars, array[1], false, undefined);
-                    } else {
+                    }
+                    else {
                         body.push(this.walk({
                             index: match_as_statement[1],
-                            display: isblock ? 'block' : 'inline',
+                            display: isblock ? 'block':'inline',
                             type: match_as_statement[2]
                         }, vars, true));
                     }
                     array = undefined;
-                } else {
+                }
+                else {
                     this.pushRowsToAST(body, vars, code, isblock, lineposi);
                 }
                 match_as_statement = undefined;
             }
             return body;
         },
-        pushRowsToAST: function(body, vars, code, isblock, lineposi) {
+        pushRowsToAST: function (body, vars, code, isblock, lineposi) {
             var rows = code.split(/[\r\n]+/);
-            for (var r = 0; r < rows.length; r++) {
+            for (var r = 0;r < rows.length;r++) {
                 var row = rows[r];
                 if (row.trim()) {
                     this.pushCodeToAST(body, vars, row, isblock, (r === 0) && lineposi);
@@ -1974,12 +2019,13 @@ function(root, factory) {
             rows = undefined;
             return body;
         },
-        pushCodeToAST: function(body, vars, code, isblock, lineposi) {
-            var display = isblock ? 'block' : 'inline';
+        pushCodeToAST: function (body, vars, code, isblock, lineposi) {
+            var display = isblock ? 'block': 'inline';
             var position = this.getPosition(code) || lineposi;
             if (position) {
                 var element = code.replace(position.match, '');
-            } else {
+            }
+            else {
                 var element = code;
             }
             if (element) {
@@ -1994,93 +2040,72 @@ function(root, factory) {
             display = position = element = undefined;
             return body;
         },
-        walk: function(element, vars, inOrder) {
-            if (vars === void 0) { vars = false; }
+        walk: function (element, vars, inOrder) {
+            if (vars === void 0) { vars = false;}
             switch (element.type) {
-                case 'arraylike':
-                    ;
-                case 'list':
-                    ;
-                    return this.walkArray(element.index, element.display, vars);
-                case 'arrowfn':
-                    ;
-                    return this.walkArrowFn(element.index, element.display, vars);
-                case 'if':
-                    ;
-                case 'call':
-                    ;
-                case 'callmethod':
-                    ;
-                case 'construct':
-                    ;
-                    return this.walkCall(element.index, element.display, vars, element.type);
-                case 'log':
-                    ;
-                case 'callschain':
-                    ;
-                    return this.walkCallsChain(element.index, element.display, vars, element.type);
-                case 'class':
-                    ;
-                    return this.walkClass(element.index, element.display, vars);
-                case 'objlike':
-                    ;
-                    if (inOrder) {
-                        element.type = 'object';
-                        return this.walkObject(element.index, element.display, vars);
-                    }
-                case 'closure':
-                    ;
-                    return this.walkClosure(element.index, element.display, vars);
-                case 'expression':
-                    ;
-                    return this.walkFnLike(element.index, element.display, vars, 'exp');
-                case 'extends':
-                    ;
-                    return this.walkExtends(element.index, element.display, vars);
-                case 'function':
-                    ;
-                    return this.walkFnLike(element.index, element.display, vars, 'def');
-                case 'object':
-                    ;
-                case 'sets':
-                    ;
+                case 'arraylike':;
+                case 'list':;
+                return this.walkArray(element.index, element.display, vars);
+                case 'arrowfn':;
+                return this.walkArrowFn(element.index, element.display, vars);
+                case 'if':;
+                case 'call':;
+                case 'callmethod':;
+                case 'construct':;
+                return this.walkCall(element.index, element.display, vars, element.type);
+                case 'log':;
+                case 'callschain':;
+                return this.walkCallsChain(element.index, element.display, vars, element.type);
+                case 'class':;
+                return this.walkClass(element.index, element.display, vars);
+                case 'objlike':;
+                if (inOrder) {
+                    element.type = 'object';
                     return this.walkObject(element.index, element.display, vars);
-                case 'parentheses':
-                    ;
-                    return this.walkParentheses(element.index, element.display, vars);
-                case 'pattern':
-                    ;
-                case 'string':
-                    ;
-                case 'template':
-                    ;
-                    var that = this;
-                    var position = this.getPositionByIndex(element.index);
-                    return {
-                        type: 'code',
-                        posi: position,
-                        display: element.display || 'inline',
-                        vars: vars,
-                        value: '___boundary_' + this.uid + '_' + element.index + '_as_string___'
-                    };
-                default:
-                    return {
-                        type: 'code',
-                        posi: void 0,
-                        display: 'hidden',
-                        vars: vars,
-                        value: ""
-                    };
+                }
+                case 'closure':;
+                return this.walkClosure(element.index, element.display, vars);
+                case 'expression':;
+                return this.walkFnLike(element.index, element.display, vars, 'exp');
+                case 'extends':;
+                return this.walkExtends(element.index, element.display, vars);
+                case 'function':;
+                return this.walkFnLike(element.index, element.display, vars, 'def');
+                case 'object':;
+                case 'sets':;
+                return this.walkObject(element.index, element.display, vars);
+                case 'parentheses':;
+                return this.walkParentheses(element.index, element.display, vars);
+                case 'pattern':;
+                case 'string':;
+                case 'template':;
+                var that = this;
+                var position = this.getPositionByIndex(element.index);
+                return {
+                    type: 'code',
+                    posi: position,
+                    display: element.display || 'inline',
+                    vars: vars,
+                    value: '___boundary_' + this.uid + '_' + element.index + '_as_string___'
+                };
+                default:return {
+                    type: 'code',
+                    posi: void 0,
+                    display: 'hidden',
+                    vars: vars,
+                    value: ""
+                };
             };
         },
-        walkParentheses: function(index, display, vars) {
+        walkParentheses: function (index, display, vars) {
             var body = [];
             var clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(/\s*(,)/);
             var position = this.getPositionByIndex(index);
-            for (var c = 0; c < clauses.length; c++) {
+            for (var c = 0;c < clauses.length;c++) {
                 if (c) {
                     var posi = this.getPosition(clauses[c]);
-                } else {
+                }
+                else {
                     var posi = this.getPosition(clauses[c]) || position;
                 }
                 this.pushSentencesToAST(body, vars, clauses[c], false, posi);
@@ -2095,16 +2120,17 @@ function(root, factory) {
                 body: body
             };
         },
-        walkArray: function(index, display, vars) {
+        walkArray: function (index, display, vars) {
             var body = [];
             var elems = [];
             var position = this.getPositionByIndex(index);
             var clauses = this.readBuffer(index).replace(/([\[\s\]])/g, '').split(',');
-            for (var c = 0; c < clauses.length; c++) {
+            for (var c = 0;c < clauses.length;c++) {
                 var posi = void 0;
                 if (c) {
                     posi = this.getPosition(clauses[c]);
-                } else {
+                }
+                else {
                     posi = this.getPosition(clauses[c]) || position;
                 }
                 var value = clauses[c].replace(posi, '');
@@ -2125,7 +2151,8 @@ function(root, factory) {
                         aname: match[1]
                     });
                     elems = [];
-                } else {
+                }
+                else {
                     this.pushSentencesToAST(elems, vars, clauses[c], false, posi);
                     if (c === clauses.length - 1) {
                         body.push({
@@ -2145,34 +2172,36 @@ function(root, factory) {
                 body: body
             };
         },
-        walkCall: function(index, display, vars, type) {
+        walkCall: function (index, display, vars, type) {
             var name = [];
             var args = [];
             var matches = this.readBuffer(index).match(matchExpRegPattern.call);
             var position = this.getPositionByIndex(index);
             var nameArr = matches[1].split('___boundary_' + this.uid);
             var paramArr = this.readBuffer(matches[2]).split(/([\(,\)])/);
-            for (var n = 0; n < nameArr.length; n++) {
+            for (var n = 0;n < nameArr.length;n++) {
                 var element = nameArr[n];
                 if (element) {
                     if (type === 'construct') {
                         this.pushReplacementsToAST(name, vars, element, false, undefined);
-                    } else {
+                    }
+                    else {
                         this.pushReplacementsToAST(name, vars, element, false, (n === 0) && position);
                     }
                 }
             }
-            for (var p = 0; p < paramArr.length; p++) {
+            for (var p = 0;p < paramArr.length;p++) {
                 var paramPosi = this.getPosition(paramArr[p]);
                 if (paramPosi) {
                     var param = paramArr[p].replace(paramPosi.match, '').trim();
-                } else {
+                }
+                else {
                     var param = paramArr[p].trim();
                 }
                 if (param && param != '(' && param != ')' && param != ',') {
                     var statements = param.split('___boundary_' + this.uid);
                     var inline = [];
-                    for (var s = 0; s < statements.length; s++) {
+                    for (var s = 0;s < statements.length;s++) {
                         this.pushReplacementsToAST(inline, vars, statements[s], false, (s === 0) && paramPosi);
                     }
                     if (inline.length) {
@@ -2183,7 +2212,8 @@ function(root, factory) {
                             vars: vars,
                             body: inline
                         });
-                    } else {
+                    }
+                    else {
                         args.push({
                             type: 'parameter',
                             posi: paramPosi,
@@ -2201,8 +2231,7 @@ function(root, factory) {
                 }
             }
             if (type === 'callmethod') {
-
-                if (position) position.head = false;
+                if(position) position.head = false;
                 display = 'inline';
             }
             matches = nameArr = paramArr = undefined;
@@ -2215,13 +2244,13 @@ function(root, factory) {
                 args: args
             };
         },
-        walkCallsChain: function(index, display, vars, type) {
+        walkCallsChain: function (index, display, vars, type) {
             var _this = this;
             var _arguments = arguments;
             var code = this.readBuffer(index);
             var position = this.getPositionByIndex(index);
             var calls = [];
-            code.replace(/(@\d+L\d+P\d+O*\d*:::)?\.___boundary_[A-Z0-9_]{36}_(\d+)_as_callmethod___/g, function(match, posi, _index) {
+            code.replace(/(@\d+L\d+P\d+O*\d*:::)?\.___boundary_[A-Z0-9_]{36}_(\d+)_as_callmethod___/g, function (match, posi, _index) {
                 if (posi) {
                     _this.replacements[_index][1] = posi;
                 }
@@ -2235,13 +2264,13 @@ function(root, factory) {
             return {
                 type: type,
                 posi: position,
-                display: (position && position.head) ? 'blocks' : 'inline',
+                display: (position && position.head) ? 'blocks':'inline',
                 vars: vars,
                 calls: calls
             };
         },
-        walkClass: function(index, display, vars) {
-            if (vars === void 0) { vars = true; }
+        walkClass: function (index, display, vars) {
+            if (vars === void 0) { vars = true;}
             var matches = this.readBuffer(index).match(matchExpRegPattern.class);
             var type = matches[1];
             var namespace = vars.scope.namespace || this.namespace;
@@ -2251,22 +2280,26 @@ function(root, factory) {
                 if (matches[2].length !== 2) {
                     cname = namespace + cname;
                 }
-            } else {
+            }
+            else {
                 if (type === 'dec') {
                     if (cname) {
                         if (this.isNativeCode) {
                             this.error('Native Code Not Support Standard Class Expression');
                         }
                         cname = namespace + cname;
-                    } else if (namespace) {
+                    }
+                    else if (namespace) {
                         if (this.isNativeCode) {
                             this.error('Native Code Not Support Standard Class Expression');
                         }
                         cname = namespace.replace(/\.$/, '');
-                    } else {
+                    }
+                    else {
                         subtype = 'anonClass';
                     }
-                } else {
+                }
+                else {
                     subtype = 'anonClass';
                 }
             }
@@ -2280,15 +2313,18 @@ function(root, factory) {
                 if (matches[5]) {
                     if (matches[5].length === 2) {
                         basename = 'pandora.' + basename;
-                    } else {
+                    }
+                    else {
                         basename = 'pandora.' + namespace + basename;
                     }
                 }
-            } else {
+            }
+            else {
                 this.useExtends = true;
                 if (matches[4] === 'ignore') {
                     basename = true;
-                } else {
+                }
+                else {
                     basename = false;
                 }
             }
@@ -2304,7 +2340,7 @@ function(root, factory) {
                 body: this.checkClassBody(vars, matches[7] || '')
             };
         },
-        walkClosure: function(index, display, vars) {
+        walkClosure: function (index, display, vars) {
             var localvars = {
                 parent: vars,
                 scope: vars.scope,
@@ -2327,7 +2363,7 @@ function(root, factory) {
                 body: body
             };
         },
-        walkExtends: function(index, display, vars) {
+        walkExtends: function (index, display, vars) {
             var matches = this.readBuffer(index).match(matchExpRegPattern.extends);
             var position = this.getPositionByIndex(index);
             var subtype = 'ext';
@@ -2339,16 +2375,19 @@ function(root, factory) {
                 subtype = matches[1];
                 if (subtype === 'voidanonspace' || subtype === 'anonspace') {
                     this.useAnonSpace = true;
-                } else {
+                }
+                else {
                     if (this.isNativeCode) {
                         this.error('Native Code Not Support Namespace Expression');
                     }
                 }
                 if (subtype === 'voidanonspace' || subtype === 'anonspace') {
                     namespace = '';
-                } else if ((subtype === 'voidglobal') || (subtype === 'global')) {
+                }
+                else if ((subtype === 'voidglobal') || (subtype === 'global')) {
                     namespace = objname + '.';
-                } else {
+                }
+                else {
                     namespace = (vars.namespace || this.namespace) + objname + '.';
                 }
                 localvars = {
@@ -2368,13 +2407,15 @@ function(root, factory) {
                 };
                 localvars.self = localvars.scope.protected;
                 body = this.pushBodyToAST([], localvars, matches[3]);
-            } else {
+            }
+            else {
                 if ((matches[1] === 'nsassign') || (matches[1] === 'globalassign')) {
                     if (this.isNativeCode) {
                         this.error('Native Code Not Support Assign Expression');
                     }
                     subtype = matches[1];
-                } else {
+                }
+                else {
                     this.useExtends = true;
                 }
                 body = this.checkObjMember(localvars, matches[3]);
@@ -2390,8 +2431,8 @@ function(root, factory) {
                 body: body
             };
         },
-        walkObject: function(index, display, vars) {
-            if (vars === void 0) { vars = true; }
+        walkObject: function (index, display, vars) {
+            if (vars === void 0) { vars = true;}
             return {
                 type: 'object',
                 display: display || 'inline',
@@ -2400,7 +2441,7 @@ function(root, factory) {
                 body: this.checkObjMember(vars, this.readBuffer(index))
             };
         },
-        walkArrowFn: function(index, display, vars) {
+        walkArrowFn: function (index, display, vars) {
             var matches = this.readBuffer(index).match(matchExpRegPattern.arrowfn);
             var subtype = 'fn';
             var selfvas = {};
@@ -2411,7 +2452,8 @@ function(root, factory) {
                 vars.locals['arguments'] = null;
                 var locals = vars.locals;
                 var varstype = 'arrowfn';
-            } else {
+            }
+            else {
                 var locals = {};
                 var varstype = 'scope';
             }
@@ -2444,24 +2486,23 @@ function(root, factory) {
                 body: this.checkFnBody(localvars, args, matches[4])
             };
         },
-        walkFnLike: function(index, display, vars, type) {
+        walkFnLike: function (index, display, vars, type) {
             var _this = this;
             var _arguments = arguments;
-
-            function push(semicolons, lines) {
-                for (var index = 0; index < lines.length; index++) {
+            function push (semicolons, lines) {
+                for (var index = 0;index < lines.length;index++) {
                     if (lines[index].type === 'codes') {
                         semicolons = push(semicolons, lines[index].body);
                         continue;
                     }
-
-                    if (lines[index].posi) lines[index].posi.head = false;
+                    if(lines[index].posi) lines[index].posi.head = false;
                     if (lines[index].value) {
                         if (lines[index].value.match(/;/)) {
                             if (semicolons < 2) {
                                 lines[index].value = lines[index].value.replace(/;\s*/, '; ');
                                 semicolons++;
-                            } else {
+                            }
+                            else {
                                 lines[index].value = lines[index].value.replace(/;\s*/, '');
                             }
                         }
@@ -2475,11 +2516,11 @@ function(root, factory) {
             };
             var matches = this.readBuffer(index).match(matchExpRegPattern.fnlike);
             var subtype = matches[2] || 'function';
-            var fname = matches[3] !== 'function' ? matches[3] : '';
+            var fname = matches[3] !== 'function' ? matches[3]:'';
             if ((type === 'def' && subtype === 'function') || type === 'exp') {
                 if (reservedFname['includes'](fname)) {
                     var headline = matches[4];
-                    var localvars_458 = {
+                    var localvars_459 = {
                         parent: vars,
                         scope: vars.scope,
                         hasHalfFunScope: false,
@@ -2491,24 +2532,25 @@ function(root, factory) {
                     if (fname === 'for') {
                         var head = {
                             type: 'codes',
-                            vars: localvars_458,
+                            vars: localvars_459,
                             display: 'inline',
                             body: []
                         };
-                        var lines = this.pushBodyToAST([], localvars_458, headline, true);
+                        var lines = this.pushBodyToAST([], localvars_459, headline, true);
                         var semicolons = push(0, lines);
-                    } else {
-                        var head = this.pushSentencesToAST([], vars, headline, false, this.getPosition(headline))[0] || (function() {
+                    }
+                    else {
+                        var head = this.pushSentencesToAST([],vars,headline,false,this.getPosition(headline))[0] || (function () {
                             _this.error(' Must have statements in head of ' + fname + ' expreesion.');
                         })();
                     }
-                    var body = this.pushBodyToAST([], localvars_458, matches[5]);
-                    this.resetVarsRoot(localvars_458);
+                    var body = this.pushBodyToAST([], localvars_459, matches[5]);
+                    this.resetVarsRoot(localvars_459);
                     return {
                         type: 'exp',
                         posi: this.getPositionByIndex(index),
                         display: 'block',
-                        vars: localvars_458,
+                        vars: localvars_459,
                         expression: fname,
                         head: head,
                         body: body
@@ -2517,42 +2559,37 @@ function(root, factory) {
                 if (fname === 'each') {
                     var condition = matches[4].match(matchExpRegPattern.travelargs);
                     if (condition) {
-                        var self = {};
-                        var agrs = [];
+                        var self = {};var agrs = [];
                         if (condition[5]) {
                             if (condition[8]) {
                                 if (condition[4] !== condition[8]) {
                                     self[condition[4]] = 'var';
                                     self[condition[8]] = 'var';
-                                    agrs = [
-                                        [condition[4], this.getPosition(condition[3])],
-                                        [condition[8], this.getPosition(condition[7])]
-                                    ];
-                                } else {
+                                    agrs = [[condition[4], this.getPosition(condition[3])], [condition[8], this.getPosition(condition[7])]];
+                                }
+                                else {
                                     this.error('indexname cannot same to the itemname');
                                 }
-                            } else {
-                                self[condition[4]] = 'var';
-                                agrs = [
-                                    [condition[4], condition[3]]
-                                ];
                             }
-                        } else {
+                            else {
+                                self[condition[4]] = 'var';
+                                agrs = [[condition[4], condition[3]]];
+                            }
+                        }
+                        else {
                             if (condition[4] !== '_index') {
                                 self['_index'] = 'var';
                                 self[condition[4]] = 'var';
-                                agrs = [
-                                    ['_index', undefined],
-                                    [condition[4], this.getPosition(condition[3])]
-                                ];
-                            } else {
+                                agrs = [['_index', undefined], [condition[4], this.getPosition(condition[3])]];
+                            }
+                            else {
                                 this.error('itemname cannot same to the default indexname');
                             }
                         }
                         this.useEach = true;
                         vars.hasHalfFunScope = true;
                         vars.locals['arguments'] = null;
-                        var localvars_463 = {
+                        var localvars_464 = {
                             parent: vars,
                             scope: {
                                 namespace: null,
@@ -2568,29 +2605,29 @@ function(root, factory) {
                             locals: vars.locals,
                             type: 'travel'
                         };
-                        localvars_463.self = localvars_463.scope.protected;
-                        var iterator = this.pushSentencesToAST([], localvars_463, condition[1], false, this.getPosition(condition[2]))[0] || (function() {
+                        localvars_464.self = localvars_464.scope.protected;
+                        var iterator = this.pushSentencesToAST([],localvars_464,condition[1],false,this.getPosition(condition[2]))[0] || (function () {
                             _this.error(' Must have statements in head of each expreesion.');
                         })();
-                        var subtype_463 = 'allprop';
-                        var code = matches[5].replace(/@ownprop[;\s]*/g, function() {
-                            subtype_463 = 'ownprop';
+                        var subtype_464 = 'allprop';
+                        var code = matches[5].replace(/@ownprop[;\s]*/g, function () {
+                            subtype_464 = 'ownprop';
                             return '';
                         });
                         return {
                             type: 'travel',
                             posi: this.getPositionByIndex(index),
                             display: 'block',
-                            subtype: subtype_463,
+                            subtype: subtype_464,
                             iterator: iterator,
-                            vars: localvars_463,
+                            vars: localvars_464,
                             callback: {
                                 type: 'def',
                                 display: 'inline',
-                                vars: localvars_463,
+                                vars: localvars_464,
                                 fname: '',
                                 args: agrs,
-                                body: this.pushBodyToAST([], localvars_463, code)
+                                body: this.pushBodyToAST([], localvars_464, code)
                             }
                         };
                     }
@@ -2602,13 +2639,15 @@ function(root, factory) {
                     if (fname !== 'return') {
                         this.pushVariableToVars(vars, 'var', fname, position);
                     }
-                } else {
+                }
+                else {
                     if (subtype === 'function') {
                         if (display === 'block') {
                             fname = '_ανώνυμος_function_' + this.anonymous_variables;
                             this.anonymous_variables++;
                         }
-                    } else {
+                    }
+                    else {
                         display = 'block';
                         fname = subtype;
                         subtype = 'function';
@@ -2646,7 +2685,7 @@ function(root, factory) {
                 body: this.checkFnBody(localvars, args, matches[5])
             };
         },
-        checkProp: function(vars, posi, type, attr, array) {
+        checkProp: function (vars, posi, type, attr, array) {
             var position = this.getPosition(posi);
             if (array.length > 1) {
                 var body = [];
@@ -2659,7 +2698,7 @@ function(root, factory) {
                         value: attr[6].trim()
                     });
                 }
-                for (var index = 1; index < array.length; index++) {
+                for (var index = 1;index < array.length;index++) {
                     var element = array[index];
                     var match_as_statement = element.trim().match(matchExpRegPattern.index3);
                     if (match_as_statement) {
@@ -2676,7 +2715,8 @@ function(root, factory) {
                                 value: match_as_statement[3].trim()
                             });
                         }
-                    } else {
+                    }
+                    else {
                         body.push({
                             type: 'code',
                             posi: void 0,
@@ -2710,13 +2750,12 @@ function(root, factory) {
                 }]
             };
         },
-        checkObjMember: function(vars, code) {
-            var that = this;
-            var body = [];
-            var bodyIndex = -1;
+        checkObjMember: function (vars, code) {
+            var that = this;var body = [];
+            var bodyIndex =  -1;
             var lastIndex = 0;
             var array = code.split(/\s*[\{,\}]\s*/);
-            for (var index = 0; index < array.length; index++) {
+            for (var index = 0;index < array.length;index++) {
                 var element = array[index].trim();
                 if (element) {
                     var elArr = element.split('___boundary_' + this.uid);
@@ -2726,14 +2765,16 @@ function(root, factory) {
                             if (match_0[5] != ':') {
                                 if ((elArr.length === 1)) {
                                     match_0[6] = match_0[4];
-                                } else {
+                                }
+                                else {
                                     continue;
                                 }
                             }
                             body.push(this.checkProp(vars, match_0[1], 'objProp', match_0, elArr));
                             bodyIndex++;
                             continue;
-                        } else {
+                        }
+                        else {
                             body.useExplode = true;
                             var posi = this.getPosition(elArr[0]);
                             body.push({
@@ -2743,41 +2784,38 @@ function(root, factory) {
                                 vars: vars
                             });
                         }
-                    } else {
-                        for (var i = 1; i < elArr.length; i++) {
+                    }
+                    else {
+                        for (var i = 1;i < elArr.length;i++) {
                             var match_as_statement = elArr[i].trim().match(matchExpRegPattern.index3);
                             switch (match_as_statement[2]) {
-                                case 'string':
-                                    ;
-                                case 'pattern':
-                                    ;
-                                case 'tamplate':
-                                    ;
-                                    console.log(body, bodyIndex);
+                                case 'string':;
+                                case 'pattern':;
+                                case 'tamplate':;
+                                console.log(body, bodyIndex);
+                                body[bodyIndex].body.push({
+                                    type: 'code',
+                                    posi: void 0,
+                                    display: 'inline',
+                                    vars: vars,
+                                    value: ',' + match_as_statement[0]
+                                });
+                                if (match_as_statement[3]) {
                                     body[bodyIndex].body.push({
                                         type: 'code',
                                         posi: void 0,
                                         display: 'inline',
                                         vars: vars,
-                                        value: ',' + match_as_statement[0]
+                                        value: match_as_statement[3]
                                     });
-                                    if (match_as_statement[3]) {
-                                        body[bodyIndex].body.push({
-                                            type: 'code',
-                                            posi: void 0,
-                                            display: 'inline',
-                                            vars: vars,
-                                            value: match_as_statement[3]
-                                        });
-                                    }
-                                    break;
-                                case 'function':
-                                    ;
-                                    if (elArr.length === 2) {
-                                        body.push(this.walkFnLike(parseInt(match_as_statement[1]), 'inline', vars, 'method'));
-                                        bodyIndex++;
-                                    }
-                                    break;
+                                }
+                                break;
+                                case 'function':;
+                                if (elArr.length === 2) {
+                                    body.push(this.walkFnLike(parseInt(match_as_statement[1]), 'inline', vars, 'method'));
+                                    bodyIndex++;
+                                }
+                                break;
                             }
                         }
                     }
@@ -2787,10 +2825,10 @@ function(root, factory) {
             that = bodyIndex = lastIndex = array = undefined;
             return body;
         },
-        checkClassBody: function(vars, code) {
+        checkClassBody: function (vars, code) {
             var body = [];
             var array = code.replace('_as_function___', '_as_function___;').split(/[;,\r\n]+/);
-            for (var index = 0; index < array.length; index++) {
+            for (var index = 0;index < array.length;index++) {
                 var element = array[index].trim();
                 var type = 'method';
                 if (element) {
@@ -2801,21 +2839,20 @@ function(root, factory) {
                             if (match_0[4].trim()) {
                                 switch (match_0[3]) {
                                     case undefined:
-                                    case 'public':
-                                        ;
-                                        type = 'prop';
-                                        break;
-                                    case 'static':
-                                        ;
-                                        type = 'staticProp';
-                                        break;
+                                    case 'public':;
+                                    type = 'prop';
+                                    break;
+                                    case 'static':;
+                                    type = 'staticProp';
+                                    break;
                                     default:
-                                        this.error('Cannot use `' + match_0[3] + '` on property `' + match_0[4] + '`');
+                                    this.error('Cannot use `' + match_0[3] + '` on property `' + match_0[4] + '`');
                                 }
                                 if (match_0[5] != '=') {
                                     if ((elArr.length === 1)) {
                                         match_0[6] = 'undefined';
-                                    } else {
+                                    }
+                                    else {
                                         continue;
                                     }
                                 }
@@ -2823,30 +2860,26 @@ function(root, factory) {
                                 continue;
                             }
                             switch (match_0[3]) {
-                                case 'om':
-                                    ;
-                                    type = 'overrideMethod';
-                                    break;
-                                case 'get':
-                                    ;
-                                    type = 'getPropMethod';
-                                    break;
-                                case 'set':
-                                    ;
-                                    type = 'setPropMethod';
-                                    break;
-                                case 'static':
-                                    ;
-                                    if (match_0[5] === '=') {
-                                        match_0[4] = 'static';
-                                        if ((elArr.length === 1)) {
-                                            match_0[6] = 'undefined';
-                                        }
-                                        body.push(this.checkProp(vars, match_0[1], 'prop', match_0, elArr));
-                                        continue;
+                                case 'om':;
+                                type = 'overrideMethod';
+                                break;
+                                case 'get':;
+                                type = 'getPropMethod';
+                                break;
+                                case 'set':;
+                                type = 'setPropMethod';
+                                break;
+                                case 'static':;
+                                if (match_0[5] === '=') {
+                                    match_0[4] = 'static';
+                                    if ((elArr.length === 1)) {
+                                        match_0[6] = 'undefined';
                                     }
-                                    type = 'staticMethod';
-                                    break;
+                                    body.push(this.checkProp(vars, match_0[1], 'prop', match_0, elArr));
+                                    continue;
+                                }
+                                type = 'staticMethod';
+                                break;
                             }
                         }
                         match_0 = undefined;
@@ -2864,26 +2897,28 @@ function(root, factory) {
             array = undefined;
             return body;
         },
-        checkArgs: function(code, localvars) {
+        checkArgs: function (code, localvars) {
             var args = code.split(/\s*,\s*/);
             var keys = [];
             var keysArray = void 0;
             var vals = [];
-            for (var index = 0; index < args.length; index++) {
+            for (var index = 0;index < args.length;index++) {
                 var arg = args[index];
                 if (arg) {
                     var array = arg.split(/\s*=\s*/);
                     var position = this.getPosition(array[0]);
                     if (position) {
                         var varname = array[0].replace(position.match, '');
-                    } else {
+                    }
+                    else {
                         var varname = array[0];
                     }
                     if (varname.match(namingExpr)) {
                         keys.push([varname, position]);
                         vals.push(array[1]);
                         localvars.self[varname] = 'var';
-                    } else if (varname.match(argsExpr)) {
+                    }
+                    else if (varname.match(argsExpr)) {
                         keysArray = [varname, position];
                         localvars.self[varname] = 'var';
                         break;
@@ -2898,10 +2933,10 @@ function(root, factory) {
                 vals: vals
             };
         },
-        checkFnBody: function(vars, args, code) {
+        checkFnBody: function (vars, args, code) {
             code = code.trim();
             var body = [];
-            for (var index = 0; index < args.vals.length; index++) {
+            for (var index = 0;index < args.vals.length;index++) {
                 if (args.vals[index] !== undefined) {
                     var valArr = args.vals[index].split('___boundary_' + this.uid);
                     if (valArr[1]) {
@@ -2918,7 +2953,8 @@ function(root, factory) {
                             display: 'inline',
                             value: '; }'
                         });
-                    } else {
+                    }
+                    else {
                         body.push({
                             type: 'code',
                             posi: args.keys[index][1],
@@ -2940,7 +2976,7 @@ function(root, factory) {
             this.pushBodyToAST(body, vars, code);
             return body;
         },
-        generate: function() {
+        generate: function () {
             var ast = this.ast;
             this.ast = {};
             var head = [];
@@ -2956,14 +2992,17 @@ function(root, factory) {
                     this.pushEach(neck);
                     this.pushExtends(neck);
                     this.pushDeclare(neck);
-                } else if (this.useExtends) {
+                }
+                else if (this.useExtends) {
                     this.pushEach(neck);
                     this.pushExtends(neck);
-                } else if (this.useEach) {
+                }
+                else if (this.useEach) {
                     this.pushEach(neck);
                 }
                 this.useLoop && this.pushLoop(neck);
-            } else {
+            }
+            else {
                 var imports = this.imports;
                 var alias = this.using_as;
                 this.imports = [];
@@ -2981,7 +3020,7 @@ function(root, factory) {
             preoutput = undefined;
             return this;
         },
-        pushPostionsToMap: function(position, codes) {
+        pushPostionsToMap: function (position, codes) {
             if (position && (typeof position === 'object')) {
                 var index = this.posimap.length;
                 this.posimap.push(position);
@@ -2994,11 +3033,11 @@ function(root, factory) {
             }
             return '';
         },
-        pickUpMap: function(string) {
+        pickUpMap: function (string) {
             var lines = string.split(/\r{0,1}\n/);
             var _lines = [];
             var mappings = [];
-            for (var l = 0; l < lines.length; l++) {
+            for (var l = 0;l < lines.length;l++) {
                 var line = lines[l];
                 lines[l] = undefined;
                 var mapping = [];
@@ -3010,7 +3049,8 @@ function(root, factory) {
                         var position = this.posimap[i];
                         this.posimap[i] = undefined;
                         mapping.push([index, position.o[0], position.o[1], position.o[2], 0]);
-                    } else {}
+                    }
+                    else {}
                     line = line.replace(match[0], '');
                 }
                 _lines.push(line);
@@ -3023,7 +3063,7 @@ function(root, factory) {
             mappings = undefined;
             return _lines.join("\r\n");
         },
-        pushNativeHeader: function(codes) {
+        pushNativeHeader: function (codes) {
             codes.push('/*!');
             codes.push("\r\n" + ' * tanguage script compiled code');
             codes.push("\r\n" + ' *');
@@ -3055,7 +3095,7 @@ function(root, factory) {
             codes.push('\r\n    var pandora = {};');
             return codes;
         },
-        pushDeclare: function(codes) {
+        pushDeclare: function (codes) {
             codes.push('\r\n    pandora.declareClass = (function () {');
             codes.push('\r\n        var blockClass = {');
             codes.push('\r\n            _public: {},');
@@ -3115,7 +3155,7 @@ function(root, factory) {
             codes.push('\r\n    }());');
             return codes;
         },
-        pushEach: function(codes) {
+        pushEach: function (codes) {
             codes.push('\r\n    pandora.slice = function (arrayLike, startIndex, endIndex) {');
             codes.push('\r\n        startIndex = parseInt(startIndex) || 0;');
             codes.push('\r\n        return Array.prototype.slice.call(arrayLike, startIndex, endIndex);');
@@ -3144,7 +3184,7 @@ function(root, factory) {
             codes.push('\r\n    }');
             return codes;
         },
-        pushExtends: function(codes) {
+        pushExtends: function (codes) {
             codes.push('\r\n    pandora.extend = function (base) {');
             codes.push('\r\n        base = (base && (typeof(base) === \'object\' || typeof(base) === \'function\')) ? base : root;');
             codes.push('\r\n        var rewrite = (arguments[1] === 1 || arguments[1] === true) ? true : false;');
@@ -3161,7 +3201,7 @@ function(root, factory) {
             codes.push('\r\n    };');
             return codes;
         },
-        pushLoop: function(codes) {
+        pushLoop: function (codes) {
             codes.push('\r\n    pandora.loop = (function () {');
             codes.push('\r\n        var BREAK = false;');
             codes.push('\r\n        loop.out = function () {');
@@ -3206,7 +3246,7 @@ function(root, factory) {
             codes.push('\r\n    }());');
             return codes;
         },
-        pushBlockHeader: function(codes, imports) {
+        pushBlockHeader: function (codes, imports) {
             codes.push('/*!');
             codes.push("\r\n" + ' * tanguage script compiled code');
             codes.push("\r\n" + ' *');
@@ -3216,18 +3256,20 @@ function(root, factory) {
             codes.push("\r\n");
             if (this.configinfo === '{}') {
                 codes.push("// ");
-            } else {
+            }
+            else {
                 this.pushPostionsToMap(this.getPosition(this.configinfo_posi), codes);
             }
             codes.push('tang.config(' + this.configinfo + ');');
             if (this.isMainBlock) {
                 codes.push("\r\n" + 'tang.init().block([');
-            } else {
+            }
+            else {
                 codes.push("\r\n" + 'tang.init().block([');
             }
             if (imports.length) {
                 var stropmi = [];
-                for (var index = 0; index < imports.length; index += 2) {
+                for (var index = 0;index < imports.length;index += 2) {
                     stropmi.push(this.pushPostionsToMap(this.getPosition(imports[index + 1])) + "'" + imports[index] + "'");
                 }
                 codes.push("\r\n    " + stropmi.join(",\r\n    ") + "\r\n");
@@ -3235,7 +3277,8 @@ function(root, factory) {
             }
             if (this.isMainBlock) {
                 codes.push('], function (pandora, root, imports, undefined) {');
-            } else {
+            }
+            else {
                 codes.push('], function (pandora, root, imports, undefined) {');
                 codes.push("\r\n    var module = this.module;");
             }
@@ -3247,7 +3290,7 @@ function(root, factory) {
             }
             return codes;
         },
-        pushAlias: function(codes, vars, alias) {
+        pushAlias: function (codes, vars, alias) {
             for (var key in vars.locals) {
                 codes.push("\r\n    var " + vars.locals[key] + ' = ' + key + ';');
             }
@@ -3257,127 +3300,111 @@ function(root, factory) {
                 codes.push(" = imports['" + value);
                 if (alias[key][1] === '*') {
                     codes.push("'];");
-                } else {
+                }
+                else {
                     codes.push("'] && imports['" + value + "']['" + key + "'];");
                 }
                 value = undefined;
             }
             return codes;
         },
-        pushCodes: function(codes, vars, array, layer, namespace, lasttype, ignoreVarsPatch) {
-            if (namespace === void 0) { namespace = this.namespace; }
-            if (lasttype === void 0) { lasttype = ''; }
-            if (ignoreVarsPatch === void 0) { ignoreVarsPatch = false; }
-            for (var index = 0; index < array.length; index++) {
+        pushCodes: function (codes, vars, array, layer, namespace, lasttype, ignoreVarsPatch) {
+            if (namespace === void 0) { namespace = this.namespace;}
+            if (lasttype === void 0) { lasttype = '';}
+            if (ignoreVarsPatch === void 0) { ignoreVarsPatch = false;}
+            for (var index = 0;index < array.length;index++) {
                 var element = array[index];
                 this.pushElement(codes, vars, element, layer, namespace, (index - 1 >= 0) ? array[index - 1].type : lasttype, ignoreVarsPatch);
             }
             return codes;
         },
-        pushElement: function(codes, vars, element, layer, namespace, lasttype, ignoreVarsPatch) {
+        pushElement: function (codes, vars, element, layer, namespace, lasttype, ignoreVarsPatch) {
             var _this = this;
             var _arguments = arguments;
-            if (namespace === void 0) { namespace = this.namespace; }
-            if (lasttype === void 0) { lasttype = ''; }
-            if (ignoreVarsPatch === void 0) { ignoreVarsPatch = false; }
+            if (namespace === void 0) { namespace = this.namespace;}
+            if (lasttype === void 0) { lasttype = '';}
+            if (ignoreVarsPatch === void 0) { ignoreVarsPatch = false;}
             var indent = "\r\n" + stringRepeat("    ", layer);
             switch (element.type) {
-                case 'arraylike':
-                    ;
-                    this.pushArrayCodes(codes, element, layer, namespace);
-                    break;
-                case 'if':
-                    ;
-                case 'call':
-                    ;
-                case 'callmethod':
-                    ;
-                case 'construct':
-                    ;
-                    this.pushCallCodes(codes, element, layer, namespace);
-                    break;
-                case 'log':
-                    ;
-                case 'callschain':
-                    ;
-                    this.pushCallsCodes(codes, element, layer, namespace, lasttype);
-                    break;
-                case 'class':
-                    ;
-                case 'dec':
-                    ;
-                    this.pushClassCodes(codes, element, layer, namespace);
-                    break;
-                case 'code':
-                    ;
-                    if (element.value) {
-                        if (ignoreVarsPatch) {
-                            var code = element.value;
-                        } else {
-                            var code = this.patchVariables(element.value, vars);
-                        }
-                        if (vars.scope.break !== undefined) {
-                            code = code.replace(/@return;*/g, function() {
-                                vars.scope.break = true;
-                                _this.useLoop = true;
-                                return 'pandora.loop.out();' + indent + 'return;';
-                            });
-                        }
-                        if (element.display === 'block' || lasttype === 'exp') {
-                            codes.push(indent + this.pushPostionsToMap(element.posi) + code);
-                        } else {
-                            if (element.posi) {
-                                if (element.posi.head) {
-                                    codes.push(indent);
-                                }
-                                this.pushPostionsToMap(element.posi, codes);
-                            }
-                            codes.push(code);
-                        }
+                case 'arraylike':;
+                this.pushArrayCodes(codes, element, layer, namespace);
+                break;
+                case 'if':;
+                case 'call':;
+                case 'callmethod':;
+                case 'construct':;
+                this.pushCallCodes(codes, element, layer, namespace);
+                break;
+                case 'log':;
+                case 'callschain':;
+                this.pushCallsCodes(codes, element, layer, namespace, lasttype);
+                break;
+                case 'class':;
+                case 'dec':;
+                this.pushClassCodes(codes, element, layer, namespace);
+                break;
+                case 'code':;
+                if (element.value) {
+                    if (ignoreVarsPatch) {
+                        var code = element.value;
                     }
-                    break;
-                case 'codes':
-                    ;
-                    this.pushCodes(codes, element.vars, element.body, layer + ((element.posi && element.posi.head) ? 1 : 0), namespace, lasttype);
-                    break;
-                case 'def':
-                    ;
-                    this.pushFunctionCodes(codes, element, layer, namespace);
-                    break;
-                case 'extends':
-                    ;
-                    this.pushExtendsCodes(codes, element, layer, namespace);
-                    break;
-                case 'exp':
-                    ;
-                case 'closure':
-                    ;
-                    this.pushExpressionCodes(codes, element, layer, namespace);
-                    break;
-                case 'expands':
-                    ;
-                    this.pushExpandClassCodes(codes, element, layer, namespace);
-                    break;
-                case 'object':
-                    ;
-                    this.pushObjCodes(codes, element, layer, namespace);
-                    break;
-                case 'travel':
-                    ;
-                    this.pushTravelCodes(codes, element, layer, namespace);
-                    break;
+                    else {
+                        var code = this.patchVariables(element.value, vars);
+                    }
+                    if (vars.scope.break !== undefined) {
+                        code = code.replace(/@return;*/g, function () {
+                            vars.scope.break = true;
+                            _this.useLoop = true;
+                            return 'pandora.loop.out();' + indent + 'return;';
+                        });
+                    }
+                    if (element.display === 'block' || lasttype === 'exp') {
+                        codes.push(indent + this.pushPostionsToMap(element.posi) + code);
+                    }
+                    else {
+                        if (element.posi) {
+                            if (element.posi.head) {
+                                codes.push(indent);
+                            }
+                            this.pushPostionsToMap(element.posi, codes);
+                        }
+                        codes.push(code);
+                    }
+                }
+                break;
+                case 'codes':;
+                this.pushCodes(codes, element.vars, element.body, layer + ((element.posi && element.posi.head) ? 1:0), namespace, lasttype);
+                break;
+                case 'def':;
+                this.pushFunctionCodes(codes, element, layer, namespace);
+                break;
+                case 'extends':;
+                this.pushExtendsCodes(codes, element, layer, namespace);
+                break;
+                case 'exp':;
+                case 'closure':;
+                this.pushExpressionCodes(codes, element, layer, namespace);
+                break;
+                case 'expands':;
+                this.pushExpandClassCodes(codes, element, layer, namespace);
+                break;
+                case 'object':;
+                this.pushObjCodes(codes, element, layer, namespace);
+                break;
+                case 'travel':;
+                this.pushTravelCodes(codes, element, layer, namespace);
+                break;
             }
             indent = undefined;
             return codes;
         },
-        pushArrayCodes: function(codes, element, layer, namespace) {
+        pushArrayCodes: function (codes, element, layer, namespace) {
             if (element.posi) {
                 this.pushPostionsToMap(element.posi, codes);
             }
             if (element.body.length) {
                 var _layer = layer;
-                var indent1 = void 0;
-                var indent2 = void 0;
+                var indent1 = void 0;var indent2 = void 0;
                 var _break = false;
                 if (element.body[0].posi && element.body[0].posi.head) {
                     indent1 = "\r\n" + stringRepeat("    ", _layer);
@@ -3386,12 +3413,13 @@ function(root, factory) {
                     codes.push(indent2);
                     _break = true;
                 }
-                for (var index = 0; index < element.body.length; index++) {
+                for (var index = 0;index < element.body.length;index++) {
                     var group = element.body[index];
                     var code = '';
                     if (group.type === 'arrVar') {
                         code += this.pushPostionsToMap(group.posi) + this.patchVariable(group.aname, group.vars);
-                    } else {
+                    }
+                    else {
                         var elements = [];
                         this.pushArrayElements(elements, group.elems, group.vars, _layer, namespace);
                         while (elements.length && !elements[0].trim()) {
@@ -3401,7 +3429,8 @@ function(root, factory) {
                         if (elements.length) {
                             if (_break) {
                                 code += elements.join(',' + indent2) + indent1;
-                            } else {
+                            }
+                            else {
                                 code += elements.join(', ');
                             }
                         }
@@ -3410,10 +3439,12 @@ function(root, factory) {
                     }
                     if (index === 0) {
                         codes.push(code);
-                    } else {
+                    }
+                    else {
                         if (index === 1) {
                             codes.push('.concat(' + code);
-                        } else {
+                        }
+                        else {
                             codes.push(', ' + code);
                         }
                         if (index === element.body.length - 1) {
@@ -3422,16 +3453,18 @@ function(root, factory) {
                     }
                 }
                 _layer = indent1 = indent2 = _break = undefined;
-            } else {
+            }
+            else {
                 codes.push('[]');
             }
             return codes;
         },
-        pushArrayElements: function(elements, body, vars, _layer, namespace) {
-            for (var index = 0; index < body.length; index++) {
+        pushArrayElements: function (elements, body, vars, _layer, namespace) {
+            for (var index = 0;index < body.length;index++) {
                 if (body[index].value) {
                     elements.push(this.pushPostionsToMap(body[index].posi) + this.patchVariables(body[index].value, vars));
-                } else {
+                }
+                else {
                     var elemCodes = [];
                     this.pushPostionsToMap(body[index].posi, elemCodes);
                     this.pushElement(elemCodes, vars, body[index], _layer, namespace);
@@ -3442,7 +3475,7 @@ function(root, factory) {
                 }
             };
         },
-        pushCallCodes: function(codes, element, layer, namespace) {
+        pushCallCodes: function (codes, element, layer, namespace) {
             var naming = this.pushCodes([], element.vars, element.name, layer, namespace, '', element.type === 'callmethod');
             if (element.posi) {
                 if (element.type === 'callmethod') {
@@ -3457,7 +3490,8 @@ function(root, factory) {
             var name = naming.join('');
             if (name === 'new') {
                 codes.push('new (');
-            } else {
+            }
+            else {
                 if (element.type === 'construct') {
                     codes.push('new ');
                 }
@@ -3480,7 +3514,8 @@ function(root, factory) {
                 if (args.length) {
                     if (_break) {
                         codes.push(indent2 + args.join(',' + indent2));
-                    } else {
+                    }
+                    else {
                         codes.push(args.join(', '));
                     }
                 }
@@ -3488,16 +3523,18 @@ function(root, factory) {
             }
             if (element.type === 'if') {
                 codes.push(') ');
-            } else if (element.display === 'block') {
+            }
+            else if (element.display === 'block') {
                 codes.push(');');
-            } else {
+            }
+            else {
                 codes.push(')');
             }
             naming = name = undefined;
             return codes;
         },
-        pushCallArgs: function(args, body, vars, _layer, namespace) {
-            for (var index = 0; index < body.length; index++) {
+        pushCallArgs: function (args, body, vars, _layer, namespace) {
+            for (var index = 0;index < body.length;index++) {
                 var param = body[index].body;
                 var paramCodes = [];
                 this.pushPostionsToMap(body[index].posi, paramCodes);
@@ -3508,7 +3545,7 @@ function(root, factory) {
                 paramCodes = undefined;
             };
         },
-        pushCallsCodes: function(codes, element, layer, namespace, lasttype) {
+        pushCallsCodes: function (codes, element, layer, namespace, lasttype) {
             var elements = [];
             var _layer = layer;
             var indent = void 0;
@@ -3516,22 +3553,25 @@ function(root, factory) {
             if (element.type === 'log') {
                 if (lasttype === 'if') {
                     indent = "";
-                } else {
+                }
+                else {
                     indent = "\r\n" + stringRepeat("    ", _layer);
                 }
                 codes.push(indent + this.pushPostionsToMap(element.posi) + 'root.console');
-            } else if (element.posi && element.posi.head) {
+            }
+            else if (element.posi && element.posi.head) {
                 _layer++;
                 _break = true;
                 indent = "\r\n" + stringRepeat("    ", _layer);
             }
-            for (var index = 0; index < element.calls.length; index++) {
+            for (var index = 0;index < element.calls.length;index++) {
                 var method = element.calls[index];
                 elements.push(this.pushElement([], element.vars, method, _layer, namespace).join(''));
             }
             if (_break) {
                 codes.push(indent + '.' + elements.join(indent + '.'));
-            } else {
+            }
+            else {
                 codes.push('.' + elements.join('.'));
                 if (element.type === 'log') {
                     codes.push(';');
@@ -3540,7 +3580,7 @@ function(root, factory) {
             elements = _layer = indent = _break = undefined;
             return codes;
         },
-        pushClassCodes: function(codes, element, layer, namespace) {
+        pushClassCodes: function (codes, element, layer, namespace) {
             var indent1 = "\r\n" + stringRepeat("    ", layer);
             var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
             var elements = [];
@@ -3553,15 +3593,18 @@ function(root, factory) {
                 cname = 'pandora.' + cnt;
                 cnt = undefined;
                 codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(___boundary_' + this.uid + '_' + index + '_as_string___, ');
-            } else {
+            }
+            else {
                 if (element.cname && element.cname.trim()) {
                     cname = element.cname.trim();
                     if (cname.match(/^[\$a-zA-Z_][\$\w]*$/)) {
                         codes.push(indent1 + 'var ' + this.pushPostionsToMap(element.posi) + cname + ' = ' + 'pandora.declareClass(');
-                    } else {
+                    }
+                    else {
                         codes.push(indent1 + this.pushPostionsToMap(element.posi) + cname + ' = ' + 'pandora.declareClass(');
                     }
-                } else {
+                }
+                else {
                     this.pushPostionsToMap(element.posi, codes);
                     codes.push('pandora.declareClass(');
                 }
@@ -3574,57 +3617,50 @@ function(root, factory) {
             var setters = [];
             var getters = [];
             var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
-            for (var index_635 = 0; index_635 < element.body.length; index_635++) {
-                var member = element.body[index_635];
+            for (var index_636 = 0;index_636 < element.body.length;index_636++) {
+                var member = element.body[index_636];
                 var elem = [];
                 switch (member.type) {
-                    case 'method':
-                        ;
-                        elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
+                    case 'method':;
+                    elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
+                    this.pushFunctionCodes(elem, member, layer + 1, namespace);
+                    elements.push(elem.join(''));
+                    break;
+                    case 'overrideMethod':;
+                    overrides[member.fname] = overrides[member.fname] || {}
+                    var argslen = member.args.length;
+                    if (!overrides[member.fname][argslen]) {
+                        var fname = overrides[member.fname][argslen] = '___override_method_' + member.fname + '_' + argslen;
+                        elem.push(indent2 + this.pushPostionsToMap(member.posi) + fname + ': ');
                         this.pushFunctionCodes(elem, member, layer + 1, namespace);
                         elements.push(elem.join(''));
-                        break;
-                    case 'overrideMethod':
-                        ;
-                        overrides[member.fname] = overrides[member.fname] || {}
-                        var argslen = member.args.length;
-                        if (!overrides[member.fname][argslen]) {
-                            var fname = overrides[member.fname][argslen] = '___override_method_' + member.fname + '_' + argslen;
-                            elem.push(indent2 + this.pushPostionsToMap(member.posi) + fname + ': ');
-                            this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                            elements.push(elem.join(''));
-                        }
-                        break;
-                    case 'prop':
-                        ;
-                        elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.pname + ': ');
-                        this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
-                        elements.push(elem.join(''));
-                        break;
-                    case 'setPropMethod':
-                        ;
-                        elem.push(indent3 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
-                        this.pushFunctionCodes(elem, member, layer + 2, namespace);
-                        setters.push(elem.join(''));
-                        break;
-                    case 'getPropMethod':
-                        ;
-                        elem.push(indent3 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
-                        this.pushFunctionCodes(elem, member, layer + 2, namespace);
-                        getters.push(elem.join(''));
-                        break;
-                    case 'staticMethod':
-                        ;
-                        elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
-                        this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                        static_elements.push(elem.join(''));
-                        break;
-                    case 'staticProp':
-                        ;
-                        elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.pname + ': ');
-                        this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
-                        static_elements.push(elem.join(''));
-                        break;
+                    }
+                    break;
+                    case 'prop':;
+                    elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.pname + ': ');
+                    this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
+                    elements.push(elem.join(''));
+                    break;
+                    case 'setPropMethod':;
+                    elem.push(indent3 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
+                    this.pushFunctionCodes(elem, member, layer + 2, namespace);
+                    setters.push(elem.join(''));
+                    break;
+                    case 'getPropMethod':;
+                    elem.push(indent3 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
+                    this.pushFunctionCodes(elem, member, layer + 2, namespace);
+                    getters.push(elem.join(''));
+                    break;
+                    case 'staticMethod':;
+                    elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.fname + ': ');
+                    this.pushFunctionCodes(elem, member, layer + 1, namespace);
+                    static_elements.push(elem.join(''));
+                    break;
+                    case 'staticProp':;
+                    elem.push(indent2 + this.pushPostionsToMap(member.posi) + member.pname + ': ');
+                    this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
+                    static_elements.push(elem.join(''));
+                    break;
                 }
                 this.pushOverrideMethod(elements, overrides, indent2, indent3);
                 if (setters.length) {
@@ -3644,7 +3680,8 @@ function(root, factory) {
                     codes.push(';' + indent1 + this.pushPostionsToMap(element.posi) + 'pandora.extend(' + cname + ', {');
                     codes.push(static_elements.join(','));
                     codes.push(indent1 + '});');
-                } else {
+                }
+                else {
                     codes.push(';');
                 }
                 codes.push(indent1);
@@ -3652,42 +3689,44 @@ function(root, factory) {
             indent1 = indent2 = indent3 = elements = static_elements = cname = overrides = getters = setters = undefined;
             return codes;
         },
-        pushFunctionCodes: function(codes, element, layer, namespace) {
+        pushFunctionCodes: function (codes, element, layer, namespace) {
             var indent = "\r\n" + stringRepeat("    ", layer);
             if (element.posi) {
                 var posi = this.pushPostionsToMap(element.posi);
-            } else {
+            }
+            else {
                 var posi = '';
             }
             this.fixVariables(element.vars);
             if (element.type === 'def' && element.fname) {
                 if (element.fname === 'return') {
                     codes.push(indent + posi + 'return function (');
-                } else {
+                }
+                else {
                     var fname = this.patchVariable(element.fname, element.vars.parent);
                     switch (element.subtype) {
-                        case 'def':
-                            ;
-                            codes.push(indent + posi + 'pandora.' + namespace + element.fname + ' = function (');
-                            break;
-                        case 'public':
-                            ;
-                            codes.push(indent + posi + 'var ' + fname + ' = pandora.' + namespace + element.fname + ' = function (');
-                            break;
+                        case 'def':;
+                        codes.push(indent + posi + 'pandora.' + namespace + element.fname + ' = function (');
+                        break;
+                        case 'public':;
+                        codes.push(indent + posi + 'var ' + fname + ' = pandora.' + namespace + element.fname + ' = function (');
+                        break;
                         default:
-                            if (element.display === 'block') {
-                                codes.push(indent + posi + 'function ' + fname + ' (');
-                            } else {
-                                codes.push(posi + 'function ' + fname + ' (');
-                            }
+                        if (element.display === 'block') {
+                            codes.push(indent + posi + 'function ' + fname + ' (');
+                        }
+                        else {
+                            codes.push(posi + 'function ' + fname + ' (');
+                        }
                     }
                 }
-            } else {
+            }
+            else {
                 codes.push(posi + 'function (');
             }
             if (element.args.length) {
                 var args = [];
-                for (var index = 0; index < element.args.length; index++) {
+                for (var index = 0;index < element.args.length;index++) {
                     args.push(this.pushPostionsToMap(element.args[index][1]) + this.patchVariable(element.args[index][0], element.vars));
                 }
                 codes.push(args.join(', '));
@@ -3701,14 +3740,15 @@ function(root, factory) {
                 }
                 element.body.push(semicolon);
                 this.pushCodes(codes, element.vars, element.body, layer + 1, namespace);
-            } else {
+            }
+            else {
                 indent = '';
             }
             codes.push(indent + '}');
             indent = undefined;
             return codes;
         },
-        pushOverrideMethod: function(elements, overrides, indent2, indent3) {
+        pushOverrideMethod: function (elements, overrides, indent2, indent3) {
             for (var fname in overrides) {
                 if (hasProp(overrides, fname)) {
                     var elem = [];
@@ -3727,13 +3767,14 @@ function(root, factory) {
                 }
             };
         },
-        pushExtendsCodes: function(codes, element, layer, namespace) {
+        pushExtendsCodes: function (codes, element, layer, namespace) {
             var indent1 = "\r\n" + stringRepeat("    ", layer);
             var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
             var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
             if (element.posi) {
                 var posi = this.pushPostionsToMap(element.posi);
-            } else {
+            }
+            else {
                 var posi = '';
             }
             if (element.subtype === 'global' || element.subtype === 'globalassign') {
@@ -3744,7 +3785,8 @@ function(root, factory) {
                 if (element.subtype === 'voidanonspace' || element.subtype === 'anonspace') {
                     codes.push(indent1 + posi + '(function () {');
                     this.pushCodes(codes, element.vars, element.body, layer + 1, namespace + '.');
-                } else {
+                }
+                else {
                     var index = this.replacements.length;
                     this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
                     codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index + '_as_string___, function () {');
@@ -3765,12 +3807,14 @@ function(root, factory) {
                 if (element.subtype === 'voidanonspace' || element.subtype === 'anonspace') {
                     codes.push('()');
                 }
-            } else if (element.subtype === 'nsassign' || element.subtype === 'globalassign') {
-                var index_677 = this.replacements.length;
+            }
+            else if (element.subtype === 'nsassign' || element.subtype === 'globalassign') {
+                var index_678 = this.replacements.length;
                 this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
-                codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_677 + '_as_string___, ');
+                codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_678 + '_as_string___, ');
                 this.pushObjCodes(codes, element, layer, namespace);
-            } else {
+            }
+            else {
                 codes.push(indent1 + posi + 'pandora.extend(' + element.oname + ', ');
                 this.pushObjCodes(codes, element, layer, namespace);
             }
@@ -3779,7 +3823,7 @@ function(root, factory) {
             indent1 = indent2 = indent3 = posi = undefined;
             return codes;
         },
-        pushObjCodes: function(codes, element, layer, namespace) {
+        pushObjCodes: function (codes, element, layer, namespace) {
             var indent1 = "\r\n" + stringRepeat("    ", layer);
             var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
             if (element.type === 'object' && element.display === 'block') {
@@ -3788,7 +3832,8 @@ function(root, factory) {
             if (element.body.useExplode) {
                 var objects = [];
                 codes.push('pandora.extend({');
-            } else {
+            }
+            else {
                 codes.push('{');
             }
             if (element.body.length) {
@@ -3800,51 +3845,51 @@ function(root, factory) {
                     codes.push(indent2);
                     _break = true;
                 }
-                for (var index = 0; index < element.body.length; index++) {
+                for (var index = 0;index < element.body.length;index++) {
                     var member = element.body[index];
                     var elem = [];
                     switch (member.type) {
-                        case 'object':
-                            ;
-                            objects.push(this.pushPostionsToMap(member.posi) + this.patchVariable(member.oname, member.vars));
-                            break;
-                        case 'method':
-                            ;
-                            elem.push(this.pushPostionsToMap(member.posi) + member.fname + ': ');
-                            this.pushFunctionCodes(elem, member, _layer, namespace);
-                            elements.push(elem.join(''));
-                            break;
-                        case 'objProp':
-                            ;
-                            elem.push(this.pushPostionsToMap(member.posi) + member.pname + ': ');
-                            this.pushCodes(elem, member.vars, member.body, _layer, namespace);
-                            elements.push(elem.join(''));
-                            break;
+                        case 'object':;
+                        objects.push(this.pushPostionsToMap(member.posi) + this.patchVariable(member.oname, member.vars));
+                        break;
+                        case 'method':;
+                        elem.push(this.pushPostionsToMap(member.posi) + member.fname + ': ');
+                        this.pushFunctionCodes(elem, member, _layer, namespace);
+                        elements.push(elem.join(''));
+                        break;
+                        case 'objProp':;
+                        elem.push(this.pushPostionsToMap(member.posi) + member.pname + ': ');
+                        this.pushCodes(elem, member.vars, member.body, _layer, namespace);
+                        elements.push(elem.join(''));
+                        break;
                     }
                     elem = undefined;
                 }
                 if (_break) {
                     codes.push(elements.join(',' + indent2));
                     codes.push(indent1);
-                } else {
+                }
+                else {
                     codes.push(elements.join(','));
                 }
                 elements = _layer = _break = undefined;
             }
             if (element.body.useExplode) {
                 codes.push('}, true, ' + objects.join(', ') + ')');
-            } else {
+            }
+            else {
                 codes.push('}');
             }
             indent1 = indent2 = undefined;
             return codes;
         },
-        pushExpandClassCodes: function(codes, element, layer, namespace) {
+        pushExpandClassCodes: function (codes, element, layer, namespace) {
             var indent1 = "\r\n" + stringRepeat("    ", layer);
             var indent2 = "\r\n" + stringRepeat("    ", layer + 1);
             if (element.posi) {
                 var posi = this.pushPostionsToMap(element.posi);
-            } else {
+            }
+            else {
                 var posi = '';
             }
             var elements = [];
@@ -3852,10 +3897,12 @@ function(root, factory) {
             var cname = '';
             if (element.subtype === 'stdClass') {
                 cname = 'pandora.' + element.cname.trim();
-            } else {
+            }
+            else {
                 if (element.cname && element.cname.trim()) {
                     cname = element.cname.trim();
-                } else {
+                }
+                else {
                     return codes;
                 }
             }
@@ -3866,45 +3913,40 @@ function(root, factory) {
             codes.push('{');
             var overrides = {};
             var indent3 = "\r\n" + stringRepeat("    ", layer + 2);
-            for (var index = 0; index < element.body.length; index++) {
+            for (var index = 0;index < element.body.length;index++) {
                 var member = element.body[index];
                 var elem = [];
                 switch (member.type) {
-                    case 'method':
-                        ;
-                        elem.push(indent2 + member.fname + ': ');
+                    case 'method':;
+                    elem.push(indent2 + member.fname + ': ');
+                    this.pushFunctionCodes(elem, member, layer + 1, namespace);
+                    elements.push(elem.join(''));
+                    break;
+                    case 'overrideMethod':;
+                    overrides[member.fname] = overrides[member.fname] || {}
+                    var argslen = member.args.length;
+                    if (!overrides[member.fname][argslen]) {
+                        var fname = overrides[member.fname][argslen] = '___override_method_' + member.fname + '_' + argslen;
+                        elem.push(indent2 + fname + ': ');
                         this.pushFunctionCodes(elem, member, layer + 1, namespace);
                         elements.push(elem.join(''));
-                        break;
-                    case 'overrideMethod':
-                        ;
-                        overrides[member.fname] = overrides[member.fname] || {}
-                        var argslen = member.args.length;
-                        if (!overrides[member.fname][argslen]) {
-                            var fname = overrides[member.fname][argslen] = '___override_method_' + member.fname + '_' + argslen;
-                            elem.push(indent2 + fname + ': ');
-                            this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                            elements.push(elem.join(''));
-                        }
-                        break;
-                    case 'prop':
-                        ;
-                        elem.push(indent2 + member.pname + ': ');
-                        this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
-                        elements.push(elem.join(''));
-                        break;
-                    case 'staticMethod':
-                        ;
-                        elem.push(indent2 + member.fname + ': ');
-                        this.pushFunctionCodes(elem, member, layer + 1, namespace);
-                        static_elements.push(elem.join(''));
-                        break;
-                    case 'staticProp':
-                        ;
-                        elem.push(indent2 + member.pname + ': ');
-                        this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
-                        static_elements.push(elem.join(''));
-                        break;
+                    }
+                    break;
+                    case 'prop':;
+                    elem.push(indent2 + member.pname + ': ');
+                    this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
+                    elements.push(elem.join(''));
+                    break;
+                    case 'staticMethod':;
+                    elem.push(indent2 + member.fname + ': ');
+                    this.pushFunctionCodes(elem, member, layer + 1, namespace);
+                    static_elements.push(elem.join(''));
+                    break;
+                    case 'staticProp':;
+                    elem.push(indent2 + member.pname + ': ');
+                    this.pushCodes(elem, member.vars, member.body, layer + 1, namespace);
+                    static_elements.push(elem.join(''));
+                    break;
                 }
             }
             this.pushOverrideMethod(elements, overrides, indent2, indent3);
@@ -3916,29 +3958,33 @@ function(root, factory) {
                 codes.push(';' + indent1 + 'pandora.extend(' + cname + ', {');
                 codes.push(static_elements.join(','));
                 codes.push(indent1 + '});');
-            } else {
+            }
+            else {
                 codes.push(';');
             }
             codes.push(indent1);
             indent1 = indent2 = elements = static_elements = cname = overrides = indent3 = undefined;
             return codes;
         },
-        pushExpressionCodes: function(codes, element, layer, namespace) {
+        pushExpressionCodes: function (codes, element, layer, namespace) {
             var indent1 = "\r\n" + stringRepeat("    ", layer);
             var indent2 = "\r\n" + stringRepeat("    ", layer);
             if (element.posi) {
                 var posi = this.pushPostionsToMap(element.posi);
-            } else {
+            }
+            else {
                 var posi = '';
             }
             this.fixVariables(element.vars);
             if (element.type === 'closure') {
                 if (element.posi) {
                     codes.push(indent1 + posi + '{');
-                } else {
+                }
+                else {
                     codes.push(' {');
                 }
-            } else {
+            }
+            else {
                 codes.push(indent1 + posi + element.expression + ' (');
                 this.pushElement(codes, element.vars.parent, element.head, layer, namespace);
                 codes.push(') {');
@@ -3947,13 +3993,14 @@ function(root, factory) {
                 codes.push(indent2);
                 this.pushCodes(codes, element.vars, element.body, layer + 1, namespace);
                 codes.push(indent1 + '}');
-            } else {
+            }
+            else {
                 codes.push('}');
             }
             indent1 = indent2 = undefined;
             return codes;
         },
-        pushTravelCodes: function(codes, element, layer, namespace) {
+        pushTravelCodes: function (codes, element, layer, namespace) {
             var index = codes.length;
             var indent = "\r\n" + stringRepeat("    ", layer);
             codes.push(indent + 'pandora.each(');
@@ -3965,25 +4012,27 @@ function(root, factory) {
             }
             if (element.subtype === 'ownprop') {
                 codes.push(', this, true);');
-            } else {
+            }
+            else {
                 codes.push(', this);');
             }
             codes.push(indent);
             index = indent = undefined;
             return codes;
         },
-        pushFooter: function(codes, vars) {
+        pushFooter: function (codes, vars) {
             for (var name in vars.scope.public) {
                 codes.push("\r\n    pandora('" + this.namespace + name + "', " + vars.scope.public[name] + ");");
             }
             if (this.isMainBlock) {
                 codes.push("\r\n" + '}, true);');
-            } else {
+            }
+            else {
                 codes.push("\r\n" + '});');
             }
             return codes;
         },
-        resetVarsRoot: function(vars) {
+        resetVarsRoot: function (vars) {
             var scope = vars.scope;
             for (var varname in vars.self) {
                 if (hasProp(vars.self, varname)) {
@@ -3991,10 +4040,12 @@ function(root, factory) {
                         if (hasProp(scope.protected, varname) && (!hasProp(scope.private, varname) || (scope.private[varname].parent === vars))) {
                             scope.private[varname] = vars;
                         }
-                    } else {
+                    }
+                    else {
                         if (hasProp(scope.protected, varname)) {
                             scope.protected[varname] = 'var';
-                        } else if (scope.protected[varname] === 'let') {
+                        }
+                        else if (scope.protected[varname] === 'let') {
                             this.error(' Variable `' + varname + '` has already been declared.');
                         }
                     }
@@ -4002,104 +4053,100 @@ function(root, factory) {
             }
             scope = undefined;
         },
-        fixVariables: function(vars) {
+        fixVariables: function (vars) {
             vars.index = this.closurecount;
             switch (vars.type) {
-                case 'arrowfn':
-                    ;
-                    vars.scope.fix_map['this'] = vars.locals['this'];
-                    vars.scope.fixed.push(vars.locals['this']);
-                case 'travel':
-                    ;
-                    if (vars.type === 'travel') {
-                        vars.scope.fixed.push('this');
+                case 'arrowfn':;
+                vars.scope.fix_map['this'] = vars.locals['this'];
+                vars.scope.fixed.push(vars.locals['this']);
+                case 'travel':;
+                if (vars.type === 'travel') {
+                    vars.scope.fixed.push('this');
+                }
+                vars.scope.fix_map['arguments'] = vars.locals['arguments'];
+                vars.scope.fixed.push(vars.locals['arguments']);
+                case 'blocklike':;
+                case 'scope':;
+                for (var element in vars.self) {
+                    var varname = element;
+                    if (keywords['includes'](element) || reserved['includes'](element)) {
+                        this.error('keywords `' + element + '` cannot be a variable name.');
                     }
-                    vars.scope.fix_map['arguments'] = vars.locals['arguments'];
-                    vars.scope.fixed.push(vars.locals['arguments']);
-                case 'blocklike':
-                    ;
-                case 'scope':
-                    ;
-                    for (var element in vars.self) {
-                        var varname = element;
-                        if (keywords['includes'](element) || reserved['includes'](element)) {
-                            this.error('keywords `' + element + '` cannot be a variable name.');
-                        }
-                        if (this.blockreserved['includes'](element)) {
-                            varname = element + '_' + vars.index;
-                            while (vars.self[varname]) {
-                                varname = varname + '_' + vars.index;
-                            }
-                        }
-                        while (vars.scope.fixed['includes'](varname)) {
+                    if (this.blockreserved['includes'](element)) {
+                        varname = element + '_' + vars.index;
+                        while (vars.self[varname]) {
                             varname = varname + '_' + vars.index;
                         }
-                        vars.scope.fix_map[element] = varname;
-                        if (hasProp(vars.scope.public, element)) {
-                            vars.scope.public[element] = varname;
-                        }
-                        vars.scope.fixed.push(varname);
                     }
-                    if ((vars.type === 'blocklike') || (vars.type === 'scope')) {
-                        for (var key in vars.locals) {
-                            if (hasProp(vars.locals, key)) {
-                                var varname_742 = '_' + key;
-                                while (vars.self[varname_742]) {
-                                    varname_742 = varname_742 + '_' + vars.index;
-                                }
-                                vars.locals[key] = varname_742;
-                            }
-                        }
+                    while (vars.scope.fixed['includes'](varname)) {
+                        varname = varname + '_' + vars.index;
                     }
-                    break;
-                case 'local':
-                    ;
-                    for (var element_744 in vars.self) {
-                        if (vars.self[element_744] === 'const' || vars.self[element_744] === 'let') {
-                            var varname_745 = element_744;
-                            if (keywords['includes'](element_744) || reserved['includes'](element_744)) {
-                                this.error('keywords `' + element_744 + '` cannot be a variable name.');
+                    vars.scope.fix_map[element] = varname;
+                    if (hasProp(vars.scope.public, element)) {
+                        vars.scope.public[element] = varname;
+                    }
+                    vars.scope.fixed.push(varname);
+                }
+                if ((vars.type === 'blocklike') || (vars.type === 'scope')) {
+                    for (var key in vars.locals) {
+                        if (hasProp(vars.locals, key)) {
+                            var varname_743 = '_' + key;
+                            while (vars.self[varname_743]) {
+                                varname_743 = varname_743 + '_' + vars.index;
                             }
-                            if (this.blockreserved['includes'](element_744) || this.xvars['includes'](element_744)) {
-                                varname_745 = element_744 + '_' + vars.index;
-                                while (vars.self[varname_745]) {
-                                    varname_745 = varname_745 + '_' + vars.index;
-                                }
-                            }
-                            while (vars.scope.fixed['includes'](varname_745) || (vars.scope.private[varname_745] && (vars.scope.private[varname_745] !== vars))) {
-                                varname_745 = varname_745 + '_' + vars.index;
-                            }
-                            if (varname_745 !== element_744) {
-                                if (vars.scope.fixed['includes'](element_744)) {
-                                    vars.fix_map[element_744] = varname_745;
-                                } else {
-                                    vars.scope.fix_map[element_744] = varname_745;
-                                }
-                            }
-                            vars.scope.fixed.push(varname_745);
+                            vars.locals[key] = varname_743;
                         }
                     }
+                }
+                break;
+                case 'local':;
+                for (var element_745 in vars.self) {
+                    if (vars.self[element_745] === 'const' || vars.self[element_745] === 'let') {
+                        var varname_746 = element_745;
+                        if (keywords['includes'](element_745) || reserved['includes'](element_745)) {
+                            this.error('keywords `' + element_745 + '` cannot be a variable name.');
+                        }
+                        if (this.blockreserved['includes'](element_745) || this.xvars['includes'](element_745)) {
+                            varname_746 = element_745 + '_' + vars.index;
+                            while (vars.self[varname_746]) {
+                                varname_746 = varname_746 + '_' + vars.index;
+                            }
+                        }
+                        while (vars.scope.fixed['includes'](varname_746) || (vars.scope.private[varname_746] && (vars.scope.private[varname_746] !== vars))) {
+                            varname_746 = varname_746 + '_' + vars.index;
+                        }
+                        if (varname_746 !== element_745) {
+                            if (vars.scope.fixed['includes'](element_745)) {
+                                vars.fix_map[element_745] = varname_746;
+                            }
+                            else {
+                                vars.scope.fix_map[element_745] = varname_746;
+                            }
+                        }
+                        vars.scope.fixed.push(varname_746);
+                    }
+                }
             }
             this.closurecount++;
         },
-        patchVariables: function(code, vars) {
+        patchVariables: function (code, vars) {
             var _this = this;
             var _arguments = arguments;
             if (code) {
-                return code.replace(matchExpRegPattern.pickConst, function(match, before, definition, varname) {
+                return code.replace(matchExpRegPattern.pickConst, function (match, before, definition, varname) {
                     if (!definition && hasProp(vars.self, varname) && (vars.self[varname] === 'const')) {
                         _this.error('Cannot re-assign constant `' + varname + '`');
                     }
                     return match;
-                }).replace(matchExpRegPattern.pickVars, function(match, before, definition, varname, after) {
+                }).replace(matchExpRegPattern.pickVars, function (match, before, definition, varname, after) {
                     return before + (definition || '') + _this.patchVariable(varname, vars) + after || '';
-                }).replace(matchExpRegPattern.pickNS, function(match, before, node, member) {
+                }).replace(matchExpRegPattern.pickNS, function (match, before, node, member) {
                     return before + _this.patchNamespace(node, vars) + member;
                 });
             }
             return '';
         },
-        patchVariable: function(varname, vars) {
+        patchVariable: function (varname, vars) {
             if (vars.fix_map && hasProp(vars.fix_map, varname)) {
                 return vars.fix_map[varname];
             }
@@ -4115,7 +4162,7 @@ function(root, factory) {
             if (hasProp(vars.scope.fix_map, varname)) {
                 return vars.scope.fix_map[varname];
             }
-            if (!keywords['includes'](varname) && !this.xvars['includes'](varname) && (!vars.scope.fixed['includes'](varname) || (hasProp(vars.scope.private, varname) && (vars.scope.private[varname] !== vars)))) {
+            if (!keywords['includes'](varname)&& !this.xvars['includes'](varname) && (!vars.scope.fixed['includes'](varname) || (hasProp(vars.scope.private, varname) && (vars.scope.private[varname] !== vars)))) {
                 if (hasProp(vars.scope.private, varname)) {
                     var _varname = varname;
                     while (hasProp(vars.scope.private, varname)) {
@@ -4124,7 +4171,8 @@ function(root, factory) {
                     while (vars.scope.fixed['includes'](varname)) {
                         varname = varname + '_' + vars.index;
                     }
-                } else {
+                }
+                else {
                     for (var key in vars.locals) {
                         if (hasProp(vars.locals, key)) {
                             var _key = vars.locals[key];
@@ -4144,16 +4192,18 @@ function(root, factory) {
                         varname = this.patchVariable(varname, vars.parent);
                     }
                 }
-            } else if (!vars.scope.fixed['includes'](varname) &&
-                !keywords['includes'](varname) &&
-                !reserved['includes'](varname) &&
-                !this.blockreserved['includes'](varname) &&
-                !this.xvars['includes'](varname)) {
+            }
+            else if (
+            !vars.scope.fixed['includes'](varname)&&
+            !keywords['includes'](varname)&&
+            !reserved['includes'](varname)&&
+            !this.blockreserved['includes'](varname)&&
+            !this.xvars['includes'](varname)) {
                 varname = this.patchVariable(varname + '_' + vars.index, vars);
             };
             return varname;
         },
-        patchNamespace: function(node, vars) {
+        patchNamespace: function (node, vars) {
             if (node === '.') {
                 return 'pandora';
             }
@@ -4162,23 +4212,24 @@ function(root, factory) {
             }
             return ('pandora.' + this.namespace).replace(/\.+$/, '');
         },
-        restoreStrings: function(string, last) {
+        restoreStrings: function (string, last) {
             var that = this;
             if (last) {
                 var pattern = this.lastPattern;
-            } else {
+            }
+            else {
                 var pattern = this.trimPattern;
             }
-            return string.replace(pattern, function() {
+            return string.replace(pattern, function () {
                 if (arguments[5]) {
                     return that.readBuffer(arguments[5]);
                 }
                 return that.readBuffer(arguments[2] || arguments[4]);
-            }).replace(this.markPattern, function() {
+            }).replace(this.markPattern, function () {
                 return that.readBuffer(arguments[1]);
             }).replace(/(@\d+L\d+P\d+O?\d*:::)/g, '');
         },
-        decode: function(string) {
+        decode: function (string) {
             string = string.replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
             var matches = string.match(/___boundary_([A-Z0-9_]{37})?(\d+)_as_[a-z]+___/);
             while (matches) {
@@ -4193,44 +4244,45 @@ function(root, factory) {
             matches = undefined;
             return string.replace(/(@\d+L\d+P\d+O?\d*:::)/g, '');
         },
-        trim: function(string) {
+        trim: function (string) {
             var _this = this;
             var _arguments = arguments;
-            string = string.replace(/\s*(@boundary_\d+_as_comments::)?@(ownprop|return)[; \t]*/g, function() {
+            console.log(string);
+            string = string.replace(/\s*(\/\*\s+@posi\d+\s+\*\/)?@(ownprop|return)[; \t]*/g, function () {
                 return '';
             });
-            string = string.replace(/((@boundary_\d+_as_comments::)\s*)+(@boundary_\d+_as_comments::)/g, "$3");
+            string = string.replace(/((\/\*\s+@posi\d+\s+\*\/)\s*)+(\/\*\s+@posi\d+\s+\*\/)/g, "$3");
             string = string.replace(/\s*;(\s*;)*[\t \x0B]*/g, ";");
-            string = string.replace(/(.)(\{|\[|\(|\.|\:)\s*[,;]+/g, function(match, before, mark) {
+            string = string.replace(/(.)(\{|\[|\(|\.|\:)\s*[,;]+/g, function (match, before, mark) {
                 if ((before === mark) && (before === ':')) {
                     return match;
                 }
                 return before + mark;
             });
-            string = string.replace(/[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_operator::)\s*/g, function(match, white, comments, midword) {
+            string = string.replace(/[;\s]*[\r\n]+(\t*)[ ]*(\/\*\s+@posi\d+\s+\*\/)(@boundary_\d+_as_operator::)\s*/g, function (match, white, comments, midword) {
                 return "\r\n" + white.replace(/\t/g, '    ') + '   ' + comments + midword;
             });
-            string = string.replace(/\s*(@boundary_\d+_as_operator::)[;\s]*[\r\n]+(\t*)[ ]*(@boundary_\d+_as_comments::)/g, "\r\n$2   $3 $1 ");
-            string = string.replace(/(}*[;\s]*)[\r\n]+([ \t]*)[ ]*(@boundary_\d+_as_comments::)(@boundary_\d+_as_midword::)\s*/g, function(match, pre, white, comments, midword) {
+            string = string.replace(/\s*(@boundary_\d+_as_operator::)[;\s]*[\r\n]+(\t*)[ ]*(\/\*\s+@posi\d+\s+\*\/)/g, "\r\n$2   $3 $1 ");
+            string = string.replace(/(}*[;\s]*)[\r\n]+([ \t]*)[ ]*(\/\*\s+@posi\d+\s+\*\/)(@boundary_\d+_as_midword::)\s*/g, function (match, pre, white, comments, midword) {
                 return pre.replace(/\s+/g, '').replace(/\};/g, '}') + "\r\n" + white.replace(/\t/g, '    ') + comments + midword;
             });
             string = string.replace(/[;\s]*(\=|\?)[;\s]*/g, " $1 ");
             string = string.replace(/\s+(\:)[;\s]*/g, " $1 ");
-            string = string.replace(/[;\s]+(@boundary_\d+_as_comments::)(\:)[;\s]*/g, " $2 $1");
-            string = string.replace(/[^\:\S]+(\:)\s*(@boundary_\d+_as_comments::)/g, " $1 $2");
-            string = string.replace(/\s+[\r\n]([ \t])/g, function(match, white) {
+            string = string.replace(/[;\s]+(\/\*\s+@posi\d+\s+\*\/)(\:)[;\s]*/g, " $2 $1");
+            string = string.replace(/[^\:\S]+(\:)\s*(\/\*\s+@posi\d+\s+\*\/)/g, " $1 $2");
+            string = string.replace(/\s+[\r\n]([ \t])/g, function (match, white) {
                 return "\r\n" + white.replace(/\t/g, '    ');
             });
             string = string.replace(/\{\s+\}/g, '{}');
             string = string.replace(/\[\s+\]/g, '[]');
             string = string.replace(/\(\s+\)/g, '()');
-            string = string.replace(/(\s*)(@boundary_(\d+)_as_(operator|aftoperator|keyword|midword)::)\s*/g, function(match, pregap, operator, index) {
+            string = string.replace(/(\s*)(@boundary_(\d+)_as_(operator|aftoperator|keyword|midword)::)\s*/g, function (match, pregap, operator, index) {
                 if (_this.replacements[index][1]) {
                     return pregap + operator;
                 }
                 return operator;
             });
-            string = string.replace(/(@boundary_\d+_as_(preoperator)::)(\s*;+|(\s+([^;])))/g, function(match, operator, word, right, afterwithgap, after) {
+            string = string.replace(/(@boundary_\d+_as_(preoperator)::)(\s*;+|(\s+([^;])))/g, function (match, operator, word, right, afterwithgap, after) {
                 if (after) {
                     return operator + after;
                 }
@@ -4239,21 +4291,20 @@ function(root, factory) {
             string = string.replace(/\)\s*return\s+/, ') return ');
             return string;
         },
-        run: function(precall, callback) {
+        run: function (precall, callback) {
             var _this = this;
             var _arguments = arguments;
-            if (precall === void 0) { precall = null; }
-            if (callback === void 0) { callback = function(content) {}; }
+            if (precall === void 0) { precall = null;}
+            if (callback === void 0) { callback = function (content) {};}
             if (!this.output) {
                 this.compile();
             }
             precall && precall.call(this, this.output);
-
             eval(this.output);
             callback.call(this);
         }
     });
-    root.tanguage_script = function(input, run) {
+    root.tanguage_script = function (input, run) {
         return new Script(input, run);
     };
     return root.tanguage_script;

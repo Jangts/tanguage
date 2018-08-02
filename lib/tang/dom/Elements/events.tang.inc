@@ -1,6 +1,6 @@
 //Expends Events APIs To 'Elements'
 
-expands .Elements {
+expands .HTMLElements {
     on (eventType, selector, data, handler) {
         switch (arguments.length) {
             case 3:

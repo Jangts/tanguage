@@ -22,7 +22,7 @@ tang.init().block([
         current: 0,
         _init: function(elem) {
             if (elem) {
-                this.Element = elem;
+                this.HTMLElement = elem;
                 this.messages = [];
                 this.vision = query('.msgbox', elem)[0];
                 if (this.vision) {
@@ -39,12 +39,12 @@ tang.init().block([
         },
         on: function() {
             this.state = true;
-            _.dom.toggleClass(this.Element, 'actived', true);
+            _.dom.toggleClass(this.HTMLElement, 'actived', true);
             return this;
         },
         off: function() {
             this.state = false;
-            _.dom.toggleClass(this.Element, 'actived', false);
+            _.dom.toggleClass(this.HTMLElement, 'actived', false);
             return this;
         },
         listener: function() {
@@ -116,8 +116,8 @@ tang.init().block([
                         that.listener();
                     }
                 };
-            _.dom.events.remove(this.Element, 'click');
-            _.dom.events.add(this.Element, 'click', 'click', null, handler);
+            _.dom.events.remove(this.HTMLElement, 'click');
+            _.dom.events.add(this.HTMLElement, 'click', 'click', null, handler);
             return this;
         },
         onshow: _.self,

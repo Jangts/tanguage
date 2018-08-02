@@ -54,7 +54,7 @@ class .SimpleEditor {
                     }
                 }
             } else {
-                each(query('textarea, input', this.cElement.Element) as i, el) {
+                each(query('textarea, input', this.cElement.HTMLElement) as i, el) {
                     this.textareas.push(builders.textarea(el));
                 }
             }
@@ -66,8 +66,8 @@ class .SimpleEditor {
                     this.mainareas.push(builders.mainarea.call(this, options, textarea.getText()));
                 }
             } else {
-                var text = this.cElement.Element.innerHTML;
-                this.cElement.Element.innerHTML = '';
+                var text = this.cElement.HTMLElement.innerHTML;
+                this.cElement.HTMLElement.innerHTML = '';
                 this.mainareas.push(builders.mainarea.call(this, options, text));
             }
 
@@ -134,7 +134,7 @@ class .SimpleEditor {
         return this.selection.getSelectionText();
     }
     inForm(formElement) {
-        return (formElement === this.cElement.Element) || _.dom.contain(formElement, this.cElement.Element);
+        return (formElement === this.cElement.HTMLElement) || _.dom.contain(formElement, this.cElement.HTMLElement);
     }
     hideExtTools() {
         // clog 'foo', query('.se-tool.data-se-dialog, .se-tool.data-se-cmds', this.toolbar);
@@ -170,7 +170,7 @@ class .SimpleEditor {
         var editor = this,
             listeners = {
                 toolbar: new _.dom.Events(this.toolbar),
-                workspaces: new _.dom.Events(this.cElement.Element)
+                workspaces: new _.dom.Events(this.cElement.HTMLElement)
             };
         each(listeners as name, listener) {
             each(events[name] as eventType, handler) {

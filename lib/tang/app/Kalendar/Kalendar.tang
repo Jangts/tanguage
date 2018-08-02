@@ -33,7 +33,7 @@ class .Kalendar extends Component {
     _init (elem) {
         elem = _.util.isElement(elem) ? elem : doc.getElementById(elem);
         if (elem) {
-            this.Element = elem;
+            this.HTMLElement = elem;
             _.dom.addClass(elem, 'tang-kalendar');
             this.months = $('.months', elem)[0] || _.dom.create('ul', elem, { className: 'months' });
             this.week = $('.week', elem)[0] || _.dom.create('ul', elem, { className: 'week' });

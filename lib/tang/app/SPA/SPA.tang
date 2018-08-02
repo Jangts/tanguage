@@ -34,7 +34,6 @@ body = doc.body;
 @include 'layers/WidgetsLayer';
 
 class .SPA extends Component {
-    Element;
     uid,
     layers = [];
     defaultLayer;
@@ -42,19 +41,21 @@ class .SPA extends Component {
     widgetsLayer;
     
     _init(elem, options = {}){
+        // this.uid = 'SPA-' + (new _.Identifier().toString());
+        // 可简写为如下
         this.uid = 'SPA-' + _.Identifier().toString();
         this.layers = [];
         if(isEl(elem)){
-            this.Element = elem;
+            this.HTMLElement = elem;
             scanLayer (this, options);
         }
         else if (isStr(elem)&&$(elem).length){
-            this.Element = $(elem).get(0);
+            this.HTMLElement = $(elem).get(0);
             scanLayer (this, options);
         }
         else{
             // clog doc;
-            this.Element = ..dom.create('div', body, {
+            this.HTMLElement = ..dom.create('div', body, {
                 id: this.uid,
                 className: 'tanguage-spa'
             });

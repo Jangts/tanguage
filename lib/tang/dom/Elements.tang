@@ -20,7 +20,7 @@ query = $..sizzle || $..selector;
 @include 'Elements/variables';
 
 // Declare Class 'domElements' Extends 'Iterator'
-class .Elements extends ..Iterator {
+class .HTMLElements extends ..Iterator {
     context = document;
     _init (selector, context) {
         if (bool.isOuterHTML(selector)) {
@@ -79,14 +79,14 @@ class .Elements extends ..Iterator {
 
 //Expends Public Static Methods 'query' For 'dom'
 public $ = (selector, context) {
-    return new $..Elements(selector, context);
+    return new $..HTMLElements(selector, context);
 }
 
 //Expends Public Static Methods 'extend' For 'dom/query'
 
 extends .$ {
      extend (object, rewrite) {
-        ..extend($..Elements.prototype, rewrite, object);
+        ..extend($..HTMLElements.prototype, rewrite, object);
     }
 }
 

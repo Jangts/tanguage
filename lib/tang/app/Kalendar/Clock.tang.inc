@@ -14,7 +14,7 @@ class Clock extends Component {
     _init (elem) {
         elem = _.util.isElement(elem) ? elem : doc.getElementById(elem);
         if (elem) {
-            this.Element = elem;
+            this.HTMLElement = elem;
             _.dom.addClass(elem, 'tang-clock');
             this.dial = $('.clock-dial', elem).html('<div class="clock-fixer"></div><div class="clock-hand hour"></div><div class="clock-hand minute"></div><div class="clock-hand second"></div>')[0] || _.dom.create('div', elem, {
                 className: 'clock-dial',

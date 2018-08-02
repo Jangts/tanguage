@@ -57,10 +57,10 @@ Charts.prototype.pie = () {
                 }
                 if (activeSegments.length > 0) {
                     this.actived = 1;
-                    _.dom.setStyle(this.Element, 'cursor', 'pointer');
+                    _.dom.setStyle(this.HTMLElement, 'cursor', 'pointer');
                 } else {
                     this.actived = 0;
-                    _.dom.setStyle(this.Element, 'cursor', 'default');
+                    _.dom.setStyle(this.HTMLElement, 'cursor', 'default');
                 }
             });
         }

@@ -33,7 +33,7 @@ class .Animation extends ..Iterator {
     static tweens = {}
 
     _init(elem, options) {
-        this.Element = elem;
+        this.HTMLElement = elem;
         this.curScene = 0;
         this.curFrame = 0;
         this.playback = true;
@@ -53,7 +53,7 @@ class .Animation extends ..Iterator {
         this.mc = {};
         for (var i in options.to) {
             this.mc[i] = {
-                from: options.from && typeof(options.from[i]) != 'undefined' ? this.rgbFormat(options.from[i]) : this.rgbFormat($..getStyle(this.Element, i)),
+                from: options.from && typeof(options.from[i]) != 'undefined' ? this.rgbFormat(options.from[i]) : this.rgbFormat($..getStyle(this.HTMLElement, i)),
                 to: this.rgbFormat(options.to[i]),
                 over: options.over && options.over[i] ? this.rgbFormat(options.over[i]) : this.rgbFormat(options.to[i]),
                 tween: options.tween && options.tween[i] ? options.tween[i] : this.tween
@@ -86,7 +86,7 @@ class .Animation extends ..Iterator {
             } else {
                 this.looped = 0;
                 callback = callback || this.callback || null;
-                callback && callback.call(this.Element, this.data);
+                callback && callback.call(this.HTMLElement, this.data);
                 this.length = 0;
                 this.curScene = 0;
                 this.playback = true;
@@ -113,7 +113,7 @@ class .Animation extends ..Iterator {
         this.timer = setInterval(() {
             if (that.curFrame >= that.frames) {
                 that.stop();
-                callback && callback.call(that.Element, that.looped);
+                callback && callback.call(that.HTMLElement, that.looped);
                 that.running && that.transfer();
                 return;
             }
@@ -202,18 +202,18 @@ class .Animation extends ..Iterator {
                 if (/^(\+|-)?\d+%$/.test(from)) {
                     var from = parseFloat(from);
                 } else {
-                    var parent = /(width|left|right)/i.test(prop) ? parseFloat($..getStyle(this.Element.parentNode, 'width')) : parseFloat($..getStyle(this.Element.parentNode, 'height')),
+                    var parent = /(width|left|right)/i.test(prop) ? parseFloat($..getStyle(this.HTMLElement.parentNode, 'width')) : parseFloat($..getStyle(this.HTMLElement.parentNode, 'height')),
                         from = from / parent * 100;
                 }
                 ds = tween(this.curFrame, from, to - from, this.frames) + '%';
             } else if (typeof(from) === 'string' && /^(\+|-)?\d+%$/.test(from)) {
-                var parent = /(width|left|right)/i.test(prop) ? parseFloat($..getStyle(this.Element.parentNode, 'width')) : parseFloat($..getStyle(this.Element.parentNode, 'height')),
+                var parent = /(width|left|right)/i.test(prop) ? parseFloat($..getStyle(this.HTMLElement.parentNode, 'width')) : parseFloat($..getStyle(this.HTMLElement.parentNode, 'height')),
                     from = parseFloat(from) * parent / 100,
                     to = to;
                 ds = tween(this.curFrame, from, to - from, this.frames);
             }
             //console.log(prop + ':' + ds);
-            $..setStyle(this.Element, prop, ds);
+            $..setStyle(this.HTMLElement, prop, ds);
         }
         return this;
     }

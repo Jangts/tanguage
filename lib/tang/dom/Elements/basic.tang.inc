@@ -1,4 +1,4 @@
-expands .Elements {
+expands .HTMLElements {
     each (handler) {
         for (var i = 0; i < this.length; i++) {
             handler.call(this[i], i, this[i]);
@@ -162,7 +162,7 @@ expands .Elements {
         return this;
     }
     appendTo (selector) {
-        var parents = new $..Elements(selector);
+        var parents = new $..HTMLElements(selector);
         //console.log(selector, parents, this.isElFragment);
         if (this.isElFragment) {
             var Elements,
@@ -210,6 +210,6 @@ expands .Elements {
         this.each(() {
             nodes.push(this.parentNode);
         });
-        return new $..Elements(..arr.unique(nodes));
+        return new $..HTMLElements(..arr.unique(nodes));
     }
 }

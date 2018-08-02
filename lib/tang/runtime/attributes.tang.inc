@@ -107,7 +107,7 @@ let runtime = void ns {
         for (i = scripts.length - 1; i >= 0; i--) {
             if (scripts[i].hasAttribute('tanguage')) {
                 return {
-                    Element: scripts[i],
+                    HTMLElement: scripts[i],
                     Pathname: calculateRelativePath(scripts[i].src)
                 };
             }
@@ -115,19 +115,19 @@ let runtime = void ns {
             matchs = src.match(preg);
             if (matchs) {
                 return {
-                    Element: scripts[i],
+                    HTMLElement: scripts[i],
                     Pathname: calculateRelativePath(src)
                 };
             }
         }
 
         return {
-            Element: null,
+            HTMLElement: null,
             Pathname: './'
         };
     }
     return {
-        Element: undefined,
+        HTMLElement: undefined,
         Pathname: __dirname + '/'
     };
 }

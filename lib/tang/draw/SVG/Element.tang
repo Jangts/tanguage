@@ -16,14 +16,14 @@ var _ = pandora,
 doc = root.document,
 {console, location} = root;
 
-class .Element {
+class .HTMLElement {
     _init(type, data, target) {
         var types = ['svg', 'rect', 'circle', 'eliipse', 'line', 'path', 'g', 'text', 'tspan', 'defs', 'use', 'textpath', 'linearGradient', 'radialGradient', 'stop'];
         if (!type || types.indexOf(type) == -1) {
             type = 'svg';
         }
         type = type || 'svg';
-        this.Element = doc.createElementNS('http://www.w3.org/2000/svg', type);
+        this.HTMLElement = doc.createElementNS('http://www.w3.org/2000/svg', type);
         if (_.util.gettype(data) === 'Object') {
             _.each(data, function(attr, value) {
                 this.attr(attr, value);
@@ -31,25 +31,25 @@ class .Element {
         }
         if (_.util.isEl(target)) {
             this.target = target;
-            this.target.appendChild(this.Element);
+            this.target.appendChild(this.HTMLElement);
         }
     }
     attr(attr, value) {
         if (attr.match(/^xlink:/i)) {
-            this.Element.setAttributeNS('http://www.w3.org/1999/xlink', attr, value);
+            this.HTMLElement.setAttributeNS('http://www.w3.org/1999/xlink', attr, value);
         } else {
             if (attr == 'styles') {
                 _.each(value, function(attr, val) {
                     this.css(attr, val);
                 }, this);
             } else {
-                this.Element.setAttribute(attr, value);
+                this.HTMLElement.setAttribute(attr, value);
             }
         }
         return this;
     }
     css(attr, value) {
-        _.dom.setStyle(this.Element, attr, value);
+        _.dom.setStyle(this.HTMLElement, attr, value);
         return this;
     }
     fire(elem, event, eventType) {
@@ -68,9 +68,9 @@ class .Element {
                 data = null;
                 break;
         };
-        if (this.Element && handler) {
+        if (this.HTMLElement && handler) {
             if (!this.Events) {
-                this.Events = new _.dom.Events(this.Element);
+                this.Events = new _.dom.Events(this.HTMLElement);
             }
             this.Events.push(eventType, selector, data, handler);
         }
@@ -109,4 +109,4 @@ class .Element {
     }
 }
 
-this.module.exports = SVG.Element;
+this.module.exports = SVG.HTMLElement;

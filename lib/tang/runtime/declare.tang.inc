@@ -57,10 +57,8 @@ produceClass (classname, superclass, members) {
             if (this instanceof constructor) {
                 this._private = {};
                 this._init.apply(this, arguments);
-                return this;
             } else {
                 var instance = new constructor();
-                instance._private = {};
                 instance._init.apply(instance, arguments);
                 return instance;
             }

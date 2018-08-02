@@ -1,14 +1,14 @@
 build(options) {
     options = options || {};
-    if (_.byCn('ib-photo-actor', this.Element)[0]) {
-        this.Actor = _.byCn('ib-photo-actor', this.Element)[0];
+    if (_.byCn('ib-photo-actor', this.HTMLElement)[0]) {
+        this.Actor = _.byCn('ib-photo-actor', this.HTMLElement)[0];
         var size = _.dom.getSize(this.Actor);
         this.ActorWidth = size.width;
         this.ActorHeight = size.height;
 
     } else {
-        var size = options.maxSize || _.dom.getSize(this.Element);
-        this.Actor = _.dom.create('div', this.Element, {
+        var size = options.maxSize || _.dom.getSize(this.HTMLElement);
+        this.Actor = _.dom.create('div', this.HTMLElement, {
             className: 'ib-photo-actor',
             style: size
         });
@@ -48,7 +48,7 @@ build(options) {
     this.duration = options.duration || 500;
     this.trigger = options.trigger || 'none';
     this.defaultImage = options.defaultImage;
-    this.Nav = query('.ib-photo-nav ul', this.Element)[0];
+    this.Nav = query('.ib-photo-nav ul', this.HTMLElement)[0];
     if (this.Nav) this.thumbNum = options.thumbNum || 10;
     this.bind();
 }

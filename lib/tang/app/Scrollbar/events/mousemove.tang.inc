@@ -1,7 +1,7 @@
 mousewheel(event) {
     if (!this.disabled) {
         if (this.verticalActived) {
-            var WinHeight = parseInt(getStyle(this.Element, 'height'));
+            var WinHeight = parseInt(getStyle(this.HTMLElement, 'height'));
             var DocHeight = getSize(this.document, 'box').height;
             if (WinHeight != this.WinHeight || DocHeight != this.DocHeight) {
                 this.amount();
@@ -34,7 +34,7 @@ mousewheel(event) {
             }
             this.DraggerTop = this.style(this.verticalDragger, 'top', Math.abs(this.documentTop / this.DocHeight * this.RailHeight));
         } else if (this.horizontalActived) {
-            var WinWidth = parseInt(getStyle(this.Element, 'width'));
+            var WinWidth = parseInt(getStyle(this.HTMLElement, 'width'));
             var DocWidth = getSize(this.document, 'box').width;
             if (WinWidth != this.WinWidth || DocWidth != this.DocWidth) {
                 this.amount();
