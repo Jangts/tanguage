@@ -471,12 +471,15 @@
             // console.log(this.replacements);
             string = this.tidyPosition(string);
             // console.log(string);
-            string = string.replace(/(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om)\s+)?___boundary_[A-Z0-9_]{36}_(\d+)_as_string___\s*(\:|\(|\=)/g, (match, posi, desc, type, index, after) => {
+            string = string.replace(/(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om|\+)\s+)?___boundary_[A-Z0-9_]{36}_(\d+)_as_string___\s*(\:|\(|\=)/g, (match, posi, desc, type, index, after) => {
                 // console.log(posi, desc, this.replacements[index][1]);
                 if (this.replacements[index][1]) {
                     return "\r\n" + this.replacements[index][1] + '@boundary_' + index + '_as_propname::' + after;
                 }
                 if (desc) {
+                    if (type==='+'){
+                        return match;
+                    }
                     return "\r\n" + posi + desc + '@boundary_' + index + '_as_propname::' + after;
                 }
                 return "\r\n" + '@boundary_' + index + '_as_propname::' + after;
@@ -498,9 +501,9 @@
 
             this.consoleDateTime('ANALYZE:');
             string = this.replaceBrackets(string);
-            // console.log(string);
+            console.log(string);
             string = this.replaceBraces(string);
-            // console.log(string);
+            console.log(string);
             string = this.replaceParentheses(string);
             // console.log(string);
             string = string
@@ -1846,6 +1849,7 @@
                     case 'usings':
                         // console.log(lines[index]);.return
                         let posi = this.replacements[lines[index].index][2];
+                        let mens = this.replacements[lines[index].index][1];
                         let src = this.replacements[lines[index].index][0].toString().trim();
                         this.replacements[lines[index].index] = null;
                         // let alias = .trim();
@@ -1854,22 +1858,19 @@
                             imports.push(src);
                             imports.push(posi);
                         }
-                        if (this.replacements[lines[index].index][1]) {
+                        if (mens) {
                             let position;
                             let alias;
                             if (lines[index].subtype === 'usings') {
-                                let members = this.replacements[lines[index].index][1].split(',');
-                                this.replacements[lines[index].index][1] = undefined;
+                                let members = mens.split(',');
                                 for (let m = 0; m < members.length; m++) {
                                     position = this.getPosition(members[m]);
                                     alias = members[m].replace(position.match, '').trim();
                                     using_as[alias] = [src, alias, position];
                                 }
                             } else {
-                                let posi = this.replacements[lines[index].index][1];
-                                position = this.getPositionByIndex(lines[index].index);
-                                alias = posi.replace(position.match, '').trim();
-                                posi = undefined;
+                                position = this.getPosition(mens);
+                                alias = mens.replace(position.match, '').trim();
                                 // console.log(alias);
                                 using_as[alias] = [src, '*', position];
                             }
@@ -3199,11 +3200,11 @@
             ast = undefined;
 
             this.consoleDateTime('JOIN PRE OPT:');
-            let preoutput = head.join('') + neck.join('') + this.trim(body.join('')) + foot.join('');
+            let preoutput = head.join('') + neck.join('') + this.restoreStrings(this.trim(body.join(''))) + foot.join('');
             head = neck = body = foot = undefined;
 
             this.consoleDateTime('PICK MAP:');
-            this.output = this.pickUpMap(this.restoreStrings(preoutput)).replace(/[\s;]+;/g, ';');
+            this.output = this.pickUpMap(preoutput).replace(/[\s;]+;/g, ';');
             preoutput = undefined;
             // console.log(this.output);
             return this;
@@ -3765,7 +3766,7 @@
                 this.pushBuffer(["'" + cnt + "'"]);
                 cname = 'pandora.' + cnt;
                 cnt = undefined;
-                codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(___boundary_' + this.uid + '_' + index + 'string___, ');
+                codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(___boundary_' + this.uid + '_' + index + '_as_string___, ');
             } else {
                 if (element.cname && element.cname.trim()) {
                     cname = element.cname.trim();
@@ -3949,7 +3950,7 @@
                 } else {
                     let index = this.replacements.length;
                     this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
-                    codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index + 'string___, function () {');
+                    codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index + '_as_string___, function () {');
                     this.pushCodes(codes, element.vars, element.body, layer + 1, namespace + element.oname.trim() + '.');
                 }
                 // console.log(element.body);
@@ -3974,7 +3975,7 @@
             } else if (element.subtype === 'nsassign' || element.subtype === 'globalassign') {
                 let index = this.replacements.length;
                 this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
-                codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index + 'string___, ');
+                codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index + '_as_string___, ');
                 this.pushObjCodes(codes, element, layer, namespace);
             } else {
                 codes.push(indent1 + posi + 'pandora.extend(' + element.oname + ', ');
@@ -4471,6 +4472,7 @@
         }
         restoreStrings(string: string): string {
             this.consoleDateTime('RESTORE STRINGS:');
+            // console.log(string);
             let that = this;
             return string.replace(this.lastPattern, function () {
                 // all + string|pattern|template  + type + propname + keyword|midword|preoperator|operator|aftoperator|comments + type

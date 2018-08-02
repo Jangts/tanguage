@@ -25,7 +25,7 @@ decode(string) {
     matches = string.match(/@boundary_(\d+)_as_[a-z]+::/);
     while (matches) {
         // console.log(matches, this.replacements[matches[2]]);
-        string = string.replace(matches[0], thisreadBuffer(matches[1])).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
+        string = string.replace(matches[0], this.readBuffer(matches[1])).replace(/@\d+L\d+P\d+(O\d+)?:*/g, '');
         matches = string.match(/@boundary_(\d+)_as_[a-z]+::/);
     }
     matches = undefined;

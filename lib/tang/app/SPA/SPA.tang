@@ -35,12 +35,14 @@ body = doc.body;
 
 class .SPA extends Component {
     Element;
+    uid,
     layers = [];
     defaultLayer;
     popupLayer;
     widgetsLayer;
     
     _init(elem, options = {}){
+        this.uid = 'SPA-' + _.Identifier().toString();
         this.layers = [];
         if(isEl(elem)){
             this.Element = elem;
@@ -53,6 +55,7 @@ class .SPA extends Component {
         else{
             // clog doc;
             this.Element = ..dom.create('div', body, {
+                id: this.uid,
                 className: 'tanguage-spa'
             });
             if(options.defaultLayerName){

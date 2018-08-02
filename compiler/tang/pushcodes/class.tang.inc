@@ -10,7 +10,7 @@ pushClassCodes(codes, element, layer, namespace) {
         this.pushBuffer(["'" + cnt + "'"]);
         cname = 'pandora.' + cnt;
         cnt = undefined;
-        codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(___boundary_' + this.uid + '_' + index + 'string___, ');
+        codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(___boundary_' + this.uid + '_' + index + '_as_string___, ');
     } else {
         if (element.cname && element.cname.trim()) {
             cname = element.cname.trim();

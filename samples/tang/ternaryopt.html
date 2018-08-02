@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUNTIME</title>
+    <script src="../../lib/dist/runtime.js" data-tang-debug></script>
+</head>
+
+<body>
+
+    <script type="text/tanguage">
+    use $ dom/Elements as $;
+
+        let
+        _ = pandora,
+        doc = root.document,
+        location = root.location,
+        query = _.dom.sizzle || _.dom.selector;
+        create (tabName, tabAlias) {
+            this.tabs[tabName] = {
+                option: _.dom.create('li', this.options, {
+                    dataTabName: tabName,
+                    html: tabName === this.startTabName ? '<div calss="tab-option starttab">' + (tabAlias || tabName) + '</div>' : '<div calss="tab-option">' + (tabAlias || tabName) + '</div><i class="tab-closer">×</i class="tab-closer">'
+                }),
+                section: _.dom.create('section', this.sections, {
+                    dataTabName: tabName
+                }),
+                tag: {
+                    origin: '',
+                    trimed: '',
+                    path: []
+                }
+            }
+            return this.resize();
+        }
+        </script>
+    <script src="../../compiler/js/web-tang.js"></script>
+</body>
+
+</html>

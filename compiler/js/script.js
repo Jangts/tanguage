@@ -441,12 +441,15 @@
             // console.log(this.replacements);
             string = this.tidyPosition(string);
             // console.log(string);
-            string = string.replace(/(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om)\s+)?___boundary_[A-Z0-9_]{36}_(\d+)_as_string___\s*(\:|\(|\=)/g, function (match, posi, desc, type, index, after) {
+            string = string.replace(/(@\d+L\d+P\d+O?\d*:::)?((public|static|set|get|om|\+)\s+)?___boundary_[A-Z0-9_]{36}_(\d+)_as_string___\s*(\:|\(|\=)/g, function (match, posi, desc, type, index, after) {
                 // console.log(posi, desc, this.replacements[index][1]);
                 if (_this.replacements[index][1]) {
                     return "\r\n" + _this.replacements[index][1] + '@boundary_' + index + '_as_propname::' + after;
                 }
                 if (desc) {
+                    if (type === '+') {
+                        return match;
+                    }
                     return "\r\n" + posi + desc + '@boundary_' + index + '_as_propname::' + after;
                 }
                 return "\r\n" + '@boundary_' + index + '_as_propname::' + after;
@@ -468,9 +471,9 @@
             // console.log(this.replacements);
             this.consoleDateTime('ANALYZE:');
             string = this.replaceBrackets(string);
-            // console.log(string);
+            console.log(string);
             string = this.replaceBraces(string);
-            // console.log(string);
+            console.log(string);
             string = this.replaceParentheses(string);
             // console.log(string);
             string = string
@@ -1886,6 +1889,7 @@
                     case 'usings':
                         // console.log(lines[index]);.return
                         var posi = this.replacements[lines[index_6].index][2];
+                        var mens = this.replacements[lines[index_6].index][1];
                         var src = this.replacements[lines[index_6].index][0].toString().trim();
                         this.replacements[lines[index_6].index] = null;
                         // let alias = .trim();
@@ -1893,12 +1897,11 @@
                             imports.push(src);
                             imports.push(posi);
                         }
-                        if (this.replacements[lines[index_6].index][1]) {
+                        if (mens) {
                             var position = void 0;
                             var alias = void 0;
                             if (lines[index_6].subtype === 'usings') {
-                                var members = this.replacements[lines[index_6].index][1].split(',');
-                                this.replacements[lines[index_6].index][1] = undefined;
+                                var members = mens.split(',');
                                 for (var m = 0; m < members.length; m++) {
                                     position = this.getPosition(members[m]);
                                     alias = members[m].replace(position.match, '').trim();
@@ -1906,10 +1909,8 @@
                                 }
                             }
                             else {
-                                var posi_3 = this.replacements[lines[index_6].index][1];
-                                position = this.getPositionByIndex(lines[index_6].index);
-                                alias = posi_3.replace(position.match, '').trim();
-                                posi_3 = undefined;
+                                position = this.getPosition(mens);
+                                alias = mens.replace(position.match, '').trim();
                                 // console.log(alias);
                                 using_as[alias] = [src, '*', position];
                             }
@@ -3256,10 +3257,10 @@
             this.pushFooter(foot, ast.vars);
             ast = undefined;
             this.consoleDateTime('JOIN PRE OPT:');
-            var preoutput = head.join('') + neck.join('') + this.trim(body.join('')) + foot.join('');
+            var preoutput = head.join('') + neck.join('') + this.restoreStrings(this.trim(body.join(''))) + foot.join('');
             head = neck = body = foot = undefined;
             this.consoleDateTime('PICK MAP:');
-            this.output = this.pickUpMap(this.restoreStrings(preoutput)).replace(/[\s;]+;/g, ';');
+            this.output = this.pickUpMap(preoutput).replace(/[\s;]+;/g, ';');
             preoutput = undefined;
             // console.log(this.output);
             return this;
@@ -3838,7 +3839,7 @@
                 this.pushBuffer(["'" + cnt + "'"]);
                 cname = 'pandora.' + cnt;
                 cnt = undefined;
-                codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(___boundary_' + this.uid + '_' + index_22 + 'string___, ');
+                codes.push(indent1 + this.pushPostionsToMap(element.posi) + 'pandora.declareClass(___boundary_' + this.uid + '_' + index_22 + '_as_string___, ');
             }
             else {
                 if (element.cname && element.cname.trim()) {
@@ -4023,7 +4024,7 @@
                 else {
                     var index_25 = this.replacements.length;
                     this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
-                    codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_25 + 'string___, function () {');
+                    codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_25 + '_as_string___, function () {');
                     this.pushCodes(codes, element.vars, element.body, layer + 1, namespace + element.oname.trim() + '.');
                 }
                 // console.log(element.body);
@@ -4047,7 +4048,7 @@
             else if (element.subtype === 'nsassign' || element.subtype === 'globalassign') {
                 var index_26 = this.replacements.length;
                 this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
-                codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_26 + 'string___, ');
+                codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index_26 + '_as_string___, ');
                 this.pushObjCodes(codes, element, layer, namespace);
             }
             else {
@@ -4547,6 +4548,7 @@
         };
         Script.prototype.restoreStrings = function (string) {
             this.consoleDateTime('RESTORE STRINGS:');
+            // console.log(string);
             var that = this;
             return string.replace(this.lastPattern, function () {
                 // all + string|pattern|template  + type + propname + keyword|midword|preoperator|operator|aftoperator|comments + type

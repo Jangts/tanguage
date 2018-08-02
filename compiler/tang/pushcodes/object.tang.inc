@@ -18,7 +18,7 @@ pushExtendsCodes(codes, element, layer, namespace) {
         } else {
             let index = this.replacements.length;
             this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
-            codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index + 'string___, function () {');
+            codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index + '_as_string___, function () {');
             this.pushCodes(codes, element.vars, element.body, layer + 1, namespace + element.oname.trim() + '.');
         }
         // console.log(element.body);
@@ -43,7 +43,7 @@ pushExtendsCodes(codes, element, layer, namespace) {
     } else if (element.subtype === 'nsassign' || element.subtype === 'globalassign') {
         let index = this.replacements.length;
         this.pushBuffer(["'" + namespace + element.oname.trim() + "'"]);
-        codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index + 'string___, ');
+        codes.push(indent1 + posi + 'pandora.ns(___boundary_' + this.uid + '_' + index + '_as_string___, ');
         this.pushObjCodes(codes, element, layer, namespace);
     } else {
         codes.push(indent1 + posi + 'pandora.extend(' + element.oname + ', ');

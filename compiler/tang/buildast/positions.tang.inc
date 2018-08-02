@@ -53,6 +53,7 @@ pickReplacePosis(lines, vars) {
             case 'usings':
                 // console.log(lines[index]);.return
                 let posi = this.replacements[lines[index].index][2];
+                let mens = this.replacements[lines[index].index][1];
                 let src = this.replacements[lines[index].index][0].toString().trim();
                 this.replacements[lines[index].index] = null;
                 // let alias = .trim();
@@ -61,23 +62,19 @@ pickReplacePosis(lines, vars) {
                     imports.push(src);
                     imports.push(posi);
                 }
-                if (this.replacements[lines[index].index][1]) {
+                if (mens) {
                     let position;
                     let alias;
                     if (lines[index].subtype === 'usings') {
-                        let members = this.replacements[lines[index].index][1].split(',');
-                        this.replacements[lines[index].index][1] = undefined;
+                        let members = mens.split(',');
                         for (let m = 0; m < members.length; m++) {
                             position = this.getPosition(members[m]);
                             alias = members[m].replace(position.match, '').trim();
                             using_as[alias] = [src, alias, position];
                         }
-                        // console.log(this.replacements[lines[index].index][1]);
                     } else {
-                        let posi = this.replacements[lines[index].index][1];
-                        position = this.getPositionByIndex(lines[index].index);
-                        alias = posi.replace(position.match, '').trim();
-                        posi = undefined;
+                        position = this.getPosition(mens);
+                        alias = mens.replace(position.match, '').trim();
                         // console.log(alias);
                         using_as[alias] = [src, '*', position];
                     }
