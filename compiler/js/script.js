@@ -235,12 +235,6 @@
                 this.run();
             }
         }
-        Script.prototype.consoleDateTime = function (tag) {
-            if (false) {
-                console.log(tag);
-                console.log(new Date());
-            }
-        };
         Script.prototype.compile = function () {
             this.consoleDateTime('START COMPILE:');
             // console.log(this.input);
@@ -4696,6 +4690,12 @@
             precall && precall.call(this, this.output);
             eval(this.output);
             callback.call(this);
+        };
+        Script.prototype.consoleDateTime = function (tag) {
+            if (false) {
+                console.log(tag);
+                console.log(new Date());
+            }
         };
         return Script;
     }());

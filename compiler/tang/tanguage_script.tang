@@ -7,9 +7,9 @@
  * https://github.com/Jangts/tanguage/wiki
  */
 ;
-@include 'expands';
-@include 'const1';
-@include 'const2';
+@include 'utils/expands';
+@include 'utils/const1';
+@include 'utils/const2';
 
 class Script {
     uid;

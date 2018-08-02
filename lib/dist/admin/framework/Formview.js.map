@@ -1,1 +1,1 @@
-{"version":3,"file":"Formview.js","sourceRoot":"","sources":["../../../tang/admin/framework/Formview.tang"],"names":[],"mappings":"AAAAA;;;;;;;;;;;;IAOUA;qBAAAA;bACFA;AAKRA;;;RAXAA;"}
+{"version":3,"file":"Formview.js","sourceRoot":"","sources":["../../../tang/admin/Explorer.tang","../../../tang/admin/framework/Application.tang","../../../tang/admin/framework/Blocksview.tang","../../../tang/admin/framework/Formview.tang"],"names":[],"mappings":"AAAAA;;;;;;;;;;;;IAOUA;qBAAAA;bACFA;AAKRA;;;RAXAA;"}

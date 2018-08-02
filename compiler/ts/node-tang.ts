@@ -13,8 +13,8 @@ const fs = require('fs');
 const glob = require("glob");
 const path = require('path');
 const getDirName = require('path').dirname;
-const tanguage_script = require('./script.js');
-// const tanguage_script = require('./tanguage_script.js');
+// const tanguage_script = require('./script.js');
+const tanguage_script = require('./tanguage_script.js');
 const vlq = require('./vlq.js');
 const commands = ['compile', 'test', 'cdir', 'build', 'help', 'version'];
 
@@ -55,7 +55,7 @@ const mapBuilder = (omappings: any[], filename: string, osources:any[], version:
 
 const onReadFile = function (src: string, context): string {
     // console.log(src, context.source);
-    let source = path.resolve(context + src + '.tang.inc');
+    let source = path.resolve(context + src + '.tanginc');
     if (this.sources[source]) {
         this.error('source ' + source + ' had already been loaded.');
     }

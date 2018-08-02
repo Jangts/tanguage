@@ -1,1 +1,1 @@
-{"version":3,"file":"Table.js","sourceRoot":"","sources":["../../../tang/admin/framework/Table.tang"],"names":[],"mappings":"AAAAA;;;;;;;;;;;;IAOUA;qBAAAA;bACFA;AAKRA;;;RAXAA;"}
+{"version":3,"file":"Table.js","sourceRoot":"","sources":["../../../tang/admin/Explorer.tang","../../../tang/admin/framework/Application.tang","../../../tang/admin/framework/Blocksview.tang","../../../tang/admin/framework/Formview.tang","../../../tang/admin/framework/Panel.tang","../../../tang/admin/framework/Table.tang"],"names":[],"mappings":"AAAAA;;;;;;;;;;;;IAOUA;qBAAAA;bACFA;AAKRA;;;RAXAA;"}

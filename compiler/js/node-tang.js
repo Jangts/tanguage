@@ -4,8 +4,8 @@ var fs = require('fs');
 var glob = require("glob");
 var path = require('path');
 var getDirName = require('path').dirname;
-var tanguage_script = require('./script.js');
-// const tanguage_script = require('./tanguage_script.js');
+// const tanguage_script = require('./script.js');
+var tanguage_script = require('./tanguage_script.js');
 var vlq = require('./vlq.js');
 var commands = ['compile', 'test', 'cdir', 'build', 'help', 'version'];
 // console.log(process.argv);
@@ -44,7 +44,7 @@ var mapBuilder = function (omappings, filename, osources, version) {
 };
 var onReadFile = function (src, context) {
     // console.log(src, context.source);
-    var source = path.resolve(context + src + '.tang.inc');
+    var source = path.resolve(context + src + '.tanginc');
     if (this.sources[source]) {
         this.error('source ' + source + ' had already been loaded.');
     }

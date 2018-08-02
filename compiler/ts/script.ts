@@ -245,12 +245,6 @@
         useExtends = false;
         useEach = false;
         useLoop = false;
-        consoleDateTime(tag: string){
-            if(false){
-                console.log(tag);
-                console.log(new Date());
-            }
-        }
         constructor(input: string, source: string = '', run: boolean = false) {
             this.consoleDateTime('BEGIN:');
             this.uid = boundaryMaker();
@@ -4625,6 +4619,12 @@
             precall && precall.call(this, this.output);
             eval(this.output);
             callback.call(this);
+        }
+        consoleDateTime(tag: string) {
+            if (false) {
+                console.log(tag);
+                console.log(new Date());
+            }
         }
     }
 

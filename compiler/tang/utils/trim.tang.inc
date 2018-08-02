@@ -1,6 +1,6 @@
 trim(string) {
     // 此处的replace在整理完成后，将进行分析归纳，最后改写为callback形式的
-    console.log(string);
+    // console.log(string);
 
     // 去除多余标注
     string = string.replace(/\s*(\/\*\s+@posi\d+\s+\*\/)?@(ownprop|return)[; \t]*/g, () => {

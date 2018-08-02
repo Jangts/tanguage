@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Thu, 02 Aug 2018 07:22:47 GMT
+ * Datetime: Thu, 02 Aug 2018 09:53:07 GMT
  */;
 void
 
@@ -4247,7 +4247,6 @@ function(root, factory) {
         trim: function (string) {
             var _this = this;
             var _arguments = arguments;
-            console.log(string);
             string = string.replace(/\s*(\/\*\s+@posi\d+\s+\*\/)?@(ownprop|return)[; \t]*/g, function () {
                 return '';
             });

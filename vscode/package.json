@@ -2,7 +2,7 @@
     "name": "tanguage",
     "displayName": "tanguage",
     "description": "tanguage syntactic sugar",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "publisher": "jangts",
     "engines": {
         "vscode": "^1.22.0"
@@ -21,7 +21,7 @@
             ],
             "extensions": [
                 ".tang",
-                ".tang.inc"
+                ".tanginc"
             ],
             "mimetypes": [
                 "text/tanguage"
