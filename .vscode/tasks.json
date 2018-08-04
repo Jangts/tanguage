@@ -23,6 +23,21 @@
             "problemMatcher": [
                 "$tsc-watch"
             ]
+        },
+        {
+            "type": "npm",
+            "script": "test-app-map",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "test-bootstrap",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "test-clib",
+            "problemMatcher": []
         }
     ]
 }

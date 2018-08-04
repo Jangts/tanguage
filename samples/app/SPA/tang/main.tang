@@ -3,3 +3,4 @@ use $ app/SPA/ as SPA;
 
 let myapp = new SPA;
 
+clog myapp;

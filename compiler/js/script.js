@@ -223,6 +223,8 @@
             this.blockreserved = ['pandora', 'root'];
             this.xvars = [];
             this.replacements = [['{}'], ['/='], ['/'], [' +'], [' -'], [' === '], [' + '], ['\"'], ['"\\r\\n"'], ['[^\\/']];
+            this.posimap = [];
+            this.sources = [];
             this.mappings = [];
             if (source) {
                 this.sources.push({
@@ -3259,7 +3261,7 @@
             var preoutput = head.join('') + neck.join('') + this.restoreStrings(this.trim(body.join(''))) + foot.join('');
             head = neck = body = foot = undefined;
             this.consoleDateTime('PICK MAP:');
-            this.output = this.pickUpMap(preoutput).replace(/[\s;]+;/g, ';');
+            this.output = this.pickUpMap(preoutput);
             preoutput = undefined;
             // console.log(this.output);
             return this;
@@ -4650,6 +4652,7 @@
             var lines = string.split(/\r{0,1}\n/);
             var _lines = [];
             var mappings = [];
+            // console.log(this.posimap);
             for (var l = 0; l < lines.length; l++) {
                 var line = lines[l];
                 lines[l] = undefined;
@@ -4657,16 +4660,10 @@
                 var match = void 0;
                 while (match = line.match(/\/\*\s@posi(\d+)\s\*\//)) {
                     var index_29 = match.index;
-                    // console.log(line, match);
-                    if (match[1] < this.posimap.length - 1) {
-                        var i = parseInt(match[1]) + 1;
-                        var position = this.posimap[i];
-                        this.posimap[i] = undefined;
-                        mapping.push([index_29, position.o[0], position.o[1], position.o[2], 0]);
-                    }
-                    else {
-                        // console.log(match);
-                    }
+                    var i = parseInt(match[1]);
+                    var position = this.posimap[i];
+                    this.posimap[i] = undefined;
+                    mapping.push([index_29, position.o[0], position.o[1], position.o[2], 0]);
                     line = line.replace(match[0], '');
                 }
                 _lines.push(line);
@@ -4674,11 +4671,9 @@
                 line = mapping = undefined;
             }
             this.posimap = undefined;
-            mappings[0][0] = [0, 0, 0, 0, 0];
             this.mappings = mappings;
             mappings = undefined;
             // console.log(mappings)
-            // return string;
             return _lines.join("\r\n");
         };
         Script.prototype.run = function (precall, callback) {

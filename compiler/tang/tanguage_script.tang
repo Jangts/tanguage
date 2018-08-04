@@ -55,6 +55,7 @@ class Script {
         this.blockreserved = ['pandora', 'root'];
         this.xvars = [];
         this.replacements = [['{}'], ['/='], ['/'], [' +'], [' -'], [' === '], [' + '], ['\"'], ['"\\r\\n"'], ['[^\\/']];
+        this.sources = [];
         this.mappings = [];
         
         if (source) {

@@ -21,6 +21,7 @@ const commands = ['compile', 'test', 'cdir', 'build', 'help', 'version'];
 // console.log(process.argv);
 const mapBuilder = (omappings: any[], filename: string, osources:any[], version: number | string = 3)=>{
     let lines = [];
+    let _lines = {};
     let sources:string[] = [];
     let last = [0, 0, 0, 0, 0];
     for (let s = 0; s < osources.length; s++) {
@@ -50,7 +51,8 @@ const mapBuilder = (omappings: any[], filename: string, osources:any[], version:
         "names": [],
         "mappings": lines.join(';')
     };
-    return JSON.stringify(mappings)
+
+    return JSON.stringify(mappings);
 }
 
 const onReadFile = function (src: string, context): string {
@@ -112,6 +114,7 @@ let handlers = {
             fs.mkdirSync(getDirName(o));
         }
         if (options.generateSourceMap) {
+            // console.log(sugar.sources);
             var output: string = sugar.output + "\r\n//# sourceMappingURL=" + path.basename(o) + '.map';
             let mappings = mapBuilder(sugar.mappings, o, sugar.sources);
             fs.writeFileSync(o + '.map', mappings);

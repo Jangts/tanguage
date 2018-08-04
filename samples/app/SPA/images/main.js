@@ -1,8 +1,9 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Wed, 18 Jul 2018 08:54:06 GMT
- */;
+ * Datetime: Sat, 04 Aug 2018 11:27:09 GMT
+ */
+;
 // tang.config({});
 tang.init().block([
     '$_/dom/',
@@ -10,5 +11,6 @@ tang.init().block([
 ], function (pandora, root, imports, undefined) {
     var SPA = imports['$_/app/spa/'];
     var myapp = new SPA;
+    root.console.log(myapp);
 }, true);
 //# sourceMappingURL=main.js.map

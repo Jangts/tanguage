@@ -42,7 +42,7 @@ fireEvents () {
     }
 }
 bindEvents () {
-    clog 'foo';
+    // clog 'foo';
     root.addEventListener('load', fireEvents, false);
     root.addEventListener('hashchange', fireEvents, false);
 }

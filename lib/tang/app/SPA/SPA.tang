@@ -4,7 +4,7 @@ use $ util/ as {isStr,isEl};
 use $ dom/ as dom;
 use $ dom/Elements as $;
 use $ app/Component as Component;
-use $ app/Router/ as Component;
+use $ app/Router/ as Router;
 
 namespace app;
 
@@ -34,11 +34,18 @@ body = doc.body;
 @include 'layers/WidgetsLayer';
 
 class .SPA extends Component {
-    uid,
+    // 唯一标识符
+    uid;
+    // 视图层容器
     layers = [];
+    // 默认层（必备）指针
     defaultLayer;
+    // 跳出层指针
     popupLayer;
+    // 装饰层指针
     widgetsLayer;
+    // 应用主路由
+    router;
     
     _init(elem, options = {}){
         // this.uid = 'SPA-' + (new _.Identifier().toString());
@@ -76,6 +83,7 @@ class .SPA extends Component {
         if(options.widgetsLayer){
             this.widgetsLayer = createWidgetLayer (this, options.widgetsLayer || widgetsLayerOptions);
         }
+        this.router = new Router;
     }
 
     addLayer () {

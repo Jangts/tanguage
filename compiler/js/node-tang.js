@@ -12,6 +12,7 @@ var commands = ['compile', 'test', 'cdir', 'build', 'help', 'version'];
 var mapBuilder = function (omappings, filename, osources, version) {
     if (version === void 0) { version = 3; }
     var lines = [];
+    var _lines = {};
     var sources = [];
     var last = [0, 0, 0, 0, 0];
     for (var s = 0; s < osources.length; s++) {
@@ -99,6 +100,7 @@ var handlers = {
             fs.mkdirSync(getDirName(o));
         }
         if (options.generateSourceMap) {
+            // console.log(sugar.sources);
             var output = sugar.output + "\r\n//# sourceMappingURL=" + path.basename(o) + '.map';
             var mappings = mapBuilder(sugar.mappings, o, sugar.sources);
             fs.writeFileSync(o + '.map', mappings);
