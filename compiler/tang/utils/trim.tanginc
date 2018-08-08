@@ -1,5 +1,4 @@
 trim(string) {
-    // 此处的replace在整理完成后，将进行分析归纳，最后改写为callback形式的
     // console.log(string);
 
     // 去除多余标注
@@ -25,7 +24,7 @@ trim(string) {
     });
     // console.log(string);
 
-    
+
     string = string.replace(/\s*(@boundary_\d+_as_operator::)[;\s]*[\r\n]+(\t*)[ ]*(\/\*\s+@posi\d+\s+\*\/)/g, "\r\n$2   $3 $1 ");
     // console.log(string);
 
@@ -54,11 +53,11 @@ trim(string) {
     // 运算符处理
     string = string.replace(/(\s*)(@boundary_(\d+)_as_(operator|aftoperator|keyword|midword)::)\s*/g, (match, pregap, operator, index) => {
         // console.log(this.replacements[index]);
-        if (this.replacements[index][1]) {
+        // if (this.replacements[index][0]) {
             // console.log(this.replacements[index]);
-            return pregap + operator;
-        }
-        return operator;
+        return pregap + operator;
+        // }
+        // return operator;
     });
     // this.replacements = undefined;
     string = string.replace(/(@boundary_\d+_as_(preoperator)::)(\s*;+|(\s+([^;])))/g, (match, operator, word, right, afterwithgap, after) => {

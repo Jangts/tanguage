@@ -1,7 +1,14 @@
 class Layer extends Component {
+    appInstance
     pages = {};
 
-    _init() {}
+    _init(app, elem, options) {
+        this.app = app;
+        this.HTMLElement = elem;
+        if(_$.getAttr(elem, 'data-layer-name')){
+
+        }
+    }
 
     toTop() {}
 
@@ -56,6 +63,17 @@ emptyLayerOptions = {
     pages: {}
 };
 
-createLayer () {
-
+createLayer (app, layerOptions) {
+    let elem;
+    // if(dom.contain(app.HTMLElement, layerOptions.elem)){}
+    if(__.in(layerOptions. elem, app.HTMLElement.childNodes)){
+        elem = layerOptions. elem;
+    }else{
+        elem = dom.create('div', app.HTMLElement, {
+            className: 'tanguage-spa-layer'
+        });
+    }
+    let layer = new Layer(app, elem, layerOptions);
+    app.layers.push(layer);
+    return layer;
 }

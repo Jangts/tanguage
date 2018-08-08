@@ -10,6 +10,8 @@ namespace app;
 
 let
 _ = pandora,
+_$ = _.dom,
+__ = _.util,
 doc = root.document,
 body = doc.body;
 
@@ -36,7 +38,7 @@ body = doc.body;
 class .SPA extends Component {
     // 唯一标识符
     uid;
-    // 视图层容器
+    // 视图层数组
     layers = [];
     // 默认层（必备）指针
     defaultLayer;
@@ -47,39 +49,64 @@ class .SPA extends Component {
     // 应用主路由
     router;
     
-    _init(elem, options = {}){
+    /**
+     *
+     * @param options {
+     *     elem: undifined | HTMLElement | string
+     *     layers: [{
+     *         tagName: string = 'div'
+     *         className: string
+     *         pages: {
+     *             defaultPage : {
+     *                 tagName: string = 'div'  
+     *             }
+     *         }
+     *     }, ...]
+     *     popupLayer: null | {}
+     *     widgetsLayer: null | {}
+     * }
+     *
+     *
+     */
+    _init(options = {}){
         // this.uid = 'SPA-' + (new _.Identifier().toString());
         // 可简写为如下
         this.uid = 'SPA-' + _.Identifier().toString();
+        // 视图层数组
         this.layers = [];
-        if(isEl(elem)){
-            this.HTMLElement = elem;
+
+        // 激活DOM对象
+        // 是否传入DOM对象
+        if(isEl(options.elem)){
+            this.HTMLElement = options.elem;
             scanLayer (this, options);
         }
-        else if (isStr(elem)&&$(elem).length){
-            this.HTMLElement = $(elem).get(0);
+        // 是否传入DOM对象选择器指令
+        else if (isStr(options.elem)&&$(options.elem).length){
+            this.HTMLElement = $(options.elem).get(0);
             scanLayer (this, options);
         }
+        // 创建并激活DOM对象
         else{
             // clog doc;
-            this.HTMLElement = ..dom.create('div', body, {
+            this.HTMLElement = dom.create('div', body, {
                 id: this.uid,
                 className: 'tanguage-spa'
             });
-            if(options.defaultLayerName){
-                this.defaultLayer = createLayer (this, options.defaultLayerName, options.layers && options.layers[options.defaultLayerName] || defaultLayerOptions);
-            }else{
-                this.defaultLayer = createLayer (this, 'default', options.layers && options.layers['default'] || defaultLayerOptions)
-            }
+            this.defaultLayer = createLayer (this, 'default', options.layers && options.layers['default'] || defaultLayerOptions);
         }
-        if(options.defaultLayerName){
-            if(options.defaultLayerName!==this.defaultLayer.uid){
-                this.defaultLayer = createLayer (this, options.defaultLayerName, options.layers && options.layers[options.defaultLayerName] || defaultLayerOptions);
-            }
+
+        // 检查默认层
+        // 如果不存在默认层指针，则创建默认层
+        if(!this.defaultLayer){
+           this.defaultLayer = createLayer (this, options.layers && options.layers['index'] || defaultLayerOptions);
         }
+
+        // 增加默认层
         if(options.popupLayer){
             this.popupLayer = createPopupLayer (this, options.popupLayer || popupLayerOptions);
         }
+        // 增加装饰层
         if(options.widgetsLayer){
             this.widgetsLayer = createWidgetLayer (this, options.widgetsLayer || widgetsLayerOptions);
         }

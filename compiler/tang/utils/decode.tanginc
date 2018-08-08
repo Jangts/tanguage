@@ -1,16 +1,12 @@
-restoreStrings(string, last) {
+restoreStrings(string) {
     let that = this;
-    if (last) {
-        var pattern = this.lastPattern;
-    } else {
-        var pattern = this.trimPattern;
-    }
-    return string.replace(pattern, function () {
+    return string.replace(this.lastPattern, function() {
+        // all + string|pattern|template  + type + propname + keyword|midword|preoperator|operator|aftoperator|comments + type
         if (arguments[5]) {
             return that.readBuffer(arguments[5]);
         }
         return that.readBuffer(arguments[2] || arguments[4]);
-    }).replace(this.markPattern, function () {
+    }).replace(this.markPattern, function() {
         return that.readBuffer(arguments[1]);
     }).replace(/(@\d+L\d+P\d+O?\d*:::)/g, '');
 }

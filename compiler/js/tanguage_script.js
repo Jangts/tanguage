@@ -1,7 +1,7 @@
 /*!
  * tanguage script compiled code
  *
- * Datetime: Sat, 04 Aug 2018 11:26:11 GMT
+ * Datetime: Tue, 07 Aug 2018 06:48:10 GMT
  */
 ;
 void
@@ -230,6 +230,7 @@ function(root, factory) {
         value: ';'
     };
     var zero2z = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+    var replacements = [['{}'], ['/='], ['/'], [' +'], [' -'], [' === '], [' + '], ['\"'], ['"\\r\\n"'], ['[^\\/']];
     var namingExpr = /^[A-Z_\$][\w\$]*$/i;
     var argsExpr = /^...[A-Z_\$][\w\$]*$/i;
     var stringas = {
@@ -407,7 +408,7 @@ function(root, factory) {
                 this.replacements[index][0] = undefined;
                 return string;
             }
-            return this.replacements[index][0].toString();
+            return replacements[index][0].toString();
         },
         markPosition: function (string, sourceid) {
             var _this = this;
@@ -3016,7 +3017,7 @@ function(root, factory) {
             }
             this.pushFooter(foot, ast.vars);
             ast = undefined;
-            var preoutput = head.join('') + neck.join('') + this.trim(body.join('')) + foot.join('');
+            var preoutput = head.join('') + neck.join('') + this.restoreStrings(this.trim(body.join(''))) + foot.join('');
             head = neck = body = foot = undefined;
             this.output = this.pickUpMap(preoutput);
             preoutput = undefined;
@@ -4210,15 +4211,9 @@ function(root, factory) {
             }
             return ('pandora.' + this.namespace).replace(/\.+$/, '');
         },
-        restoreStrings: function (string, last) {
+        restoreStrings: function (string) {
             var that = this;
-            if (last) {
-                var pattern = this.lastPattern;
-            }
-            else {
-                var pattern = this.trimPattern;
-            }
-            return string.replace(pattern, function () {
+            return string.replace(this.lastPattern, function () {
                 if (arguments[5]) {
                     return that.readBuffer(arguments[5]);
                 }
@@ -4274,10 +4269,7 @@ function(root, factory) {
             string = string.replace(/\[\s+\]/g, '[]');
             string = string.replace(/\(\s+\)/g, '()');
             string = string.replace(/(\s*)(@boundary_(\d+)_as_(operator|aftoperator|keyword|midword)::)\s*/g, function (match, pregap, operator, index) {
-                if (_this.replacements[index][1]) {
-                    return pregap + operator;
-                }
-                return operator;
+                return pregap + operator;
             });
             string = string.replace(/(@boundary_\d+_as_(preoperator)::)(\s*;+|(\s+([^;])))/g, function (match, operator, word, right, afterwithgap, after) {
                 if (after) {

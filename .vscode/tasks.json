@@ -38,6 +38,11 @@
             "type": "npm",
             "script": "test-clib",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "test-app",
+            "problemMatcher": []
         }
     ]
 }

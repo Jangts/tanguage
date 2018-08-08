@@ -1,5 +1,6 @@
 const
 zero2z = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(''),
+replacements = [['{}'], ['/='], ['/'], [' +'], [' -'], [' === '], [' + '], ['\"'], ['"\\r\\n"'], ['[^\\/']],
 namingExpr = /^[A-Z_\$][\w\$]*$/i,
 argsExpr = /^...[A-Z_\$][\w\$]*$/i,
 stringas = {

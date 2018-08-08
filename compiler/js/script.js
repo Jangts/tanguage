@@ -102,7 +102,7 @@
         },
         value: ';'
     };
-    var zero2z = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(''), namingExpr = /^[A-Z_\$][\w\$]*$/i, argsExpr = /^...[A-Z_\$][\w\$]*$/i, stringas = {
+    var zero2z = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(''), replacements = [['{}'], ['/='], ['/'], [' +'], [' -'], [' === '], [' + '], ['\"'], ['"\\r\\n"'], ['[^\\/']], namingExpr = /^[A-Z_\$][\w\$]*$/i, argsExpr = /^...[A-Z_\$][\w\$]*$/i, stringas = {
         '/': '_as_pattern___',
         '`': '_as_template___',
         '"': '_as_string___',
@@ -387,7 +387,7 @@
                 this.replacements[index][0] = undefined;
                 return string;
             }
-            return this.replacements[index][0].toString();
+            return replacements[index][0].toString();
         };
         Script.prototype.encode = function (string) {
             var _this = this;

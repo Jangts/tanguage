@@ -124,7 +124,7 @@ class Script {
             this.replacements[index][0] = undefined;
             return string;
         }
-        return this.replacements[index][0].toString();
+        return replacements[index][0].toString();
     }
     @include 'position';
     @include 'encode';

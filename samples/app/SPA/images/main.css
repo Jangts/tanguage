@@ -1,2 +1,23 @@
-body {
-  width: 100%; }
+.tanguage-spa {
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+}
+
+.tanguage-spa>* {
+    display: none;
+}
+
+.tanguage-spa-layer {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: auto;
+}

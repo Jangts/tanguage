@@ -42,8 +42,9 @@ generate() {
     this.pushFooter(foot, ast.vars);
     ast = undefined;
 
-    let preoutput = head.join('') + neck.join('') + this.trim(body.join('')) + foot.join('');
+    let preoutput = head.join('') + neck.join('') + this.restoreStrings(this.trim(body.join(''))) + foot.join('');
     head = neck = body = foot = undefined;
+
     this.output = this.pickUpMap(preoutput);
     preoutput = undefined;
     // console.log(this.output);

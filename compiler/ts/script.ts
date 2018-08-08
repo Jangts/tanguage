@@ -110,6 +110,7 @@
 
     const
         zero2z: string[] = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(''),
+        replacements = [['{}'], ['/='], ['/'], [' +'], [' -'], [' === '], [' + '], ['\"'], ['"\\r\\n"'], ['[^\\/']],
         namingExpr: RegExp = /^[A-Z_\$][\w\$]*$/i,
         argsExpr: RegExp = /^...[A-Z_\$][\w\$]*$/i,
         stringas: any = {
@@ -418,7 +419,7 @@
                 this.replacements[index][0] = undefined;
                 return string;
             }
-            return this.replacements[index][0].toString();
+            return replacements[index][0].toString();
         }
         encode(string: string): string {
             // console.log(string);
