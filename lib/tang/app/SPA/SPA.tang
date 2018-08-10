@@ -46,6 +46,8 @@ class .SPA extends Component {
     popupLayer;
     // 装饰层指针
     widgetsLayer;
+    // 当前页面层指针
+    activedLayer;
     // 应用主路由
     router;
     
@@ -75,6 +77,9 @@ class .SPA extends Component {
         // 视图层数组
         this.layers = [];
 
+        // 注册路由
+        this.router = new Router;
+
         // 激活DOM对象
         // 是否传入DOM对象
         if(isEl(options.elem)){
@@ -99,7 +104,7 @@ class .SPA extends Component {
         // 检查默认层
         // 如果不存在默认层指针，则创建默认层
         if(!this.defaultLayer){
-           this.defaultLayer = createLayer (this, options.layers && options.layers['index'] || defaultLayerOptions);
+           this.defaultLayer = createLayer (this, 'default', options.layers && options.layers['default'] || defaultLayerOptions);
         }
 
         // 增加默认层
@@ -110,7 +115,10 @@ class .SPA extends Component {
         if(options.widgetsLayer){
             this.widgetsLayer = createWidgetLayer (this, options.widgetsLayer || widgetsLayerOptions);
         }
-        this.router = new Router;
+    }
+
+    refleshTitle(newTitle){
+        $('title').html(newTitle);
     }
 
     addLayer () {

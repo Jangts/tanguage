@@ -12,12 +12,33 @@
     display: none;
 }
 
-.tanguage-spa-layer {
+.tanguage-spa .spa-layer {
     display: block;
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
-    overflow: auto;
+    overflow: hidden;
+}
+
+.tanguage-spa .spa-layer>* {
+    display: none;
+}
+
+.tanguage-spa .spa-pages,
+.tanguage-spa .spa-loading,
+.tanguage-spa .spa-tool {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+.tanguage-spa .spa-pages,
+.tanguage-spa .spa-loading.actived,
+.tanguage-spa .spa-tool.actived {
+    display: block;
 }

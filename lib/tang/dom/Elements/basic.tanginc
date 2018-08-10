@@ -212,4 +212,7 @@ expands .HTMLElements {
         });
         return new $..HTMLElements(..arr.unique(nodes));
     }
+    has (elem) {
+        return bool.in(elem, this[0].childNodes);
+    }
 }

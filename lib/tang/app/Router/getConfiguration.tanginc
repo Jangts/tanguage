@@ -9,6 +9,7 @@ replaceAsterisk = /\/\*$/;
 let configurations = {};
 
 formatPath (path) {
+    // clog path;
     return path.replace(replaceSlashes, '/').replace(/\/$/, '');
 }
 getConfiguration (path) {

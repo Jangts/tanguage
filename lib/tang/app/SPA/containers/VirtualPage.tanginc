@@ -4,7 +4,11 @@ class VirtualPage extends Component {
     viewComponent;
     buttonsComponent;
 
-    _init() {}
+    _init(layer, pagename, elem, options) {
+        layer.app.router.reg(pagename, {layer, pagename}, function(foo, bar){
+            clog foo, bar;
+        });
+    }
 
     load () {
 
@@ -28,5 +32,23 @@ class VirtualPage extends Component {
 }
 
 defaultPageOptions = {
-    tagName: 'div'
+    tagName: 'div',
+    html: 'hello, this is my first SPA!'
+}
+
+createPage (layer, pageName, pageOptions) {
+    let elem;
+    // if(dom.contain(app.HTMLElement, layerOptions.elem)){}
+    if(layer.$pages.has(pageOptions.elem)){
+        elem = pageOptions.elem;
+    }else{
+        elem = dom.create(pageOptions.tagName || 'div', layer.$pages[0], {
+            className: 'spa-vpage',
+            dataLayerName: pageName,
+            html: pageOptions.html || 'hello, this is my first SPA!'
+        });
+    }
+    let page = new VirtualPage(layer, pageName, elem, pageOptions);
+    layer.pages[pageName] = page;
+    return page;
 }

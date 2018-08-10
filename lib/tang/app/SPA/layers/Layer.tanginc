@@ -5,8 +5,13 @@ class Layer extends Component {
     _init(app, elem, options) {
         this.app = app;
         this.HTMLElement = elem;
-        if(_$.getAttr(elem, 'data-layer-name')){
-
+        this.name = _$.getAttr(elem, 'data-layer-name');
+        this.$pages = $('.spa-pages', elem);
+        this.$tools = $('.spa-tools', elem);
+        this.$loading = $('.spa-loading', elem);
+        clog options;
+        each (options.pages as pageName, pageOptions) {
+            createPage (this, pageName, pageOptions);
         }
     }
 
@@ -54,7 +59,7 @@ defaultLayerOptions = {
     tagName: 'div',
     className: '',
     pages: {
-        defaultPage : defaultPageOptions
+        '/index/' : defaultPageOptions
     }
 },
 emptyLayerOptions = {
@@ -63,17 +68,19 @@ emptyLayerOptions = {
     pages: {}
 };
 
-createLayer (app, layerOptions) {
+createLayer (app, layerName, layerOptions) {
     let elem;
     // if(dom.contain(app.HTMLElement, layerOptions.elem)){}
     if(__.in(layerOptions. elem, app.HTMLElement.childNodes)){
-        elem = layerOptions. elem;
+        elem = layerOptions.elem;
     }else{
-        elem = dom.create('div', app.HTMLElement, {
-            className: 'tanguage-spa-layer'
+        elem = dom.create(layerOptions.tagName || 'div', app.HTMLElement, {
+            className: 'spa-layer',
+            dataLayerName: layerName,
+            html:'<div class="spa-pages"></div><div class="spa-loading"></div><div class="spa-tools"></div>'
         });
     }
     let layer = new Layer(app, elem, layerOptions);
-    app.layers.push(layer);
+    app.layers[layerName] = layer;
     return layer;
 }
